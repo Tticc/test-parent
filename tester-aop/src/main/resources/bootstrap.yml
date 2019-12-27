@@ -1,0 +1,9 @@
+server:
+  port: 9800
+spring:
+  profiles:
+    active: dev
+  application:
+    name: cloud-office-server
+  main:
+    allow-bean-definition-overriding: true
