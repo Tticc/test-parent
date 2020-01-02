@@ -16,12 +16,16 @@
         <log.version>1.2</log.version>
         <junit.version>4.11</junit.version>
         <aspectj.version>1.9.4</aspectj.version>
+        <lang3.version>3.7</lang3.version>
+        <reactor.version>3.2.12.RELEASE</reactor.version>
     </properties>
 
 
     <modules>
         <module>tester-aop</module>
+        <module>tester-gateway</module>
     </modules>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -29,29 +33,33 @@
                 <artifactId>spring-boot-starter</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+            <!-- web -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+            <!-- web -->
+            <!-- webflux -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-webflux</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.projectreactor</groupId>
+                <artifactId>reactor-core</artifactId>
+                <version>${reactor.version}</version>
+            </dependency>
+            <!-- webflux -->
 
             <dependency>
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>
                 <version>${log.version}</version>
             </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
-                <scope>test</scope>
-            </dependency>
 
+            <!--aop-->
             <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjrt</artifactId>
@@ -61,6 +69,13 @@
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjweaver</artifactId>
                 <version>${aspectj.version}</version>
+            </dependency>
+            <!--aop-->
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${lang3.version}</version>
             </dependency>
 
 
@@ -75,8 +90,14 @@
                 <artifactId>spring-boot-starter-test</artifactId>
                 <version>${spring.version}</version>
                 <scope>test</scope>
-
             </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
     <build>
