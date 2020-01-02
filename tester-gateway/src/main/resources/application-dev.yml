@@ -1,0 +1,21 @@
+spring:
+  profiles: dev
+  datasource:
+    dbcp2:
+      num-tests-per-eviction-run:
+
+
+tester:
+  gateway:
+    whitelist:
+      enable: 1
+      global: office-cloud,auth-middle,new-opendor,tester-gw
+    visit:
+      auth:
+        enable: 1
+        map:
+          dev-office.aeonbuy.com: office-cloud,auth-middle,new-opendor,tester-gw
+          sit-office.aeonbuy.com: office-cloud,auth-middle,new-opendor,tester-gw
+          prod-office.aeonbuy.com: office-cloud,auth-middle,new-opendor,tester-gw
+          localhost: all
+

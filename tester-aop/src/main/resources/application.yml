@@ -1,9 +1,9 @@
 server:
-  port: 9800
+  port: 8001
 spring:
   profiles:
     active: dev
   application:
-    name: cloud-office-server
+    name: tester-aop
   main:
     allow-bean-definition-overriding: true
