@@ -50,7 +50,7 @@ public class GatewayConfig {
     private Integer gatewayVisitAuthEnable;
 
     @Autowired
-    private WhiteListMapConfig whiteListMapConfig;
+    private VisitAuthMapConfig visitAuthMapConfig;
 
 
 
@@ -97,7 +97,7 @@ public class GatewayConfig {
 
     /** 检查是否为合法的请求*/
     private boolean haveVisitAuthorizeOrNoConfig(String hostName, String serverName){
-        Map<String, Set<String>> whiteMap = whiteListMapConfig.getMap();
+        Map<String, Set<String>> whiteMap = visitAuthMapConfig.getMap();
         if(CollectionUtils.isEmpty(whiteMap)){
             return true;
         }

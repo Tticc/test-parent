@@ -10,7 +10,7 @@ import java.util.Set;
 @Component
 @Configuration
 @ConfigurationProperties(prefix = "tester.gateway.visit.auth")
-public class WhiteListMapConfig {
+public class VisitAuthMapConfig {
 
     private Map<String, Set<String>> map;
 
