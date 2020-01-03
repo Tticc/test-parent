@@ -5,6 +5,7 @@
 
     <groupId>com.tester</groupId>
     <artifactId>test-parent</artifactId>
+    <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <name>test-parent</name>
     <description>Demo project for Spring Boot</description>
@@ -24,6 +25,7 @@
     <modules>
         <module>tester-aop</module>
         <module>tester-gateway</module>
+        <module>tester-func-program</module>
     </modules>
 
     <dependencyManagement>

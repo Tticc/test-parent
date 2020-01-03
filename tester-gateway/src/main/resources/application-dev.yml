@@ -16,6 +16,6 @@ tester:
         map:
           dev-office.aeonbuy.com: office-cloud,auth-middle,new-opendor,tester-gw
           sit-office.aeonbuy.com: office-cloud,auth-middle,new-opendor,tester-gw
-          prod-office.aeonbuy.com: office-cloud,auth-middle,new-opendor,tester-gw
+          office.aeonbuy.com: office-cloud,auth-middle,new-opendor,tester-gw
           localhost: all
 
