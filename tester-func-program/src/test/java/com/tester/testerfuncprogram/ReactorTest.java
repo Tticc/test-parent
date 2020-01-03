@@ -1,13 +1,18 @@
 package com.tester.testerfuncprogram;
 
+import com.tester.testerfuncprogram.interfaces.AddAllFunction;
 import org.junit.Test;
+import org.reactivestreams.Subscription;
+import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.DirectProcessor;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,36 +28,112 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ReactorTest {
 
     @Test
-    public void test_HotPublisher(){
+    public void test_HotPublisher() {
         DirectProcessor<String> hotSource = DirectProcessor.create();
         Flux<String> hotFlux = hotSource;
-        hotFlux.subscribe(d -> System.out.println("Subscriber 1 to Hot Source: "+d));
+        hotFlux.subscribe(d -> System.out.println("Subscriber 1 to Hot Source: " + d));
         hotSource.onNext("blue");
         hotSource.onNext("green");
-        hotFlux.subscribe(d -> System.out.println("Subscriber 2 to Hot Source: "+d));
+        hotFlux.subscribe(d -> System.out.println("Subscriber 2 to Hot Source: " + d));
         hotSource.onNext("orange");
         hotSource.onNext("purple");
         hotSource.onComplete();
     }
 
     @Test
-    public void test_Flux(){
+    public void test_Flux() {
         Flux.just(getIntList())
                 .timeout(Duration.ofMillis(1))
                 .take(3)
                 .subscribe(System.out::println);
     }
-    private List<Integer> getIntList(){
-        List<Integer> list = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8));
+
+    private List<Integer> getIntList() {
+        List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8));
         return list;
     }
 
+    @Test
+    public void test_flux() {
+        Flux<Long> interval = Flux.interval(Duration.ofMillis(1000));
+        interval.subscribe(System.out::println);
+    }
+
+    @Test
+    public void test_fluxCreate() {
+        Flux<String> seq1 = Flux.just("foo", "bar", "foobar");
+        List<String> list = new ArrayList<>(Arrays.asList("foo1", "bar1", "foobar1"));
+        Flux<String> seq2 = Flux.fromIterable(list);
+        seq1.subscribe(System.out::println);
+    }
 
 
     @Test
-    public void test_ids(){
+    public void test_flux_subscriber() {
+        Flux<String> seq1 = Flux.just("foo", "bar", "foobar", "end").map(e -> {
+            if (Objects.equals("end", e)) {
+                throw new RuntimeException("end it");
+            }
+            return e;
+        });
+//        seq1.subscribe(System.out::println, err -> System.out.println("error msg:" + err.getMessage()));
+        Flux<Integer> ints = Flux.range(1, 40);
+        ints.subscribe(i -> System.out.println(i),
+                error -> System.err.println("Error " + error),
+                () -> System.out.println("Done"),
+                sub -> sub.request(10));
+    }
+
+    @Test
+    public void test_mySubscriber(){
+        BaseSubscriber<Integer> mysub = new BaseSubscriber<Integer>() {
+            public void hookOnSubscribe(Subscription subscription) {
+                System.out.println("Subscribed");
+                request(1);
+            }
+            public void hookOnNext(Integer value) {
+                System.out.println(value);
+                request(1);
+            }
+        };
+        Flux<Integer> ints = Flux.range(1, 4);
+        ints.subscribe(i -> System.out.println(i),
+                error -> System.err.println("Error " + error),
+                () -> {System.out.println("Done");},
+                s -> s.request(10));
+        ints.subscribe(mysub);
+        ints.subscribe(mysub);
+
+    }
+
+    private void test_BaseSubscriber(){
+//        BaseSubscriber
+    }
+
+    @Test
+    public void test_stream() {
+        Stream.of(1, 2, 3, 4, 5).map(e -> {
+            if(e >=5 ){
+                throw new RuntimeException();
+            }
+            return e;
+        }).forEach(e -> System.out.println(e));
+    }
+
+
+    @Test
+    public void test_monoCreate() {
+        Mono<String> foo = Mono.just("foo");
+        Mono<String> empty = Mono.empty();
+        Flux<Integer> numbersFromFiveToSeven = Flux.range(0, 3);
+        numbersFromFiveToSeven.subscribe(System.out::println);
+    }
+
+
+    @Test
+    public void test_ids() {
         CompletableFuture<List<String>> ids = CompletableFuture.supplyAsync(() -> {
-            return new ArrayList<>(Arrays.asList("NameJoe - 103","b","c","d","e"));
+            return new ArrayList<>(Arrays.asList("NameJoe - 103", "b", "c", "d", "e"));
         });
         CompletableFuture<List<String>> result = ids.thenComposeAsync(l -> {
             Stream<CompletableFuture<String>> zip =
@@ -81,7 +162,7 @@ public class ReactorTest {
 
     private CompletableFuture<Integer> ifhStat(String i) {
         return CompletableFuture.supplyAsync(() -> {
-            if(i.contains("103")){
+            if (i.contains("103")) {
                 return 103;
             }
             return null;
@@ -90,7 +171,7 @@ public class ReactorTest {
 
     private CompletableFuture<String> ifhName(String i) {
         return CompletableFuture.supplyAsync(() -> {
-            if(i.contains("NameJoe")){
+            if (i.contains("NameJoe")) {
                 return "NameJoe";
             }
             return null;
