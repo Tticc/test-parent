@@ -26,6 +26,7 @@
         <module>tester-aop</module>
         <module>tester-gateway</module>
         <module>tester-func-program</module>
+        <module>tester-common</module>
     </modules>
 
     <dependencyManagement>

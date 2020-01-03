@@ -1,6 +1,6 @@
 package com.tester.testerfuncprogram.service;
 
-import com.tester.testerfuncprogram.interfaces.GetFuncInter;
+import com.tester.testerfuncprogram.interfaces.GetFunction;
 import org.springframework.stereotype.Service;
 
 @Service("getFuncInterManager")
@@ -10,7 +10,7 @@ public class GetFuncInterManager {
         return getMySelf(GetFuncInterManager::gett);
     }
 
-    private <T> GetFuncInterManager getMySelf (GetFuncInter<T> t){
+    private <T> GetFuncInterManager getMySelf (GetFunction<T> t){
         return new GetFuncInterManager();
     }
 
