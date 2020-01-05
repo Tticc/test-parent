@@ -3,6 +3,7 @@ package com.tester.testerfuncprogram;
 import com.tester.testerfuncprogram.interfaces.AddAllFunction;
 import org.junit.Test;
 import org.reactivestreams.Subscription;
+import reactor.core.Disposable;
 import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.DirectProcessor;
 import reactor.core.publisher.Flux;
@@ -14,14 +15,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * <a href = "https://projectreactor.io/docs/core/release/reference/#core-features">reactor</a>
- *
+ * <a href = "https://projectreactor.io/docs/core/release/reference/#core-features">reactor url</a>
+ * <ol>
+ *     <li>Publisher - Flux</li>
+ *     <li>Subscriber - LambdaSubscriber</li>
+ *     <li>Subscription - </li>
+ * </ol>
  * @author 温昌营
  * @date 2020/1/3
  */
@@ -60,12 +66,60 @@ public class ReactorTest {
     }
 
     @Test
-    public void test_fluxCreate() {
+    public void test_fluxCreate_just() {
         Flux<String> seq1 = Flux.just("foo", "bar", "foobar");
         List<String> list = new ArrayList<>(Arrays.asList("foo1", "bar1", "foobar1"));
         Flux<String> seq2 = Flux.fromIterable(list);
         seq1.subscribe(System.out::println);
     }
+    @Test
+    public void test_fluxCreate_generate(){
+        Flux<String> flux = Flux.generate(
+                () -> 0,
+                (state, sink) -> {
+                    // sink.next时，会直接调用flux.subscribe注册的Subscriber的onNext方法，
+                    // 也就是 System.out::println、真的吗
+                    sink.next("3 x " + state + " = " + 3*state);
+                    if (state == 10) sink.complete();
+                    return state + 1;
+                },
+                (state) -> {
+                    // 最后最后会被调用。可以用来清理state，比如state是数据库连接时，可以在这里关闭
+                    state = null;
+                    System.out.println(state);
+                });
+        Flux<String> flux1 = Flux.generate(
+                AtomicLong::new,
+                (state, sink) -> {
+                    long i = state.getAndIncrement();
+                    sink.next("3 x " + i + " = " + 3*i);
+                    if (i == 10) sink.complete();
+                    return state;
+                });
+        flux.subscribe(System.out::println);
+    }
+
+    @Test
+    public void test_fluxCreate_create(){
+    }
+
+    @Test
+    public void test_FluxToList() {
+        Flux<String> seq1 = Flux.just("foo", "bar", "foobar");
+        List<String> block = seq1
+                .map(e -> e)
+                .map(e -> {
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    return e;
+                }).collectList().block(Duration.ofMillis(1000));
+        System.out.println(block);
+    }
+
+
 
 
     @Test

@@ -1,19 +1,11 @@
 package com.tester.testerfuncprogram;
 
-import com.sun.xml.internal.ws.util.CompletedFuture;
-import com.tester.testerfuncprogram.interfaces.AddAllFunction;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.Duration;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class FuncNormalTest {
 
@@ -28,9 +20,9 @@ public class FuncNormalTest {
 
 
     @Test
-    public void test_flatMap(){
+    public void test_flatMap() {
         Map<Integer, List<Integer>> map = new HashMap<>();
-        map.put(0,null);
+        map.put(0, null);
         map.put(1, new ArrayList<>(Arrays.asList(11, 12, 13, 14, 15)));
         map.put(2, new ArrayList<>(Arrays.asList(21, 22, 23, 24, 25)));
         map.put(3, null);
@@ -38,17 +30,18 @@ public class FuncNormalTest {
                 .flatMap(e -> e.getValue().stream())
                 .forEach(System.out::println);
     }
+
     @Test
     public void test_jdkFunc() {
         Map<Integer, List<Integer>> map = new HashMap<>();
-        map.put(0,null);
+        map.put(0, null);
         map.put(1, new ArrayList<>(Arrays.asList(11, 12, 13, 14, 15)));
         map.put(2, new ArrayList<>(Arrays.asList(21, 22, 23, 24, 25)));
         map.put(3, null);
         Function<Map<Integer, List<Integer>>, List<Integer>> function = (a) -> {
             List<Integer> list = new ArrayList<>();
-            for (Map.Entry<Integer,List<Integer>> entry : a.entrySet()) {
-                if(entry.getValue() != null){
+            for (Map.Entry<Integer, List<Integer>> entry : a.entrySet()) {
+                if (entry.getValue() != null) {
                     list.addAll(entry.getValue());
                 }
             }
