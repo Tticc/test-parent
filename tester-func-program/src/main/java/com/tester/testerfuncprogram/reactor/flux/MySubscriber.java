@@ -5,17 +5,21 @@ import reactor.core.Disposable;
 import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.DirectProcessor;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 public class MySubscriber {
 
     public static void main(String[] args) {
+        System.out.println("currentThreadId:"+Thread.currentThread().getId());
         Flux.range(0,10)
                 // Flux方法
                 .doOnRequest(r -> System.out.println("request amount "+r))
-                .limitRate(2,2)
-                .limitRequest(3)
+                .limitRate(2)
+//                .limitRequest(3)
                 // subscriber
-                .subscribe(new BaseSubscriber<Integer>() {
+                .subscribeOn(Schedulers.newSingle("ji"))
+                .subscribe(e -> System.out.println("tid:"+Thread.currentThread().getId()+", number:"+e));
+                /*.subscribe(new BaseSubscriber<Integer>() {
                     @Override
                     public void hookOnSubscribe(Subscription subscription){
                         request(8);
@@ -28,8 +32,13 @@ public class MySubscriber {
                             cancel();
                         }
                     }
-                });
+                });*/
 
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

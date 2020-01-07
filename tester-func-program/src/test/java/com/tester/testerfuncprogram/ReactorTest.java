@@ -8,13 +8,18 @@ import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.DirectProcessor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -60,9 +65,54 @@ public class ReactorTest {
     }
 
     @Test
-    public void test_flux() {
-        Flux<Long> interval = Flux.interval(Duration.ofMillis(1000));
-        interval.subscribe(System.out::println);
+    public void test_limitRate(){
+        Flux.generate(
+                () -> 0,
+                (state, sink) -> {
+                    // sink.next时，会直接调用flux.subscribe注册的Subscriber的onNext方法，
+                    // 也就是 System.out::println、真的吗
+                    sink.next("3 x " + state + " = " + 3 * state);
+                    if (state == 10) sink.complete();
+                    return state + 1;
+                },
+                (state) -> {
+                    // 最后最后会被调用。可以用来清理state，比如state是数据库连接时，可以在这里关闭
+                    state = null;
+                    System.out.println("finally, state is: "+state);
+                })
+                .doOnRequest((e) -> System.out.println("requested amount "+ e))
+                .limitRate(2)
+                .subscribe(e -> System.out.println("tid: " + Thread.currentThread().getId() + ", value: "+ e));
+    }
+
+
+    @Test
+    public void test_fluxCreate_interval() throws InterruptedException {
+        Thread t = new Thread(()->test_flux_newSingle());
+        Thread t2 = new Thread(()->test_flux_newSingle());
+        Thread t3 = new Thread(()->test_flux_newSingle());
+        Thread t4 = new Thread(()->test_flux_newSingle());
+        Thread t5 = new Thread(()->test_flux_newSingle());
+        t.start();
+        t2.start();
+        t3.start();
+        t4.start();
+        t5.start();
+//        test_flux_newSingle();
+        Thread.currentThread().join(200);
+
+    }
+    private void test_flux_newSingle(){
+
+        System.out.println("currentThreadId: "+Thread.currentThread().getId());
+        // 默认就是 Schedulers.parallel()，数量为CPU核心数
+        Flux<Long> interval = Flux.interval(Duration.ofMillis(2)/*,Schedulers.parallel()*/);
+        interval.subscribe(e -> System.out.println("tid1: " + Thread.currentThread().getId() + ", value: "+ e));
+        Flux<Long> interval1 = Flux.interval(Duration.ofMillis(2));
+        interval1.subscribe(e -> System.out.println("tid2: " + Thread.currentThread().getId() + ", value: "+ e));
+        Flux<Long> interval2 = Flux.interval(Duration.ofMillis(2));
+        interval2.subscribe(e -> System.out.println("tid3: " + Thread.currentThread().getId() + ", value: "+ e));
+
     }
 
     @Test
@@ -71,6 +121,7 @@ public class ReactorTest {
         List<String> list = new ArrayList<>(Arrays.asList("foo1", "bar1", "foobar1"));
         Flux<String> seq2 = Flux.fromIterable(list);
         seq1.subscribe(System.out::println);
+
     }
     @Test
     public void test_fluxCreate_generate(){
@@ -101,6 +152,16 @@ public class ReactorTest {
 
     @Test
     public void test_fluxCreate_create(){
+        List<ActionListener> listeners = new ArrayList<>();
+
+        Flux.create(sink -> {
+            listeners.add(evt -> sink.next(evt));
+        })
+                .subscribe(System.out::println);
+
+        listeners.forEach(action -> action.actionPerformed(
+                new ActionEvent(ReactorTest.class, 0, "shit happens"))
+        );
     }
 
     @Test

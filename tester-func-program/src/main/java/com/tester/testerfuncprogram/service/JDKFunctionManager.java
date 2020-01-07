@@ -1,9 +1,9 @@
-package com.tester.testerfuncprogram.interfaces.impl;
+package com.tester.testerfuncprogram.service;
 
 import java.util.*;
 import java.util.function.Function;
 
-public class JDKFunctionImpl {
+public class JDKFunctionManager {
 
     public static void main(String[] args){
         Map<Integer, List<Integer>> map = new HashMap<>();
