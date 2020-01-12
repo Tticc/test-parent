@@ -3,6 +3,7 @@ package com.tester.testerfuncprogram;
 import com.tester.testerfuncprogram.interfaces.AddAllFunction;
 import org.junit.Test;
 import org.reactivestreams.Subscription;
+import org.springframework.util.StopWatch;
 import reactor.core.Disposable;
 import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.DirectProcessor;
@@ -19,7 +20,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,6 +40,169 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @date 2020/1/3
  */
 public class ReactorTest {
+
+    @Test
+    public void test_getCPUProcessNumber(){
+        System.out.println(Runtime.getRuntime().availableProcessors());
+    }
+    @Test
+    public void test_Parallel() throws InterruptedException {
+        Scheduler s = Schedulers.newParallel("parallel-scheduler", 4);
+
+        final Flux<String> flux = Flux
+                .range(1, 7)
+                .map(i -> 10 + i)
+                .publishOn(s)
+                .map(i -> "value " + i);
+
+        new Thread(() -> flux.subscribe(e -> System.out.println("tid:"+Thread.currentThread().getId()+", e:"+e))).start();
+        Thread.currentThread().join(1000);
+    }
+    @Test
+    public void test_publish_subscribe_On() throws InterruptedException {
+        System.out.println("parent tid:"+Thread.currentThread().getId());
+        CountDownLatch countDownLatch = new CountDownLatch(2);
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        Scheduler parallel = Schedulers.parallel();
+        Flux.range(1,3)
+                .limitRate(2)
+                .publishOn(parallel)
+                .map(e->{
+                    try {
+                        System.out.println("tid:"+Thread.currentThread().getId());
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    return e;
+                })
+                .publishOn(parallel)
+                .map(e->{
+                    try {
+                        System.out.println("tid:"+Thread.currentThread().getId());
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    return e;
+                })
+                .subscribe(System.out::println,null,()->countDownLatch.countDown());
+        countDownLatch.countDown();
+        countDownLatch.await();
+        stopWatch.stop();
+        System.out.println("total time:"+stopWatch.getTotalTimeMillis());
+    }
+
+    @Test
+    public void test_fork_join2() throws InterruptedException {
+        System.out.println("parent tid:"+Thread.currentThread().getId());
+        CountDownLatch countDownLatch = new CountDownLatch(4);
+        Scheduler parallel = Schedulers.parallel();
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        Flux.range(1, 4)
+                .parallel()
+                .runOn(parallel)
+//                .publishOn(parallel)
+                .map(e -> {
+                    try {
+                        System.out.println("map1 tid:" + Thread.currentThread().getId());
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    return e;
+                })
+                .map(e -> {
+                    try {
+                        System.out.println("map2 tid:" + Thread.currentThread().getId());
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    return e;
+                })
+                .subscribe(e -> System.out.println("result tid:"+Thread.currentThread().getId()+", e:"+e),
+                null,
+                ()->countDownLatch.countDown());
+//                .subscribe(getMySubscriber(countDownLatch));
+//        sequential.subscribe(getMySubscriber(countDownLatch));
+        countDownLatch.await();
+        stopWatch.stop();
+//        Thread.sleep(5000);
+        System.out.println("total time:"+stopWatch.getTotalTimeMillis());
+    }
+
+    @Test
+    public void test_fork_join1() throws InterruptedException {
+        System.out.println("parent tid:"+Thread.currentThread().getId());
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        Scheduler parallel = Schedulers.parallel();
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        Mono<List<Integer>> sequential = Flux.range(1, 4)
+                .parallel()
+                .runOn(parallel)
+//                .publishOn(parallel)
+                .map(e -> {
+                    try {
+                        System.out.println("map1 tid:" + Thread.currentThread().getId());
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    return e;
+                })
+                .map(e -> {
+                    try {
+                        System.out.println("map2 tid:" + Thread.currentThread().getId());
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    return e;
+                })
+                .sequential()
+                .collectList();
+        sequential.subscribe(e -> System.out.println("result tid:"+Thread.currentThread().getId()+", e:"+e),
+                        null,
+                        ()->countDownLatch.countDown());
+//        sequential.subscribe(getMySubscriber(countDownLatch));
+//        countDownLatch.await();
+        stopWatch.stop();
+//        Thread.sleep(5000);
+        System.out.println("total time:"+stopWatch.getTotalTimeMillis());
+    }
+
+    private <T> BaseSubscriber<T> getMySubscriber(CountDownLatch countDownLatch){
+        BaseSubscriber<T> mysub = new BaseSubscriber<T>() {
+            @Override
+            public void hookOnSubscribe(Subscription subscription) {
+                System.out.println("Subscribed");
+//                request(1);
+                requestUnbounded();
+            }
+            @Override
+            public void hookOnNext(T value) {
+                System.out.println("result tid:"+Thread.currentThread().getId()+", e:"+value);
+                requestUnbounded();
+//                request(1);
+            }
+            @Override
+            public void hookOnComplete(){
+                countDownLatch.countDown();
+            }
+
+        };
+        return mysub;
+    }
+
+    @Test
+    public void test_property_bufferSize(){
+        int i = Integer.parseInt(System.getProperty("reactor.bufferSize.small", "256"));
+        System.out.println(i);
+    }
 
     @Test
     public void test_HotPublisher() {
@@ -121,8 +287,8 @@ public class ReactorTest {
         List<String> list = new ArrayList<>(Arrays.asList("foo1", "bar1", "foobar1"));
         Flux<String> seq2 = Flux.fromIterable(list);
         seq1.subscribe(System.out::println);
-
     }
+
     @Test
     public void test_fluxCreate_generate(){
         Flux<String> flux = Flux.generate(
@@ -164,19 +330,15 @@ public class ReactorTest {
         );
     }
 
+
     @Test
-    public void test_FluxToList() {
-        Flux<String> seq1 = Flux.just("foo", "bar", "foobar");
-        List<String> block = seq1
-                .map(e -> e)
-                .map(e -> {
-                    try {
-                        Thread.sleep(1);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                    return e;
-                }).collectList().block(Duration.ofMillis(1000));
+    public void test_fluxToMonoToList(){
+        Mono<List<Integer>> listMono = Flux.range(1, 7)
+                .collectList();
+        // process list within Mono
+        listMono.subscribe(System.out::println);
+        // get list from Mono
+        List<Integer> block = listMono.block();
         System.out.println(block);
     }
 
@@ -212,14 +374,56 @@ public class ReactorTest {
             }
         };
         Flux<Integer> ints = Flux.range(1, 4);
-        ints.subscribe(i -> System.out.println(i),
-                error -> System.err.println("Error " + error),
-                () -> {System.out.println("Done");},
-                s -> s.request(10));
-        ints.subscribe(mysub);
-        ints.subscribe(mysub);
+        // lambda subscribe
+//        ints.subscribe(i -> System.out.println(i),
+//                error -> System.err.println("Error " + error),
+//                () -> {System.out.println("Done");},
+//                s -> s.request(10));
+        // custom subscribe
+        ints.doOnRequest((l)->System.out.println("request amount:"+l))
+//                .limitRequest(2)
+                .take(2)
+                .subscribe(mysub);
+//        ints.subscribe(mysub);
 
     }
+
+    @Test
+    public void test_request_lambda(){
+        Flux.range(1, 7)
+                .doOnRequest(n -> System.out.println("request amount:"+n))
+                .limitRequest(7)
+                // limitRate是用来限制每次请求的数量的，与mySubscriber的request一样作用
+                .limitRate(2)
+                // subscribe 里的request是指定总共获取的数量，
+                // 如果publisher发布的元素<=，那么所有的元素都会被处理，
+                // 否则， 多余发布的元素会被丢弃。
+//                .subscribe(System.out::println,(e)->{},()->{}, sub->sub.request(1));
+                .subscribe(System.out::println,(e)->{},()->{});
+    }
+
+
+    @Test
+    public void test_request_mySubscriber() {
+        BaseSubscriber<Integer> mysub = new BaseSubscriber<Integer>() {
+            public void hookOnSubscribe(Subscription subscription) {
+                System.out.println("Subscribed");
+                request(1);
+//                requestUnbounded();
+            }
+
+            public void hookOnNext(Integer value) {
+                System.out.println(value);
+                request(1);
+//                requestUnbounded();
+            }
+        };
+        Flux.range(1, 7)
+                .doOnRequest(n -> System.out.println("request amount:"+n))
+                .limitRequest(4)
+                .subscribe(mysub);
+    }
+
 
     private void test_BaseSubscriber(){
 //        BaseSubscriber
