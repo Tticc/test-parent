@@ -5,10 +5,7 @@ import org.junit.Test;
 import org.reactivestreams.Subscription;
 import org.springframework.util.StopWatch;
 import reactor.core.Disposable;
-import reactor.core.publisher.BaseSubscriber;
-import reactor.core.publisher.DirectProcessor;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.*;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
@@ -24,10 +21,12 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 
 /**
  * <a href = "https://projectreactor.io/docs/core/release/reference/#core-features">reactor url</a>
@@ -105,6 +104,7 @@ public class ReactorTest {
                 .parallel()
                 .runOn(parallel)
 //                .publishOn(parallel)
+
                 .map(e -> {
                     try {
                         System.out.println("map1 tid:" + Thread.currentThread().getId());
@@ -224,6 +224,11 @@ public class ReactorTest {
                 .take(3)
                 .subscribe(System.out::println);
     }
+    @Test
+    public void test_FluxToMono(){
+        Mono<Void> then = Flux.just(1, 2, 3, 4).then();
+        // 怎么处理Mono
+    }
 
     private List<Integer> getIntList() {
         List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8));
@@ -260,10 +265,10 @@ public class ReactorTest {
         Thread t4 = new Thread(()->test_flux_newSingle());
         Thread t5 = new Thread(()->test_flux_newSingle());
         t.start();
-        t2.start();
-        t3.start();
-        t4.start();
-        t5.start();
+//        t2.start();
+//        t3.start();
+//        t4.start();
+//        t5.start();
 //        test_flux_newSingle();
         Thread.currentThread().join(200);
 
@@ -272,21 +277,115 @@ public class ReactorTest {
 
         System.out.println("currentThreadId: "+Thread.currentThread().getId());
         // 默认就是 Schedulers.parallel()，数量为CPU核心数
-        Flux<Long> interval = Flux.interval(Duration.ofMillis(2)/*,Schedulers.parallel()*/);
+        Flux<Long> interval = Flux.interval(Duration.ofMillis(2),Schedulers.single()/*,Schedulers.parallel()*/);
         interval.subscribe(e -> System.out.println("tid1: " + Thread.currentThread().getId() + ", value: "+ e));
-        Flux<Long> interval1 = Flux.interval(Duration.ofMillis(2));
+        Flux<Long> interval1 = Flux.interval(Duration.ofMillis(2),Schedulers.single());
         interval1.subscribe(e -> System.out.println("tid2: " + Thread.currentThread().getId() + ", value: "+ e));
-        Flux<Long> interval2 = Flux.interval(Duration.ofMillis(2));
+        Flux<Long> interval2 = Flux.interval(Duration.ofMillis(2),Schedulers.single());
         interval2.subscribe(e -> System.out.println("tid3: " + Thread.currentThread().getId() + ", value: "+ e));
 
     }
 
     @Test
-    public void test_fluxCreate_just() {
+    public void test_fluxCreate_just() throws InterruptedException {
+        System.out.println("father threadId:"+Thread.currentThread().getId());
         Flux<String> seq1 = Flux.just("foo", "bar", "foobar");
         List<String> list = new ArrayList<>(Arrays.asList("foo1", "bar1", "foobar1"));
         Flux<String> seq2 = Flux.fromIterable(list);
-        seq1.subscribe(System.out::println);
+        seq1.subscribeOn(Schedulers.parallel()).subscribe(e -> System.out.println("tid:"+Thread.currentThread().getId()+", e:"+e));
+        Thread.currentThread().join(20);
+
+    }
+
+    /**
+     * <ol>
+     *     <li>subscribeOn - 往下到subscribe，往上到源头都受到这个subscribeOn语句影响。
+     *     range的执行也会放到线程池中！！！</li>
+     *     <li>publishOn - 影响部分流程，在publishOn往下的操作都受到这个subscribeOn语句影响，直到遇到下一个publishOn语句。
+     *     无法影响到range！！！</li>
+     *     <li>代码从下往上组装。所以先碰到subscribeOn，所有操作受到影响，会在parallel的某个线程中执行，
+     *     接着遇到publishOn，publishOn语句以后的操作都受到publishOn的影响，会在parallel的另一个线程中执行</li>
+     * </ol>
+     * @author 温昌营
+     * @date 2020/1/8
+     */
+    @Test
+    public void test_subscribeOn_publishOn() throws InterruptedException{
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        StopWatch sw = new StopWatch();
+        sw.start();
+        System.out.println("parent tid:"+Thread.currentThread().getId());
+        Scheduler s = Schedulers.newParallel("parallel-scheduler", 4);
+
+//        s = Schedulers.single();
+        Flux.range(1, 3)
+                .doOnRequest((e) -> System.out.println("request amount: "+ e))
+                .limitRate(2)
+                .publishOn(s)
+                .map(e ->
+                {
+                    if(e == null){
+                        return null;
+                    }
+                    return e;}
+                )
+                .handle((BiConsumer<? super Integer, SynchronousSink<Integer>>)(e,sink) -> {
+                    System.out.println("handle1 tid:"+Thread.currentThread().getId()+",e:"+e);
+                    sink.next(e+10);
+                })
+                .handle((BiConsumer<? super Integer, SynchronousSink<Integer>>)(e,sink) -> {
+                    System.out.println("handle2 tid:"+Thread.currentThread().getId()+",e:"+e);
+//                    Integer a = (Integer)e;
+                    sink.next(e+10);
+                })
+                .handle((e,sink) -> {
+                    System.out.println("handle3 tid:"+Thread.currentThread().getId()+",e:"+e);
+                    Integer a = (Integer)e;
+                    // 最后一个handle返回的是String类型即可
+                    sink.next("jid");
+                })
+                .publishOn(s)
+                .doOnComplete(() -> countDownLatch.countDown())
+                .subscribe(e->System.out.println("result tid:"+Thread.currentThread().getId()+",e:"+e));
+        countDownLatch.await();
+        sw.stop();
+        System.out.println("time:"+sw.getTotalTimeMillis());
+    }
+
+    @Test
+    public void test_watch_countDownLatch() throws InterruptedException {
+        System.out.println("parent tid:"+Thread.currentThread().getId());
+        CountDownLatch countDownLatch = new CountDownLatch(2);
+        StopWatch sw = new StopWatch();
+        sw.start();
+        Flux.range(1,3)
+                .handle((e, sink) -> {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    sink.next(e);
+                })
+                .subscribeOn(Schedulers.parallel())
+                .doOnComplete(() -> countDownLatch.countDown())
+                .subscribe(e -> System.out.println("result tid:"+Thread.currentThread().getId()+",e:"+e));
+        Flux.range(31,3)
+                .handle((e, sink) -> {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    sink.next(e);
+                })
+                .subscribeOn(Schedulers.parallel())
+                .doOnComplete(() -> countDownLatch.countDown())
+                .subscribe(e -> System.out.println("result tid:"+Thread.currentThread().getId()+",e:"+e));
+        countDownLatch.await();
+        sw.stop();
+        System.out.println("total time:"+sw.getTotalTimeMillis());
+
     }
 
     @Test
@@ -340,6 +439,33 @@ public class ReactorTest {
         // get list from Mono
         List<Integer> block = listMono.block();
         System.out.println(block);
+    }
+
+    @Test
+    public void test_handle() throws InterruptedException {
+        System.out.println("parent tid:"+Thread.currentThread().getId());
+        Flux<String> alphabet = Flux.just(-1, 30, 13, 9, 20)
+                .handle((i, sink) -> {
+                    String letter = alphabet(i);
+                    if (letter != null) {
+                        sink.next(i);
+                    }
+                }).handle((i, sink) -> {
+                    String letter = alphabet((int)i);
+                    if (letter != null) {
+                        sink.next(letter);
+                    }
+                });
+
+        alphabet.subscribeOn(Schedulers.single()).subscribe(e -> System.out.println("tid:"+Thread.currentThread().getId()+",e:"+e));
+        Thread.currentThread().join(100);
+    }
+    private String alphabet(int letterNumber) {
+        if (letterNumber < 1 || letterNumber > 26) {
+            return null;
+        }
+        int letterIndexAscii = 'A' + letterNumber - 1;
+        return "" + (char) letterIndexAscii;
     }
 
 
