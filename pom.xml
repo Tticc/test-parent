@@ -19,6 +19,9 @@
         <aspectj.version>1.9.4</aspectj.version>
         <lang3.version>3.7</lang3.version>
         <reactor.version>3.2.12.RELEASE</reactor.version>
+        <codec.version>1.13</codec.version>
+        <PKCS7.version>1.46</PKCS7.version>
+
     </properties>
 
 
@@ -79,6 +82,16 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${codec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk16</artifactId>
+                <version>${PKCS7.version}</version>
             </dependency>
 
 
