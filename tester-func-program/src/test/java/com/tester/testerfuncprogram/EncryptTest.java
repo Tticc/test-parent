@@ -67,4 +67,7 @@ public class EncryptTest {
         byte[] encrypted = cipher.doFinal(message);
         System.out.println(new String(encrypted));
     }
+
+
+
 }
