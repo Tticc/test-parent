@@ -8,6 +8,7 @@ import reactor.core.Disposable;
 import reactor.core.publisher.*;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
+import reactor.util.function.Tuple2;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,8 +26,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.in;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * <a href = "https://projectreactor.io/docs/core/release/reference/#core-features">reactor url</a>
@@ -429,6 +429,38 @@ public class ReactorTest {
         );
     }
 
+    @Test
+    public void test_concat(){
+        Flux<Integer> range = Flux.range(100, 5);
+        Mono<List<Integer>> listMono = Flux.range(1, 5)
+                // 往流前面添加
+                .startWith(11, 12, 13, 14)
+                // 往流后面追加
+                .concatWith(range)
+                .collectList();
+        listMono.subscribe(System.out::println);
+
+    }
+    @Test
+    public void test_Then(){
+        Flux<Integer> range = Flux.range(100, 5);
+        Mono<List<Integer>> listMono1 = range.collectList();
+        Mono<List<Integer>> listMono = Flux.range(1, 5)
+                // 往流前面添加
+                .startWith(11, 12, 13, 14)
+                // 往流后面追加
+                .concatWith(range)
+                .ofType(Integer.class)
+                .map(e -> {
+                    System.out.println(e);
+                    return e;
+                })
+                .collectList();
+        Mono<List<Integer>> then = listMono.then(listMono1);
+        then.subscribe(System.out::println);
+
+    }
+
 
     @Test
     public void test_fluxToMonoToList(){
@@ -452,12 +484,13 @@ public class ReactorTest {
                     }
                 }).handle((i, sink) -> {
                     String letter = alphabet((int)i);
+                    System.out.println("letter:"+letter);
                     if (letter != null) {
                         sink.next(letter);
                     }
                 });
 
-        alphabet.subscribeOn(Schedulers.single()).subscribe(e -> System.out.println("tid:"+Thread.currentThread().getId()+",e:"+e));
+        alphabet.subscribeOn(Schedulers.immediate()).subscribe(e -> System.out.println("tid:"+Thread.currentThread().getId()+",e:"+e));
         Thread.currentThread().join(100);
     }
     private String alphabet(int letterNumber) {
