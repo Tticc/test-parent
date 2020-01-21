@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Update;
 public interface UserMapper extends BaseMapper<UserDomain, Long> {
 
     @Select("select * from u_person where id = #{id} and deleted = 0")
-    UserDomain selectOne(@Param("id") Long id);
+    UserDomain selectUserById(@Param("id") Long id);
 
 }
