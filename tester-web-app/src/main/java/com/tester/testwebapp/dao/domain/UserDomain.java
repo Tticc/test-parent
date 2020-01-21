@@ -42,3 +42,28 @@ public class UserDomain extends BaseDomain {
     /** 数据来源;PlatformEnum */
     private Integer dataFrom ;
 }
+/**
+ -- ----------------------------
+ -- Table structure for u_person
+ -- ----------------------------
+ DROP TABLE IF EXISTS `u_person`;
+ CREATE TABLE `u_person`  (
+ `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+ `name` varchar(32) CHARACTER SET utf8mb4 NULL DEFAULT NULL COMMENT '名字',
+ `ext_person_id` varchar(32) CHARACTER SET utf8mb4 NULL DEFAULT NULL COMMENT 'ext_person_id',
+ `employee_id` varchar(64) CHARACTER SET utf8mb4 NULL DEFAULT NULL COMMENT '员工号 员工号',
+ `cellphone` varchar(32) CHARACTER SET utf8mb4 NULL DEFAULT NULL COMMENT '手机号',
+ `gender` int(11) NULL DEFAULT NULL COMMENT '性别 1=男，0=女',
+ `email` varchar(64) CHARACTER SET utf8mb4 NULL DEFAULT NULL COMMENT '邮箱',
+ `enname` varchar(32) CHARACTER SET utf8mb4 NULL DEFAULT NULL COMMENT '英文名',
+ `wechatid` varchar(64) CHARACTER SET utf8mb4 NULL DEFAULT NULL COMMENT '微信ID',
+ `status` int(11) NULL DEFAULT NULL COMMENT '状态',
+ `note` varchar(512) CHARACTER SET utf8mb4 NULL DEFAULT NULL COMMENT '备注',
+ `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+ `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+ `revision` int(11) NULL DEFAULT NULL COMMENT '版本号',
+ `deleted` int(11) NULL DEFAULT NULL COMMENT '是否删除 0=未删除，1=已删除',
+ `data_from` int(11) NULL DEFAULT NULL COMMENT '数据来源 1=SAP，2=cloudoffice，默认1',
+ PRIMARY KEY (`id`) USING BTREE
+ ) ENGINE = InnoDB AUTO_INCREMENT = 3188 CHARACTER SET = utf8mb4 COMMENT = '人员表 人员表' ROW_FORMAT = Dynamic;
+ **/
