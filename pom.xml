@@ -30,6 +30,7 @@
         <module>tester-gateway</module>
         <module>tester-func-program</module>
         <module>tester-common</module>
+        <module>test-web-app</module>
     </modules>
 
     <dependencyManagement>

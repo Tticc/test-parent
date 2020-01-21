@@ -1,0 +1,9 @@
+server:
+  port: 8004
+spring:
+  profiles:
+    active: dev
+  application:
+    name: tester-web-app
+  main:
+    allow-bean-definition-overriding: true
