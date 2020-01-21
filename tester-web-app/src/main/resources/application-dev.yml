@@ -1,0 +1,18 @@
+spring:
+  profiles: dev
+  datasource:
+    #    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/twa?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+    #Hikari
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 8
+      connection-timeout: 30000
+      connection-test-query: select 1
+#mybatis
+mybatis:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml

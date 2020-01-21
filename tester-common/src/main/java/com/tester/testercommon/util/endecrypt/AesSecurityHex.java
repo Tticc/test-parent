@@ -1,9 +1,7 @@
 package com.tester.testercommon.util.endecrypt;
 
-import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
-import org.bouncycastle.util.encoders.HexEncoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;

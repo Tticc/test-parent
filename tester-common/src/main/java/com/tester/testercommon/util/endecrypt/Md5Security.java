@@ -10,8 +10,8 @@ public class Md5Security {
     public static void main(String[] args) throws Exception {
         String pwd = "123456";
         String salt = "305a878cd5e668aebb66baa6";
-        String encrypt = encrypt(pwd+salt);
-        System.out.println("final pwd: "+encrypt);
+        String encrypt = encrypt(pwd + salt);
+        System.out.println("final pwd: " + encrypt);
     }
 
     private static String SECRET_KEY = "e95f8a3e7205ced3e12o";

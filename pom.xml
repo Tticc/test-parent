@@ -21,6 +21,9 @@
         <reactor.version>3.2.12.RELEASE</reactor.version>
         <codec.version>1.13</codec.version>
         <PKCS7.version>1.46</PKCS7.version>
+        <mysql.version>8.0.16</mysql.version>
+        <datasource.version>3.3.1</datasource.version>
+        <persistence.version>1.0.2</persistence.version>
 
     </properties>
 
@@ -30,7 +33,7 @@
         <module>tester-gateway</module>
         <module>tester-func-program</module>
         <module>tester-common</module>
-        <module>test-web-app</module>
+        <module>tester-web-app</module>
     </modules>
 
     <dependencyManagement>
@@ -78,7 +81,28 @@
                 <version>${aspectj.version}</version>
             </dependency>
             <!--aop-->
-
+            <!--mysql-->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>${datasource.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.persistence</groupId>
+                <artifactId>persistence-api</artifactId>
+                <version>${persistence.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>2.1.1</version>
+            </dependency>
+            <!--mysql-->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
