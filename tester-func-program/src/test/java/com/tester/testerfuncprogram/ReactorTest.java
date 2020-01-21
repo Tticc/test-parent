@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.reactivestreams.Subscription;
 import org.springframework.util.StopWatch;
 import reactor.core.Disposable;
+import reactor.core.Exceptions;
 import reactor.core.publisher.*;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
@@ -439,7 +440,35 @@ public class ReactorTest {
                 .concatWith(range)
                 .collectList();
         listMono.subscribe(System.out::println);
+    }
+    @Test
+    public void test_zipWith(){
+        Flux.range(1,5)
+                .zipWith(Flux.range(11,4),(a,b) -> {
+                    return a+b;
+                })
+                .subscribe(e -> System.out.println(e));
 
+    }
+    @Test
+    public void test_retryWhen() {
+        Flux<String> flux =
+                Flux.<String>error(new IllegalArgumentException())
+                        .retryWhen(companion -> companion
+                                .doOnNext(e -> System.out.println("before:"+e))
+                                .zipWith(Flux.range(1, 4),
+                                        (error, index) -> {
+                                            System.out.println("index:"+index);
+                                            if (index < 4) {
+                                                return index;
+                                            }
+                                            else {
+                                                throw Exceptions.propagate(error);
+                                            }
+                                        })
+                                .doOnNext(e -> System.out.println("after:"+e))
+                        );
+        flux.subscribe(e -> System.out.println(e),ex -> ex.printStackTrace());
     }
     @Test
     public void test_Then(){
