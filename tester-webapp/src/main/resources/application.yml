@@ -10,9 +10,13 @@ spring:
   # thymeleaf
   thymeleaf:
     prefix: classpath:/templates/
-    check-template-location: true
+#    check-template-location: true
     suffix: .html
     encoding: UTF-8
     mode: HTML5
     cache: false
-    content-type: text/html
+#    content-type: text/html
+
+
+
+

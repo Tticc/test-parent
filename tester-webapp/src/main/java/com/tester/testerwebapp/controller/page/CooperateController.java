@@ -21,5 +21,13 @@ public class CooperateController {
 		req.setAttribute("content", initContent);
 		return "coor";
 	}
+	@GetMapping("/ind")
+	public String index(HttpServletRequest req) {
+		return "index";
+	}
+	@GetMapping("demo")
+	public String demo(HttpServletRequest req) {
+		return "demo";
+	}
 
 }
