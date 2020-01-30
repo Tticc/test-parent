@@ -1,21 +1,16 @@
-package com.tester.testwebapp.controller;
+package com.tester.testerwebapp.controller;
 
 import com.tester.testercommon.controller.BaseController;
 import com.tester.testercommon.controller.RestResult;
-import com.tester.testwebapp.dao.domain.UserDomain;
-import com.tester.testwebapp.dao.mapper.UserMapper;
-import com.tester.testwebapp.dao.service.UserManager;
+import com.tester.testerwebapp.dao.domain.UserDomain;
+import com.tester.testerwebapp.dao.service.UserManager;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.ResultMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-
-import javax.annotation.Resource;
 
 /**
  * @Author 温昌营

@@ -1,10 +1,9 @@
-package com.tester.testwebapp.dao.mapper;
+package com.tester.testerwebapp.dao.mapper;
 
 import com.tester.testercommon.dao.mapper.BaseMapper;
-import com.tester.testwebapp.dao.domain.UserDomain;
+import com.tester.testerwebapp.dao.domain.UserDomain;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 /**
  * @Author 温昌营

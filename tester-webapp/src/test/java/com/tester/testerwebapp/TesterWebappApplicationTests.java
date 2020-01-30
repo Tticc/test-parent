@@ -1,10 +1,10 @@
-package com.tester.testwebapp;
+package com.tester.testerwebapp;
 
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TestWebAppApplicationTests {
+class TesterWebappApplicationTests {
 
     @Test
     void contextLoads() {

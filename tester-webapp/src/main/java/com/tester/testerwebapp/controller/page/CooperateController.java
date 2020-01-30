@@ -1,4 +1,4 @@
-package com.tester.testwebapp.controller.page;
+package com.tester.testerwebapp.controller.page;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

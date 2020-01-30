@@ -1,4 +1,4 @@
-package com.tester.testwebapp.config;
+package com.tester.testerwebapp.config;
 
 /**
  * @Author 温昌营

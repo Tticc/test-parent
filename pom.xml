@@ -36,6 +36,7 @@
         <module>tester-func-program</module>
         <module>tester-common</module>
         <module>tester-web-app</module>
+        <module>tester-webapp</module>
     </modules>
 
     <dependencyManagement>

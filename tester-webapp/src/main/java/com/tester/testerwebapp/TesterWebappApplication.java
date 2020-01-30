@@ -1,18 +1,17 @@
-package com.tester.testwebapp;
+package com.tester.testerwebapp;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
-@MapperScan("com.tester.testwebapp.**.mapper")
+@MapperScan("com.tester.testerwebapp.**.mapper")
 @SpringBootApplication
-public class TestWebAppApplication implements CommandLineRunner {
+public class TesterWebappApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TestWebAppApplication.class, args);
+        SpringApplication.run(TesterWebappApplication.class, args);
     }
 
     @Autowired
