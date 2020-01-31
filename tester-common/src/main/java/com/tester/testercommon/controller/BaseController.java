@@ -11,6 +11,7 @@ import reactor.core.publisher.Mono;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author 温昌营
@@ -25,15 +26,17 @@ public class BaseController {
         return restResult;
     }
     public <T> Mono<RestResult<T>> monoSuccess() {
-        return Mono.just((new RestResult()).code(200L).message("执行成功！").putTimestamp());
+        return monoSuccess(Mono.empty());
     }
 
     public <T> RestResult<T> success(T data) {
         RestResult restResult = this.success("执行成功！", data);
         return restResult;
     }
+
     public <T> Mono<RestResult<T>> monoSuccess(Mono<T> data) {
-        return data.map(e -> this.success("执行成功！", e));
+        return monoSuccess("执行成功！", data);
+
     }
 
     public <T> RestResult<T> success(String message, T data) {
@@ -42,7 +45,16 @@ public class BaseController {
     }
 
     public <T> Mono<RestResult<T>> monoSuccess(String message, Mono<T> data) {
-        return data.map(e -> (new RestResult()).code(200L).message(message).putTimestamp().data(e));
+        return data.map(e -> Optional.of(e))
+                .defaultIfEmpty(Optional.empty())
+                .handle((e, sink) -> {
+                            if (!e.isPresent()) {
+                                sink.next(this.success(message, null));
+                                return;
+                            }
+                            sink.next(this.success(message, e.get()));
+                        }
+                );
     }
 
     public <T> RestResult<T> fail(long code, String message) {

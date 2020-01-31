@@ -17,6 +17,16 @@ public class UserManager {
     private UserMapper userMapper;
 
     public Mono<UserDomain> selectUserById(Long id){
-        return Mono.just(userMapper.selectUserById(id));
+        return Mono.justOrEmpty(userMapper.selectUserById(id));
+    }
+
+    public Mono<Integer> insert(){
+        UserDomain userDomain = new UserDomain();
+        userDomain.setName("wenc").setCellphone("123498734892").setDataFrom(1).setEmployeeId("0001").setWechatid("1232");
+        return Mono.justOrEmpty(userMapper.insert(userDomain));
+    }
+
+    public Mono<Integer> update(){
+        return Mono.justOrEmpty(userMapper.updateByPrimaryKey(null));
     }
 }

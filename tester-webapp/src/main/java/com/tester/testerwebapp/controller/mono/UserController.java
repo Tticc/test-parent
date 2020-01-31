@@ -1,4 +1,4 @@
-package com.tester.testerwebapp.controller;
+package com.tester.testerwebapp.controller.mono;
 
 import com.tester.testercommon.controller.BaseController;
 import com.tester.testercommon.controller.RestResult;
@@ -38,4 +38,14 @@ public class UserController extends BaseController {
         Mono<UserDomain> userDomainMono = userManager.selectUserById(id);
         return monoSuccess(userDomainMono);
     }
+
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    public Mono<RestResult<Integer>> insert() {
+        log.info("controller start here.");
+        Mono<Integer> userDomainMono = userManager.insert();
+        return monoSuccess(userDomainMono);
+    }
+
+
+
 }

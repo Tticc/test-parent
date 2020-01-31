@@ -14,4 +14,5 @@ public interface UserMapper extends BaseMapper<UserDomain, Long> {
     @Select("select * from u_person where id = #{id} and deleted = 0")
     UserDomain selectUserById(@Param("id") Long id);
 
+
 }
