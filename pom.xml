@@ -27,6 +27,7 @@
         <persistence.version>1.0.2</persistence.version>
         <fastjson.version>1.2.60</fastjson.version>
         <tkmybatis.version>2.1.5</tkmybatis.version>
+        <mockito.version>1.10.19</mockito.version>
 
     </properties>
 
@@ -53,6 +54,13 @@
                 <version>${spring.version}</version>
             </dependency>
             <!-- web -->
+            <!--redis-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-redis</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <!--redis-->
             <!-- webflux -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -144,7 +152,6 @@
             </dependency>
 
 
-
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
@@ -157,11 +164,12 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>${mockito.version}</version>
                 <scope>test</scope>
             </dependency>
+
 
         </dependencies>
     </dependencyManagement>

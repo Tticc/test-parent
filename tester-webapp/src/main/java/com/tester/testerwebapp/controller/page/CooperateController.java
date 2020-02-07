@@ -19,15 +19,16 @@ public class CooperateController {
 		String initContent = COOPCONTENT;
 		this.sb.replace(0, this.sb.length(), initContent);
 		req.setAttribute("content", initContent);
+		req.setAttribute("someAttr","here is the someAttr");
 		return "coor";
 	}
 	@GetMapping("/ind")
 	public String index(HttpServletRequest req) {
 		return "index";
 	}
-	@GetMapping("demo")
+	@GetMapping("index")
 	public String demo(HttpServletRequest req) {
-		return "demo";
+		return "index";
 	}
 
 }

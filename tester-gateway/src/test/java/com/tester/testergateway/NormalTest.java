@@ -3,6 +3,7 @@ package com.tester.testergateway;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class NormalTest {
@@ -22,6 +23,21 @@ public class NormalTest {
     public void test_assert_state(){
         String str1 = "null";
         org.springframework.util.Assert.state(str1 != null, () -> "Missing @ConfigurationProperties on ");
+    }
+    
+    @Test
+    public void test_atomic_integer() throws InterruptedException {
+        AtomicInteger ai = new AtomicInteger();
+        for (int i = 0; i < 10; i++) {
+            new Thread(() -> {
+                ai.addAndGet(1);
+                ai.addAndGet(2);
+                ai.addAndGet(3);
+                ai.addAndGet(4);
+            }).start();
+        }
+        Thread.sleep(1000);
+        System.out.println(ai);
     }
 
 }
