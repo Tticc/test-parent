@@ -1,6 +1,7 @@
 package com.tester.testerwebapp.suitecase.controller;
 
 import com.tester.testercommon.controller.RestResult;
+import com.tester.testerwebapp.TesterWebappApplication;
 import com.tester.testerwebapp.controller.mono.UserController;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.dao.mapper.UserMapper;
@@ -11,10 +12,16 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Mono;
 
-@RunWith(MockitoJUnitRunner.class)
+@SpringBootTest(classes = TesterWebappApplication.class)
+@RunWith(SpringRunner.class)
+@EnableAutoConfiguration
+@AutoConfigureMockMvc
 public class LoginControllerTest extends TestCase {
 
     @InjectMocks
