@@ -22,28 +22,28 @@ public class BaseController {
     }
 
     public <T> RestResult<T> success() {
-        RestResult restResult = (new RestResult()).code(200L).message("执行成功！").putTimestamp();
-        return restResult;
+        return RestResult.success();
     }
     public <T> Mono<RestResult<T>> monoSuccess() {
         return monoSuccess(Mono.empty());
     }
 
     public <T> RestResult<T> success(T data) {
-        RestResult restResult = this.success("执行成功！", data);
-        return restResult;
-    }
-
-    public <T> Mono<RestResult<T>> monoSuccess(Mono<T> data) {
-        return monoSuccess("执行成功！", data);
-
+        return RestResult.success(data);
     }
 
     public <T> RestResult<T> success(String message, T data) {
-        RestResult restResult = (new RestResult()).code(200L).message(message).putTimestamp().data(data);
-        return restResult;
+        return RestResult.success(message,data);
     }
 
+    public <T> RestResult<T> fail(long code, String message) {
+        return RestResult.fail(code, message);
+    }
+
+
+    public <T> Mono<RestResult<T>> monoSuccess(Mono<T> data) {
+        return monoSuccess("执行成功！", data);
+    }
     public <T> Mono<RestResult<T>> monoSuccess(String message, Mono<T> data) {
         return data.map(e -> Optional.of(e))
                 .defaultIfEmpty(Optional.empty())
@@ -55,10 +55,6 @@ public class BaseController {
                             sink.next(this.success(message, e.get()));
                         }
                 );
-    }
-
-    public <T> RestResult<T> fail(long code, String message) {
-        return (new RestResult()).code(code).message(message).putTimestamp().data((Object)null);
     }
     public <T> Mono<RestResult<T>> monoFail(long code, String message) {
         return Mono.just((new RestResult()).code(code).message(message).putTimestamp().data((Object)null));

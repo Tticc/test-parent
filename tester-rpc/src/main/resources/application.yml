@@ -1,0 +1,14 @@
+server:
+  port: 8005
+spring:
+  profiles:
+    active: dev
+  application:
+    name: tester-rpc
+  main:
+    allow-bean-definition-overriding: true
+
+
+
+
+

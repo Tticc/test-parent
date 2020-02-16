@@ -28,6 +28,8 @@
         <fastjson.version>1.2.60</fastjson.version>
         <tkmybatis.version>2.1.5</tkmybatis.version>
         <mockito.version>1.10.19</mockito.version>
+        <netty.version>4.1.45.Final</netty.version>
+
 
     </properties>
 
@@ -38,6 +40,7 @@
         <module>tester-func-program</module>
         <module>tester-common</module>
         <module>tester-webapp</module>
+        <module>tester-rpc</module>
     </modules>
 
     <dependencyManagement>
@@ -129,11 +132,21 @@
             </dependency>
             <!--mysql-->
 
+            <!--netty-->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <!--netty-->
+
+            <!--json-->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
+            <!--json-->
 
             <dependency>
                 <groupId>org.apache.commons</groupId>
