@@ -43,6 +43,7 @@ public class ReactorTest {
 
     @Test
     public void test_getCPUProcessNumber(){
+
         System.out.println(Runtime.getRuntime().availableProcessors());
     }
     @Test

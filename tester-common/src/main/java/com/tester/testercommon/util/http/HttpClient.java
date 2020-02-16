@@ -26,39 +26,59 @@ public class HttpClient {
     public static final String POST_METHOD = "POST";
 
     public static void main(String[] args){
-        String wenc = httpsRequestRetry(String.format(getUrl, token, userId), GET_METHOD, null,
-                0, false, "wenc");
+        String wenc = httpsRequestRetry(String.format(getUrl, token, userId),
+                GET_METHOD,
+                null,
+                0,
+                false,
+                true,
+                "wenc");
         JSONObject parse = (JSONObject)JSONObject.parse(wenc);
         parse.put("mobile", "18883394480");
         parse.put("position", "d当");
         System.out.println(parse.toString());
 
-        String wenc1 = httpsRequestRetry(String.format(updateUrl, token), POST_METHOD, parse.toString(), 0, false, "wenc");
+        String wenc1 = httpsRequestRetry(String.format(updateUrl, token),
+                POST_METHOD,
+                parse.toString(),
+                0,
+                false,
+                true,
+                "wenc");
         System.out.println(wenc1);
     }
 
 
-//    public static IWxportService wxportService = null;
     static{
         try {
             // 创建SSLContext对象，并使用我们指定的信任管理器初始化
-            TrustManager[] tm = { new WeixinX509TrustManager() };
+            TrustManager[] tm = { new MyX509TrustManager() };
             SSLContext sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, tm, new java.security.SecureRandom());
             // 从SSLContext对象中得到SSLSocketFactory对象
             ssf = sslContext.getSocketFactory();
-//            wxportService = (IWxportService) DqdpAppContext
-//                    .getSpringContext().getBean("wxportService",
-//                            IWxportService.class);
         } catch (Exception e) {
             log.error("init SSLSocketFactory error", e);
         }
     }
+
+    /**
+     *
+     * @param requestUrl URL
+     * @param requestMethod post/get
+     * @param outputStr 请求数据
+     * @param retryCount 传0，重试三次
+     * @param isBizmpvers 传false
+     * @param isHttps http/https
+     * @param requestId 日志追踪用
+     * @return
+     */
     public static String httpsRequestRetry(String requestUrl,
                                            String requestMethod,
                                            String outputStr,
                                            int retryCount,
                                            boolean isBizmpvers,
+                                           boolean isHttps,
                                            String requestId) {
         long strat = System.currentTimeMillis();
         if(retryCount>2){//最多重试3次
@@ -74,17 +94,17 @@ public class HttpClient {
         BufferedReader bufferedReader = null;
         try {
             URL url = new URL(requestUrl);
-//            if (Configuration.WEIXIN_QY_API_IS_HTTPS) {
+            if (isHttps) {
                 HttpsURLConnection httpsUrlConn = (HttpsURLConnection) url.openConnection();
                 httpUrlConn = httpsUrlConn;
                 httpsUrlConn.setSSLSocketFactory(ssf);
                 if(isBizmpvers){
                     httpsUrlConn.addRequestProperty("Bizmp-Version", "1.0");
                 }
-//            }
-//            else {
-//                httpUrlConn = (HttpURLConnection) url.openConnection();
-//            }
+            }
+            else {
+                httpUrlConn = (HttpURLConnection) url.openConnection();
+            }
             httpUrlConn.setConnectTimeout(10*1000);
             httpUrlConn.setReadTimeout(7 * 1000);
             httpUrlConn.setDoOutput(true);
@@ -121,8 +141,8 @@ public class HttpClient {
             }
         } catch (IOException ce) {
             log.error("httprequest error uuid=" + thisRequestId
-                    + ";Weixin server connection timed out.", ce);
-            return httpsRequestRetry(requestUrl, requestMethod, outputStr, retryCount, isBizmpvers, requestId);
+                    + ";server connection timed out.", ce);
+            return httpsRequestRetry(requestUrl, requestMethod, outputStr, retryCount, isBizmpvers, isHttps, requestId);
         } catch (Exception e) {
             log.error("httprequest error uuid=" + thisRequestId + ";", e);
         } finally {
