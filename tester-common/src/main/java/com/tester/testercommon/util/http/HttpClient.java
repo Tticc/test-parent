@@ -19,33 +19,36 @@ import java.net.URL;
 public class HttpClient {
     private static String getUrl =  "https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=%s&userid=%s";
     private static String updateUrl = "https://qyapi.weixin.qq.com/cgi-bin/user/update?access_token=%s";
-    private static String token = "S7sq-U0BdxY7JU7MRFh0Zm9XwXQanEyhPm2zOy6uNUFxwaL_j1YkzzhkS5wuRc3dpYBGEY_9NurTPOJIxDcfFVfRGMRDtfZGcLgss5UBsCYb3uXorREKwynKrmANpQmc4DLLoa4YXCs2Xw2JMdmEC_t_Y8sJjr8BeL3gPDAdbbqLRALNr9JDN7r2t_01oraoNM92unDNRdjl15FAdf__JA";
-    private static String userId = "liufei";
+//    private static String token = "AZ2z2sNoWyYVeu9WGYIRT1Ut2eT1WGi0dQLGX-P6BUg017GGZCnw7f6nf83HxSYxLIIuNS3qQ5NpZ9RP79pqsL78tRgAT19uzIQtASzuoUW2cVGiWTBSxHYnlERQ2PhdUj-hjXmlZDYMMZQyjiIGtg5Lma4CAx4MZIy6G5QRxxiL1YooS_D6WPpFa-bcjlbtcXL_Lkkp9wKjUjBulQzz6w";
+//    private static String userId = "liufei";
+
+    private static String getToken = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s";
+    private static String corpId = "ww4749ac23812cffae";
+    private static String contactSecret = "5JMxsYqj1VnHTT5suo4xpQG1RA19aTix_hwAp_SGJUw";
+    private static String testSecret = "75eMTOfJJ2tXs3ogQZ1VMCj0InSj0yh50fP-TruHRHk";
+
     public static SSLSocketFactory ssf;
     public static final String GET_METHOD = "GET";
     public static final String POST_METHOD = "POST";
 
     public static void main(String[] args){
-        String wenc = httpsRequestRetry(String.format(getUrl, token, userId),
-                GET_METHOD,
-                null,
-                0,
-                false,
-                true,
-                "wenc");
-        JSONObject parse = (JSONObject)JSONObject.parse(wenc);
-        parse.put("mobile", "18883394480");
-        parse.put("position", "d当");
-        System.out.println(parse.toString());
+        String token = "";
+//        String userId = "liufei";
+        String userId = "18883394480";
+        token = getAccessToken(testSecret);
+        System.out.println(token);
+//        token = getAccessToken(contactSecret);
 
-        String wenc1 = httpsRequestRetry(String.format(updateUrl, token),
-                POST_METHOD,
-                parse.toString(),
-                0,
-                false,
-                true,
-                "wenc");
-        System.out.println(wenc1);
+        System.out.println("\n\n");
+
+        JSONObject user = getUser(userId, token);
+//        user.put("mobile", "18883394480");
+//        user.put("position", "d当");
+        System.out.println(user.toString());
+        System.out.println("\n\n");
+
+        JSONObject jsonObject = updateUser(user, token);
+        System.out.println(jsonObject);
     }
 
 
@@ -62,6 +65,38 @@ public class HttpClient {
         }
     }
 
+    public static String getAccessToken(String secret){
+        String newToken = httpsRequestRetry(String.format(getToken, corpId, secret),
+                GET_METHOD,
+                null,
+                0,
+                false,
+                true,
+                "getToken");
+        System.out.println(newToken);
+        JSONObject parse1 = (JSONObject)JSONObject.parse(newToken);
+        return String.valueOf(parse1.get("access_token"));
+    }
+    public static JSONObject getUser(String userId, String token){
+        String wenc = httpsRequestRetry(String.format(getUrl, token, userId),
+                GET_METHOD,
+                null,
+                0,
+                false,
+                true,
+                "getUser");
+        return (JSONObject)JSONObject.parse(wenc);
+    }
+    public static JSONObject updateUser(JSONObject user, String token){
+        String wenc1 = httpsRequestRetry(String.format(updateUrl, token),
+                POST_METHOD,
+                user.toString(),
+                0,
+                false,
+                true,
+                "updateUser");
+        return (JSONObject)JSONObject.parse(wenc1);
+    }
     /**
      *
      * @param requestUrl URL
