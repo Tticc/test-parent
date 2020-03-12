@@ -9,6 +9,11 @@ import java.util.concurrent.atomic.AtomicReference;
 public class NormalTest {
 
     @Test
+    public void test_length(){
+        int length = "WWCISP_G8PYgRaOVHjXWUWFqchpBqqqUpGj0OyR9z6WTwhnMZGCPHxyviVstiv_2fTG8YOJq8L8zJT2T2OvTebANV-2MQ".length();
+        System.out.println(length);
+    }
+    @Test
     public void test_atomic(){
         String str1 = "after comp";
         String str2 = "after after";
