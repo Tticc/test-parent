@@ -1,8 +1,7 @@
 package com.tester.testercommon.util.http;
 
 import com.alibaba.fastjson.JSONObject;
-import com.tester.testercommon.util.http.userinfo.ExtInfo;
-import com.tester.testercommon.util.http.userinfo.UserInfoMessage;
+import com.tester.testercommon.util.http.userinfo.QywxUserInfoMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -14,7 +13,6 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.*;
 
 /**
  * for test
@@ -70,19 +68,18 @@ public class HttpClient {
 //        user.put("mobile", "188833944804");
 //        user.put("position", "d当");
         System.out.println(user.toString());
-        UserInfoMessage esds = JSONObject.toJavaObject(user, UserInfoMessage.class);
+        QywxUserInfoMessage esds = JSONObject.toJavaObject(user, QywxUserInfoMessage.class);
         System.out.println(esds);
-        List<ExtInfo> attrs = esds.getExtattr().get("attrs");
+        /*List<ExtInfo> attrs = esds.getExtattr().get("attrs");
         for (ExtInfo info:attrs) {
             if(Objects.equals(info.getName(),"组织列表")){
                 System.out.println(info);
                 Map<String,String> newmap = new HashMap<>();
-                newmap.put("value","50003321:销售部,99003332:客服部");
+                newmap.put("value","500111111:销售部,111111112:客服部");
                 info.setText(newmap);
-                info.setValue("真正的值");
             }
         }
-        System.out.println((JSONObject)JSONObject.toJSON(esds));
+        System.out.println((JSONObject)JSONObject.toJSON(esds));*/
         /*JSONObject extattr = (JSONObject)user.get("extattr");
         System.out.println(extattr);
         JSONArray attrs = (JSONArray)extattr.get("attrs");
@@ -92,9 +89,9 @@ public class HttpClient {
         }*/
 
         // 更新user
-        System.out.println("\n\n");
+        /*System.out.println("\n\n");
         JSONObject jsonObject = updateUser((JSONObject)JSONObject.toJSON(esds), token);
-        System.out.println(jsonObject);
+        System.out.println(jsonObject);*/
     }
 
 
@@ -162,7 +159,7 @@ public class HttpClient {
         return (JSONObject)JSONObject.parse(wenc);
     }
     /** InfoMessage*/
-    public static JSONObject updateUser(UserInfoMessage user, String token){
+    public static JSONObject updateUser(QywxUserInfoMessage user, String token){
         String wenc1 = httpsRequestRetry(String.format(updateUrl, token),
                 POST_METHOD,
                 user.toString(),
