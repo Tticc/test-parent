@@ -1,8 +1,7 @@
 package com.tester.testercommon.util.http;
 
 import com.alibaba.fastjson.JSONObject;
-import com.tester.testercommon.util.http.userinfo.ExtInfo;
-import com.tester.testercommon.util.http.userinfo.UserInfoMessage;
+import com.tester.testercommon.util.http.userinfo.QywxUserInfoMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -14,7 +13,6 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.*;
 
 /**
  * for test
@@ -70,7 +68,7 @@ public class HttpClient {
 //        user.put("mobile", "188833944804");
 //        user.put("position", "d当");
         System.out.println(user.toString());
-        UserInfoMessage esds = JSONObject.toJavaObject(user, UserInfoMessage.class);
+        QywxUserInfoMessage esds = JSONObject.toJavaObject(user, QywxUserInfoMessage.class);
         System.out.println(esds);
         List<ExtInfo> attrs = new ArrayList<>();
         // 公司
@@ -174,7 +172,7 @@ public class HttpClient {
         return (JSONObject)JSONObject.parse(wenc);
     }
     /** InfoMessage*/
-    public static JSONObject updateUser(UserInfoMessage user, String token){
+    public static JSONObject updateUser(QywxUserInfoMessage user, String token){
         String wenc1 = httpsRequestRetry(String.format(updateUrl, token),
                 POST_METHOD,
                 user.toString(),

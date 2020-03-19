@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Data
 @Accessors(chain = true)
-public class ExtProfileAttr {
+public class QywxUserExtProfileAttr {
     String type;
     String name;
     Map<String, String> text;
