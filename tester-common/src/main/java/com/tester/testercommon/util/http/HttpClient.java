@@ -1,6 +1,7 @@
 package com.tester.testercommon.util.http;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tester.testercommon.util.http.userinfo.QywxUserExtInfo;
 import com.tester.testercommon.util.http.userinfo.QywxUserInfoMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
@@ -13,6 +14,10 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * for test
@@ -70,7 +75,7 @@ public class HttpClient {
         System.out.println(user.toString());
         QywxUserInfoMessage esds = JSONObject.toJavaObject(user, QywxUserInfoMessage.class);
         System.out.println(esds);
-        List<ExtInfo> attrs = new ArrayList<>();
+        List<QywxUserExtInfo> attrs = new ArrayList<>();
         // 公司
         attrs.add(generateAttr("公司","永旺数字科技有限公司"));
         attrs.add(generateAttr("公司id","50001245"));
@@ -99,8 +104,8 @@ public class HttpClient {
     }
 
 
-    public static ExtInfo generateAttr(String name, String value){
-        ExtInfo ex = new ExtInfo();
+    public static QywxUserExtInfo generateAttr(String name, String value){
+        QywxUserExtInfo ex = new QywxUserExtInfo();
         ex.setName(name);
         ex.setType(0);
         Map<String,String> newmap = new HashMap<>();
