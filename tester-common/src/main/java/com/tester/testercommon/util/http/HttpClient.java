@@ -48,8 +48,8 @@ public class HttpClient {
 
     public static void main(String[] args){
         String token = "";
-//        String userId = "liufei";
         String userId = "liufei";
+//        String userId = "oops";
         token = getAccessToken(contactSecret);
         System.out.println(token);
 //        token = getAccessToken(contactSecret);
@@ -72,16 +72,19 @@ public class HttpClient {
         System.out.println(user.toString());
         UserInfoMessage esds = JSONObject.toJavaObject(user, UserInfoMessage.class);
         System.out.println(esds);
-        List<ExtInfo> attrs = esds.getExtattr().get("attrs");
-        for (ExtInfo info:attrs) {
-            if(Objects.equals(info.getName(),"组织列表")){
-                System.out.println(info);
-                Map<String,String> newmap = new HashMap<>();
-                newmap.put("value","50003321:销售部,99003332:客服部");
-                info.setText(newmap);
-                info.setValue("真正的值");
-            }
-        }
+        List<ExtInfo> attrs = new ArrayList<>();
+        // 公司
+        attrs.add(generateAttr("公司","永旺数字科技有限公司"));
+        attrs.add(generateAttr("公司id","50001245"));
+        // 店铺
+        attrs.add(generateAttr("店铺","天河店"));
+        attrs.add(generateAttr("店铺id","51001245"));
+        // 组织
+        attrs.add(generateAttr("组别","销售组"));
+        attrs.add(generateAttr("组别id","52001245"));
+
+
+        esds.getExtattr().put("attrs",attrs);
         System.out.println((JSONObject)JSONObject.toJSON(esds));
         /*JSONObject extattr = (JSONObject)user.get("extattr");
         System.out.println(extattr);
@@ -98,6 +101,15 @@ public class HttpClient {
     }
 
 
+    public static ExtInfo generateAttr(String name, String value){
+        ExtInfo ex = new ExtInfo();
+        ex.setName(name);
+        ex.setType(0);
+        Map<String,String> newmap = new HashMap<>();
+        newmap.put("value",value);
+        ex.setText(newmap);
+        return ex;
+    }
 
 
     static{
