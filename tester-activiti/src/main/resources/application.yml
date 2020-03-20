@@ -1,0 +1,22 @@
+server:
+  port: 8005
+spring:
+  profiles:
+    active: dev
+  application:
+    name: tester-web-app
+  main:
+    allow-bean-definition-overriding: true
+  # thymeleaf
+  thymeleaf:
+    prefix: classpath:/templates/
+#    check-template-location: true
+    suffix: .html
+    encoding: UTF-8
+    mode: HTML5
+    cache: false
+#    content-type: text/html
+
+
+
+
