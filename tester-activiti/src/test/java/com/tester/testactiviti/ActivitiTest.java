@@ -1,5 +1,7 @@
 package com.tester.testactiviti;
 
+import com.tester.testactiviti.dao.domain.TaskAssigneeDO;
+import com.tester.testactiviti.dao.mapper.TaskAssigneeMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.model.*;
 import org.activiti.bpmn.model.Process;
@@ -14,6 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 /**
  * @Author 温昌营
  * @Date
@@ -26,8 +34,8 @@ public class ActivitiTest {
     private static final String START_EVENT_ID = "start";
     private static final String START_TASK_KEY = "startTask";
     private static final String GATE_WAY_ID = "exGateway";
-    private static final String GATE_WAY_END_EXPRESS = "${conditionEntity.getOrderReceived() == false}";
-    private static final String GATE_WAY_CONTINUE_EXPRESS = "${conditionEntity.getOrderReceived() == true}";
+    private static final String GATE_WAY_END_EXPRESS = "${conditionEntity.getOrderReceived(procId) == false}";
+    private static final String GATE_WAY_CONTINUE_EXPRESS = "${conditionEntity.getOrderReceived(procId) == true}";
     private static final String USER_TASK_ID = "user_task";
     private static final String END_EVENT_ID = "end";
     private static final String END_TASK_KEY = "endTask";
@@ -36,12 +44,20 @@ public class ActivitiTest {
     private RepositoryService repositoryService;
     @Autowired
     private RuntimeService runtimeService;
-//    @Autowired
-//    private ActivitiService activitiService;
     @Autowired
     private TaskService taskService;
 
     private String processKey = "process_key_uuid";
+
+    @Resource
+    private TaskAssigneeMapper taskAssigneeMapper;
+    @Test
+    public void test_size(){
+
+        List<TaskAssigneeDO> select = taskAssigneeMapper.selectAll();
+        System.out.println("select.size():"+select.size());
+    }
+
     @Test
     public void test_createModel(){
         BpmnModel model = tcreatFlow(processKey);
@@ -73,7 +89,14 @@ public class ActivitiTest {
         }
         String taskId = taskByProcId.getId();
         System.out.println("taskId:"+taskId+", taskName:"+taskByProcId.getName());
-        taskService.complete(taskId);
+        if(Objects.equals(taskByProcId.getName(),START_TASK_KEY)){
+            Map<String,Object> map = new HashMap<>();
+            map.put("procId",insId);
+            taskService.complete(taskId,map);
+        }else {
+
+            taskService.complete(taskId);
+        }
         return true;
     }
 

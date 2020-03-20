@@ -18,6 +18,9 @@ public class BaseDomain implements Serializable, Cloneable {
         this.updateTime = this.createTime = new Date();
         this.revision = 0;
     }
+    public BaseDomain init(){
+        return this;
+    }
 
     private Long id;
     private Date createTime;
