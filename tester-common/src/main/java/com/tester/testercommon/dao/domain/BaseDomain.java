@@ -16,7 +16,7 @@ import java.util.Date;
 public class BaseDomain implements Serializable, Cloneable {
     public BaseDomain init(){
         this.updateTime = this.createTime = new Date();
-        this.revision = 0;
+        this.revision = this.deleted = 0;
         return this;
     }
 

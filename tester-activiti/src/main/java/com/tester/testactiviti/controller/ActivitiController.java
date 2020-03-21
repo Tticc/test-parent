@@ -1,5 +1,12 @@
 package com.tester.testactiviti.controller;
 
+import com.tester.testactiviti.dao.domain.FlowFieldConditionDO;
+import com.tester.testactiviti.dao.domain.NodeModelDO;
+import com.tester.testactiviti.dao.mapper.FlowFieldConditionMapper;
+import com.tester.testactiviti.dao.mapper.MetaFieldMapper;
+import com.tester.testactiviti.dao.mapper.NodeModelMapper;
+import com.tester.testactiviti.model.request.FlowModelCreateModel;
+import com.tester.testactiviti.model.request.NodeCreateModel;
 import com.tester.testercommon.controller.BaseController;
 import com.tester.testercommon.controller.RestResult;
 import lombok.extern.slf4j.Slf4j;
@@ -8,11 +15,16 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.redis.connection.RedisZSetCommands;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
+import reactor.util.function.Tuples;
+
+import javax.annotation.Resource;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author 温昌营
@@ -29,8 +41,64 @@ public class ActivitiController extends BaseController {
     private RuntimeService runtimeService;
     @Autowired
     private TaskService taskService;
+    @Resource
+    private FlowFieldConditionMapper flowFieldConditionMapper;
+    @Resource
+    private MetaFieldMapper metaFieldMapper;
+    @Resource
+    private NodeModelMapper nodeModelMapper;
 
-    @PostMapping("task/complete")
+    @PostMapping("/testConnect")
+    public Mono<RestResult<Object>> testConnect() {
+        return monoSuccess();
+    }
+
+    @PostMapping("flow/createModel")
+    public Mono<RestResult<Object>> createModel(@RequestBody @Valid FlowModelCreateModel model) {
+        List<FlowFieldConditionDO> ffc = new ArrayList<>();
+        List<NodeModelDO> nodeModelDOS = new ArrayList<>();
+        List<NodeCreateModel> nodes = model.getNodes();
+        for (NodeCreateModel node : nodes) {
+            FlowFieldConditionDO init = new FlowFieldConditionDO().init();
+            init.setCheckType(node.getCheckType())
+                    .setCheckValue(node.getCheckValue())
+                    .setFalseNext(node.getFalseNext())
+                    .setFieldModelId(node.getFieldModelId())
+                    .setFlowModelId(0L)// todo 这个可以应该是新生成的，无法从前端获得
+                    .setIfCondition(node.getIfCondition())
+                    .setNodeKey(node.getNodeKey())
+                    .setTrueNext(node.getTrueNext());
+            NodeModelDO init1 = new NodeModelDO().init();
+            init1.setFlowModelId(0L) // todo 这个可以应该是新生成的，无法从前端获得
+                    .setCoopType(node.getCoopType())
+                    .setSpecificIdList(node.getSpecificIdList().toString()) // todo 处理
+                    .setSerialNumber(node.getSerialNumber())
+                    .setNodeType(node.getNodeType())
+                    .setNodeKey(node.getNodeKey())
+                    .setApproverType(node.getApproverType())
+                    .setActivitiFlowId("null")// todo 后台设置
+                    .setNextNodeKeyList(node.getNextNodeKeyList().toString())// todo 处理
+                    ;
+
+            ffc.add(init);
+            nodeModelDOS.add(init1);
+        }
+        Tuple2<List<FlowFieldConditionDO>,List<NodeModelDO>> tt = Tuples.of(ffc,nodeModelDOS);
+        return monoSuccess(Mono.justOrEmpty(tt));
+    }
+
+    @PostMapping("/flow/createFLowInstance")
+    public Mono<RestResult<Object>> createFLowInstance(@RequestParam String procKey) {
+        return monoSuccess(Mono.justOrEmpty("createFLowInstance"));
+    }
+
+    @PostMapping("/flow/deleteFLowInstance")
+    public Mono<RestResult<Object>> deleteFLowInstance(@RequestParam String procKey) {
+        return monoSuccess(Mono.justOrEmpty("deleteFLowInstance"));
+    }
+
+
+    @PostMapping("/task/complete")
     public Mono<RestResult<Object>> completeTask(@RequestParam String insId, @RequestParam String content) {
         Task task = taskService.createTaskQuery().processInstanceId(insId).singleResult();
         String msg;
@@ -40,15 +108,5 @@ public class ActivitiController extends BaseController {
             msg = "has next task。taskId:"+task.getId()+", taskName:"+task.getName();
         }
         return monoSuccess(Mono.justOrEmpty(msg));
-    }
-
-    @PostMapping("flow/create")
-    public Mono<RestResult<Object>> createFlow(@RequestParam String procKey) {
-        return monoSuccess(Mono.justOrEmpty(runtimeService.startProcessInstanceByKey(procKey).getId()));
-    }
-
-    @PostMapping("flow/delete")
-    public Mono<RestResult<Object>> deleteFlow(@RequestParam String procKey) {
-        return monoSuccess(Mono.justOrEmpty(runtimeService.startProcessInstanceByKey(procKey).getId()));
     }
 }

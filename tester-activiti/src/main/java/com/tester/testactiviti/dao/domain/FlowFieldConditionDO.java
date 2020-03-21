@@ -34,8 +34,8 @@ public class FlowFieldConditionDO extends BaseDomain {
     private String checkValue ;
     /** 使用节点;在哪个节点使用这个条件 */
     private String nodeKey ;
-    /** 比较结果;0=false，1=true */
-    private Integer result ;
+//    /** 比较结果;0=false，1=true */
+//    private Integer result ;
     /** 结果为真时的下一个节点key */
     private String trueNext ;
     /** 结果为假时的下一个节点key */
@@ -51,7 +51,7 @@ CREATE TABLE f_flow_field_condition(
     check_type INT    COMMENT '判断类型 1=大于，2=小于，3=等于' ,
     check_value VARCHAR(64)    COMMENT '比较的值' ,
     node_key VARCHAR(64)    COMMENT '使用节点 在哪个节点使用这个条件' ,
-    result INT    COMMENT '比较结果 0=false，1=true' ,
+--    result INT    COMMENT '比较结果 0=false，1=true' ,
     true_next VARCHAR(64)    COMMENT '结果为真时的下一个节点key' ,
     false_next VARCHAR(64)    COMMENT '结果为假时的下一个节点key' ,
     deleted INT    COMMENT '是否删除 0=未删除，1=删除' ,

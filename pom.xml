@@ -12,7 +12,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <spring.version>2.1.9.RELEASE</spring.version>
+        <spring.version>2.1.8.RELEASE</spring.version>
         <lombok.version>1.18.10</lombok.version>
         <log.version>1.2</log.version>
         <junit.version>4.11</junit.version>
@@ -29,6 +29,7 @@
         <tkmybatis.version>2.1.5</tkmybatis.version>
         <mockito.version>1.10.19</mockito.version>
         <netty.version>4.1.45.Final</netty.version>
+        <swagger.version>2.9.2</swagger.version>
 
 
     </properties>
@@ -164,6 +165,10 @@
                 <version>${PKCS7.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+            </dependency>
 
             <dependency>
                 <groupId>org.projectlombok</groupId>

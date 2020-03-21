@@ -8,8 +8,8 @@
         <version>0.0.1-SNAPSHOT</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <artifactId>test-webapp</artifactId>
-    <name>test-webapp</name>
+    <artifactId>tester-webapp</artifactId>
+    <name>tester-webapp</name>
 
     <properties>
         <java.version>1.8</java.version>
