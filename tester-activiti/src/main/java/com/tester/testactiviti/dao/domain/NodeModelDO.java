@@ -16,8 +16,8 @@ import java.util.Date;
 @Data
 @ToString(callSuper=true)
 @Accessors(chain=true)
-@Table(name = "f_task_assignee")
-public class TaskAssigneeDO extends BaseDomain {
+@Table(name = "f_node_model")
+public class NodeModelDO extends BaseDomain {
     /**
      * 初始化数据。插入数据的时候调用，查询的时候不需要
      * @return com.aeon.dmc.cloud.office.core.dao.domain.flow.TaskAssigneeDO
@@ -25,14 +25,8 @@ public class TaskAssigneeDO extends BaseDomain {
      * @date 2019/11/14
      */
     @Override
-    public TaskAssigneeDO init(){
+    public NodeModelDO init(){
         super.init();
-        this.depth = 0;
-        this.flowStatus = 20; // 进行中
-        this.taskApprovalType = 1; // 或签
-        this.approverType = 2; // 指定人
-        this.taskStatus = 1; // 未开始
-        this.approvalStatus = 1; // 未审批
         return this;
     }
 

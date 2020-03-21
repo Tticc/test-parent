@@ -14,11 +14,9 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 public class BaseDomain implements Serializable, Cloneable {
-    public BaseDomain(){
+    public BaseDomain init(){
         this.updateTime = this.createTime = new Date();
         this.revision = 0;
-    }
-    public BaseDomain init(){
         return this;
     }
 
