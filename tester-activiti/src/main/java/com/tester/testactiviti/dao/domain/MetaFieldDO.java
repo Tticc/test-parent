@@ -15,27 +15,19 @@ import javax.persistence.Table;
 @Data
 @ToString(callSuper=true)
 @Accessors(chain=true)
-@Table(name = "f_node_model")
-public class NodeModelDO extends BaseDomain {
+@Table(name = "meta_field")
+public class MetaFieldDO extends BaseDomain {
     @Override
-    public NodeModelDO init(){
+    public MetaFieldDO init(){
         super.init();
         return this;
     }
-    /** activiti流程id */
-    private String activitiFlowId ;
-    /** 节点key，uuid;在有序列号之后，需要吗 */
-    private String nodeKey ;
-    /** 节点类型;节点类型(任务节点/判断节点/起始/终止) */
-    private Integer nodeType ;
-    /** 序号 */
-    private Integer serialNumber ;
-    /** 下一个节点;在有序列号之后，需要吗 */
-    private String nextNodeStrIdList ;
-    /** 审批人类型。;注：任务节点才需要 */
-    private Integer approverType ;
-    /** 指定id列表;根据审批人类型来确定。可能是人员id、岗位id、角色id等。注：任务节点才需要 */
-    private String specificIdList ;
+    /** 名称 */
+    private String name ;
+    /** 类型 */
+    private Integer type ;
+    /** 大类;可以按长度区分，暂时不区分 */
+    private Integer category ;
 
 }
 /*
