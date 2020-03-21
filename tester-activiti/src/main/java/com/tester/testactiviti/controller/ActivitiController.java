@@ -5,6 +5,7 @@ import com.tester.testactiviti.dao.domain.NodeModelDO;
 import com.tester.testactiviti.dao.mapper.FlowFieldConditionMapper;
 import com.tester.testactiviti.dao.mapper.MetaFieldMapper;
 import com.tester.testactiviti.dao.mapper.NodeModelMapper;
+import com.tester.testactiviti.model.request.FieldConditionCreateModel;
 import com.tester.testactiviti.model.request.FlowModelCreateModel;
 import com.tester.testactiviti.model.request.NodeCreateModel;
 import com.tester.testercommon.controller.BaseController;
@@ -59,15 +60,6 @@ public class ActivitiController extends BaseController {
         List<NodeModelDO> nodeModelDOS = new ArrayList<>();
         List<NodeCreateModel> nodes = model.getNodes();
         for (NodeCreateModel node : nodes) {
-            FlowFieldConditionDO init = new FlowFieldConditionDO().init();
-            init.setCheckType(node.getCheckType())
-                    .setCheckValue(node.getCheckValue())
-                    .setFalseNext(node.getFalseNext())
-                    .setFieldModelId(node.getFieldModelId())
-                    .setFlowModelId(0L)// todo 这个可以应该是新生成的，无法从前端获得
-                    .setIfCondition(node.getIfCondition())
-                    .setNodeKey(node.getNodeKey())
-                    .setTrueNext(node.getTrueNext());
             NodeModelDO init1 = new NodeModelDO().init();
             init1.setFlowModelId(0L) // todo 这个可以应该是新生成的，无法从前端获得
                     .setCoopType(node.getCoopType())
@@ -79,9 +71,20 @@ public class ActivitiController extends BaseController {
                     .setActivitiFlowId("null")// todo 后台设置
                     .setNextNodeKeyList(node.getNextNodeKeyList().toString())// todo 处理
                     ;
-
-            ffc.add(init);
             nodeModelDOS.add(init1);
+            List<FieldConditionCreateModel> conditions = node.getConditions();
+            for (FieldConditionCreateModel condition : conditions) {
+                FlowFieldConditionDO cond = new FlowFieldConditionDO().init();
+                cond.setCheckType(condition.getCheckType())
+                        .setCheckValue(condition.getCheckValue())
+                        .setFalseNext(condition.getFalseNext())
+                        .setFieldModelId(condition.getFieldModelId())
+                        .setFlowModelId(0L)// todo 这个可以应该是新生成的，无法从前端获得
+                        .setIfCondition(condition.getIfCondition())
+                        .setNodeKey(node.getNodeKey())
+                        .setTrueNext(condition.getTrueNext());
+                ffc.add(cond);
+            }
         }
         Tuple2<List<FlowFieldConditionDO>,List<NodeModelDO>> tt = Tuples.of(ffc,nodeModelDOS);
         return monoSuccess(Mono.justOrEmpty(tt));

@@ -34,8 +34,10 @@ public class NodeCreateModel {
     @ApiModelProperty(value = "指定id列表", example = "[1,2,3]", required = false)
     private List<Long> specificIdList;
 
+    @ApiModelProperty(value = "条件列表。节点类型为 判断节点 时才有", example = "[1,2,3]", required = false)
+    List<FieldConditionCreateModel> conditions;
 
-    // condition table
+    /*// condition table
     @ApiModelProperty(value = "字段模板id", example = "1", required = false)
     private Long fieldModelId;
 
@@ -69,20 +71,6 @@ public class NodeCreateModel {
                 .setSerialNumber(null)
                 .setSpecificIdList(null)
         ;
-    }
-    private void tt(){
-        FlowFieldConditionDO flowFieldConditionDO = new FlowFieldConditionDO();
-        flowFieldConditionDO
-                .setNodeKey(null)
-                .setFlowModelId(null)
+    }*/
 
-
-                .setFieldModelId(null)
-                .setIfCondition(null)
-                .setCheckType(null)
-                .setCheckValue(null)
-                .setTrueNext(null)
-                .setFalseNext(null)
-        ;
-    }
 }
