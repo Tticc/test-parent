@@ -64,6 +64,7 @@ public class ActivitiController extends BaseController {
 
     @PostMapping("/createFlowModel")
     public Mono<RestResult<Object>> createFlowModel(@RequestBody @Valid FlowModelCreateModel model) {
+        // todo activiti flow id 可以考虑存放到枚举里面
         String activitiFlowId = "cycle_flow";
         // 1.持久化流程模板(可拆分)。假设已完成
         Long flowModelId = 1L;
@@ -77,10 +78,15 @@ public class ActivitiController extends BaseController {
         // 4.持久化条件模板(可拆分)
         List<FormFieldConditionDO> conditionDOS = generateFlowFieldCondition(model.getNodes());
         formFieldConditionMapper.insertList(conditionDOS);
+        return monoSuccess(Mono.justOrEmpty("success"));
+    }
 
+    @PostMapping("/instanceFlow")
+    public Mono<RestResult<Object>> instanceFlow(@RequestBody @Valid FlowModelCreateModel model) {
+        // todo 创建流程，注意case id，考虑case id使用的地方
 
-        // 5.插入值
-        // 6.根据值初始化 task_assignee表
+        // 5.插入表单值
+        // 6.根据表单值初始化 task_assignee表
         return monoSuccess(Mono.justOrEmpty("success"));
     }
 /*
