@@ -15,31 +15,33 @@ import javax.persistence.Table;
 @Data
 @ToString(callSuper=true)
 @Accessors(chain=true)
-@Table(name = "f_flow_field_condition")
-public class FlowFieldConditionDO extends BaseDomain {
+@Table(name = "f_form_field_condition")
+public class FormFieldConditionDO extends BaseDomain {
     @Override
-    public FlowFieldConditionDO init(){
+    public FormFieldConditionDO init(){
         super.init();
         return this;
     }
-    /** 流程模板id */
-    private Long flowModelId ;
-    /** 字段模板id */
-    private Long fieldModelId ;
-    /** 是否条件;0=false，1=true */
-    private Integer ifCondition ;
+    /** 表单-字段关系表id;可能并不需要 */
+    private Long formFieldId ;
+    /** 表单-字段关系表key */
+    private String formFieldKey ;
+    /** 使用节点id */
+    private Long nodeId ;
+    /** 使用节点key;在哪个节点使用这个条件 */
+    private String nodeKey ;
     /** 判断类型;1=大于，2=小于，3=等于 */
     private Integer checkType ;
     /** 比较的值 */
     private String checkValue ;
-    /** 使用节点;在哪个节点使用这个条件 */
-    private String nodeKey ;
-//    /** 比较结果;0=false，1=true */
-//    private Integer result ;
     /** 结果为真时的下一个节点key */
     private String trueNext ;
+    /** 结果为真时的下一个节点id */
+    private Long trueNextId ;
     /** 结果为假时的下一个节点key */
     private String falseNext ;
+    /** 结果为假时的下一个节点id */
+    private Long falseNextId ;
 
 }
 /*

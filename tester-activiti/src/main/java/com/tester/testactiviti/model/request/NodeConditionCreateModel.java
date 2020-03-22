@@ -1,22 +1,28 @@
 package com.tester.testactiviti.model.request;
 
-import com.tester.testactiviti.dao.domain.FlowFieldConditionDO;
+import com.tester.testactiviti.dao.domain.FormFieldConditionDO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class FieldConditionCreateModel {
+public class NodeConditionCreateModel {
+
 
 
 
     // condition table
-    @ApiModelProperty(value = "字段模板id", example = "1", required = false)
-    private Long fieldModelId;
+    @ApiModelProperty(value = "表单-字段key", example = "1", required = false)
+    private String formFieldKey;
 
-    @ApiModelProperty(value = "是否条件;0=false，1=true", example = "endNode", required = true)
-    private Integer ifCondition;
+    // todo tobe deleted. 根据formFieldKey获取这个id，然后更新 表单-字段表的 if_condition
+//    @ApiModelProperty(value = "表单-字段id", example = "1", required = false)
+//    private Long formFieldId;
+
+    // 一定会是condition
+//    @ApiModelProperty(value = "是否条件;0=false，1=true", example = "endNode", required = true)
+//    private Integer ifCondition;
 
     @ApiModelProperty(value = "判断类型;1=大于，2=小于，3=等于", example = "1", required = false)
     private Integer checkType ;
@@ -34,14 +40,11 @@ public class FieldConditionCreateModel {
 
 
     private void tt(){
-        FlowFieldConditionDO flowFieldConditionDO = new FlowFieldConditionDO();
+        FormFieldConditionDO flowFieldConditionDO = new FormFieldConditionDO();
         flowFieldConditionDO
                 .setNodeKey(null)
-                .setFlowModelId(null)
 
 
-                .setFieldModelId(null)
-                .setIfCondition(null)
                 .setCheckType(null)
                 .setCheckValue(null)
                 .setTrueNext(null)

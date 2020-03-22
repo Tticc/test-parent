@@ -1,7 +1,5 @@
 package com.tester.testactiviti.model.request;
 
-import com.tester.testactiviti.dao.domain.FlowFieldConditionDO;
-import com.tester.testactiviti.dao.domain.NodeModelDO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -34,8 +32,8 @@ public class NodeCreateModel {
     @ApiModelProperty(value = "指定id列表", example = "[1,2,3]", required = false)
     private List<Long> specificIdList;
 
-    @ApiModelProperty(value = "条件列表。节点类型为 判断节点 时才有", example = "[1,2,3]", required = false)
-    List<FieldConditionCreateModel> conditions;
+    @ApiModelProperty(value = "条件。一个判断节点最多只有一个条件。节点类型为 判断节点 时才有", example = "[1,2,3]", required = false)
+    NodeConditionCreateModel condition;
 
     /*// condition table
     @ApiModelProperty(value = "字段模板id", example = "1", required = false)

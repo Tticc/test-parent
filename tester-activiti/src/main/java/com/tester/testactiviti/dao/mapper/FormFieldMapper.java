@@ -1,18 +1,18 @@
 package com.tester.testactiviti.dao.mapper;
 
-import com.tester.testactiviti.dao.domain.NodeModelDO;
+import com.tester.testactiviti.dao.domain.FormFieldDO;
 import com.tester.testercommon.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 @Mapper
-public interface NodeModelMapper extends BaseMapper<NodeModelDO,Long> {
+public interface FormFieldMapper extends BaseMapper<FormFieldDO,Long> {
 
 
-    @Select("select id from f_node_model where node_key = #{nodeKey} and deleted = 0")
-    Long selectIdByNodeKey(@Param("nodeKey")String nodeKey);
 
+    @Select("select id from front_form_field where form_field_key = #{formFieldKey} and deleted = 0")
+    Long selectIdByFormFieldKey(@Param("formFieldKey")String formFieldKey);
 
 
 /*

@@ -1,11 +1,11 @@
 package com.tester.testactiviti.dao.mapper;
 
-import com.tester.testactiviti.dao.domain.FlowFieldConditionDO;
+import com.tester.testactiviti.dao.domain.FormFieldConditionDO;
 import com.tester.testercommon.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface FlowFieldConditionMapper extends BaseMapper<FlowFieldConditionDO,Long> {
+public interface FormFieldConditionMapper extends BaseMapper<FormFieldConditionDO,Long> {
 
 
 

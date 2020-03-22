@@ -66,7 +66,7 @@ public class ActivitiTest {
                 .name(processKey).deploy();
         String id = deploy.getId();
         System.out.println("deloy id:"+id);
-        startProcess(processKey);
+//        startProcess(processKey);
 
 
     }
