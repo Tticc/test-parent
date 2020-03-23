@@ -42,9 +42,13 @@ spring:
 #mybatis
 mybatis:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
 
-
-
+logging:
+  level:
+    com.tester.testactiviti.dao.mapper: debug
+#    com.aeon.dmc.cloud.office.core.dao.mapper: debug
 
 
 
