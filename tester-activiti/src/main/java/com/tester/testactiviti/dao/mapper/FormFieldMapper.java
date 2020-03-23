@@ -5,6 +5,9 @@ import com.tester.testercommon.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 @Mapper
 public interface FormFieldMapper extends BaseMapper<FormFieldDO,Long> {
@@ -14,6 +17,11 @@ public interface FormFieldMapper extends BaseMapper<FormFieldDO,Long> {
     @Select("select id from front_form_field where form_field_key = #{formFieldKey} and deleted = 0")
     Long selectIdByFormFieldKey(@Param("formFieldKey")String formFieldKey);
 
+    @Update("update front_form_field set if_condition = #{ifCondition}, update_time = SYSDATE() where id = #{id} and deleted = 0")
+    int updateIfConditionToId(@Param("id")Long id, @Param("ifCondition")Integer ifCondition);
+
+    @Select("select * from front_form_field where id = #{id} and deleted = 0")
+    FormFieldDO selectById(@Param("id")Long id);
 
 /*
     *//**

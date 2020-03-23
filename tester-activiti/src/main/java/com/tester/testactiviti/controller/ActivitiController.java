@@ -1,16 +1,14 @@
 package com.tester.testactiviti.controller;
 
-import com.tester.testactiviti.dao.domain.FormFieldConditionDO;
-import com.tester.testactiviti.dao.domain.FormFieldDO;
-import com.tester.testactiviti.dao.domain.NodeModelDO;
-import com.tester.testactiviti.dao.mapper.FormFieldConditionMapper;
-import com.tester.testactiviti.dao.mapper.FormFieldMapper;
-import com.tester.testactiviti.dao.mapper.MetaFieldMapper;
-import com.tester.testactiviti.dao.mapper.NodeModelMapper;
+import com.alibaba.fastjson.JSONObject;
+import com.tester.testactiviti.dao.domain.*;
+import com.tester.testactiviti.dao.mapper.*;
 import com.tester.testactiviti.model.request.FormFieldCreateModel;
 import com.tester.testactiviti.model.request.NodeConditionCreateModel;
 import com.tester.testactiviti.model.request.FlowModelCreateModel;
 import com.tester.testactiviti.model.request.NodeCreateModel;
+import com.tester.testactiviti.util.enums.CheckTypeEnum;
+import com.tester.testactiviti.util.enums.NodeTypeEnum;
 import com.tester.testercommon.controller.BaseController;
 import com.tester.testercommon.controller.RestResult;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +17,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
@@ -26,9 +25,12 @@ import reactor.util.function.Tuples;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @Author 温昌营
@@ -39,6 +41,7 @@ import java.util.Objects;
 @RequestMapping("/activiti")
 public class ActivitiController extends BaseController {
 
+    private static Integer CONDITION_TAG = 1;
     private String processKey = "process_key_uuid";
     private Long flowModelId = 1L;
 
@@ -56,6 +59,8 @@ public class ActivitiController extends BaseController {
     private NodeModelMapper nodeModelMapper;
     @Resource
     private FormFieldMapper formFieldMapper;
+    @Resource
+    private FieldValueMapper fieldValueMapper;
 
     @PostMapping("/testConnect")
     public Mono<RestResult<Object>> testConnect() {
@@ -82,13 +87,84 @@ public class ActivitiController extends BaseController {
     }
 
     @PostMapping("/instanceFlow")
-    public Mono<RestResult<Object>> instanceFlow(@RequestBody @Valid FlowModelCreateModel model) {
+    public Mono<RestResult<Object>> instanceFlow() {
         // todo 创建流程，注意case id，考虑case id使用的地方
+        Long caseId = 1L;
+        List<NodeModelDO> newNodeModels = nodeModelMapper.selectNodesByFlowModelId(1L);
+        NodeModelDO nodeModelDO = nodeModelMapper.selectStartNodeByFlowModelId(1L, 1);
+        System.out.println(newNodeModels);
+        List<TaskAssigneeDO> list = new ArrayList<>();
+        int serial = 1;
+        processNode(newNodeModels.get(0),serial,caseId,newNodeModels,list);
 
+        List<JSONObject> collect = list.stream().map(e -> JSONObject.toJSONString(e,true)).map(e -> (JSONObject)JSONObject.parse(e)).collect(Collectors.toList());
         // 5.插入表单值
         // 6.根据表单值初始化 task_assignee表
-        return monoSuccess(Mono.justOrEmpty("success"));
+        return monoSuccess(Mono.justOrEmpty(collect));
     }
+
+
+    private void processNode(NodeModelDO newNodeModel,int serial,Long caseId,List<NodeModelDO> newNodeModels,List<TaskAssigneeDO> list){
+        NodeTypeEnum byValue = NodeTypeEnum.getByValue(newNodeModel.getNodeType());
+        switch (byValue){
+            case END:
+                break;
+            case USER_TASK:
+                String[] split = newNodeModel.getSpecificIdList().split(";");
+                for (int i = 0; i < split.length; i++) {
+                    TaskAssigneeDO taskAssigneeDO = new TaskAssigneeDO().init();
+                    try {
+                        taskAssigneeDO.setApproverUserId(Long.valueOf(split[i]))
+                                .setCaseId(caseId)
+                                .setSerialNo(serial)
+                                .setTaskApprovalType(newNodeModel.getCoopType());
+                    }catch (Exception e){
+                        continue;
+                    }
+                    list.add(taskAssigneeDO);
+                }
+                List<NodeModelDO> collect0 = newNodeModels.stream().filter(e -> Objects.equals(e.getSerialNumber(), (newNodeModel.getSerialNumber()+1))).collect(Collectors.toList());
+                processNode(collect0.get(0),++serial,caseId,newNodeModels,list);
+                break;
+            case EXCLUSIVE_CHECK:
+                String nodeKey = newNodeModel.getNodeKey();
+                FormFieldConditionDO conditionDO = formFieldConditionMapper.getByNodeId(newNodeModel.getId());
+                FormFieldDO formFieldDO = formFieldMapper.selectById(conditionDO.getFormFieldId());
+
+                Integer fieldType = formFieldDO.getFieldType();
+                // todo 根据字段类型转换数据
+                FieldValueDO fieldValueDO = fieldValueMapper.selectByFormFieldIdAndCaseId(formFieldDO.getId(), caseId);
+                String value = fieldValueDO.getValue();
+                int currentV = Integer.valueOf(value);
+                int checkV = Integer.valueOf(conditionDO.getCheckValue());
+
+//                    Object currentValue = conditionDO.getFormFieldId();
+                CheckTypeEnum byValue1 = CheckTypeEnum.getByValue(conditionDO.getCheckType());
+                switch (byValue1){
+                    case LG:
+                        List<NodeModelDO> collect = null;
+                        if(currentV > checkV){
+                            collect = newNodeModels.stream().filter(e -> Objects.equals(e.getId(), conditionDO.getTrueNextId())).collect(Collectors.toList());
+                        }else {
+                            collect = newNodeModels.stream().filter(e -> Objects.equals(e.getId(), conditionDO.getFalseNextId())).collect(Collectors.toList());
+                        }
+                        if(!CollectionUtils.isEmpty(collect)){
+                            processNode(collect.get(0),serial,caseId,newNodeModels,list);
+                        }
+                        break;
+                    case LE:
+                        break;
+                    case EQ:
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
 /*
     @PostMapping("flow/createModel")
     public Mono<RestResult<Object>> createModel(@RequestBody @Valid FlowModelCreateModel model) {
@@ -161,6 +237,7 @@ public class ActivitiController extends BaseController {
                     .setIfCondition(0)
                     .setFormFieldKey(formField.getKey())
                     .setFormFieldName(formField.getName())
+                    .setFieldType(1)
                     .setSerialNumber(formField.getSerialNumber());
             newFormFields.add(formFieldDO);
         }
@@ -178,26 +255,42 @@ public class ActivitiController extends BaseController {
                     .setNodeType(node.getNodeType())
                     .setSerialNumber(node.getSerialNumber())
                     // 可能不需要
-                    .setNextNodeKeyList(String.valueOf(node.getNextNodeKeyList()))
+                    .setNextNodeKeyList(idsToString(node.getNextNodeKeyList()))
                     ;
-            if(Objects.equals(node.getNodeType(),1)) {
+            if(Objects.equals(node.getNodeType(),NodeTypeEnum.USER_TASK.getValue())) {
                 // 如果是任务节点，需要设置审批人数据
                 newNode.setApproverType(node.getApproverType())
-                        .setSpecificIdList(String.valueOf(node.getSpecificIdList()))
+                        .setSpecificIdList(idsToString(node.getSpecificIdList()))
                         .setCoopType(node.getCoopType());
             }
             result.add(newNode);
         }
         return result;
     }
+    private <T> String idsToString(List<T> ids){
+        if(null == ids){
+            return null;
+        }
+        if(ids.size() <= 0){
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (T id:ids) {
+            sb.append(String.valueOf(id)).append(";");
+        }
+        String s = sb.toString().replaceFirst(";$", "");
+        return s;
+    }
 
     private List<FormFieldConditionDO> generateFlowFieldCondition(List<NodeCreateModel> nodes) {
         List<FormFieldConditionDO> result = new ArrayList<>();
         for (NodeCreateModel node : nodes) {
-            if(Objects.equals(node.getNodeType(),2)){
+            if(Objects.equals(node.getNodeType(),NodeTypeEnum.EXCLUSIVE_CHECK.getValue())){
                 // 如果是条件节点，生成条件
                 NodeConditionCreateModel condition = node.getCondition();
                 FormFieldConditionDO newFormField = new FormFieldConditionDO().init();
+                Long aLong = formFieldMapper.selectIdByFormFieldKey(condition.getFormFieldKey());
+                formFieldMapper.updateIfConditionToId(aLong,CONDITION_TAG);
                 newFormField.setCheckType(condition.getCheckType())
                         .setCheckValue(condition.getCheckValue())
                         .setFalseNext(condition.getFalseNext())
@@ -207,7 +300,7 @@ public class ActivitiController extends BaseController {
                         .setNodeKey(node.getNodeKey())
                         .setNodeId(nodeModelMapper.selectIdByNodeKey(node.getNodeKey()))
                         .setFormFieldKey(condition.getFormFieldKey())
-                        .setFormFieldId(formFieldMapper.selectIdByFormFieldKey(condition.getFormFieldKey()));
+                        .setFormFieldId(aLong);
                 result.add(newFormField);
             }
         }

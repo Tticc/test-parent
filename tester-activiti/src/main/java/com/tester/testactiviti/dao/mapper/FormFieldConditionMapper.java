@@ -3,11 +3,15 @@ package com.tester.testactiviti.dao.mapper;
 import com.tester.testactiviti.dao.domain.FormFieldConditionDO;
 import com.tester.testercommon.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface FormFieldConditionMapper extends BaseMapper<FormFieldConditionDO,Long> {
 
 
+    @Select("select * from f_form_field_condition where node_id = #{nodeId} and deleted = 0")
+    FormFieldConditionDO getByNodeId(@Param("nodeId") Long nodeId);
 
 
 

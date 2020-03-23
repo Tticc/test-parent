@@ -3,12 +3,16 @@ package com.tester.testactiviti.dao.mapper;
 import com.tester.testactiviti.dao.domain.FieldValueDO;
 import com.tester.testercommon.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface FieldValueMapper extends BaseMapper<FieldValueDO,Long> {
 
 
 
+    @Select("select * from front_field_value where form_field_id = #{formFieldId} and case_id = #{caseId} and deleted = 0")
+    FieldValueDO selectByFormFieldIdAndCaseId(@Param("formFieldId") Long formFieldId, @Param("caseId") Long caseId);
 
 
 /*

@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface NodeModelMapper extends BaseMapper<NodeModelDO,Long> {
 
@@ -13,9 +15,13 @@ public interface NodeModelMapper extends BaseMapper<NodeModelDO,Long> {
     @Select("select id from f_node_model where node_key = #{nodeKey} and deleted = 0")
     Long selectIdByNodeKey(@Param("nodeKey")String nodeKey);
 
+    @Select("select * from f_node_model where flow_model_id  = #{flowModelId} and deleted = 0 order by serial_number")
+    List<NodeModelDO> selectNodesByFlowModelId(@Param("flowModelId")Long flowModelId);
 
+    @Select("select * from f_node_model where flow_model_id  = #{flowModelId} and serial_number = #{start} and deleted = 0")
+    NodeModelDO selectStartNodeByFlowModelId(@Param("flowModelId")Long flowModelId, @Param("start")Integer start);
 
-/*
+    /*
     *//**
      * 返回所有的审批关系
      * @return List<TaskAssigneeDO>
