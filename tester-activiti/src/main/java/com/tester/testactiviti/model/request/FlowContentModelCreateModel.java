@@ -8,7 +8,8 @@ import java.util.List;
 
 @Data
 @Accessors(chain = true)
-public class FlowModelCreateModel {
+public class FlowContentModelCreateModel {
+
     @ApiModelProperty(value = "流程类型", example = "1", required = true)
     private Integer flowType;
 
@@ -17,4 +18,12 @@ public class FlowModelCreateModel {
 
     @ApiModelProperty(value = "表单字段列表", example = "1", required = true)
     private List<FormFieldCreateModel> formFields;
+
+    @ApiModelProperty(value = "流程模板id", example = "1", required = true)
+    private Long flowModelId;
+
+    @ApiModelProperty(value = "表单模板id", example = "1", required = true)
+    private Long formModelId;
+
+
 }

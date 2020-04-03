@@ -47,60 +47,59 @@ public class HttpClient {
     private static String getUserURI = "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token=%s&code=%s";
     private static String getUserURI_miapp = "https://qyapi.weixin.qq.com/cgi-bin/miniprogram/jscode2session?access_token=%s&js_code=%s&grant_type=authorization_code";
 
-
-
     public static void main(String[] args){
         String token = "";
         String userId = "liufei";
 //        String userId = "oops";
-        token = getAccessToken(contactSecret);
-        System.out.println(token);
+//        token = getAccessToken(contactSecret);
+//        System.out.println(token);
 //        token = getAccessToken(contactSecret);
 
         // 3.根据code获取用户信息
-//        String code = "VZBKDEbgLo7aCHpMBVt_KLY8WrTRgRru-cuvrnZUIAw";
-//        JSONObject user1 = getUserByCode(code);
-//        System.out.println(user1);
-//        userId = String.valueOf(user1.get("userid"));
+        String code = "yW6kd6bw-GPrfASVKGsq0_pO2fmPGw8BlrJIYD7m0qQ";
+        JSONObject user1 = getUserByCode(code);
+        System.out.println(user1);
+        userId = String.valueOf(user1.get("userid"));
+        System.out.println(userId);
 
         // 1.打卡数据
 //        System.out.println(getCheckInData(token));
 
         // 2.更新企业微信用户的手机号 - 失败
         // 获取user
-        System.out.println("\n\n");
-        JSONObject user = getUser(userId, token);
-//        user.put("mobile", "188833944804");
-//        user.put("position", "d当");
-        System.out.println(user.toString());
-        QywxUserInfoMessage esds = JSONObject.toJavaObject(user, QywxUserInfoMessage.class);
-        System.out.println(esds);
-        List<QywxUserExtInfo> attrs = new ArrayList<>();
-        // 公司
-        attrs.add(generateAttr("公司","永旺数字科技有限公司"));
-        attrs.add(generateAttr("公司id","50001245"));
-        // 店铺
-        attrs.add(generateAttr("店铺","天河店"));
-        attrs.add(generateAttr("店铺id","51001245"));
-        // 组织
-        attrs.add(generateAttr("组别","销售组"));
-        attrs.add(generateAttr("组别id","52001245"));
-
-
-        esds.getExtattr().put("attrs",attrs);
-        System.out.println((JSONObject)JSONObject.toJSON(esds));
-        /*JSONObject extattr = (JSONObject)user.get("extattr");
-        System.out.println(extattr);
-        JSONArray attrs = (JSONArray)extattr.get("attrs");
-        System.out.println(attrs);
-        if(!CollectionUtils.isEmpty(attrs)){
-            JSONObject one = (JSONObject)attrs.get(0);
-        }*/
-
-        // 更新user
-        System.out.println("\n\n");
-        JSONObject jsonObject = updateUser((JSONObject)JSONObject.toJSON(esds), token);
-        System.out.println(jsonObject);
+//        System.out.println("\n\n");
+//        JSONObject user = getUser(userId, token);
+////        user.put("mobile", "188833944804");
+////        user.put("position", "d当");
+//        System.out.println(user.toString());
+//        QywxUserInfoMessage esds = JSONObject.toJavaObject(user, QywxUserInfoMessage.class);
+//        System.out.println(esds);
+//        List<QywxUserExtInfo> attrs = new ArrayList<>();
+//        // 公司
+//        attrs.add(generateAttr("公司","永旺数字科技有限公司"));
+//        attrs.add(generateAttr("公司id","50001245"));
+//        // 店铺
+//        attrs.add(generateAttr("店铺","天河店"));
+//        attrs.add(generateAttr("店铺id","51001245"));
+//        // 组织
+//        attrs.add(generateAttr("组别","销售组"));
+//        attrs.add(generateAttr("组别id","52001245"));
+//
+//
+//        esds.getExtattr().put("attrs",attrs);
+//        System.out.println((JSONObject)JSONObject.toJSON(esds));
+//        /*JSONObject extattr = (JSONObject)user.get("extattr");
+//        System.out.println(extattr);
+//        JSONArray attrs = (JSONArray)extattr.get("attrs");
+//        System.out.println(attrs);
+//        if(!CollectionUtils.isEmpty(attrs)){
+//            JSONObject one = (JSONObject)attrs.get(0);
+//        }*/
+//
+//        // 更新user
+//        System.out.println("\n\n");
+//        JSONObject jsonObject = updateUser((JSONObject)JSONObject.toJSON(esds), token);
+//        System.out.println(jsonObject);
     }
 
 

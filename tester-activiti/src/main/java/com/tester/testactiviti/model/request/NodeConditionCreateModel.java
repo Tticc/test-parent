@@ -1,6 +1,5 @@
 package com.tester.testactiviti.model.request;
 
-import com.tester.testactiviti.dao.domain.FormFieldConditionDO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -35,20 +34,4 @@ public class NodeConditionCreateModel {
 
     @ApiModelProperty(value = "条件为假时下一个节点的key", example = "endNode", required = false)
     private String falseNext;
-
-
-
-
-    private void tt(){
-        FormFieldConditionDO flowFieldConditionDO = new FormFieldConditionDO();
-        flowFieldConditionDO
-                .setNodeKey(null)
-
-
-                .setCheckType(null)
-                .setCheckValue(null)
-                .setTrueNext(null)
-                .setFalseNext(null)
-        ;
-    }
 }

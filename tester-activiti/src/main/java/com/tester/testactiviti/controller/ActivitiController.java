@@ -5,8 +5,9 @@ import com.tester.testactiviti.dao.domain.*;
 import com.tester.testactiviti.dao.mapper.*;
 import com.tester.testactiviti.model.request.FormFieldCreateModel;
 import com.tester.testactiviti.model.request.NodeConditionCreateModel;
-import com.tester.testactiviti.model.request.FlowModelCreateModel;
+import com.tester.testactiviti.model.request.FlowContentModelCreateModel;
 import com.tester.testactiviti.model.request.NodeCreateModel;
+import com.tester.testactiviti.service.ReuseActivitiFlowCreateManager;
 import com.tester.testactiviti.util.enums.CheckTypeEnum;
 import com.tester.testactiviti.util.enums.NodeTypeEnum;
 import com.tester.testercommon.controller.BaseController;
@@ -20,14 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuple2;
-import reactor.util.function.Tuples;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -61,23 +58,32 @@ public class ActivitiController extends BaseController {
     private FormFieldMapper formFieldMapper;
     @Resource
     private FieldValueMapper fieldValueMapper;
+    @Autowired
+    private ReuseActivitiFlowCreateManager reuseActivitiFlowCreateManager;
 
     @PostMapping("/testConnect")
     public Mono<RestResult<Object>> testConnect() {
         return monoSuccess();
     }
 
+    /** 启动一次就足够了*/
+    @PostMapping("/oneTime")
+    public Mono<RestResult<Object>> onFlow(){
+        reuseActivitiFlowCreateManager.createActivitiFlowModel();
+        return monoSuccess();
+    }
+
     @PostMapping("/createFlowModel")
-    public Mono<RestResult<Object>> createFlowModel(@RequestBody @Valid FlowModelCreateModel model) {
+    public Mono<RestResult<Object>> createFlowModel(@RequestBody @Valid FlowContentModelCreateModel model) {
         // todo activiti flow id 可以考虑存放到枚举里面
-        String activitiFlowId = "cycle_flow";
+        String activitiFlowKey = ReuseActivitiFlowCreateManager.REUSE_PROCESS_KEY;
         // 1.持久化流程模板(可拆分)。假设已完成
-        Long flowModelId = 1L;
+        Long flowModelId = model.getFlowModelId();
         // 2.持久化表单模板(可拆分)。假设已完成
-        Long formModelId = 1L;
+        Long formModelId = model.getFormModelId();
         // 3.持久化 节点模板 和 表单-字段模板(可拆分)
         List<FormFieldDO> newFormFields = generateFormField(model.getFormFields(),formModelId);
-        List<NodeModelDO> newNodeModels = generateNodeModel(model.getNodes(),flowModelId,activitiFlowId);
+        List<NodeModelDO> newNodeModels = generateNodeModel(model.getNodes(),flowModelId,activitiFlowKey);
         formFieldMapper.insertList(newFormFields);
         nodeModelMapper.insertList(newNodeModels);
         // 4.持久化条件模板(可拆分)
