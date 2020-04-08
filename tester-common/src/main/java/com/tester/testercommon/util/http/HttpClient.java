@@ -1,9 +1,11 @@
 package com.tester.testercommon.util.http;
 
 import com.alibaba.fastjson.JSONObject;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import com.tester.testercommon.util.http.userinfo.QywxUserExtInfo;
 import com.tester.testercommon.util.http.userinfo.QywxUserInfoMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -26,7 +28,9 @@ import java.util.Map;
 public class HttpClient {
     private static String getUrl =  "https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=%s&userid=%s";
     private static String updateUrl = "https://qyapi.weixin.qq.com/cgi-bin/user/update?access_token=%s";
-//    private static String token = "AZ2z2sNoWyYVeu9WGYIRT1Ut2eT1WGi0dQLGX-P6BUg017GGZCnw7f6nf83HxSYxLIIuNS3qQ5NpZ9RP79pqsL78tRgAT19uzIQtASzuoUW2cVGiWTBSxHYnlERQ2PhdUj-hjXmlZDYMMZQyjiIGtg5Lma4CAx4MZIy6G5QRxxiL1YooS_D6WPpFa-bcjlbtcXL_Lkkp9wKjUjBulQzz6w";
+    private static String createUserInfoURI ="https://qyapi.weixin.qq.com/cgi-bin/user/create?access_token=%s";
+
+    //    private static String token = "AZ2z2sNoWyYVeu9WGYIRT1Ut2eT1WGi0dQLGX-P6BUg017GGZCnw7f6nf83HxSYxLIIuNS3qQ5NpZ9RP79pqsL78tRgAT19uzIQtASzuoUW2cVGiWTBSxHYnlERQ2PhdUj-hjXmlZDYMMZQyjiIGtg5Lma4CAx4MZIy6G5QRxxiL1YooS_D6WPpFa-bcjlbtcXL_Lkkp9wKjUjBulQzz6w";
 //    private static String userId = "liufei";
 
     private static String getToken = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s";
@@ -55,15 +59,18 @@ public class HttpClient {
 //        System.out.println(token);
 //        token = getAccessToken(contactSecret);
 
+//        createUser();
+
+
         // 3.根据code获取用户信息
-        String code = "yW6kd6bw-GPrfASVKGsq0_pO2fmPGw8BlrJIYD7m0qQ";
-        JSONObject user1 = getUserByCode(code);
-        System.out.println(user1);
-        userId = String.valueOf(user1.get("userid"));
-        System.out.println(userId);
+//        String code = "yW6kd6bw-GPrfASVKGsq0_pO2fmPGw8BlrJIYD7m0qQ";
+//        JSONObject user1 = getUserByCode(code);
+//        System.out.println(user1);
+//        userId = String.valueOf(user1.get("userid"));
+//        System.out.println(userId);
 
         // 1.打卡数据
-//        System.out.println(getCheckInData(token));
+        getCheckInData();
 
         // 2.更新企业微信用户的手机号 - 失败
         // 获取user
@@ -102,6 +109,35 @@ public class HttpClient {
 //        System.out.println(jsonObject);
     }
 
+    private static void getCheckInData(){
+        String token = getAccessToken(checkInSecret);
+        String URI = String.format(checkInDataUrl, token);
+        JSONObject obj = new JSONObject();
+        obj.put("opencheckindatatype", "3");
+        obj.put("starttime", "1492617600");
+        obj.put("endtime", "1492790400");
+        obj.put("useridlist",new ArrayList<String>());
+        JSONObject jsonObject = commonPostRequest(obj, URI);
+        System.out.println(jsonObject);
+    }
+
+    private static void createUser(){
+        String token = getAccessToken(contactSecret);
+        String URI = String.format(createUserInfoURI, token);
+        QywxUserInfoMessage nu = new QywxUserInfoMessage();
+        ArrayList<Integer> integers = new ArrayList<>();
+        integers.add(4);
+        integers.add(null);
+        nu.setEmail("00005@qq.com")
+                .setName("ccccc")
+                .setUserid("00000125")
+                .setEnable(1)
+                .setDepartment(integers);
+        JSONObject o = (JSONObject)JSONObject.toJSON(nu);
+        JSONObject jsonObject = commonPostRequest(o, URI);
+        System.out.println(jsonObject);
+
+    }
 
     public static QywxUserExtInfo generateAttr(String name, String value){
         QywxUserExtInfo ex = new QywxUserExtInfo();
