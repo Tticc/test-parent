@@ -30,6 +30,8 @@ public class HttpClient {
     private static String updateUrl = "https://qyapi.weixin.qq.com/cgi-bin/user/update?access_token=%s";
     private static String createUserInfoURI ="https://qyapi.weixin.qq.com/cgi-bin/user/create?access_token=%s";
 
+    private static String deleteDeptURI = "https://qyapi.weixin.qq.com/cgi-bin/department/delete?access_token=%s&id=%s";
+
     //    private static String token = "AZ2z2sNoWyYVeu9WGYIRT1Ut2eT1WGi0dQLGX-P6BUg017GGZCnw7f6nf83HxSYxLIIuNS3qQ5NpZ9RP79pqsL78tRgAT19uzIQtASzuoUW2cVGiWTBSxHYnlERQ2PhdUj-hjXmlZDYMMZQyjiIGtg5Lma4CAx4MZIy6G5QRxxiL1YooS_D6WPpFa-bcjlbtcXL_Lkkp9wKjUjBulQzz6w";
 //    private static String userId = "liufei";
 
@@ -70,7 +72,10 @@ public class HttpClient {
 //        System.out.println(userId);
 
         // 1.打卡数据
-        getCheckInData();
+//        getCheckInData();
+
+        // 删除部门
+        deleteDept();
 
         // 2.更新企业微信用户的手机号 - 失败
         // 获取user
@@ -107,6 +112,15 @@ public class HttpClient {
 //        System.out.println("\n\n");
 //        JSONObject jsonObject = updateUser((JSONObject)JSONObject.toJSON(esds), token);
 //        System.out.println(jsonObject);
+    }
+
+    private static void deleteDept(){
+        String token = getAccessToken(contactSecret);
+        String deptId = "1000";
+        String URI = String.format(deleteDeptURI, token,deptId);
+        JSONObject jsonObject = commonGetRequest(URI);
+        System.out.println(jsonObject);
+
     }
 
     private static void getCheckInData(){
