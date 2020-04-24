@@ -43,8 +43,8 @@ public class TempCOUserAdder {
         // 4.找到组织的一个岗位StationOrg
         // 5.执行printStationOrgSQL
         // 6.设置ifPush=true,插入qywx
-//        boolean ifPush = false;
-//        generateAndPushUser(ifPush);
+        boolean ifPush = false;
+        generateAndPushUser(ifPush);
 //        printStationOrgSQL();
     }
     public static void generateAndPushUser(boolean ifPush){
@@ -72,8 +72,10 @@ public class TempCOUserAdder {
         String[] split = getStr().split("\\n");
         System.out.println("userLength:"+split.length+"\n");
         StringBuilder sbInsert = new StringBuilder();
-        StringBuilder sbSearch = new StringBuilder();
-        sbSearch.append("select * from u_person where ext_person_id in (");
+        StringBuilder sbSearcha = new StringBuilder();
+        StringBuilder sbSearchMap = new StringBuilder();
+        sbSearchMap.append("select uso.* from u_person as up left join u_station_org as uso on up.id = uso.user_id where up.ext_person_id in (");
+        sbSearcha.append("select * from u_person where ext_person_id in (");
         for (String s : split) {
             String[] split1 = s.split(",");
             sbInsert.append("INSERT INTO `cloud_office`.`u_person`(`name`, `ext_person_id`, `employee_id`, `cellphone`, `gender`, `email`, `enname`, `wechatid`, `status`, `note`, `create_time`, `update_time`, `revision`, `deleted`, `data_from`, `main_corp_id`, `badge`, `emp_sub_group_id`) VALUES (")
@@ -87,14 +89,19 @@ public class TempCOUserAdder {
                     .append(", 3, NULL, SYSDATE(), SYSDATE(), 0, 0, 99, 0, ")
                     .append("'").append(split1[1]).append("'")
                     .append(", null);\n");
-            sbSearch.append("'").append(split1[1]).append("',");
+            sbSearcha.append("'").append(split1[1]).append("',");
+            sbSearchMap.append("'").append(split1[1]).append("',");
             newQywxUsers.add(generateQywxUserInfo(split1[1],split1[0],split1[2],split1[5]));
         }
-        sbSearch.replace(sbSearch.length()-1,sbSearch.length(),"");
-        sbSearch.append(");");
+        sbSearcha.replace(sbSearcha.length()-1,sbSearcha.length(),"");
+        sbSearchMap.replace(sbSearchMap.length()-1,sbSearchMap.length(),"");
+        sbSearcha.append(");");
+        sbSearchMap.append(") and uso.deleted = 0;\n");
         System.out.println(sbInsert.toString());
         System.out.println("\n\n\n");
-        System.out.println(sbSearch.toString());
+        System.out.println(sbSearcha.toString());
+        System.out.println("\n\n\n");
+        System.out.println(sbSearchMap.toString());
     }
 
     private static String generateStationOrgSQL(){

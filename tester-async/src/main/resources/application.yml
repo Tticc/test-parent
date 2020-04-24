@@ -1,0 +1,13 @@
+server:
+  port: 8006
+spring:
+  profiles:
+    active: dev
+  application:
+    name: tester-async
+  main:
+    allow-bean-definition-overriding: true
+
+
+
+
