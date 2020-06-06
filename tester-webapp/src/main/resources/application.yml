@@ -5,6 +5,9 @@ spring:
     active: dev
   application:
     name: tester-web-app
+  servlet:
+    multipart:
+      enabled: false
   main:
     allow-bean-definition-overriding: true
   # thymeleaf

@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class AsyncMethodManager {
 
+    /**
+     * '@Async("cusThreadPool")':配置好的线程池
+     * @return
+     */
     @Async("cusThreadPool")
     @SneakyThrows
     public void test_async(){
