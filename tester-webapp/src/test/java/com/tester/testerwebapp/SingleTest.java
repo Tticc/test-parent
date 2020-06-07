@@ -12,6 +12,7 @@ public class SingleTest {
         System.out.println(a);
 //        System.out.println(b);
         System.gc();
+
     }
 }
 
