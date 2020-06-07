@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 import java.util.*;
 import java.util.function.Function;
 
-public class FuncNormalTest {
+public class NormalTest_Func {
 
     @Test
     public void test_call() throws Exception {

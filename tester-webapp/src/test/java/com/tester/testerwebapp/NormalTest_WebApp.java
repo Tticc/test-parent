@@ -9,7 +9,13 @@ import java.io.FileReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class NormalTest {
+public class NormalTest_WebApp {
+    public static void main(String[] args) {
+        System.out.println("hello,world");
+        byte[] placeholder=new byte[64*1024*1024];
+        System.gc();
+    }
+
 
     @Test
     public void test_equal(){

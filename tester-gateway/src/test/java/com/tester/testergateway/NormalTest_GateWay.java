@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class NormalTest {
+public class NormalTest_GateWay {
 
     @Test
     public void test_length(){

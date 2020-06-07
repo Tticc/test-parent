@@ -9,7 +9,7 @@ import java.util.Date;
  * @Author 温昌营
  * @Date
  */
-public class NormalTestActiviti {
+public class NormalTest_Activiti {
 
     @Test
     public void test_newDO(){
