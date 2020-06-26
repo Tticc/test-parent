@@ -1,4 +1,4 @@
-package com.tester.testerwebapp.model;
+package com.tester.testercommon.model.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(-2147483598)
 @Slf4j
-public class CacheLockReadParamAspect {
+public class CacheLockInterceptor {
 
 //    public static final DefaultRedisScript REMOVE_LOCK_LUA_SCRIPT = new DefaultRedisScript("if redis.call('get',KEYS[1]) == ARGV[1] then return redis.call('del',KEYS[1]) else return -1 end", Long.class);
 //    public static final DefaultRedisScript GET_LOCK_LUA_SCRIPT = new DefaultRedisScript("if redis.call('setnx', KEYS[1], ARGV[1]) == 1 then return redis.call('pexpire', KEYS[1], ARGV[2]) else return 0 end", Long.class);
@@ -41,7 +41,6 @@ public class CacheLockReadParamAspect {
         }
 
         String key = cacheLock.key();
-        key = "'md:payment:out_trade_no_'+#payRequest.outTradeNo";// -> md:payment:out_trade_no_xxxxx
         StringBuffer lockKeyBuffer = new StringBuffer();
         lockKeyBuffer.append("dubhe-lock:");
         if (key != null && !"".equals(key.trim())) {

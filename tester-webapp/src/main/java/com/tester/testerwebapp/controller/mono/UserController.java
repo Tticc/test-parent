@@ -1,21 +1,14 @@
 package com.tester.testerwebapp.controller.mono;
 
-import com.alibaba.fastjson.JSONObject;
 import com.tester.testercommon.controller.BaseController;
 import com.tester.testercommon.controller.RestResult;
-import com.tester.testercommon.exception.BusinessException;
 import com.tester.testercommon.util.redis.RedisUtilValue;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.dao.service.UserManager;
-import com.tester.testerwebapp.model.IdAndNameModel;
+import com.tester.testercommon.model.request.IdAndNameModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
