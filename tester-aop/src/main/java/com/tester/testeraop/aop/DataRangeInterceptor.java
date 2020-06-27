@@ -25,17 +25,15 @@ public class DataRangeInterceptor {
 
     @Around("@annotation(dataRangeChecker)")
     public Object checkDataRange(ProceedingJoinPoint pjp, DataRangeChecker dataRangeChecker) throws Throwable {
-
+        Object[] args = pjp.getArgs();
         String key = dataRangeChecker.key();
         if(!StringUtils.hasText(key)){
-            return null;
+            return pjp.proceed(args);
         }
-
         MethodSignature methodSignature = (MethodSignature)pjp.getSignature();
         EvaluationContext ctx = new StandardEvaluationContext();
         String[] parameterNames = methodSignature.getParameterNames();
         if (parameterNames != null && parameterNames.length >= 1) {
-            Object[] args = pjp.getArgs();
             for(int i = 0; i < parameterNames.length; ++i) {
                 ctx.setVariable(parameterNames[i], args[i]);
             }
@@ -46,7 +44,7 @@ public class DataRangeInterceptor {
             ExpressionParser parser = new SpelExpressionParser();
             Long orgId = Long.valueOf(parser.parseExpression(key).getValue(ctx).toString());
 
-            obj = pjp.proceed();
+            obj = pjp.proceed(args);
         }finally {
 
         }
