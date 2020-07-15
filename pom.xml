@@ -30,6 +30,7 @@
         <mockito.version>1.10.19</mockito.version>
         <netty.version>4.1.45.Final</netty.version>
         <swagger.version>2.9.2</swagger.version>
+        <poi.version>3.8</poi.version>
 
 
     </properties>
@@ -154,6 +155,7 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>${lang3.version}</version>
             </dependency>
+            <!--加密-->
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
@@ -164,6 +166,32 @@
                 <artifactId>bcprov-jdk16</artifactId>
                 <version>${PKCS7.version}</version>
             </dependency>
+            <!--加密-->
+
+
+
+            <!-- poi -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <!-- poi -->
+
+
+
+
+
+
+
+
+
+
 
             <dependency>
                 <groupId>io.springfox</groupId>
@@ -201,3 +229,4 @@
     </build>
 
 </project>
+

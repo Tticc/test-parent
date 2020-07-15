@@ -16,7 +16,7 @@ public class CommonUtil {
 	public static String getDateString() {
 		return new SimpleDateFormat("yyyy-mm-dd hh:mm:ss E").format(new Date());
 	}
-	x
+
 	/**
 	 * 获取格式化的日期字符串
 	 * @author Wen, Changying

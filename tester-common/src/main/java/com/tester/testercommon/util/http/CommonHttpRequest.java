@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * @Author 温昌营
- * @Date
+ * @Date 2020-5-14
  */
 public class CommonHttpRequest {
     public static <TInput, TOutput> TOutput jsonPost(String url, TInput object, Class<TOutput> outputClazz, Integer timeOut) {
