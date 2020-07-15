@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tester.testerwebapp.dao.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.tester.testerwebapp.dao.domain.UserDomain">
+        <id column="id" property="id"/>
+        <id column="id" property="id"/>
+    </resultMap>
+
+    <sql id="table_name">
+        u_person
+    </sql>
+
+    <!--todo 未完成-->
+    <update id="batchUpdate" parameterType="com.tester.testerwebapp.dao.domain.UserDomain">
+        <foreach collection="list" item="item" index="index" separator=";">
+            update
+            <include refid="table_name"/>
+            <set>
+                <if test="item.invoiceInfoId != null">invoice_info_id = #{item.invoiceInfoId,jdbcType=BIGINT},</if>
+                <if test="item.orderNo != null">order_no = #{item.orderNo,jdbcType=BIGINT},</if>
+                <if test="item.memberId != null">member_id = #{item.memberId,jdbcType=BIGINT},</if>
+                <if test="item.sellerTaxNo != null">seller_tax_no = #{item.sellerTaxNo,jdbcType=VARCHAR},</if>
+                <if test="item.invoiceCode != null">invoice_code = #{item.invoiceCode,jdbcType=VARCHAR},</if>
+                <if test="item.invoiceNo != null">invoice_no = #{item.invoiceNo,jdbcType=VARCHAR},</if>
+                <if test="item.invoiceDate != null">invoice_date = #{item.invoiceDate,jdbcType=TIMESTAMP},</if>
+                <if test="item.taxControlCode != null">tax_control_code = #{item.taxControlCode,jdbcType=VARCHAR},</if>
+                <if test="item.invoiceQrCode != null">invoice_qr_code = #{item.invoiceQrCode,jdbcType=VARCHAR},</if>
+                <if test="item.invoiceUrl != null">invoice_url = #{item.invoiceUrl,jdbcType=VARCHAR},</if>
+                <if test="item.invoiceMainInfo != null">invoice_main_info = #{item.invoiceMainInfo,jdbcType=VARCHAR},
+                </if>
+                version = version + 1,
+            </set>
+            where
+            id = #{item.id, jdbcType=BIGINT} and deleted = 0
+            and version = #{item.version, jdbcType=INTEGER}
+        </foreach>
+    </update>
+</mapper>
