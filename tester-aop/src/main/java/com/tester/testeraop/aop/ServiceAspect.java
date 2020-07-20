@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 @Component
 @Order(1)
 @Slf4j
-public class ControllerAspect {
+public class ServiceAspect {
 
     @Autowired
     private ApplicationContext applicationContext;
