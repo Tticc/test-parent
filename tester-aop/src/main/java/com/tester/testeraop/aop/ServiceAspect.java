@@ -44,7 +44,7 @@ public class ServiceAspect {
     @Around(value = "execution(* com.tester.testeraop.service.impl.DaoServiceImpl.*(..))")
 //    @Around(value = "@annotation(com.tester.testeraop.controller.StackTraceAnnotation)")
     public Object traceBackgroundThread2(ProceedingJoinPoint pjp) throws Throwable {
-        System.out.println("controller was triggered!");
+        System.out.println("service aspect was triggered!");
         Object[] args = pjp.getArgs();
         // 1.获取注解
         MethodSignature methodSignature = (MethodSignature) pjp.getSignature();

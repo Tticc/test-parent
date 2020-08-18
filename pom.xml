@@ -43,6 +43,7 @@
         <module>tester-common</module>
         <module>tester-webapp</module>
         <module>tester-rpc</module>
+        <module>tester-pool</module>
     </modules>
 
     <dependencyManagement>
