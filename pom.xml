@@ -31,6 +31,10 @@
         <netty.version>4.1.45.Final</netty.version>
         <swagger.version>2.9.2</swagger.version>
         <poi.version>3.8</poi.version>
+        <shardingsphere.version>4.0.0-RC2</shardingsphere.version>
+        <pagehelper.version>5.1.10</pagehelper.version>
+        <fileupload.version>1.4</fileupload.version>
+        <commonsio.version>2.6</commonsio.version>
 
 
     </properties>
@@ -44,10 +48,12 @@
         <module>tester-webapp</module>
         <module>tester-rpc</module>
         <module>tester-pool</module>
+        <module>tester-mybatis</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter</artifactId>
@@ -93,6 +99,22 @@
                 <version>${tkmybatis.version}</version>
             </dependency>
             <!--tk.mybatis-->
+
+            <!-- shardingsphere -->
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>sharding-jdbc-core</artifactId>
+                <version>${shardingsphere.version}</version>
+            </dependency>
+            <!-- shardingsphere -->
+
+            <!--pagehelper-->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper</artifactId>
+                <version>${pagehelper.version}</version>
+            </dependency>
+            <!--pagehelper-->
 
             <dependency>
                 <groupId>commons-logging</groupId>
@@ -184,6 +206,18 @@
             </dependency>
             <!-- poi -->
 
+            <!--file-->
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${fileupload.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commonsio.version}</version>
+            </dependency>
+            <!--file-->
 
 
 

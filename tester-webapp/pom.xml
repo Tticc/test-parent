@@ -21,6 +21,13 @@
             <artifactId>tester-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.tester</groupId>
+            <artifactId>tester-mybatis</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-core</artifactId>
@@ -31,7 +38,16 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <!-- web -->
-
+        <!--file-->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <!--file-->
 
         <!-- poi -->
         <dependency>

@@ -35,9 +35,15 @@ public class AesSecurityHex {
     public static String encrypt(String msg) throws Exception {
         return encrypt(msg, defaultKey(), defaultOffSet());
     }
+    public static String encrypt(String msg,String key) throws Exception {
+        return encrypt(msg, key, defaultOffSet());
+    }
     /** aes 解密*/
     public static String decrypt(String msg) throws Exception {
         return decrypt(msg, defaultKey(), defaultOffSet());
+    }
+    public static String decrypt(String msg,String key) throws Exception {
+        return decrypt(msg, key, defaultOffSet());
     }
 
     /** aes 加密*/
