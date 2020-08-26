@@ -1,10 +1,10 @@
 package com.tester.testermybatis.config;
 
+import com.tester.testermybatis.config.prop.ComplexDatabaseShardingAlgorithm;
+import com.tester.testermybatis.config.prop.ComplexTableShardingAlgorithm;
+import com.tester.testermybatis.config.prop.MyDatabaseProperties;
+import com.tester.testermybatis.config.prop.ShardingDatabaseProperties;
 import com.tester.testermybatis.constant.ConstantList;
-import com.tester.testermybatis.prop.ComplexDatabaseShardingAlgorithm;
-import com.tester.testermybatis.prop.ComplexTableShardingAlgorithm;
-import com.tester.testermybatis.prop.MyDatabaseProperties;
-import com.tester.testermybatis.prop.ShardingDatabaseProperties;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 分库分表数据源<br/>
@@ -141,8 +140,8 @@ public class MyDataBaseConfiguration implements InitializingBean {
             if(this.myDatabaseProperties.isStrict()){
                 tableRule = new TableRuleConfiguration(tableName,myDatabaseProperties.getTableActualDataNodes().get(tableName));
             }else {
-                // 真实分片表根据分片数量配置
                 StringBuilder actualDataNodes = new StringBuilder();
+                // 真实分片表根据分片数量配置
                 int index = 0;
                 for(Map.Entry<String,DataSource> entry : dataSourceMap.entrySet()){
                     for(int i = 0; i < myDatabaseProperties.getShardingNumPerDb(); i++){
@@ -150,11 +149,11 @@ public class MyDataBaseConfiguration implements InitializingBean {
                     }
                 }
                 tableRule = new TableRuleConfiguration(tableName,actualDataNodes.substring(1));
+                log.info("============================== actualDataNodes: {} ==============================",actualDataNodes);
             }
             tableRule.setKeyGeneratorConfig(generatorConfiguration);
             tableRules.add(tableRule);
         }
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> bindingTableGroup:",bindingTableGroup);
         ShardingRuleConfiguration shardRuleConfig = new ShardingRuleConfiguration();
         // 表分库分表规则
         shardRuleConfig.setTableRuleConfigs(tableRules);

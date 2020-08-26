@@ -4,11 +4,16 @@ import com.tester.testeraop.controller.CloudOfficeException;
 import com.tester.testeraop.controller.StackTraceAnnotation;
 import com.tester.testeraop.controller.UserOperationDO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.mapping.BoundSql;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
@@ -20,10 +25,7 @@ import org.springframework.util.StringUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -35,10 +37,14 @@ import java.util.stream.Stream;
 @Component
 @Order(1)
 @Slf4j
-public class ServiceAspect {
+public class ServiceAspect implements InitializingBean {
 
     @Autowired
     private ApplicationContext applicationContext;
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
+
+    private Configuration configuration;
 
 
     @Around(value = "execution(* com.tester.testeraop.service.impl.DaoServiceImpl.*(..))")
@@ -82,7 +88,6 @@ public class ServiceAspect {
                 .setOperationContent(sb.toString())
 //                .setOriginalData(null)
 //                .setNewData(null)
-                .setTraceId(getTraceId())
                 .setDeletedReason(0)
                 .setOperatorEmployeeId(null)
                 .setOperatorPersonId(null)
@@ -103,23 +108,15 @@ public class ServiceAspect {
         if(StringUtils.isEmpty(mapper) || StringUtils.isEmpty(methodName)){
             return sql;
         }
+        String mapperMethod = mapper+"."+methodName;
         try{
-            sql = "select * from xxx";
-        // todo 获取sql
-        /*Configuration configuration = sqlSessionFactory.getConfiguration();
-        MappedStatement mappedStatement = configuration.getMappedStatement("com.aeon.dmc.cloud.office.core.dao.mapper.user.OrganizationMapper.selectByPrimaryKey");
-        BoundSql boundSql = mappedStatement.getBoundSql(null);
-        String sql = boundSql.getSql();*/
+            MappedStatement mappedStatement = configuration.getMappedStatement(mapperMethod);
+            BoundSql boundSql = mappedStatement.getBoundSql(null);
+            sql = boundSql.getSql();
         }catch (Throwable t){
-
+            log.error("获取sql出错.mapper:{},methodName:{}e:{}",mapper,methodName,t);
         }
         return sql;
-    }
-
-    private String getTraceId(){
-
-        // todo 获取traceId
-        return "traceId";
     }
 
 
@@ -195,5 +192,10 @@ public class ServiceAspect {
         System.out.println(traceList.size());
     }
 
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        configuration = sqlSessionFactory.getConfiguration();
+    }
 
 }

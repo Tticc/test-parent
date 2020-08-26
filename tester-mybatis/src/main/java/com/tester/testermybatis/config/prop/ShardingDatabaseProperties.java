@@ -1,4 +1,4 @@
-package com.tester.testermybatis.prop;
+package com.tester.testermybatis.config.prop;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -22,7 +22,6 @@ public class OrderItemManager {
     }
 
 
-    /***************** tk.mybatis **************************************************/
     public int insert(OrderItemDomain domain){
         int insert = orderItemMapper.insert(domain);
         return insert;

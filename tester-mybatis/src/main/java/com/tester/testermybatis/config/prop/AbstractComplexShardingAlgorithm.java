@@ -1,4 +1,4 @@
-package com.tester.testermybatis.prop;
+package com.tester.testermybatis.config.prop;
 
 import com.tester.testercommon.util.SpringBeanContextUtil;
 import org.apache.shardingsphere.api.sharding.complex.ComplexKeysShardingValue;

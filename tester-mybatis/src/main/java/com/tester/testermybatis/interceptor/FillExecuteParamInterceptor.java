@@ -29,7 +29,7 @@ import java.util.Set;
 public class FillExecuteParamInterceptor implements Interceptor {
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-        Object parameter = invocation.getArgs()[0];
+        Object parameter = invocation.getArgs()[1];
         MappedStatement mappedStatement = (MappedStatement)invocation.getArgs()[0];
         SqlCommandType sqlCommandType = mappedStatement.getSqlCommandType();
         this.setAttr(parameter, sqlCommandType);

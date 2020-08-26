@@ -1,4 +1,4 @@
-package com.tester.testermybatis.prop;
+package com.tester.testermybatis.config.prop;
 
 import lombok.Data;
 import org.springframework.beans.factory.InitializingBean;
@@ -51,7 +51,7 @@ public class MyDatabaseProperties implements InitializingBean {
     /**
      * 逻辑表名
      */
-    private String logicTables = "order_item,user";
+    private String logicTables = "order_item,order_member";
 
     /**
      * 逻辑表对应真实分片（strict=true时配置）

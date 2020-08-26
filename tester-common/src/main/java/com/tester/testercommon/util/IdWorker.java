@@ -2,12 +2,12 @@ package com.tester.testercommon.util;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -16,36 +16,33 @@ import java.net.UnknownHostException;
  * 雪花算法
  * @Date 18:18 2020/8/25
  **/
-@Component
+//@Component
 @Slf4j
-public class IdWorker{
+@Configuration
+@EnableConfigurationProperties({ServerProperties.class})
+public class IdWorker implements InitializingBean {
 
     @Value("${server.port:8000}")
     private int port;
 
-    //下面两个每个5位，加起来就是10位的工作机器id
-    private long workerId = getWorkId();    //工作id
-    private long datacenterId = workerId;   //数据id
+    @Autowired
+    private ServerProperties serverProperties;
+
+    //10位的工作机器id
+    private long workerId;    //工作id
     //12位的序列号
-    private long sequence = workerId+90;
+    private long sequence;
     public IdWorker(){
-        this.workerId = getWorkId();
-        this.datacenterId = workerId;
-        this.sequence = workerId+90;
     }
     public IdWorker(long workerId, long datacenterId, long sequence){
         // sanity check for workerId
         if (workerId > maxWorkerId || workerId < 0) {
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0",maxWorkerId));
         }
-        if (datacenterId > maxDatacenterId || datacenterId < 0) {
-            throw new IllegalArgumentException(String.format("datacenter Id can't be greater than %d or less than 0",maxDatacenterId));
-        }
-        System.out.printf("worker starting. timestamp left shift %d, datacenter id bits %d, worker id bits %d, sequence bits %d, workerid %d",
-                timestampLeftShift, datacenterIdBits, workerIdBits, sequenceBits, workerId);
+        System.out.printf("worker starting. timestamp left shift %d, worker id bits %d, sequence bits %d, workerid %d",
+                timestampLeftShift, workerIdBits, sequenceBits, workerId);
 
         this.workerId = workerId;
-        this.datacenterId = datacenterId;
         this.sequence = sequence;
     }
 
@@ -53,11 +50,9 @@ public class IdWorker{
     private long twepoch = 1598350733582L;
 
     //长度为5位
-    private long workerIdBits = 5L;
-    private long datacenterIdBits = 5L;
+    private long workerIdBits = 10L;
     //最大值
     private long maxWorkerId = -1L ^ (-1L << workerIdBits);
-    private long maxDatacenterId = -1L ^ (-1L << datacenterIdBits);
     //序列号id长度
     private long sequenceBits = 12L;
     //序列号最大值
@@ -65,20 +60,14 @@ public class IdWorker{
     
     //工作id需要左移的位数，12位
     private long workerIdShift = sequenceBits;
-   //数据id需要左移位数 12+5=17位
-    private long datacenterIdShift = sequenceBits + workerIdBits;
     //时间戳需要左移位数 12+5+5=22位
-    private long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits;
+    private long timestampLeftShift = sequenceBits + workerIdBits;
     
     //上次时间戳，初始值为负数
     private long lastTimestamp = -1L;
 
     public long getWorkerId(){
         return workerId;
-    }
-
-    public long getDatacenterId(){
-        return datacenterId;
     }
 
     public long getTimestamp(){
@@ -118,7 +107,6 @@ public class IdWorker{
           * 因为个部分只有相应位上的值有意义，其它位上都是0，所以将各部分的值进行 | 运算就能得到最终拼接好的id
         */
         return ((timestamp - twepoch) << timestampLeftShift) |
-                (datacenterId << datacenterIdShift) |
                 (workerId << workerIdShift) |
                 sequence;
     }
@@ -138,6 +126,7 @@ public class IdWorker{
     }
 
     private long getWorkId(){
+        int port = serverProperties.getPort();
         String host = null;
         try {
             host = InetAddress.getLocalHost().getHostAddress();
@@ -159,4 +148,9 @@ public class IdWorker{
         }
     }
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        this.workerId = getWorkId();
+        this.sequence = 1;
+    }
 }

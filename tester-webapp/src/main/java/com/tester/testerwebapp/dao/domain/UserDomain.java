@@ -14,6 +14,10 @@ import javax.persistence.Table;
 @Accessors(chain = true)
 @Table(name = "u_person")
 public class UserDomain extends BaseDomain {
+    public UserDomain init(){
+        super.init();
+        return this;
+    }
     /** 员工号;员工号 */
     private String employeeId ;
 

@@ -17,6 +17,21 @@ public class NormalTest_WebApp {
     }
 
     @Test
+    public void test_date(){
+        Date date = new Date(1288834974657L);
+        long time = new Date().getTime();
+        System.out.println(time);
+        System.out.println(date);
+        long i = 1598431351362L - 1288834974657L;
+        System.out.println(i);
+        long res = (1 << 22) |
+                (89 << 12) |
+                1;
+        System.out.println(res);
+        // 1001001110000010000011000010100000010001011001000000000000
+        // 1001000000101010110000111001110100000010001011001000000000000
+    }
+    @Test
     public void test_linkedHashMap(){
         LinkedHashMap<Object, Object> map = new LinkedHashMap<>();
         map.put("jo","jo");

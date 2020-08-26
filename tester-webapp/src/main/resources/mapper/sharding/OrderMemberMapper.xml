@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tester.testermybatis.dao.mapper.OrderMemberMapper">
+    <resultMap type="com.tester.testermybatis.dao.domain.OrderMemberDomain" id="baseResultMap">
+        <result property="id" column="id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="memberAccount" column="member_account"/>
+        <result property="memberPhone" column="member_phone"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="revision" column="revision"/>
+        <result property="deleted" column="deleted"/>
+    </resultMap>
+    <sql id="baseSelectSql">
+		member_id
+        ,order_no
+        ,member_account
+        ,member_phone
+        ,create_time
+        ,update_time
+        ,revision
+        ,deleted
+	</sql>
+    <sql id="selectSql">
+        id,
+        <include refid="baseSelectSql"></include>
+    </sql>
+
+
+    <sql id="insertSql">
+		#{memberId},
+        #{orderNo},
+        #{memberAccount},
+        #{memberPhone},
+        #{createTime},
+        #{updateTime},
+        #{revision},
+        #{deleted}
+	</sql>
+
+    <sql id="table_name">
+        order_member
+    </sql>
+
+    <select id="testJoinTable" resultType="com.tester.testermybatis.model.response.MemberJoinItemVO">
+        select om.member_account,om.member_phone, oi.member_id,oi.order_no,oi.sku_name,oi.sale_price
+        from order_member as om join order_item as oi on om.order_no = oi.order_no
+        where om.member_id = #{memberId} and oi.deleted = 0 and om.deleted = 0
+    </select>
+
+    <select id="testJoinTable2" resultType="com.tester.testermybatis.model.response.MemberJoinItemVO">
+        select om.member_account,om.member_phone, oi.member_id,oi.order_no,oi.sku_name,oi.sale_price
+        from order_member as om join order_item as oi on om.id = oi.id
+        where om.id = #{id} and oi.deleted = 0 and om.deleted = 0
+    </select>
+
+    <insert id="insert" parameterType="com.tester.testermybatis.dao.domain.OrderMemberDomain">
+        insert into <include refid="table_name"></include>
+        <trim prefix="(" suffix=")" >
+            <include refid="baseSelectSql"/>
+        </trim>
+        <trim prefix="values (" suffix=")" >
+            <include refid="insertSql"/>
+        </trim>
+    </insert>
+</mapper>

@@ -1,7 +1,7 @@
 package com.tester.testermybatis.service;
 
 import com.tester.testercommon.util.IdWorker;
-import com.tester.testermybatis.prop.MyDatabaseProperties;
+import com.tester.testermybatis.config.prop.MyDatabaseProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -38,8 +38,9 @@ public class MyKeyGenerator {
     private IdWorker idWorker;
 
     public Long generateOrderNo(Long memberId, Integer orderType){
+        // 注：这里虽然使用雪花算法控制唯一，但是由于需要兼容分表算法，所以只截取雪花算法生成的long的后12位，可能会导致orderNo非唯一。
         String longStr = String.valueOf(idWorker.nextId());
-        String substring = longStr.substring(longStr.length() - 12);
+        String substring = longStr.length() >= 12 ? longStr.substring(longStr.length() - 12) : longStr;
         return generateOrderNo(substring,memberId,orderType);
     }
     public Long generateOrderNo(String serialNo, Long memberId, Integer orderType){

@@ -1,15 +1,17 @@
 package com.tester.testerwebapp.controller;
 
+import com.tester.testermybatis.dao.mapper.OrderMemberMapper;
+import com.tester.testermybatis.model.response.MemberJoinItemVO;
 import com.tester.testermybatis.dao.domain.OrderItemDomain;
+import com.tester.testermybatis.dao.domain.OrderMemberDomain;
 import com.tester.testermybatis.dao.service.OrderItemManager;
-import com.tester.testermybatis.prop.ComplexDatabaseShardingAlgorithm;
-import com.tester.testermybatis.prop.ComplexTableShardingAlgorithm;
+import com.tester.testermybatis.dao.service.OrderMemberManager;
 import com.tester.testermybatis.service.MyKeyGenerator;
 import com.tester.testerwebapp.TesterWebappApplication;
 import com.tester.testerwebapp.dao.domain.UserDomain;
+import com.tester.testerwebapp.dao.mapper.UserMapper;
 import com.tester.testerwebapp.dao.service.UserManager;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shardingsphere.core.parse.core.rule.registry.ParseRuleRegistry;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.InitializingBean;
@@ -21,12 +23,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
-import java.util.Objects;
 
 
 @RunWith(SpringRunner.class)
@@ -40,6 +42,9 @@ public class RestTemplateTest implements InitializingBean {
     @Autowired
     private UserManager userManager;
 
+    @Resource
+    private UserMapper userMapper;
+
     private RestTemplate restTemplate;
 
     @Autowired
@@ -48,7 +53,43 @@ public class RestTemplateTest implements InitializingBean {
     @Autowired
     private OrderItemManager orderItemManager;
 
+    @Autowired
+    private OrderMemberManager orderMemberManager;
+    @Resource
+    private OrderMemberMapper orderMemberMapper;
 
+
+
+    @Test
+    public void test_table(){
+        Mono<UserDomain> userDomainMono = userManager.selectUserById(1L);
+        UserDomain block = userDomainMono.block();
+        System.out.println(block);
+    }
+
+    @Test
+    public void test_user(){
+        UserDomain userDomain = new UserDomain().init();
+        userDomain.setName("name")
+                .setCellphone("1298301")
+                .setEmployeeId("38293")
+                .setWechatid("jfijifoa")
+                .setEmail("ji9oejifao")
+                .setEnname("jfieo")
+                ;
+        Mono<Integer> insert = userManager.insert();
+        Integer block = insert.block();
+        System.out.println(block);
+    }
+
+    @Test
+    public void test_orderMember(){
+        List<MemberJoinItemVO> memberJoinItemVOS2 = orderMemberMapper.testJoinTable2(505326337323974657L);
+        System.out.println(memberJoinItemVOS2);
+        List<MemberJoinItemVO> memberJoinItemVOS = orderMemberManager.testJoinTable(9883215L);
+        System.out.println(memberJoinItemVOS.size());
+        System.out.println(memberJoinItemVOS);
+    }
 
     @Test
     public void test_sharding(){
@@ -66,15 +107,14 @@ public class RestTemplateTest implements InitializingBean {
                 .setWeight(new BigDecimal("0.00"));
         int insert = orderItemManager.insert(domain);
 
+        OrderMemberDomain orderMemberDomain = new OrderMemberDomain().init();
+        orderMemberDomain.setMemberAccount("account129039")
+                .setMemberId(memberId)
+                .setMemberPhone("8374924232")
+                .setOrderNo(aLong);
+        int insert1 = orderMemberManager.insert(orderMemberDomain);
 //        List<OrderItemDomain> orderItemDomains = orderItemManager.listByOrderNo(31131020L);
         System.out.println(domain);
-    }
-
-    @Test
-    public void test_table(){
-        Mono<UserDomain> userDomainMono = userManager.selectUserById(1L);
-        UserDomain block = userDomainMono.block();
-        System.out.println(block);
     }
 
     @Override

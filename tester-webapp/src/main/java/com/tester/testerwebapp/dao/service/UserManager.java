@@ -23,8 +23,9 @@ public class UserManager {
         return Mono.justOrEmpty(userMapper.selectUserById(id));
     }
 
+    @Transactional(rollbackFor = Exception.class, transactionManager = ConstantList.NORMAL_MANAGER)
     public Mono<Integer> insert(){
-        UserDomain userDomain = new UserDomain();
+        UserDomain userDomain = new UserDomain().init();
         userDomain.setName("wenc").setCellphone("123498734892").setDataFrom(1).setEmployeeId("0001").setWechatid("1232");
         return Mono.justOrEmpty(userMapper.insert(userDomain));
     }
