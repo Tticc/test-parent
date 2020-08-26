@@ -1,8 +1,10 @@
 package com.tester.testerwebapp.dao.service;
 
+import com.tester.testermybatis.constant.ConstantList;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.dao.mapper.UserMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
@@ -16,6 +18,7 @@ public class UserManager {
     @Resource
     private UserMapper userMapper;
 
+    @Transactional(rollbackFor = Exception.class, transactionManager = ConstantList.NORMAL_MANAGER)
     public Mono<UserDomain> selectUserById(Long id){
         return Mono.justOrEmpty(userMapper.selectUserById(id));
     }

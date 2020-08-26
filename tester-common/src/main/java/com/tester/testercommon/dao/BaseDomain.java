@@ -1,4 +1,4 @@
-package com.tester.testercommon.dao.domain;
+package com.tester.testercommon.dao;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

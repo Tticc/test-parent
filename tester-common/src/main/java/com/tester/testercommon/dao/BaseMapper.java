@@ -1,7 +1,5 @@
-package com.tester.testercommon.dao.mapper;
+package com.tester.testercommon.dao;
 
-import com.tester.testercommon.dao.domain.BaseDomain;
-import org.mybatis.spring.annotation.MapperScan;
 import tk.mybatis.mapper.common.special.InsertListMapper;
 
 import java.io.Serializable;

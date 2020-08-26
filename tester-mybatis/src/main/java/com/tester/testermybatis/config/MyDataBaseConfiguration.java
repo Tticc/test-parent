@@ -1,5 +1,6 @@
 package com.tester.testermybatis.config;
 
+import com.tester.testermybatis.constant.ConstantList;
 import com.tester.testermybatis.prop.ComplexDatabaseShardingAlgorithm;
 import com.tester.testermybatis.prop.ComplexTableShardingAlgorithm;
 import com.tester.testermybatis.prop.MyDatabaseProperties;
@@ -14,37 +15,60 @@ import org.apache.shardingsphere.api.config.sharding.TableRuleConfiguration;
 import org.apache.shardingsphere.api.config.sharding.strategy.ComplexShardingStrategyConfiguration;
 import org.apache.shardingsphere.shardingjdbc.api.ShardingDataSourceFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
+ * 分库分表数据源<br/>
+ *
+ *
+ *
+ *
+ * <p>数据库内容：</p>
+ * <p>mydb_00
+ *  order_item_0
+ *  order_item_1
+ * mydb_01
+ *  order_item_2
+ *  order_item_3
+ * mydb_02
+ *  order_item_4
+ *  order_item_5</p>
  * @Author 温昌营
  * @Date 2020-8-20 18:18:22
  */
 @Configuration
 @EnableConfigurationProperties({MyDatabaseProperties.class,ServerProperties.class})
-@MapperScan(basePackages = {"com.tester.testermybatis.dao.mapper"}, sqlSessionFactoryRef = "mySqlSessionFactory")
+@org.mybatis.spring.annotation.MapperScan(basePackages = {"com.tester.testermybatis.dao.mapper"}, sqlSessionFactoryRef = "mySqlSessionFactory")
 @Data
 @Slf4j
-public class MyDataBaseConfiguration {
+public class MyDataBaseConfiguration implements InitializingBean {
+
+    private final MybatisProperties properties;
+
+    private final ResourceLoader resourceLoader;
 
     private static String virtualDbNamePrefix = "sharding_db_";
-
-    public static final String MY_MANAGER = "transactionManger-my";
 
     @Autowired
     private MyDatabaseProperties myDatabaseProperties;
@@ -77,6 +101,9 @@ public class MyDataBaseConfiguration {
         if(resources.length>0){
             sqlSessionFactoryBean.setConfigLocation(resources[0]);
         }
+        if (!ObjectUtils.isEmpty(this.properties.resolveMapperLocations())) {
+            sqlSessionFactoryBean.setMapperLocations(this.properties.resolveMapperLocations());
+        }
         return sqlSessionFactoryBean.getObject();
     }
 
@@ -90,7 +117,7 @@ public class MyDataBaseConfiguration {
         return ShardingDataSourceFactory.createDataSource(dataSourceMap,rule,props);
     }
 
-    @Bean(MY_MANAGER)
+    @Bean(ConstantList.MY_MANAGER)
     public DataSourceTransactionManager getDataSourceTransactionManager() throws SQLException {
         return new DataSourceTransactionManager(myDataSource());
     }
@@ -127,6 +154,7 @@ public class MyDataBaseConfiguration {
             tableRule.setKeyGeneratorConfig(generatorConfiguration);
             tableRules.add(tableRule);
         }
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> bindingTableGroup:",bindingTableGroup);
         ShardingRuleConfiguration shardRuleConfig = new ShardingRuleConfiguration();
         // 表分库分表规则
         shardRuleConfig.setTableRuleConfigs(tableRules);
@@ -134,6 +162,8 @@ public class MyDataBaseConfiguration {
         shardRuleConfig.getBindingTableGroups().add(bindingTableGroup.substring(1));
         // 默认分库策略
         shardRuleConfig.setDefaultDatabaseShardingStrategyConfig(databaseComplexShardStrategy());
+        // 默认分表策略
+        shardRuleConfig.setDefaultTableShardingStrategyConfig(tableComplexShardStrategy());
 
         return shardRuleConfig;
     }
@@ -146,7 +176,8 @@ public class MyDataBaseConfiguration {
     }
 
     private Map<String, DataSource> createDataSourceMap() {
-        Map<String, DataSource> result = new HashMap<>(myDatabaseProperties.getDatasource().size());
+        // 使用 linkedHashMap 自带排序
+        Map<String, DataSource> result = new LinkedHashMap<>(myDatabaseProperties.getDatasource().size());
         ShardingDatabaseProperties properties;
         int index = 0;
         Set<Map.Entry<String, ShardingDatabaseProperties>> entries = myDatabaseProperties.getDatasource().entrySet();
@@ -188,5 +219,19 @@ public class MyDataBaseConfiguration {
         dataSource.addDataSourceProperty("prepStmtCacheSqlLimit",properties.getPrepStmtCacheSqlLimit());
         dataSource.addDataSourceProperty("useServerPrepStmts",properties.isUseServerPrepStmts());
         return dataSource;
+    }
+
+
+    @Override
+    public void afterPropertiesSet() {
+        checkConfigFileExists();
+    }
+
+    private void checkConfigFileExists() {
+        if (this.properties.isCheckConfigLocation() && StringUtils.hasText(this.properties.getConfigLocation())) {
+            Resource resource = this.resourceLoader.getResource(this.properties.getConfigLocation());
+            Assert.state(resource.exists(), "Cannot find config location: " + resource
+                    + " (please add config file or check your Mybatis configuration)");
+        }
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import tk.mybatis.spring.annotation.MapperScan;
 
-@MapperScan("com.tester.testerwebapp.**.mapper")
+//@MapperScan("com.tester.**.mapper")
 @SpringBootApplication(scanBasePackages = {"com.tester.*"})
 //@SpringBootApplication(scanBasePackages = {"com.aeon.dmc.cloud.office", "com.lingzhi"}, exclude = {DataSourceAutoConfiguration.class})
 

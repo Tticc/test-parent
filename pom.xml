@@ -97,6 +97,12 @@
                 <groupId>tk.mybatis</groupId>
                 <artifactId>mapper-spring-boot-starter</artifactId>
                 <version>${tkmybatis.version}</version>
+                <exclusions>
+                    <exclusion>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-starter-jdbc</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <!--tk.mybatis-->
 

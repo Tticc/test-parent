@@ -21,5 +21,13 @@ spring:
 #    content-type: text/html
 
 
+#mybatis
+mybatis:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  configuration:
+    # 自动匹配字段驼峰规则
+    map-underscore-to-camel-case: true
+
+
 
 

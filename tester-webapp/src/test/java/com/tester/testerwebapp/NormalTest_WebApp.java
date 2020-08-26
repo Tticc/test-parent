@@ -16,6 +16,79 @@ public class NormalTest_WebApp {
         System.gc();
     }
 
+    @Test
+    public void test_linkedHashMap(){
+        LinkedHashMap<Object, Object> map = new LinkedHashMap<>();
+        map.put("jo","jo");
+        System.out.println(map);
+    }
+    @Test
+    public void test_num_shift(){
+        long time = new Date().getTime();
+        System.out.println(time);
+        String str = "89374294893248392";
+        System.out.println(str.length());
+        String substring = str.substring(str.length() - 10);
+        System.out.println(substring);
+        System.out.println(substring.length());
+        System.out.println((-1L<<5));
+    }
+
+
+    @Test
+    public void test_value(){
+        int i = 9883210%6;
+        System.out.println(i);
+    }
+    @Test
+    public void test_order_no(){
+        Long memberId = 9883210L;
+        Long aLong = generateOrderNo(10L, memberId, 1);
+        System.out.println(aLong);
+        String suffix = getSuffixdb("order_item", "order_no", aLong%1000);
+        System.out.println(suffix);
+
+        String suffix1 = getSuffixtb("order_item", "order_no", aLong % 1000);
+        System.out.println(suffix1);
+
+    }
+    public String getSuffixdb(String logicTableName, String columnName, Long shardValue) {
+        Integer dbNum = 3;
+        Integer tableShardNum = 2;
+        Long suffix;
+        suffix = shardValue/10;
+        return "_"+(suffix<10?"0"+suffix:suffix);
+    }
+    public String getSuffixtb(String logicTableName, String columnName, Long shardValue) {
+        Integer dbNum = 3;
+        Integer tableShardNum = 2;
+        Long suffix;
+        suffix = (shardValue / 10) * tableShardNum + shardValue % 10;
+        return "_"+(suffix<10?"0"+suffix:suffix);
+    }
+    public Long generateOrderNo(Long serialNo, Long memberId, Integer orderType){
+        Integer tableIndex = getTableIndex(memberId);
+        Integer dbIndex = getDbIndex(tableIndex);
+        Integer tableIndexInDb = getTableIndexInDb(tableIndex);
+        String orderNo = serialNo + orderType.toString() + (dbIndex < 10 ? "0" + dbIndex : dbIndex) + tableIndexInDb;
+        return Long.valueOf(orderNo);
+    }
+
+    private Integer getTableIndex(Long memberId) {
+        Integer dbNum = 3;
+        Integer tableShardNum = 2;
+        return (int) (memberId % (dbNum * tableShardNum));
+    }
+    private Integer getDbIndex(Integer tableIndex) {
+        Integer tableShardNum = 2;
+        return tableIndex / tableShardNum;
+    }
+    private Integer getTableIndexInDb(Integer tableIndex) {
+        Integer tableShardNum = 2;
+        return tableIndex - (tableIndex / tableShardNum) * tableShardNum;
+    }
+
+
 
     @Test
     public void test_equal(){

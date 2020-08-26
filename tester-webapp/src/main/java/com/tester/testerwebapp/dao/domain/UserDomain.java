@@ -1,6 +1,6 @@
 package com.tester.testerwebapp.dao.domain;
 
-import com.tester.testercommon.dao.domain.BaseDomain;
+import com.tester.testercommon.dao.BaseDomain;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

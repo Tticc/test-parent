@@ -1,6 +1,6 @@
 package com.tester.testermybatis.dao.domain;
 
-import com.tester.testercommon.dao.domain.BaseDomain;
+import com.tester.testercommon.dao.BaseDomain;
 import com.tester.testermybatis.annotation.DecryptDomain;
 import com.tester.testermybatis.annotation.DecryptField;
 import lombok.Data;

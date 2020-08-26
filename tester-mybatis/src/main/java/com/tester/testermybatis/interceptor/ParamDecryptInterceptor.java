@@ -1,5 +1,6 @@
 package com.tester.testermybatis.interceptor;
 
+import com.tester.testercommon.enums.YesNoEnum;
 import com.tester.testercommon.util.endecrypt.AesSecurityHex;
 import com.tester.testermybatis.annotation.DecryptDomain;
 import com.tester.testermybatis.annotation.DecryptField;
@@ -9,10 +10,7 @@ import org.apache.ibatis.executor.resultset.DefaultResultSetHandler;
 import org.apache.ibatis.executor.resultset.ResultSetHandler;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ResultMap;
-import org.apache.ibatis.plugin.Interceptor;
-import org.apache.ibatis.plugin.Intercepts;
-import org.apache.ibatis.plugin.Invocation;
-import org.apache.ibatis.plugin.Signature;
+import org.apache.ibatis.plugin.*;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Field;
@@ -20,10 +18,7 @@ import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @Author 温昌营
@@ -50,10 +45,17 @@ public class ParamDecryptInterceptor implements Interceptor {
     private static final String GET = "get";
 
     private static final String UNDERLINE = "_";
+    /**
+     * 启用开关. 1.开启 0.关闭
+     */
+    private boolean enable;
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-
+        // 不启动加密直接返回
+        if(!enable){
+            return invocation.proceed();
+        }
         Object target = invocation.getTarget();
 
         // 判断target类型
@@ -64,7 +66,7 @@ public class ParamDecryptInterceptor implements Interceptor {
             // 为 Executor 则进行加密
             return doEncrypt(invocation);
         }
-        return null;
+        return invocation.proceed();
     }
 
     private Object doEncrypt(Invocation invocation) throws Throwable {
@@ -148,6 +150,7 @@ public class ParamDecryptInterceptor implements Interceptor {
                 while (resultSet.next()) {
                     Object instance = resultType.newInstance();
                     for (String col : columnList) {
+                        Class<?>  tempResultType = resultType;
                         // 获取列名字段驼峰式命名
                         String fieldName = camelFormat(col);
                         // 获取属性值
@@ -155,15 +158,21 @@ public class ParamDecryptInterceptor implements Interceptor {
                         // 判断是否存在解密注解
                         Field field;
                         try {
-                            field = resultType.getField(fieldName);
+                            try {
+                                field = tempResultType.getDeclaredField(fieldName);
+                            }catch (NoSuchFieldException nfe){
+                                // 继续查询baseDomain内容
+                                tempResultType = tempResultType.getSuperclass();
+                                field = tempResultType.getDeclaredField(fieldName);
+                            }
                         } catch (Exception e) {
                             log.warn("参数解密异常，无此字段【{}】", fieldName);
                             continue;
                         }
                         DecryptField decryptField = field.getAnnotation(DecryptField.class);
                         // setter方法
-                        Method setter = buildSetterMethod(resultType, fieldName, field.getType());
-                        if (declaredField != null && obj != null) {
+                        Method setter = buildSetterMethod(tempResultType, fieldName, field.getType());
+                        if (decryptField != null && obj != null) {
                             // 解密处理
                             setter.invoke(instance, AesSecurityHex.decrypt(obj.toString()));
                         } else {
@@ -215,5 +224,24 @@ public class ParamDecryptInterceptor implements Interceptor {
             return Short.toUnsignedInt((Short) object);
         }
         return object;
+    }
+
+
+
+//    @Override
+//    public Object plugin(Object target) {
+//        return Plugin.wrap(target, this);
+//    }
+
+    /**
+     * 设置开关
+     * @param properties
+     * @return void
+     * @Date 11:22 2020/8/24
+     * @Author 温昌营
+     **/
+    @Override
+    public void setProperties(Properties properties) {
+        enable = Boolean.valueOf(properties.getProperty("enable", "true"));
     }
 }

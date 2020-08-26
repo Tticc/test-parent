@@ -21,7 +21,9 @@ public class MyDatabaseProperties implements InitializingBean {
     private boolean strict = false;
 
     /**
-     * strict=false时，每个db实例分片数量
+     * strict=false时，每个db实例分片数量<br/>
+     * 注：由于orderNo生成算法限制，不可超过2位数<br/>
+     * com.tester.testermybatis.service.MyKeyGenerator#generateOrderNo
      */
     private Integer shardingNumPerDb = 2;
 
@@ -40,6 +42,7 @@ public class MyDatabaseProperties implements InitializingBean {
                     "123456",
                     "mydb_",
                     0,
+                    // 注：由于orderNo生成算法限制，不可超过3位数
                     2
                     ));
         }
@@ -48,7 +51,7 @@ public class MyDatabaseProperties implements InitializingBean {
     /**
      * 逻辑表名
      */
-    private String logicTables = "order,user";
+    private String logicTables = "order_item,user";
 
     /**
      * 逻辑表对应真实分片（strict=true时配置）
@@ -61,7 +64,9 @@ public class MyDatabaseProperties implements InitializingBean {
     private boolean showSql = false;
 
     /**
-     * 分库数量。
+     * 分库数量。<br/>
+     * 注：由于orderNo生成算法限制，不可超过3位数<br/>
+     * com.tester.testermybatis.service.MyKeyGenerator#generateOrderNo
      */
     private Integer allDbNum;
 

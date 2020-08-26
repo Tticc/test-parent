@@ -2,7 +2,6 @@ package com.tester.testermybatis.prop;
 
 import com.tester.testercommon.util.SpringBeanContextUtil;
 import org.apache.shardingsphere.api.sharding.complex.ComplexKeysShardingValue;
-import org.springframework.context.ApplicationContext;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;

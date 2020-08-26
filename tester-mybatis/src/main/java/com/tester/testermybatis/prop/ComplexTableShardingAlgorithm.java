@@ -23,7 +23,7 @@ public class ComplexTableShardingAlgorithm extends AbstractComplexShardingAlgori
         }else {
             suffix = null;
         }
-        return "_"+(suffix<10?"0"+suffix:suffix);
+        return "_"+suffix;
     }
 
     @Override

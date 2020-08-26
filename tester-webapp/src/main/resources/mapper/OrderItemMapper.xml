@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tester.testermybatis.dao.mapper.OrderItemMapper">
+    <resultMap type="com.tester.testermybatis.dao.domain.OrderItemDomain" id="baseResultMap">
+        <result property="id" column="id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="productId" column="product_id"/>
+        <result property="skuId" column="invoice_head_type"/>
+        <result property="skuName" column="invoice_head"/>
+        <result property="saleQty" column="invoice_content"/>
+        <result property="salePrice" column="invoice_taxpayer"/>
+        <result property="weight" column="invoice_no"/>
+        <result property="saleUnit" column="invoice_amount"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="revision" column="revision"/>
+        <result property="deleted" column="deleted"/>
+    </resultMap>
+    <sql id="baseSelectSql">
+		member_id
+        ,order_no
+        ,product_id
+        ,sku_id
+        ,sku_name
+        ,sale_qty
+        ,sale_price
+        ,weight
+        ,sale_unit
+        ,create_time
+        ,update_time
+        ,revision
+        ,deleted
+	</sql>
+    <sql id="selectSql">
+        id,
+        <include refid="baseSelectSql"></include>
+    </sql>
+
+
+    <sql id="insertSql">
+		#{memberId},
+        #{orderNo},
+        #{productId},
+        #{skuId},
+        #{skuName},
+        #{saleQty},
+        #{salePrice},
+        #{weight},
+        #{saleUnit},
+        #{createTime},
+        #{updateTime},
+        #{revision},
+        #{deleted}
+	</sql>
+
+    <sql id="table_name">
+        order_item
+    </sql>
+
+    <select id="listByOrderNo" resultMap="baseResultMap">
+        select <include refid="selectSql"></include>
+        from <include refid="table_name"></include>
+        where order_no = #{orderNo}
+        and deleted = 0
+    </select>
+    <insert id="insert" parameterType="com.tester.testermybatis.dao.domain.OrderItemDomain">
+        insert into <include refid="table_name"></include>
+        <trim prefix="(" suffix=")" >
+            <include refid="baseSelectSql"/>
+        </trim>
+        <trim prefix="values (" suffix=")" >
+            <include refid="insertSql"/>
+        </trim>
+    </insert>
+</mapper>

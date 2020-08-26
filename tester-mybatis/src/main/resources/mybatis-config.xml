@@ -39,9 +39,10 @@
 
     <plugins>
         <plugin interceptor="com.github.pagehelper.PageInterceptor"/>
+        <plugin interceptor="com.tester.testermybatis.interceptor.FillExecuteParamInterceptor"/>
         <plugin interceptor="com.tester.testermybatis.interceptor.ParamDecryptInterceptor">
-            <!-- 是否启动 1.是 0.否 -->
-            <property name="enable" value="1"/>
+            <!-- 是否启用字段加密-->
+            <property name="enable" value="true"/>
         </plugin>
     </plugins>
 </configuration>

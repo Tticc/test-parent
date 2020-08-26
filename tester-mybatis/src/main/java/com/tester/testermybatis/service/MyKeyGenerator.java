@@ -1,5 +1,6 @@
 package com.tester.testermybatis.service;
 
+import com.tester.testercommon.util.IdWorker;
 import com.tester.testermybatis.prop.MyDatabaseProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +13,7 @@ import java.util.Objects;
  * @Date 2020-8-21 17:10:49
  */
 @Service
-public class KeyGenerator {
+public class MyKeyGenerator {
 
 
     private static final String PREFIX = "1";
@@ -33,7 +34,15 @@ public class KeyGenerator {
     @Autowired
     private MyDatabaseProperties myDatabaseProperties;
 
-    public Long generateOrderNo(Long serialNo, Long memberId, Integer orderType){
+    @Autowired
+    private IdWorker idWorker;
+
+    public Long generateOrderNo(Long memberId, Integer orderType){
+        String longStr = String.valueOf(idWorker.nextId());
+        String substring = longStr.substring(longStr.length() - 12);
+        return generateOrderNo(substring,memberId,orderType);
+    }
+    public Long generateOrderNo(String serialNo, Long memberId, Integer orderType){
         Integer tableIndex = getTableIndex(memberId);
         Integer dbIndex = getDbIndex(tableIndex);
         Integer tableIndexInDb = getTableIndexInDb(tableIndex);
