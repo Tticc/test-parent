@@ -76,3 +76,32 @@ public class OrderItemDomain extends BaseDomain {
 
 
 }
+
+
+/*
+
+-- ----------------------------
+        -- Table structure for order_item_0
+        -- ----------------------------
+        DROP TABLE IF EXISTS `order_item_0`;
+        CREATE TABLE `order_item_0`  (
+        `id` bigint(20) NOT NULL COMMENT '主键',
+        `member_id` bigint(20) NOT NULL COMMENT '会员ID',
+        `order_no` bigint(20) NOT NULL COMMENT '订单号',
+        `product_id` bigint(20) NULL DEFAULT NULL COMMENT '商品ID',
+        `sku_id` bigint(20) NULL DEFAULT NULL COMMENT 'SKUID',
+        `sku_name` varchar(150) CHARACTER SET utf8mb4 NULL DEFAULT NULL COMMENT 'SKU名称',
+        `sale_qty` decimal(7, 2) NULL DEFAULT NULL COMMENT '数量',
+        `sale_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '销售单价',
+        `weight` decimal(12, 6) NULL DEFAULT NULL COMMENT '商品重量（单） 单位kg',
+        `sale_unit` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '销售单位',
+        `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+        `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+        `revision` int(11) NULL DEFAULT NULL COMMENT '版本号',
+        `deleted` int(11) NULL DEFAULT NULL COMMENT '是否删除 0=未删除，1=已删除',
+        PRIMARY KEY (`id`) USING BTREE,
+        INDEX `idx_order_no`(`order_no`) USING BTREE
+        ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '商品明细表 ' ROW_FORMAT = Dynamic;
+
+*/
+
