@@ -4,7 +4,7 @@ import com.tester.testermybatis.config.prop.ComplexDatabaseShardingAlgorithm;
 import com.tester.testermybatis.config.prop.ComplexTableShardingAlgorithm;
 import com.tester.testermybatis.config.prop.MyDatabaseProperties;
 import com.tester.testermybatis.config.prop.ShardingDatabaseProperties;
-import com.tester.testermybatis.constant.ConstantList;
+import com.tester.testercommon.constant.ConstantList;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

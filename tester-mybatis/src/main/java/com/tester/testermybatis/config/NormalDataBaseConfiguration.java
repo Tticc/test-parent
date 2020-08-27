@@ -1,6 +1,6 @@
 package com.tester.testermybatis.config;
 
-import com.tester.testermybatis.constant.ConstantList;
+import com.tester.testercommon.constant.ConstantList;
 import com.tester.testermybatis.config.prop.NormalDatabaseProperties;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Data;

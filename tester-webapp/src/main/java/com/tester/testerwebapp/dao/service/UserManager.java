@@ -1,6 +1,6 @@
 package com.tester.testerwebapp.dao.service;
 
-import com.tester.testermybatis.constant.ConstantList;
+import com.tester.testercommon.constant.ConstantList;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.dao.mapper.UserMapper;
 import org.springframework.stereotype.Service;
