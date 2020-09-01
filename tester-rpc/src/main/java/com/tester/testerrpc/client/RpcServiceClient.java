@@ -40,7 +40,8 @@ public class RpcServiceClient {
 				System.out.println(ds.toString());
 				System.out.println("Tticc ****************************************************");
 				params.put("name", "Tticc");
-				System.out.println("output in thread:"+ds.getDubboService("GreetService_sayHello", params));
+				System.out.println("output in thread:"+ds.getDubboService("HelloManager_getVO", params));
+				System.out.println("done!");
 			}
 		}, "Tticc").start();
 
@@ -101,7 +102,7 @@ public class RpcServiceClient {
 	// 初始化 mft。
 	private MyFutureTask<Object> mft = new MyFutureTask<Object>();
 	//private final String HOST = "127.0.0.1";
-	private static String host = "192.168.1.103";
+	private static String host = "192.168.99.1";
 	private static int port = 8000;
 	public RpcServiceClient setMft(MyFutureTask<Object> mft) {
 		this.mft = mft;
@@ -239,7 +240,7 @@ public class RpcServiceClient {
 						@Override
 						public void channelActive(ChannelHandlerContext ctx) {
 							//when client connect to server, say hello.
-							//System.out.println(ResultVOUtil.success("channel active!"));
+							System.out.println(RestResult.success("channel active!"));
 						}
 					});
 				}
@@ -281,6 +282,7 @@ public class RpcServiceClient {
 			}
 		}catch (InterruptedException e) {
 				e.printStackTrace();
+				Thread.currentThread().interrupt();
 		}finally {
 			worker.shutdownGracefully();
 		}
@@ -344,6 +346,7 @@ public class RpcServiceClient {
 			}
 		}catch (InterruptedException e) {
 				e.printStackTrace();
+				Thread.currentThread().interrupt();
 		}finally {
 			worker.shutdownGracefully();
 		}

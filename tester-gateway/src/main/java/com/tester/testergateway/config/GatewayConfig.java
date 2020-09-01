@@ -110,7 +110,7 @@ public class GatewayConfig {
     /** 截取url中的domain*/
     private String getDomain(String url){
         Matcher mc = pattern.matcher(url);
-        while (mc.find()){
+        if (mc.find()){
             return mc.group(1).trim();
         }
         return url;

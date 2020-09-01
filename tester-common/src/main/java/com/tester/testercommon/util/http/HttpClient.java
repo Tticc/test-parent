@@ -165,7 +165,7 @@ public class HttpClient {
         try {
             // 创建SSLContext对象，并使用我们指定的信任管理器初始化
             TrustManager[] tm = { new MyX509TrustManager() };
-            SSLContext sslContext = SSLContext.getInstance("SSL");
+            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
             sslContext.init(null, tm, new java.security.SecureRandom());
             // 从SSLContext对象中得到SSLSocketFactory对象
             ssf = sslContext.getSocketFactory();

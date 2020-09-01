@@ -24,8 +24,18 @@ import java.util.Map;
  */
 @Component("serviceMap")
 public class ServiceMap implements ApplicationContextAware {
-    public static Map<String, Method> serviceMap = new HashMap<String, Method>();
-    public static Map<String, ServiceNode> serviceNodesMap = new HashMap<String, ServiceNode>();
+
+    private static Map<String, Method> serviceMap = new HashMap<String, Method>();
+
+    private static Map<String, ServiceNode> serviceNodesMap = new HashMap<String, ServiceNode>();
+
+    public static Map<String, Method> getServiceMap() {
+        return serviceMap;
+    }
+
+    public static Map<String, ServiceNode> getServiceNodesMap() {
+        return serviceNodesMap;
+    }
     @Autowired
     private ApplicationContext applicationContext;
 

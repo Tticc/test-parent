@@ -28,7 +28,7 @@ public class MultiFileConfig {
         resolver.setDefaultEncoding("UTF-8");
         Resource uploadTempDirResource = new FileSystemResource(this.uploadTempDir);
         resolver.setUploadTempDir(uploadTempDirResource);
-        resolver.setMaxUploadSize(100*1024*1024);
+        resolver.setMaxUploadSize(100L*1024*1024);
         resolver.setMaxInMemorySize(5*1024*1000);
         return resolver;
     }

@@ -1,11 +1,14 @@
 package com.tester.testercommon.controller;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
  * @Author 温昌营
  * @Date
  */
+@Data
 public class RestResult<T> implements Serializable {
     // "状态码；200：成功， 非200：失败"
     protected static long code = 200L;

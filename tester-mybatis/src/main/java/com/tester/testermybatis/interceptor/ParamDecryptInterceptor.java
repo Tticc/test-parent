@@ -136,50 +136,53 @@ public class ParamDecryptInterceptor implements Interceptor {
                 // 返回集合
                 List<Object> resultList = new ArrayList<>();
                 Statement statement = (Statement) invocation.getArgs()[0];
-                ResultSet resultSet = statement.getResultSet();
-                if (null == resultSet) {
-                    return resultList;
-                }
-                // 获得对应列名
-                ResultSetMetaData metaData = resultSet.getMetaData();
-                // 列名集合
-                List<String> columnList = new ArrayList<>();
-                for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    columnList.add(metaData.getColumnName(i));
-                }
-                while (resultSet.next()) {
-                    Object instance = resultType.newInstance();
-                    for (String col : columnList) {
-                        Class<?>  tempResultType = resultType;
-                        // 获取列名字段驼峰式命名
-                        String fieldName = camelFormat(col);
-                        // 获取属性值
-                        Object obj = resultSet.getObject(col);
-                        // 判断是否存在解密注解
-                        Field field;
-                        try {
-                            try {
-                                field = tempResultType.getDeclaredField(fieldName);
-                            }catch (NoSuchFieldException nfe){
-                                // 继续查询baseDomain内容
-                                tempResultType = tempResultType.getSuperclass();
-                                field = tempResultType.getDeclaredField(fieldName);
-                            }
-                        } catch (Exception e) {
-                            log.warn("参数解密异常，无此字段【{}】", fieldName);
-                            continue;
-                        }
-                        DecryptField decryptField = field.getAnnotation(DecryptField.class);
-                        // setter方法
-                        Method setter = buildSetterMethod(tempResultType, fieldName, field.getType());
-                        if (decryptField != null && obj != null) {
-                            // 解密处理
-                            setter.invoke(instance, AesSecurityHex.decrypt(obj.toString()));
-                        } else {
-                            setter.invoke(instance, paramHandle(obj));
-                        }
+                try(ResultSet resultSet = statement.getResultSet()) {
+                    if (null == resultSet) {
+                        return resultList;
                     }
-                    resultList.add(instance);
+                    // 获得对应列名
+                    ResultSetMetaData metaData = resultSet.getMetaData();
+                    // 列名集合
+                    List<String> columnList = new ArrayList<>();
+                    for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                        columnList.add(metaData.getColumnName(i));
+                    }
+                    while (resultSet.next()) {
+                        Object instance = resultType.newInstance();
+                        for (String col : columnList) {
+                            Class<?> tempResultType = resultType;
+                            // 获取列名字段驼峰式命名
+                            String fieldName = camelFormat(col);
+                            // 获取属性值
+                            Object obj = resultSet.getObject(col);
+                            // 判断是否存在解密注解
+                            Field field;
+                            try {
+                                try {
+                                    field = tempResultType.getDeclaredField(fieldName);
+                                } catch (NoSuchFieldException nfe) {
+                                    // 继续查询baseDomain内容
+                                    tempResultType = tempResultType.getSuperclass();
+                                    field = tempResultType.getDeclaredField(fieldName);
+                                }
+                            } catch (Exception e) {
+                                log.warn("参数解密异常，无此字段【{}】", fieldName);
+                                continue;
+                            }
+                            DecryptField decryptField = field.getAnnotation(DecryptField.class);
+                            // setter方法
+                            Method setter = buildSetterMethod(tempResultType, fieldName, field.getType());
+                            if (decryptField != null && obj != null) {
+                                // 解密处理
+                                setter.invoke(instance, AesSecurityHex.decrypt(obj.toString()));
+                            } else {
+                                setter.invoke(instance, paramHandle(obj));
+                            }
+                        }
+                        resultList.add(instance);
+                    }
+                }catch (Exception e){
+                    throw e;
                 }
                 return resultList;
             } catch (Exception e) {

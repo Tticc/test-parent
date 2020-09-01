@@ -22,7 +22,10 @@ public class TxtWrite {
             checkDir.mkdir();//创建文件夹
         }
         if (!contentFile.exists()) {
-            contentFile.createNewFile();
+            boolean newFile = contentFile.createNewFile();
+            if(!newFile){
+                log.error("文件夹创建失败");
+            }
         }
         return absFileName;
     }

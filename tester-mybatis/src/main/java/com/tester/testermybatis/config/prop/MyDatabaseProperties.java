@@ -28,25 +28,11 @@ public class MyDatabaseProperties implements InitializingBean {
     private Integer shardingNumPerDb = 2;
 
     /**
-     * 数据源配置
+     * 数据源配置。在 afterPropertiesSet 初始化
      * strict=true 每个数据源配置
      * strict=false 服务器配置
      */
-    private Map<String, ShardingDatabaseProperties> datasource = new HashMap<String, ShardingDatabaseProperties>() {
-        {
-            put("server1", new ShardingDatabaseProperties(
-                    "com.mysql.cj.jdbc.Driver",
-                    "jdbc:mysql://localhost:3306/",
-                    "?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8",
-                    "root",
-                    "123456",
-                    "mydb_",
-                    0,
-                    // 注：由于orderNo生成算法限制，不可超过3位数
-                    2
-                    ));
-        }
-    };
+    private Map<String, ShardingDatabaseProperties> datasource = new HashMap<>();
 
     /**
      * 逻辑表名
@@ -91,5 +77,17 @@ public class MyDatabaseProperties implements InitializingBean {
             }
             allDbNum = lastDbIndex + 1;
         }
+
+        datasource.put("server1",new ShardingDatabaseProperties(
+                "com.mysql.cj.jdbc.Driver",
+                "jdbc:mysql://localhost:3306/",
+                "?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8",
+                "root",
+                "123456",
+                "mydb_",
+                0,
+                // 注：由于orderNo生成算法限制，不可超过3位数
+                2
+        ));
     }
 }

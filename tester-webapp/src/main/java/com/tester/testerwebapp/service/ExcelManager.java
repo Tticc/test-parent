@@ -84,17 +84,11 @@ public class ExcelManager {
     private void cellType(Cell cell){
         switch (cell.getCellType()){
             case Cell.CELL_TYPE_NUMERIC:
-                break;
             case Cell.CELL_TYPE_STRING:
-                break;
             case Cell.CELL_TYPE_FORMULA:
-                break;
             case Cell.CELL_TYPE_BLANK:
-                break;
             case Cell.CELL_TYPE_BOOLEAN:
-                break;
             case Cell.CELL_TYPE_ERROR:
-                break;
             default:
                 break;
         }

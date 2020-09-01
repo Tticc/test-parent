@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -113,7 +114,7 @@ public class NormalTest_WebApp {
     }
 
     @Test
-    public void test_readTxt(){
+    public void test_readTxt() throws IOException {
         Set<String> ppSet = new HashSet<>(Arrays.asList(getPp()));
         System.out.println(ppSet.size());
         Set<String> pisSet = new HashSet<>(Arrays.asList(getPis()));
@@ -132,7 +133,7 @@ public class NormalTest_WebApp {
      * person in person
      * @return
      */
-    private String[] getPp(){
+    private String[] getPp() throws IOException {
         File file = new File("C:\\Users\\wenc\\Desktop\\ppa.txt");
         String[] text = MyFileReader.txt2String(file,";").split(";");
         System.out.println("pp.size:"+text.length);
@@ -142,7 +143,7 @@ public class NormalTest_WebApp {
      * person in station
      * @return
      */
-    private String[] getPis(){
+    private String[] getPis() throws IOException {
         File file = new File("C:\\Users\\wenc\\Desktop\\pisa.txt");
         String[] text = MyFileReader.txt2String(file,";").split(";");
         System.out.println("pis.size:"+text.length);

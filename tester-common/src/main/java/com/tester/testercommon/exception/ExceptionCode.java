@@ -22,7 +22,7 @@ public class ExceptionCode {
     public static final long GET_LOCK_FILED = 5008L;
     public static final long REJECT_VISIT = 5009L;
     public static final long NETWORK_EXCEPTION = 5010L;
-    public static Map<String, String> EX_MAP;
+    protected static Map<String, String> EX_MAP;
     private Map<String, String> exception;
 
     public ExceptionCode() {

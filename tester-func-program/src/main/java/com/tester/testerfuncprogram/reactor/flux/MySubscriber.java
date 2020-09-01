@@ -1,9 +1,5 @@
 package com.tester.testerfuncprogram.reactor.flux;
 
-import org.reactivestreams.Subscription;
-import reactor.core.Disposable;
-import reactor.core.publisher.BaseSubscriber;
-import reactor.core.publisher.DirectProcessor;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
@@ -39,6 +35,7 @@ public class MySubscriber {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 }

@@ -129,7 +129,7 @@ public class RpcServiceProvider {
                                 if ("".equals(methodName) || "null".equals(methodName))
                                     throw new Exception("未提供serviceKey.");
 
-                                if ((sn = ServiceMap.serviceNodesMap.get(methodName)) == null ||
+                                if ((sn = ServiceMap.getServiceNodesMap().get(methodName)) == null ||
                                         (m = sn.getMethod()) == null ||
                                         (service = sn.getSerivceImpl()) == null)
                                     throw new Exception("没有找到对于serviceKey:" + methodName + "对应的service方法,请更正serviceKey!");
@@ -241,7 +241,7 @@ public class RpcServiceProvider {
                                     throw new Exception("未提供serviceKey.");
 
 
-                                Method m = ServiceMap.serviceMap.get(methodName);
+                                Method m = ServiceMap.getServiceMap().get(methodName);
                                 Parameter[] paramName = m.getParameters();
                                 // 当前方法无参。需要if吗？不需要，可以兼容
 //								if(paramName != null && paramName.length == 0) {
@@ -328,7 +328,7 @@ public class RpcServiceProvider {
                                 obj = (JSONObject) JSONObject.parse(msg.toString());
                                 String methodName = String.valueOf(obj.get("serviceKey"));
                                 Map<String, Object> params = (Map<String, Object>) obj.get("params");
-                                Method m = ServiceMap.serviceMap.get(methodName);
+                                Method m = ServiceMap.getServiceMap().get(methodName);
                                 Parameter[] paramName = m.getParameters();
                                 Class<?>[] paramClass = m.getParameterTypes();
                                 Object[] param = new Object[paramName.length];

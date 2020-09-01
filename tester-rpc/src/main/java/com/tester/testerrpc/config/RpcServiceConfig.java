@@ -19,7 +19,7 @@ public class RpcServiceConfig {
 	private int dubboServerPort;
 	@Value("${tester.rpc.server.host:127.0.0.1}")
 	private String dubboServerHost;
-	@Value("${tester.rpc.server.provider.number:5}")
+	@Value("${tester.rpc.server.provider.number:1}")
 	private int providerNumber;
 
 	@Autowired

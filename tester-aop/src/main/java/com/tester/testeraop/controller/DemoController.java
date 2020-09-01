@@ -35,7 +35,7 @@ public class DemoController {
     }
 
     @RequestMapping(value = "/demoMono", method = RequestMethod.POST)
-    public Mono<List<Integer>> demoMono() throws InterruptedException {
+    public Mono<List<Integer>> demoMono(){
         System.out.println("p tid:"+Thread.currentThread().getId());
         List<Integer> list = new ArrayList<>(Arrays.asList(1,2,3,4,5));
         Mono<List<Integer>> listMono = Flux.fromIterable(list)
@@ -48,6 +48,7 @@ public class DemoController {
                         Thread.sleep(1000);
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
+                        Thread.currentThread().interrupt();
                     }
                     sink.next(e);
                 })

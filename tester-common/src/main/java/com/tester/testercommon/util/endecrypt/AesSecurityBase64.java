@@ -46,7 +46,8 @@ public class AesSecurityBase64 {
         byte[] oft = base64Decode(offSet);
         // PKCS5Padding
         // PKCS7Padding
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "BC");
+//        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "BC");
+        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
         SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
         IvParameterSpec iv = new IvParameterSpec(Arrays.copyOfRange(oft,0,16));
         // 加密
@@ -62,7 +63,8 @@ public class AesSecurityBase64 {
         // PKCS5Padding
         // PKCS7Padding
         Security.addProvider(new BouncyCastleProvider());
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "BC");
+//        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "BC");
+        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
         SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
         IvParameterSpec iv = new IvParameterSpec(Arrays.copyOfRange(oft,0,16));
         // 解密
