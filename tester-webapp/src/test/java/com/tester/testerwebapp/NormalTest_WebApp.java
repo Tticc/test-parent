@@ -1,12 +1,21 @@
 package com.tester.testerwebapp;
 
+import com.tester.testercommon.util.endecrypt.Md5Security;
 import com.tester.testercommon.util.file.MyFileReader;
+import com.tester.testercommon.util.jwt.JwtDataModel;
+import com.tester.testercommon.util.jwt.JwtHelper;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.junit.Test;
 
+import javax.crypto.spec.SecretKeySpec;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.Key;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,6 +24,14 @@ public class NormalTest_WebApp {
         System.out.println("hello,world");
         byte[] placeholder=new byte[64*1024*1024];
         System.gc();
+    }
+
+    @Test
+    public void test_jwt() throws Exception {
+        String s = JwtHelper.generateJwtToken(1, 9900L);
+        System.out.println(s);
+        JwtDataModel jwtDataId = JwtHelper.getJwtDataId(s);
+        System.out.println(jwtDataId);
     }
 
     @Test
