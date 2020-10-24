@@ -1,9 +1,14 @@
 package com.tester.testermybatis.service;
 
 import com.tester.testercommon.util.IdWorker;
+import com.tester.testermybatis.annotation.DecryptDomain;
+import com.tester.testermybatis.config.DemoClass;
+import com.tester.testermybatis.config.ThatShouldNotInBeanFactory1;
+import com.tester.testermybatis.config.ThatShouldNotInBeanFactory2;
 import com.tester.testermybatis.config.prop.MyDatabaseProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -14,6 +19,19 @@ import java.util.Objects;
  */
 @Service
 public class MyKeyGenerator {
+    public static void main(String[] args) {
+        AnnotationConfigApplicationContext applicationContext=new AnnotationConfigApplicationContext(DemoClass.class);  //这里的参数代表要做操作的类
+
+        String[] beanDefinitionNames = applicationContext.getBeanDefinitionNames();
+        for (String name : beanDefinitionNames){
+            System.out.println(name);
+        }
+
+    }
+    @Autowired
+    private ThatShouldNotInBeanFactory1 thatShouldNotInBeanFactory1;
+    @Autowired
+    private ThatShouldNotInBeanFactory2 thatShouldNotInBeanFactory2;
 
 
     private static final String PREFIX = "1";

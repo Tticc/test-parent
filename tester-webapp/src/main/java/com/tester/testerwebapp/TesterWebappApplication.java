@@ -1,5 +1,6 @@
 package com.tester.testerwebapp;
 
+import com.tester.testermybatis.annotation.DecryptDomain1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,7 +12,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 //@MapperScan("com.tester.**.mapper")
 @SpringBootApplication(scanBasePackages = {"com.tester.*"})
 //@SpringBootApplication(scanBasePackages = {"com.aeon.dmc.cloud.office", "com.lingzhi"}, exclude = {DataSourceAutoConfiguration.class})
-
+@DecryptDomain1
 public class TesterWebappApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
