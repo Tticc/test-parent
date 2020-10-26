@@ -1,0 +1,33 @@
+server:
+  port: 8007
+spring:
+  profiles:
+    active: dev
+  application:
+    name: tester-cv
+  servlet:
+    multipart:
+      enabled: false
+  main:
+    allow-bean-definition-overriding: true
+  # thymeleaf
+  thymeleaf:
+    prefix: classpath:/templates/
+#    check-template-location: true
+    suffix: .html
+    encoding: UTF-8
+    mode: HTML5
+    cache: false
+#    content-type: text/html
+
+
+#mybatis
+mybatis:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  configuration:
+    # 自动匹配字段驼峰规则
+    map-underscore-to-camel-case: true
+
+
+
+
