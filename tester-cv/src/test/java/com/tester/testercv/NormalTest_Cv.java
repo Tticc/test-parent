@@ -25,7 +25,7 @@ public class NormalTest_Cv {
         Webcam webcam = Webcam.getDefault();
 
         webcam.setViewSize(WebcamResolution.VGA.getSize());
-        String filePath = "C:\\Users\\wenc\\Desktop\\captureImg\\";
+//        String filePath = "C:\\Users\\wenc\\Desktop\\captureImg\\";
         for(int i = 0; i < 10; i++){
 //            WebcamUtils.capture(webcam, filePath+i+"_saved.png", ImageUtils.FORMAT_PNG);
             Thread.sleep(500L);
@@ -44,6 +44,10 @@ public class NormalTest_Cv {
     public void test_view_capture() throws InterruptedException, IOException {
 
         Webcam webcam = Webcam.getDefault();
+        if(null == webcam){
+            System.out.println("fatal error - 机器可能没有驱动/没有摄像头");
+            return;
+        }
 
         webcam.setViewSize(WebcamResolution.VGA.getSize());
 
@@ -99,5 +103,6 @@ public class NormalTest_Cv {
             }
         }
     }
+
 
 }
