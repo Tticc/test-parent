@@ -59,6 +59,28 @@ public class MatrixImgTool {
     }
 
 
+    /**
+     * 从图片中获取数据矩阵
+     * @param img
+     * @return int[][]
+     * @Date 14:37 2020/11/3
+     * @Author 温昌营
+     **/
+    public static int[][] getDataArrayFromImg(BufferedImage img, int times){
+        int height = img.getHeight();
+        int width = img.getWidth();
+        int[][] pointArr = new int[height/times][width/times];
+        int imgPix;
+        for (int i = 0; i < pointArr.length; i++) {
+            for (int j = 0; j < pointArr[0].length; j++) {
+                imgPix = img.getRGB(j*times,i*times);
+                pointArr[i][j] = ((imgPix << 8) >> 8)%256;
+            }
+        }
+        return pointArr;
+    }
+
+
     private static void setImgArr(int i,int j,int imgArr[][],int times, int pixel){
         for (int x = 0; x < times; x++) {
             for (int y = 0; y < times; y++) {

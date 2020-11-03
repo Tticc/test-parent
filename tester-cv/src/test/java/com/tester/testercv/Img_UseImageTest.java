@@ -30,14 +30,26 @@ public class Img_UseImageTest {
         int fei = ~-526345;
         System.out.println(fei);
         System.out.println(16777000 % 256);
+
+        System.out.println((float)5/6);
     }
     @Test
     public void test_readImg() throws Exception {
         String filePath = BASE_PATH+"p1_saved.png";
         BufferedImage img = ImageIO.read(new File(filePath));
-        int[][] pointArr = getDataArrayFromImg(img);
+        int[][] pointArr = MatrixImgTool.getDataArrayFromImg(img,times);
 //        printDataArray(pointArr);
-        reWriteImg(pointArr,times);
+        regenImg(pointArr);
+
+    }
+
+    private void regenImg(int[][] pointArr) throws Exception {
+        int[][] imgArr = MatrixImgTool.transToImgArr(pointArr, times);
+        drawLine(4,31,imgArr,154,120,times);
+        int i = atomicInteger.incrementAndGet();
+        String outputPath = BASE_PATH+"regen_"+i+"_saved.png";
+        MatrixImgTool.generateImgByImgArr(imgArr,outputPath);
+//        reWriteImg(pointArr,times);
     }
 
     /**
@@ -59,26 +71,6 @@ public class Img_UseImageTest {
         MatrixImgTool.generateImgByImgArr(imgArr,filePath);
     }
 
-    /**
-     * 从图片中获取数据矩阵
-     * @param img
-     * @return int[][]
-     * @Date 14:37 2020/11/3
-     * @Author 温昌营
-     **/
-    public int[][] getDataArrayFromImg(BufferedImage img){
-        int height = img.getHeight();
-        int width = img.getWidth();
-        int[][] pointArr = new int[height/times][width/times];
-        int imgPix;
-        for (int i = 0; i < pointArr.length; i++) {
-            for (int j = 0; j < pointArr[0].length; j++) {
-                imgPix = img.getRGB(j*times,i*times);
-                pointArr[i][j] = ((imgPix << 8) >> 8)%256;
-            }
-        }
-        return pointArr;
-    }
 
     /**
      * 打印数据矩阵
@@ -91,14 +83,32 @@ public class Img_UseImageTest {
         for (int i = 0; i < dataArr.length; i++) {
             for (int j = 0; j < dataArr[0].length; j++) {
                 if(dataArr[i][j] == pointPixel){
-                    System.out.print(256+",");
+                    // 数据点
+//                    System.out.print(256+",");
+                    System.out.println("["+i+","+j+"]");
                 }else {
-                    System.out.print(0+",");
+                    // 背景点
+//                    System.out.print(0+",");
                 }
             }
-            System.out.println();
+//            System.out.println();
         }
 
+    }
+
+    public void drawLine(int dataArrIStart,int dataArrJStart, int[][] imgArr,int dataArrIEnd,int dataArrJEnd, int times){
+        int x1 = dataArrIStart*times;
+        int x2 = dataArrIEnd*times;
+        int y1 = dataArrJStart*times;
+        int y2 = dataArrJEnd*times;
+        float k =  ((float)y2 - y1) / ((float)x2 - x1);
+        int b = ((y1+y2) - Math.round(k*(x1+x2)))/2;
+        int j;
+        for (int i = x1; i < x2; i++) {
+            j = Math.round(k*i)+b;
+            imgArr[i][j] = imgArr[x1][y1];
+            System.out.println("i is:"+i+",j is:"+j);
+        }
     }
 
 
