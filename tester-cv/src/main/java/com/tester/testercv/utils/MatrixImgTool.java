@@ -107,7 +107,6 @@ public class MatrixImgTool {
 
 
     public static void drawLine(int[] startPoint,int[] endPoint,int[][] imgArr,int times){
-
         int x1 = startPoint[0]*times;
         int x2 = endPoint[0]*times;
         int y1 = startPoint[1]*times;
@@ -115,36 +114,36 @@ public class MatrixImgTool {
         float k =  ((float)y2 - y1) / ((float)x2 - x1);
         int b = ((y1+y2) - Math.round(k*(x1+x2)))/2;
         int j;
-        if(x1 < x2){
-            for (int i = x1; i < x2; i++) {
-                j = Math.round(k*i)+b;
-                imgArr[i][j] = imgArr[x1][y1];
-//                System.out.println("i is:"+i+",j is:"+j);
-            }
+        int xDis = Math.abs(x1-x2);
+        int yDis = Math.abs(y1-y2);
+        if(xDis >= yDis) {
+            if (x1 < x2) {
+                for (int i = x1; i < x2; i++) {
+                    j = Math.round(k * i) + b;
+                    imgArr[i][j] = imgArr[x1][y1];
+                }
 
-        }else{
-            for (int i = x1; i >= x2; i--) {
-                j = Math.round(k*i)+b;
-                imgArr[i][j] = imgArr[x1][y1];
-//                System.out.println("i is:"+i+",j is:"+j);
+            } else {
+                for (int i = x1; i >= x2; i--) {
+                    j = Math.round(k * i) + b;
+                    imgArr[i][j] = imgArr[x1][y1];
+                }
+            }
+        }else {
+            if (y1 < y2) {
+                for (int i = y1; i < y2; i++) {
+                    j = Math.round((i-b)/k);
+                    imgArr[j][i] = imgArr[x1][y1];
+                }
+
+            } else {
+                for (int i = y1; i >= y2; i--) {
+                    j = Math.round((i-b)/k);
+                    imgArr[j][i] = imgArr[x1][y1];
+                }
             }
         }
     }
-
-//    public static void drawLine(int dataArrIStart,int dataArrJStart, int[][] imgArr,int dataArrIEnd,int dataArrJEnd, int times){
-//        int x1 = dataArrIStart*times;
-//        int x2 = dataArrIEnd*times;
-//        int y1 = dataArrJStart*times;
-//        int y2 = dataArrJEnd*times;
-//        float k =  ((float)y2 - y1) / ((float)x2 - x1);
-//        int b = ((y1+y2) - Math.round(k*(x1+x2)))/2;
-//        int j;
-//        for (int i = x1; i < x2; i++) {
-//            j = Math.round(k*i)+b;
-//            imgArr[i][j] = imgArr[x1][y1];
-//            System.out.println("i is:"+i+",j is:"+j);
-//        }
-//    }
 
 
     private static void setImgArr(int i,int j,int imgArr[][],int times, int pixel){

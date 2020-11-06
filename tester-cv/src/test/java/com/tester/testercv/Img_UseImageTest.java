@@ -37,7 +37,7 @@ public class Img_UseImageTest {
 
     }
     @Test
-    public void test_readImg() throws Exception {
+    public void test_redrawImg() throws Exception {
         String filePath = BASE_PATH+"p1_saved.png";
         BufferedImage img = ImageIO.read(new File(filePath));
         // 从图片获取数据矩阵
@@ -65,17 +65,16 @@ public class Img_UseImageTest {
         int length = points.length;
         int[] order = new int[length];
         // 当前起始点从0开始，不做随机
-//        int length = points.length;
 //        int startPoint = random.nextInt(length);
         int startPoint = 0;
         int[][] tempPoints = Arrays.copyOf(points, length);
-        calSub(startPoint,tempPoints,order,0);
+        calculateLine(startPoint,tempPoints,order,0);
         for (int i = 0; i < length; i++) {
             System.out.print(order[i]+",");
         }
         return order;
     }
-    private void calSub(int currPointIndex,int[][] tempPoints,int[] order,int currOrderIndex){
+    private void calculateLine(int currPointIndex, int[][] tempPoints, int[] order, int currOrderIndex){
         int length = tempPoints.length;
         if(currOrderIndex >= length){
             return;
@@ -93,10 +92,9 @@ public class Img_UseImageTest {
             }
             dis = newDis;
             nextPointIndex = i;
-
         }
         tempPoints[currPointIndex][0]=tempPoints[currPointIndex][1] = -1;
-        calSub(nextPointIndex,tempPoints,order,++currOrderIndex);
+        calculateLine(nextPointIndex,tempPoints,order,++currOrderIndex);
     }
 
     private int calDis(int[][] points,int startIndex,int endIndex){
