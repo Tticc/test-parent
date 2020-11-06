@@ -7,7 +7,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -42,18 +44,44 @@ public class Img_UseImageTest {
         BufferedImage img = ImageIO.read(new File(filePath));
         // 从图片获取数据矩阵
         int[][] dataArr = MatrixImgTool.getDataArrayFromImg(img,times);
+        minInNextStep(dataArr);
+    }
+
+    /**
+     * 整体最小算法
+     * @param dataArr
+     * @throws Exception
+     */
+    private void minInAll(int[][] dataArr) throws Exception {
         // 从数据矩阵获取点
         int[][] points = MatrixImgTool.getPointsFromDataArr(dataArr,pointPixel);
-        int[][] pointsCopy = MatrixImgTool.getPointsFromDataArr(dataArr,pointPixel);
         // 计算连接顺序
-        int[] order = doCal(pointsCopy);
+        int[] order = doCal(points);
         int lineNum = order.length-1;
         int[][] imgArr = MatrixImgTool.transToImgArr(dataArr, times);
         for (int i = 0; i < lineNum; i++) {
             MatrixImgTool.drawLine(points[order[i]],points[order[i+1]],imgArr,times);
         }
-        MatrixImgTool.generateImgByImgArr(imgArr, BASE_PATH+"p1_saved_lined.png");
+        MatrixImgTool.generateImgByImgArr(imgArr, BASE_PATH+"saved_minInAll_lined.png");
+    }
 
+
+    /**
+     * 下一步最小算法
+     * @param dataArr
+     * @throws Exception
+     */
+    private void minInNextStep(int[][] dataArr) throws Exception {
+        // 从数据矩阵获取点
+        int[][] points = MatrixImgTool.getPointsFromDataArr(dataArr,pointPixel);
+        // 计算连接顺序
+        int[] order = doCal(points);
+        int lineNum = order.length-1;
+        int[][] imgArr = MatrixImgTool.transToImgArr(dataArr, times);
+        for (int i = 0; i < lineNum; i++) {
+            MatrixImgTool.drawLine(points[order[i]],points[order[i+1]],imgArr,times);
+        }
+        MatrixImgTool.generateImgByImgArr(imgArr, BASE_PATH+"saved_minInNextStep_lined.png");
     }
 
 
@@ -64,26 +92,29 @@ public class Img_UseImageTest {
     private int[] doCal(int[][] points){
         int length = points.length;
         int[] order = new int[length];
-        // 当前起始点从0开始，不做随机
+        // 当前起始点从第0个节点开始，不做随机
 //        int startPoint = random.nextInt(length);
         int startPoint = 0;
         int[][] tempPoints = Arrays.copyOf(points, length);
-        calculateLine(startPoint,tempPoints,order,0);
+        calculateLine1(startPoint,tempPoints,order,0, new HashSet<>());
         for (int i = 0; i < length; i++) {
             System.out.print(order[i]+",");
         }
         return order;
     }
-    private void calculateLine(int currPointIndex, int[][] tempPoints, int[] order, int currOrderIndex){
+
+    private void calculateLine1(int currPointIndex, int[][] tempPoints, int[] order, int currOrderIndex, Set<Integer> hisPointIndex){
         int length = tempPoints.length;
         if(currOrderIndex >= length){
             return;
         }
+        hisPointIndex.add(currPointIndex);
         order[currOrderIndex] = currPointIndex;
         int nextPointIndex = currPointIndex;
+        // 距离，初始设置为int最大值
         int dis = Integer.MAX_VALUE;
         for (int i = 0; i < length; i++) {
-            if(i==currPointIndex || tempPoints[i][0] == -1){
+            if(hisPointIndex.contains(i)){
                 continue;
             }
             int newDis = calDis(tempPoints, currPointIndex, i);
@@ -93,8 +124,7 @@ public class Img_UseImageTest {
             dis = newDis;
             nextPointIndex = i;
         }
-        tempPoints[currPointIndex][0]=tempPoints[currPointIndex][1] = -1;
-        calculateLine(nextPointIndex,tempPoints,order,++currOrderIndex);
+        calculateLine1(nextPointIndex,tempPoints,order,++currOrderIndex,hisPointIndex);
     }
 
     private int calDis(int[][] points,int startIndex,int endIndex){
@@ -102,15 +132,6 @@ public class Img_UseImageTest {
         int[] endPoint = points[endIndex];
         double i = Math.sqrt(Math.pow(endPoint[0] - startPoint[0],2) + Math.pow(endPoint[1] - startPoint[1],2));
         return (int)Math.round(i);
-    }
-
-    private void regenImg(int[][] pointArr) throws Exception {
-        int[][] imgArr = MatrixImgTool.transToImgArr(pointArr, times);
-//        MatrixImgTool.drawLine(4,31,imgArr,154,120,times);
-        int i = atomicInteger.incrementAndGet();
-        String outputPath = BASE_PATH+"regen_"+i+"_saved.png";
-        MatrixImgTool.generateImgByImgArr(imgArr,outputPath);
-//        reWriteImg(pointArr,times);
     }
 
     /**
