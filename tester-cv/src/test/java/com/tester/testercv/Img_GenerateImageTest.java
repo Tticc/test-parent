@@ -9,7 +9,7 @@ public class Img_GenerateImageTest {
 
     public static Random random = new Random();
 
-    public static final String BASE_PATH = "C:\\Users\\wenc\\Desktop\\captureImg\\";
+    public static final String BASE_PATH = "C:\\Users\\Admin\\Desktop\\captureImg\\";
 
     public static int backgroundPixel =  255;
     public static int pointPixel =  0;

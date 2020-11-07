@@ -6,10 +6,7 @@ import org.junit.Test;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -44,7 +41,8 @@ public class Img_UseImageTest {
         BufferedImage img = ImageIO.read(new File(filePath));
         // 从图片获取数据矩阵
         int[][] dataArr = MatrixImgTool.getDataArrayFromImg(img,times);
-        minInNextStep(dataArr);
+//        minInNextStep(dataArr);
+        minInAllStep(dataArr);
     }
 
     /**
@@ -52,17 +50,72 @@ public class Img_UseImageTest {
      * @param dataArr
      * @throws Exception
      */
-    private void minInAll(int[][] dataArr) throws Exception {
+    private void minInAllStep(int[][] dataArr) throws Exception {
         // 从数据矩阵获取点
         int[][] points = MatrixImgTool.getPointsFromDataArr(dataArr,pointPixel);
         // 计算连接顺序
-        int[] order = doCal(points);
-        int lineNum = order.length-1;
-        int[][] imgArr = MatrixImgTool.transToImgArr(dataArr, times);
-        for (int i = 0; i < lineNum; i++) {
-            MatrixImgTool.drawLine(points[order[i]],points[order[i+1]],imgArr,times);
+        int[] order = calculateOrder_MinInAllStep(points);
+//        int lineNum = order.length-1;
+//        int[][] imgArr = MatrixImgTool.transToImgArr(dataArr, times);
+//        for (int i = 0; i < lineNum; i++) {
+//            MatrixImgTool.drawLine(points[order[i]],points[order[i+1]],imgArr,times);
+//        }
+//        MatrixImgTool.generateImgByImgArr(imgArr, BASE_PATH+"saved_minInAll_lined.png");
+    }
+
+    private int[] calculateOrder_MinInAllStep(int[][] points){
+        ArrayList<Integer> minDisList = new ArrayList<>(Arrays.asList(Integer.MAX_VALUE));
+        LinkedHashSet<Integer> hisPointIndex = new LinkedHashSet<>();
+        hisPointIndex.add(0);
+        ArrayList<Integer> minPointIndex = new ArrayList<>();
+        calculateLine_MinInAllStep(minDisList,minPointIndex,0,points,0,hisPointIndex);
+        System.out.println(minPointIndex);
+        return null;
+    }
+
+    /**
+     * <ol>
+     *     <li>当前最小距离。初始值为：Integer.MAX_VALUE;</li>
+     *     <li>当前最小距离对应的点 int[]</li>
+     *     <li>当前距离</li>
+     *     <li>所有点</li>
+     *     <li>已遍历的点 LinkedHashSet</li>
+     *     <li>当前点</li>
+     *     <li></li>
+     * </ol>
+     * @return
+     */
+    private void calculateLine_MinInAllStep(ArrayList<Integer> minDisList, ArrayList<Integer> minPointIndex, int dis, int[][] points, int currPointIndex, LinkedHashSet<Integer> hisPointIndex){
+        int length = points.length;
+        if(hisPointIndex.size() >= length){
+            minDisList.add(dis);
+//            System.out.println(hisPointIndex);
+            Iterator<Integer> iterator = hisPointIndex.iterator();
+            if(iterator.hasNext()){
+                minPointIndex.add(iterator.next());
+            }
+            return;
         }
-        MatrixImgTool.generateImgByImgArr(imgArr, BASE_PATH+"saved_minInAll_lined.png");
+        for (int i = 0; i < length; i++) {
+            int size = minDisList.size();
+            int minDis = minDisList.get(size-1);
+            if(hisPointIndex.contains(i)){
+                continue;
+            }
+            int newDis = dis + calDis(points, currPointIndex, i);
+            if(newDis >= minDis){
+                // 此时未到达最终点，如果距离已经大于现有的最小值，放弃
+                continue;
+            }
+            System.out.println(hisPointIndex);
+            hisPointIndex.add(i);
+            calculateLine_MinInAllStep(minDisList,minPointIndex,newDis,points,i,hisPointIndex);
+            int newSize = minDisList.size();
+//            if(size >= newSize){
+                // 这时，意味着最短路径没有更新，删去当前节点的历史记录
+                hisPointIndex.remove(i);
+//            }
+        }
     }
 
 
@@ -75,7 +128,7 @@ public class Img_UseImageTest {
         // 从数据矩阵获取点
         int[][] points = MatrixImgTool.getPointsFromDataArr(dataArr,pointPixel);
         // 计算连接顺序
-        int[] order = doCal(points);
+        int[] order = calculateOrder_MinInNextStep(points);
         int lineNum = order.length-1;
         int[][] imgArr = MatrixImgTool.transToImgArr(dataArr, times);
         for (int i = 0; i < lineNum; i++) {
@@ -89,22 +142,29 @@ public class Img_UseImageTest {
     /**
      * 计算距离
      **/
-    private int[] doCal(int[][] points){
+    private int[] calculateOrder_MinInNextStep(int[][] points){
         int length = points.length;
         int[] order = new int[length];
         // 当前起始点从第0个节点开始，不做随机
 //        int startPoint = random.nextInt(length);
         int startPoint = 0;
-        int[][] tempPoints = Arrays.copyOf(points, length);
-        calculateLine1(startPoint,tempPoints,order,0, new HashSet<>());
+        calculateLine_MinInNextStep(startPoint,points,order,0, new HashSet<>());
         for (int i = 0; i < length; i++) {
             System.out.print(order[i]+",");
         }
         return order;
     }
 
-    private void calculateLine1(int currPointIndex, int[][] tempPoints, int[] order, int currOrderIndex, Set<Integer> hisPointIndex){
-        int length = tempPoints.length;
+    /**
+     *
+     * @param currPointIndex 当前点
+     * @param points 所有点
+     * @param order 点顺序
+     * @param currOrderIndex 点顺序序号
+     * @param hisPointIndex 已到达的点
+     */
+    private void calculateLine_MinInNextStep(int currPointIndex, int[][] points, int[] order, int currOrderIndex, Set<Integer> hisPointIndex){
+        int length = points.length;
         if(currOrderIndex >= length){
             return;
         }
@@ -117,14 +177,14 @@ public class Img_UseImageTest {
             if(hisPointIndex.contains(i)){
                 continue;
             }
-            int newDis = calDis(tempPoints, currPointIndex, i);
+            int newDis = calDis(points, currPointIndex, i);
             if(dis <= newDis){
                 continue;
             }
             dis = newDis;
             nextPointIndex = i;
         }
-        calculateLine1(nextPointIndex,tempPoints,order,++currOrderIndex,hisPointIndex);
+        calculateLine_MinInNextStep(nextPointIndex,points,order,++currOrderIndex,hisPointIndex);
     }
 
     private int calDis(int[][] points,int startIndex,int endIndex){
