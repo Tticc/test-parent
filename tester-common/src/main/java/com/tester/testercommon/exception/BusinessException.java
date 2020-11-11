@@ -18,7 +18,7 @@ public class BusinessException extends Exception{
     private ExceptionCode exceptionCode;
 
     public BusinessException(long exCode, String exDesc) {
-        super(String.valueOf(exCode));
+        super(exDesc);
         this.setExCode(exCode);
     }
 

@@ -15,4 +15,8 @@ public class ConstantList {
      * 非 分库分表数据源
      **/
     public static final String NORMAL_MANAGER = "transactionManger-normal";
+
+
+
+    public static final String TRACE_ID_KEY = "X-B3-TraceId";
 }

@@ -4,6 +4,7 @@ import org.springframework.lang.NonNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 public class CommonUtil {
 
@@ -38,5 +39,8 @@ public class CommonUtil {
 	public static String toLowerCaseFirstOne(@NonNull String s) {
 		if(Character.isLowerCase(s.charAt(0))) return s;
 		return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
+	}
+	public static String getUUID() {
+		return UUID.randomUUID().toString();
 	}
 }

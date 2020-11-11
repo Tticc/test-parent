@@ -38,11 +38,12 @@ public class Img_UseImageTest {
     @Test
     public void test_redrawImg() throws Exception {
         String filePath = BASE_PATH+"p1_saved.png";
+        int startPointIndex = 8;
         BufferedImage img = ImageIO.read(new File(filePath));
         // 从图片获取数据矩阵
         int[][] dataArr = MatrixImgTool.getDataArrayFromImg(img,times);
-//        minInNextStep(dataArr);
-        minInAllStep(dataArr);
+//        minInNextStep(dataArr,startPointIndex); // 8,11,14,6,10,12,9,7,15,16,17,13,5,1,2,3,0,4,18
+//        minInAllStep(dataArr,startPointIndex); // [8, 14, 11, 12, 10, 6, 4, 0, 2, 3, 7, 9, 18, 15, 16, 17, 13, 5, 1]
     }
 
     /**
@@ -50,27 +51,34 @@ public class Img_UseImageTest {
      * @param dataArr
      * @throws Exception
      */
-    private void minInAllStep(int[][] dataArr) throws Exception {
+    private void minInAllStep(int[][] dataArr, int startPointIndex) throws Exception {
         // 从数据矩阵获取点
         int[][] points = MatrixImgTool.getPointsFromDataArr(dataArr,pointPixel);
         // 计算连接顺序
-        int[] order = calculateOrder_MinInAllStep(points);
-//        int lineNum = order.length-1;
-//        int[][] imgArr = MatrixImgTool.transToImgArr(dataArr, times);
-//        for (int i = 0; i < lineNum; i++) {
-//            MatrixImgTool.drawLine(points[order[i]],points[order[i+1]],imgArr,times);
-//        }
-//        MatrixImgTool.generateImgByImgArr(imgArr, BASE_PATH+"saved_minInAll_lined.png");
+        int[] order = calculateOrder_MinInAllStep(points,startPointIndex);
+        int lineNum = order.length-1;
+        int[][] imgArr = MatrixImgTool.transToImgArr(dataArr, times);
+        for (int i = 0; i < lineNum; i++) {
+            MatrixImgTool.drawLine(points[order[i]],points[order[i+1]],imgArr,times);
+        }
+        MatrixImgTool.generateImgByImgArr(imgArr, BASE_PATH+"saved_minInAllStep_lined.png");
     }
 
-    private int[] calculateOrder_MinInAllStep(int[][] points){
+    private int[] calculateOrder_MinInAllStep(int[][] points, int startPointIndex){
         ArrayList<Integer> minDisList = new ArrayList<>(Arrays.asList(Integer.MAX_VALUE));
         LinkedHashSet<Integer> hisPointIndex = new LinkedHashSet<>();
-        hisPointIndex.add(0);
+
+        hisPointIndex.add(startPointIndex);
         ArrayList<Integer> minPointIndex = new ArrayList<>();
-        calculateLine_MinInAllStep(minDisList,minPointIndex,0,points,0,hisPointIndex);
-        System.out.println(minPointIndex);
-        return null;
+        long l = System.currentTimeMillis();
+        calculateLine_MinInAllStep(minDisList,minPointIndex,0,points,startPointIndex,hisPointIndex);
+        long le = System.currentTimeMillis();
+        System.out.println("length:"+points.length+"。time cost:"+(le-l)+"。finall order:"+minPointIndex);
+        int[] order = new int[minPointIndex.size()];
+        for (int i = 0; i < order.length; i++) {
+            order[i] = minPointIndex.get(i);
+        }
+        return order;
     }
 
     /**
@@ -89,9 +97,10 @@ public class Img_UseImageTest {
         int length = points.length;
         if(hisPointIndex.size() >= length){
             minDisList.add(dis);
-//            System.out.println(hisPointIndex);
+            System.out.println(hisPointIndex);
             Iterator<Integer> iterator = hisPointIndex.iterator();
-            if(iterator.hasNext()){
+            boolean b = minPointIndex.removeAll(minPointIndex);
+            while(iterator.hasNext()){
                 minPointIndex.add(iterator.next());
             }
             return;
@@ -107,7 +116,7 @@ public class Img_UseImageTest {
                 // 此时未到达最终点，如果距离已经大于现有的最小值，放弃
                 continue;
             }
-            System.out.println(hisPointIndex);
+//            System.out.println(hisPointIndex);
             hisPointIndex.add(i);
             calculateLine_MinInAllStep(minDisList,minPointIndex,newDis,points,i,hisPointIndex);
             int newSize = minDisList.size();
@@ -124,11 +133,11 @@ public class Img_UseImageTest {
      * @param dataArr
      * @throws Exception
      */
-    private void minInNextStep(int[][] dataArr) throws Exception {
+    private void minInNextStep(int[][] dataArr,int startPointIndex) throws Exception {
         // 从数据矩阵获取点
         int[][] points = MatrixImgTool.getPointsFromDataArr(dataArr,pointPixel);
         // 计算连接顺序
-        int[] order = calculateOrder_MinInNextStep(points);
+        int[] order = calculateOrder_MinInNextStep(points,startPointIndex);
         int lineNum = order.length-1;
         int[][] imgArr = MatrixImgTool.transToImgArr(dataArr, times);
         for (int i = 0; i < lineNum; i++) {
@@ -142,13 +151,15 @@ public class Img_UseImageTest {
     /**
      * 计算距离
      **/
-    private int[] calculateOrder_MinInNextStep(int[][] points){
+    private int[] calculateOrder_MinInNextStep(int[][] points,int startPointIndex){
         int length = points.length;
         int[] order = new int[length];
         // 当前起始点从第0个节点开始，不做随机
 //        int startPoint = random.nextInt(length);
-        int startPoint = 0;
-        calculateLine_MinInNextStep(startPoint,points,order,0, new HashSet<>());
+        long l = System.currentTimeMillis();
+        calculateLine_MinInNextStep(startPointIndex,points,order,0, new HashSet<>());
+        long le = System.currentTimeMillis();
+        System.out.println("length:"+points.length+"。time cost:"+(le-l)+"。finall order:"+order);
         for (int i = 0; i < length; i++) {
             System.out.print(order[i]+",");
         }
