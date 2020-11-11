@@ -41,6 +41,6 @@ public class CommonUtil {
 		return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
 	}
 	public static String getUUID() {
-		return UUID.randomUUID().toString();
+		return UUID.randomUUID().toString().replaceAll("-","");
 	}
 }

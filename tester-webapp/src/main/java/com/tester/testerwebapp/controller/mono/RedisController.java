@@ -50,9 +50,41 @@ public class RedisController extends BaseController {
     // ******************* 可重入redis锁 ************************************************************************
     @RequestMapping(value="reentrantLock", method = RequestMethod.POST)
     public Mono<RestResult<String>> reentrantLock() throws BusinessException {
-        boolean lock = reentrantRedisLockManager.getLock("md:cv:orderNo", "12321", 1000*60*5);
+        boolean lock = reentrantRedisLockManager.getLock("md:cv:orderNo",1000*60*5);
         Mono<String> stringMono = Mono.justOrEmpty(String.valueOf(lock));
         return monoSuccess(stringMono);
+    }
+
+    @RequestMapping(value="releaseReentrantLock", method = RequestMethod.POST)
+    public Mono<RestResult<String>> releaseReentrantLock() throws BusinessException {
+        boolean lock = reentrantRedisLockManager.removeLock("md:cv:orderNo");
+        Mono<String> stringMono = Mono.justOrEmpty(String.valueOf(lock));
+        return monoSuccess(stringMono);
+    }
+
+    @RequestMapping(value="reLock", method = RequestMethod.POST)
+    public RestResult<String> reLock() throws BusinessException {
+        testLockMethod(0,5);
+        return success();
+    }
+
+
+
+
+    private void testLockMethod(int count,int maxTime) throws BusinessException {
+        if(count >= maxTime){
+            return;
+        }
+        String lockKey = "md:cv:orderNo";
+        try {
+            boolean lock = reentrantRedisLockManager.getLock(lockKey, 1000 * 60 * 5);
+            if (lock) {
+                System.out.println("lockSuccess。time:"+ count);
+                testLockMethod(++count,maxTime);
+            }
+        }finally {
+            reentrantRedisLockManager.removeLock(lockKey);
+        }
     }
 
 

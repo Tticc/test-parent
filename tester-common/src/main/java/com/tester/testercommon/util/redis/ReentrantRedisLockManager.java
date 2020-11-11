@@ -17,12 +17,14 @@ import java.util.List;
  * @Date 9:29 2020/11/11
  * @Author 温昌营
  **/
-@Component("reentrantRedisLockManager")
 @Slf4j
+@Component("reentrantRedisLockManager")
 public class ReentrantRedisLockManager {
+    /**
+     * traceId 过期时间，默认为10分钟
+     **/
     private int traceIdTimeout = 1000*60*10;
-    public static final DefaultRedisScript REMOVE_LOCK_LUA_SCRIPT = new DefaultRedisScript("if redis.call('get',KEYS[1]) == ARGV[1] then return redis.call('del',KEYS[1]) else return -1 end", Long.class);
-    public static final DefaultRedisScript GET_LOCK_LUA_SCRIPT = new DefaultRedisScript("if redis.call('setnx', KEYS[1], ARGV[1]) == 1 then return redis.call('pexpire', KEYS[1], ARGV[2]) else return 0 end", Long.class);
+
     public static final DefaultRedisScript GET_REENTRANT_LOCK_LUA_SCRIPT = new DefaultRedisScript(
             "if redis.call('setnx',KEYS[1],ARGV[1]) == 1 then \n" +
                     "    redis.call('pexpire',KEYS[1],ARGV[2])\n" +
@@ -36,29 +38,69 @@ public class ReentrantRedisLockManager {
                     "    end\n" +
                     "end", Long.class);
 
+    public static final DefaultRedisScript REMOVE_REENTRANT_LOCK_LUA_SCRIPT = new DefaultRedisScript("if redis.call('get',KEYS[1]) == ARGV[1] then \n" +
+            "    if redis.call('DECR',KEYS[2]) < 1 then\n" +
+            "        redis.call('del',KEYS[2])\n" +
+            "        return redis.call('del',KEYS[1])\n" +
+            "    else\n" +
+            "        return 1--释放成功，但是仍然持有锁\n" +
+            "    end\n" +
+            "else\n" +
+            "    return 1\n" +
+            "end\n", Long.class);
+
+
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    public ReentrantRedisLockManager(StringRedisTemplate redisTemplate) {
-        this.redisTemplate = redisTemplate;
+    /**
+     * true=成功，false=失败
+     * @param key
+     * @param timeout
+     * @return boolean
+     * @Date 17:36 2020/11/11
+     * @Author 温昌营
+     **/
+    public boolean getLock(String key, int timeout) throws BusinessException {
+        List<String> keys = new ArrayList<>();
+        String traceId = addKeys(keys, key);
+        log.info("keys:{}",keys);
+        Object result = this.redisTemplate.execute(GET_REENTRANT_LOCK_LUA_SCRIPT, keys, new Object[]{traceId, String.valueOf(timeout),String.valueOf(traceIdTimeout)});
+        return Integer.parseInt(String.valueOf(result)) > 0;
     }
 
-    public boolean getLock(String key, String value, int timeout) throws BusinessException {
-        List<String> keys = new ArrayList();
+    /**
+     * 释放不判断成功失败
+     * @param key
+     * @return boolean
+     * @Date 17:27 2020/11/11
+     * @Author 温昌营
+     **/
+    public boolean removeLock(String key) throws BusinessException {
+        List<String> keys = new ArrayList<>();
+        String traceId = addKeys(keys,key);
+        Object result = this.redisTemplate.execute(REMOVE_REENTRANT_LOCK_LUA_SCRIPT, keys, new Object[]{traceId});
+        return String.valueOf(1).equals(String.valueOf(result));
+    }
+
+    /**
+     * 接入key。
+     * <br/>加prefix是为了保证lua的所有操作key都在同一个slot中。
+     * <br/>redis只将 : 前 {} 里面的数据做hash，所以只要保证{}里面的内容一致，就能将lua的key都hash到同一个slot
+     *
+     * @param keys
+     * @param dataKey
+     * @return void
+     * @Date 17:31 2020/11/11
+     * @Author 温昌营
+     **/
+    private String addKeys(List<String> keys, String dataKey){
         String traceId = MDC.get("X-B3-TraceId");
+//        traceId = "111";
         String prefix = "{"+traceId+"}:";
 //        prefix = "{orderNo}:";
-        keys.add(prefix+key);
+        keys.add(prefix+dataKey);
         keys.add(prefix+traceId);
-        System.out.println(keys);
-        Object result = this.redisTemplate.execute(GET_REENTRANT_LOCK_LUA_SCRIPT, keys, new Object[]{traceId, String.valueOf(timeout),String.valueOf(traceIdTimeout)});
-        return Integer.parseInt(result.toString()) > 0;
-    }
-
-    public boolean removeLock(String key, String tokenVersion) throws BusinessException {
-        List<String> keys = new ArrayList();
-        keys.add(key);
-        Object result = this.redisTemplate.execute(REMOVE_LOCK_LUA_SCRIPT, keys, new Object[]{tokenVersion});
-        return String.valueOf(1).equals(result.toString());
+        return traceId;
     }
 }

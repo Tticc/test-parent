@@ -1,4 +1,4 @@
-package com.tester.testeraop.annotation;
+package com.tester.testercommon.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CacheLock {
+public @interface ReentrantCacheLock {
     String key() default "";
 
     int timeout() default 10000;
