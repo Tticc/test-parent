@@ -24,7 +24,7 @@ public class AopController extends BaseController {
 
     @PostMapping(value = "/test_param")
     public RestResult test_param(@RequestBody @Valid IdAndNameModel model){
-        aopManager.test_param(model);
+//        aopManager.test_param(model);
         return success();
     }
 

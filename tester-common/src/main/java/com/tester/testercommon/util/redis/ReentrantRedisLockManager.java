@@ -97,7 +97,7 @@ public class ReentrantRedisLockManager {
     private String addKeys(List<String> keys, String dataKey){
         String traceId = MDC.get("X-B3-TraceId");
 //        traceId = "111";
-        String prefix = "{"+traceId+"}:";
+        String prefix = "{"+dataKey+"}:";
 //        prefix = "{orderNo}:";
         keys.add(prefix+dataKey);
         keys.add(prefix+traceId);
