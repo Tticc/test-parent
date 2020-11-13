@@ -21,6 +21,11 @@ public class Civil {
     private boolean hider = false;
 
     /**
+     * 年龄
+     */
+    private int age = 1;
+
+    /**
      * 攻击力
      */
     private int attack = 0;
@@ -40,10 +45,7 @@ public class Civil {
 
 
     // 坐标。需要初始化
-    private int x;
-    private int y;
-    private int z;
-
+    private int[] spacePoint;
 
     /**
      * id
@@ -53,4 +55,10 @@ public class Civil {
      * 名称
      */
     private String name;
+
+
+
+    public void growth(){
+        CivilHelper.civilGrowth(this);
+    }
 }

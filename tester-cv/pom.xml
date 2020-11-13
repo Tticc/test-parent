@@ -20,6 +20,11 @@
             <artifactId>tester-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.tester</groupId>
+            <artifactId>tester-pool</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.tester</groupId>
