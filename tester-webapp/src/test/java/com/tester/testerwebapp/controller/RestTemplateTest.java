@@ -1,5 +1,6 @@
 package com.tester.testerwebapp.controller;
 
+import com.tester.testercommon.util.redis.RedisUtilValue;
 import com.tester.testermybatis.dao.mapper.OrderMemberMapper;
 import com.tester.testermybatis.model.response.MemberJoinItemVO;
 import com.tester.testermybatis.dao.domain.OrderItemDomain;
@@ -18,17 +19,30 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.data.redis.connection.DefaultStringRedisConnection;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 @RunWith(SpringRunner.class)
@@ -58,6 +72,53 @@ public class RestTemplateTest implements InitializingBean {
     @Resource
     private OrderMemberMapper orderMemberMapper;
 
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
+
+    @Autowired
+    private RedisUtilValue redisUtilValue;
+
+    @Test
+    public void test_redisValue(){
+        boolean aa = redisUtilValue.setValue("aa", 100L);
+        Serializable aa1 = redisUtilValue.getValue("aa");
+        System.out.println(aa);
+    }
+
+    @Test
+    public void test_view(){
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new GenericToStringSerializer<>(Long.class));
+        ValueOperations<Object, Object> valueOperations = redisTemplate.opsForValue();
+        valueOperations.set("long",11L);
+        Object aLong = valueOperations.get("long");
+        System.out.println(aLong);
+    }
+    @Test
+    public void test_listOpe(){
+        ListOperations<String, String> listOperations = stringRedisTemplate.opsForList();
+        Long aLong = listOperations.leftPush("ll", "23");
+        System.out.println(aLong);
+    }
+
+    @Test
+    public void test_getAndPrint(){
+//        ListOperations<String, Integer> listOperations = redisTemplate.opsForList();
+        ListOperations<String, String> listOperations = stringRedisTemplate.opsForList();
+        listOperations.leftPush("ll","11");
+        for(;;){
+            List<String> ll = listOperations.range("ll", 0, 10);
+            System.out.println(ll);
+            String s =  listOperations.leftPop("ll", 4, TimeUnit.SECONDS);
+//            if(null != s) {
+                System.out.println("got:" + s);
+//            }
+        }
+    }
 
 
     @Test

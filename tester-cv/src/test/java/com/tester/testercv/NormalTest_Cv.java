@@ -11,11 +11,41 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class NormalTest_Cv {
 
     private AtomicInteger atomicInteger = new AtomicInteger(0);
+
+
+    class LRUMap<K,V> extends LinkedHashMap<K,V>{
+        public LRUMap(){
+            super(4, 0.75f, true);
+        }
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<K,V> eldest){
+            return size() > 4;
+        }
+    }
+
+    @Test
+    public void test_lru(){
+        LRUMap<String,String> map = new LRUMap<>();
+        map.put("1","1");
+        map.put("2","2");
+        map.put("3","3");
+        System.out.println(map);
+        map.get("1");
+        map.put("4","4");
+        System.out.println(map);
+        map.put("5","5");
+        System.out.println(map);
+        map.put("6","6");
+        System.out.println(map);
+    }
+
 
 
     @Test
@@ -103,6 +133,4 @@ public class NormalTest_Cv {
             }
         }
     }
-
-
 }
