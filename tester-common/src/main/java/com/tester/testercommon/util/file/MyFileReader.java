@@ -2,6 +2,7 @@ package com.tester.testercommon.util.file;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 public class MyFileReader {
@@ -22,5 +23,17 @@ public class MyFileReader {
             e.printStackTrace();
         }
         return result.toString();
+    }
+
+    public static byte[] readFileToByte(File file){
+        try {
+            int length = (int) file.length();
+            byte[] data = new byte[length];
+            new FileInputStream(file).read(data);
+            return data;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
