@@ -30,18 +30,36 @@ public class AesSecurityBase64 {
 
     private static String CODE = "UTF-8";
 
-    /** aes 加密*/
+    /** aes aes 加密 String*/
     public static String encrypt(String msg) throws Exception {
         return encrypt(msg, defaultKey(), defaultOffSet());
     }
-    /** aes 解密*/
+    /** aes 加密 byte*/
+    public static byte[] encrypt(byte[] msg) throws Exception {
+        return encrypt(msg, defaultKey(), defaultOffSet());
+    }
+    /** aes 解密 String*/
     public static String decrypt(String msg) throws Exception {
         return decrypt(msg, defaultKey(), defaultOffSet());
     }
+    /** aes 解密 byte*/
+    public static byte[] decrypt(byte[] msg) throws Exception {
+        return decrypt(msg, defaultKey(), defaultOffSet());
+    }
 
-    /** aes 加密*/
+    /**
+     *  aes 加密 String
+     */
     public static String encrypt(String msg, String aseKey, String offSet) throws Exception {
         byte[] message = msg.getBytes(CODE);
+        byte[] encrypted = encrypt(message,aseKey,offSet);
+        return base64EncodeToString(encrypted);
+    }
+
+    /**
+     * ase 加密byte数据
+     */
+    public static byte[] encrypt(byte[] message,String aseKey, String offSet) throws Exception {
         byte[] key = base64Decode(aseKey);
         byte[] oft = base64Decode(offSet);
         // PKCS5Padding
@@ -53,11 +71,17 @@ public class AesSecurityBase64 {
         // 加密
         cipher.init(Cipher.ENCRYPT_MODE, keySpec, iv);
         byte[] encrypted = cipher.doFinal(message);
-        return base64EncodeToString(encrypted);
+        return encrypted;
     }
-    /** aes 解密*/
+    /** aes 解密 String*/
     public static String decrypt(String msg, String aseKey, String offSet) throws Exception {
         byte[] message = base64Decode(msg);
+        byte[] encrypted = decrypt(message,aseKey,offSet);
+        return new String(encrypted,CODE);
+    }
+
+    /** aes 解密 byte数据*/
+    public static byte[] decrypt(byte[] message, String aseKey, String offSet) throws Exception {
         byte[] key = base64Decode(aseKey);
         byte[] oft = base64Decode(offSet);
         // PKCS5Padding
@@ -70,8 +94,7 @@ public class AesSecurityBase64 {
         // 解密
         cipher.init(Cipher.DECRYPT_MODE, keySpec, iv);
         byte[] encrypted = cipher.doFinal(message);
-
-        return new String(encrypted,CODE);
+        return encrypted;
     }
 
     private static String defaultKey(){
