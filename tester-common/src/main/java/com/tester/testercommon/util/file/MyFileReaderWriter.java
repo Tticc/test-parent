@@ -1,11 +1,8 @@
 package com.tester.testercommon.util.file;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 
-public class MyFileReader {
+public class MyFileReaderWriter {
 
     public static String txt2String(File file) throws IOException {
         return txt2String(file,"");
@@ -25,15 +22,27 @@ public class MyFileReader {
         return result.toString();
     }
 
-    public static byte[] readFileToByte(File file){
-        try {
-            int length = (int) file.length();
-            byte[] data = new byte[length];
-            new FileInputStream(file).read(data);
-            return data;
-        } catch (Exception e) {
+    public static byte[] file2Byte(File file){
+        byte[] bytes = new byte[(int)file.length()];
+        try(FileInputStream buf = new FileInputStream(file)){
+            buf.read(bytes);
+        }catch(Exception e){
             e.printStackTrace();
-            return null;
+        }
+        return bytes;
+    }
+
+    public static void byte2File(byte[] data,File file){
+        InputStream in = new ByteArrayInputStream(data);
+        try(FileOutputStream fos = new FileOutputStream(file)){
+            int len = 0;
+            byte[] buf = new byte[1024];
+            while ((len = in.read(buf)) != -1) {
+                fos.write(buf, 0, len);
+            }
+            fos.flush();
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 }

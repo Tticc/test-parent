@@ -1,6 +1,6 @@
 package com.tester.testerwebapp;
 
-import com.tester.testercommon.util.file.MyFileReader;
+import com.tester.testercommon.util.file.MyFileReaderWriter;
 import com.tester.testercommon.util.jwt.JwtDataModel;
 import com.tester.testercommon.util.jwt.JwtHelper;
 import org.junit.Test;
@@ -146,7 +146,7 @@ public class NormalTest_WebApp {
      */
     private String[] getPp() throws IOException {
         File file = new File("C:\\Users\\wenc\\Desktop\\ppa.txt");
-        String[] text = MyFileReader.txt2String(file,";").split(";");
+        String[] text = MyFileReaderWriter.txt2String(file,";").split(";");
         System.out.println("pp.size:"+text.length);
         return text;
     }
@@ -156,7 +156,7 @@ public class NormalTest_WebApp {
      */
     private String[] getPis() throws IOException {
         File file = new File("C:\\Users\\wenc\\Desktop\\pisa.txt");
-        String[] text = MyFileReader.txt2String(file,";").split(";");
+        String[] text = MyFileReaderWriter.txt2String(file,";").split(";");
         System.out.println("pis.size:"+text.length);
         return text;
     }
