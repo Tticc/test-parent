@@ -42,7 +42,7 @@ public class NormalTest_Cv {
         System.out.println(map);
         map.put("5","5");
         System.out.println(map);
-        map.put("6","6");
+        map.put("6","6 ");
         System.out.println(map);
     }
 
