@@ -16,7 +16,7 @@ public class Img_UseImageTest {
     private AtomicInteger atomicInteger = new AtomicInteger(0);
     public static final String BASE_PATH = Img_GenerateImageTest.BASE_PATH;
 
-    private static int pointPixel =  Img_GenerateImageTest.pointPixel;
+    private static int pointPixel =  -9;
     private static int times = Img_GenerateImageTest.times;
 
 
@@ -37,13 +37,13 @@ public class Img_UseImageTest {
     }
     @Test
     public void test_redrawImg() throws Exception {
-        String filePath = BASE_PATH+"p1_saved.png";
+        String filePath = BASE_PATH+"saved_black.png";
         int startPointIndex = 8;
         BufferedImage img = ImageIO.read(new File(filePath));
         // 从图片获取数据矩阵
         int[][] dataArr = MatrixImgTool.getDataArrayFromImg(img,times);
 //        minInNextStep(dataArr,startPointIndex); // 8,11,14,6,10,12,9,7,15,16,17,13,5,1,2,3,0,4,18
-//        minInAllStep(dataArr,startPointIndex); // [8, 14, 11, 12, 10, 6, 4, 0, 2, 3, 7, 9, 18, 15, 16, 17, 13, 5, 1]
+        minInAllStep(dataArr,startPointIndex); // [8, 14, 11, 12, 10, 6, 4, 0, 2, 3, 7, 9, 18, 15, 16, 17, 13, 5, 1]
     }
 
     /**
@@ -136,6 +136,7 @@ public class Img_UseImageTest {
     private void minInNextStep(int[][] dataArr,int startPointIndex) throws Exception {
         // 从数据矩阵获取点
         int[][] points = MatrixImgTool.getPointsFromDataArr(dataArr,pointPixel);
+        System.out.println("point size:"+points.length);
         // 计算连接顺序
         int[] order = calculateOrder_MinInNextStep(points,startPointIndex);
         int lineNum = order.length-1;

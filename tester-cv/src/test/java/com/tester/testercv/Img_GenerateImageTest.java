@@ -9,10 +9,10 @@ public class Img_GenerateImageTest {
 
     public static Random random = new Random();
 
-    public static final String BASE_PATH = "C:\\Users\\Admin\\Desktop\\captureImg\\";
+    public static final String BASE_PATH = "C:\\Users\\Admin\\Desktop\\captureImg\\black\\";
 
-    public static int backgroundPixel =  255;
-    public static int pointPixel =  0;
+    public static int backgroundPixel =  0;
+    public static int pointPixel =  255;
     public static int times = 4;
 
     @Test
@@ -32,7 +32,7 @@ public class Img_GenerateImageTest {
             }
         }
         System.out.println("像素点："+pixNum);
-        String filePath = BASE_PATH+"saved.png";
+        String filePath = BASE_PATH+"saved_black.png";
         int[][] imgArr = MatrixImgTool.transToImgArr(dataArr,times);
         MatrixImgTool.generateImgByImgArr(imgArr,filePath);
     }

@@ -111,13 +111,15 @@ public class MatrixImgTool {
         int x2 = endPoint[0]*times;
         int y1 = startPoint[1]*times;
         int y2 = endPoint[1]*times;
-        float k =  ((float)y2 - y1) / ((float)x2 - x1);
+        float xDis = x2-x1 == 0?0.001f:x2-x1;// 避免在求k值的时候分母为0
+        float yDis = y2-y1;
+        float k =  (yDis) / (xDis);
         int b = ((y1+y2) - Math.round(k*(x1+x2)))/2;
         int j;
-        int xDis = Math.abs(x1-x2);
-        int yDis = Math.abs(y1-y2);
-        if(xDis >= yDis) {
-            if (x1 < x2) {
+        float xAbsDis = Math.abs(xDis);
+        float yAbsDis = Math.abs(yDis);
+        if(xAbsDis >= yAbsDis) {
+            if (x1 <= x2) {
                 for (int i = x1; i < x2; i++) {
                     j = Math.round(k * i) + b;
                     imgArr[i][j] = imgArr[x1][y1];
