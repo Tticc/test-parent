@@ -1,5 +1,6 @@
 package com.tester.testercv.draw;
 
+import com.tester.testercv.draw.basic.NodeTypeEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -11,6 +12,11 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class Node {
+    /**
+     *
+     * 节点id
+     */
+    private Long id;
     /**
      * 层级。start节点 = 0。<br/>
      *  其他：down = level + 1; right = level;
@@ -32,4 +38,26 @@ public class Node {
      * 上一个节点。非 start节点有previous
      **/
     private Node previous;
+    /**
+     * 节点文本
+     **/
+    private String text;
+    /**
+     * x轴位置
+     **/
+    private int xPixel;
+    /**
+     * y轴位置
+     **/
+    private int yPixel;
+
+    @Override
+    public String toString() {
+        return "{level:" + level +
+                ", type:" + NodeTypeEnum.getByValue(type).getText() +
+                ", text:" + text +
+                ", xPixel:" + xPixel +
+                ", yPixel:" + yPixel +
+                "}";
+    }
 }

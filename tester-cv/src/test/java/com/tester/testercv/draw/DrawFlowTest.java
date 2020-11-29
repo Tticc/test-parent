@@ -1,11 +1,16 @@
 package com.tester.testercv.draw;
 
 import com.tester.testercv.Img_GenerateImageTest;
+import com.tester.testercv.draw.basic.NodeTypeEnum;
 import org.junit.Test;
 import org.opencv.core.*;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.springframework.util.CollectionUtils;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Author 温昌营
@@ -17,10 +22,10 @@ public class DrawFlowTest {
 
     private static final int halfNodeHeight = 50;
     private static final int halfNodeWidth = 100;
-    private static final int POINT_TYPE_START = 0;
-    private static final int POINT_TYPE_CHECK = 1;
-    private static final int POINT_TYPE_TASK = 2;
-    private static final int POINT_TYPE_END = 3;
+    public static final int POINT_TYPE_START = NodeTypeEnum.START.getValue();
+    public static final int POINT_TYPE_CHECK = NodeTypeEnum.EXCLUSIVE_CHECK.getValue();
+    public static final int POINT_TYPE_TASK = NodeTypeEnum.USER_TASK.getValue();
+    public static final int POINT_TYPE_END = NodeTypeEnum.END.getValue();
 
 
     public static final Scalar DEFAULT_LINE_POINT = new Scalar(255);
@@ -35,7 +40,147 @@ public class DrawFlowTest {
     }
 
     @Test
-    public void test_drow(){
+    public void test_drawFromNode(){
+        ImgNodeBuilder imgNodeBuilder = new ImgNodeBuilder();
+        imgNodeBuilder.buildNodeTree();
+        Map<Integer, List<Node>> levelNodeMap = imgNodeBuilder.getLevelNodeMap();
+        Node startOfImgNode = imgNodeBuilder.getStartOfImgNode();
+
+        int maxNodeLevel = levelNodeMap.size();
+        int rows = maxNodeLevel*halfNodeHeight*3;
+        int maxNodeNum = levelNodeMap.values().stream().map(e -> e.size()).max(Integer::compareTo).get();
+        int cols = maxNodeNum*halfNodeWidth*3;
+
+        startOfImgNode.setXPixel(halfNodeWidth)
+                .setYPixel(halfNodeHeight);
+        for (int i = 1; i < maxNodeLevel; i++) {
+            List<Node> nodes = levelNodeMap.get(i);
+            for (Node node : nodes) {
+                Node previous = node.getPrevious();
+                if(previous.getLevel() == node.getLevel()){
+                    // 如果层级相同，y不变，x+halfNodeWidth*3
+                    node.setXPixel(getRightPointX(previous.getXPixel()));
+                    node.setYPixel(previous.getYPixel());
+                }else{
+                    node.setXPixel(previous.getXPixel());
+                    node.setYPixel(getDownPointY(previous.getYPixel()));
+                }
+            }
+            negativeFeedback(nodes);
+        }
+        System.out.println(levelNodeMap);
+
+        Mat flowMat = new Mat(rows, cols, CvType.CV_8UC1, new Scalar(0));
+        drawFromNodeTree(flowMat,startOfImgNode,null);
+        showImg(flowMat,"flow at the very first");
+    }
+
+    private void drawFromNodeTree(Mat mat, Node node,Node previous){
+        if(null == node){
+            return;
+        }
+        drawNode(mat,node);
+        drawLine(mat,previous,node);
+        drawFromNodeTree(mat,node.getDown(),node);
+        drawFromNodeTree(mat,node.getRight(),node);
+    }
+    private void drawNode(Mat mat,Node node){
+        NodeTypeEnum byValue = NodeTypeEnum.getByValue(node.getType());
+        Point point = new Point(node.getXPixel(), node.getYPixel());
+        switch (byValue){
+            case USER_TASK:
+                imgproc_rectangle(mat,point);
+                break;
+            case START:
+                imgproc_ellipse(mat, point);
+                break;
+            case END:
+            case EXCEPTION_END:
+                imgproc_ellipse(mat, point);
+                break;
+            case EXCLUSIVE_CHECK:
+                imgproc_diamond(mat,point);
+                break;
+            case ALL:
+            default:
+                break;
+        }
+        imgproc_text(mat,point,node.getText());
+    }
+    private void drawLine(Mat mat, Node start, Node end){
+        if(null == start || end == null){
+            return;
+        }
+        Point startPoint = new Point(start.getXPixel(),start.getYPixel());
+        Point endPoint = new Point(end.getXPixel(),end.getYPixel());
+        lineNode(mat,startPoint,endPoint);
+    }
+
+
+
+    /**
+     * @param x
+     * @return
+     */
+    private int getRightPointX(int x){
+        return x+halfNodeWidth *3;
+    }
+    /**
+     * @param y
+     * @return
+     */
+    private int getDownPointY(int y){
+        return y + halfNodeHeight *3;
+    }
+
+    private void negativeFeedback(List<Node> nodes){
+        List<Integer> collect1 = nodes.stream().map(e -> e.getXPixel()).collect(Collectors.toList());
+        System.out.println("xs is:"+collect1);
+        int size;
+        if(CollectionUtils.isEmpty(nodes)||(size = nodes.size()) <= 1){
+            return;
+        }
+        for (int i = 0; i < size-1; i++) {
+            for (int j = i+1; j < size; j++) {
+                Node iNode = nodes.get(i);
+                Node jNode = nodes.get(j);
+                if(Math.abs(iNode.getXPixel() - jNode.getXPixel()) <= halfNodeWidth*2){
+                    reSetPreviousPoint(nodes,iNode,jNode);
+                }
+            }
+        }
+    }
+    private void reSetPreviousPoint(List<Node> nodes, Node iNode, Node jNode){
+        Node iPre = iNode.getPrevious();
+        Node jPre = jNode.getPrevious();
+        if(iPre.getId() == jPre.getId()){
+            // 这种情况不可能出现。
+            System.err.println("异常！！！，距离过近的两个节点的直接父节点相同");
+            return;
+        }
+        if(iPre.getLevel() == jPre.getLevel()){
+            // 这种情况不可能出现。
+            System.err.println("异常！！！，距离过近的两个节点的直接父节点在同一层");
+            return;
+        }
+        // 由level层级低的一方移动。移动x轴即可
+        Node movedPre = iPre.getLevel() > jPre.getLevel() ? jPre : iPre;
+        rebuildPointFromMovedNode(movedPre);
+        negativeFeedback(nodes);
+    }
+    private void rebuildPointFromMovedNode(Node movedNode){
+        if(null == movedNode){
+            return;
+        }
+        movedNode.setXPixel(getRightPointX(movedNode.getXPixel()));
+        if(movedNode.getDown() != null){
+            movedNode.getDown().setXPixel(movedNode.getXPixel());
+        }
+        rebuildPointFromMovedNode(movedNode.getRight());
+    }
+
+    @Test
+    public void test_draw(){
 //        demoPrint();
 //        readImg();
 //        writeBlackImg();
@@ -68,6 +213,13 @@ public class DrawFlowTest {
         imgproc_diamond(mat,point);
         imgproc_text(mat,point,text);
     }
+
+    /**
+     *
+     * @param mat
+     * @param start
+     * @param end
+     */
     void lineNode(Mat mat,Point start,Point end){
         Point lineStart;
         Point lineEnd;
@@ -108,12 +260,7 @@ public class DrawFlowTest {
                 x = start.x + halfNodeWidth * 3;
             }
         }
-
         return new Point(x,y);
-    }
-
-    private void negativeFeedback(){
-
     }
 
 
@@ -151,6 +298,12 @@ public class DrawFlowTest {
 
     private void imgproc_line(Mat mat, Point start,Point end){
         Imgproc.line(mat,start,end,DEFAULT_LINE_POINT);
+    }
+
+    private void imgproc_rectangle(Mat mat, Point point){
+        Point start = new Point(point.x - halfNodeWidth,point.y - halfNodeHeight);
+        Point end = new Point(point.x + halfNodeWidth,point.y + halfNodeHeight);
+        Imgproc.rectangle(mat,start,end,DEFAULT_LINE_POINT);
     }
 
 
