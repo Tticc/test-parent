@@ -48,31 +48,25 @@ public class DrawFlowTest {
 
         int maxNodeLevel = levelNodeMap.size();
         int rows = maxNodeLevel*halfNodeHeight*3;
-        int maxNodeNum = levelNodeMap.values().stream().map(e -> e.size()).max(Integer::compareTo).get();
-        int cols = maxNodeNum*halfNodeWidth*3;
+        int maxNodeNum = levelNodeMap.values().stream().flatMap(Collection::stream).max(Comparator.comparing(Node::getCol)).get().getCol();
+        int cols = (maxNodeNum+1)*halfNodeWidth*3;
 
         startOfImgNode.setXPixel(halfNodeWidth)
                 .setYPixel(halfNodeHeight);
         for (int i = 1; i < maxNodeLevel; i++) {
             List<Node> nodes = levelNodeMap.get(i);
             for (Node node : nodes) {
-                Node previous = node.getPrevious();
-                if(previous.getLevel() == node.getLevel()){
-                    // 如果层级相同，y不变，x+halfNodeWidth*3
-                    node.setXPixel(getRightPointX(previous.getXPixel()));
-                    node.setYPixel(previous.getYPixel());
-                }else{
-                    node.setXPixel(previous.getXPixel());
-                    node.setYPixel(getDownPointY(previous.getYPixel()));
-                }
+                node.setXPixel((node.getCol()*3+1)*halfNodeWidth);
+                node.setYPixel((node.getLevel()*3+1)*halfNodeHeight);
             }
-            negativeFeedback(nodes);
         }
+        System.out.println("\n\n\nlevelNodeMap:");
         System.out.println(levelNodeMap);
 
         Mat flowMat = new Mat(rows, cols, CvType.CV_8UC1, new Scalar(0));
         drawFromNodeTree(flowMat,startOfImgNode,null);
         showImg(flowMat,"flow at the very first");
+//        writeImg("img flow",flowMat);
     }
 
     private void drawFromNodeTree(Mat mat, Node node,Node previous){
@@ -105,7 +99,9 @@ public class DrawFlowTest {
             default:
                 break;
         }
-        imgproc_text(mat,point,node.getText());
+        String text = node.getText();
+        Point textPoint = new Point(point.x - halfNodeWidth + 5, point.y);
+        imgproc_text(mat,textPoint,text);
     }
     private void drawLine(Mat mat, Node start, Node end){
         if(null == start || end == null){
@@ -140,33 +136,40 @@ public class DrawFlowTest {
         if(CollectionUtils.isEmpty(nodes)||(size = nodes.size()) <= 1){
             return;
         }
-        for (int i = 0; i < size-1; i++) {
-            for (int j = i+1; j < size; j++) {
+
+        // 从右往左执行
+        Node preLevelMovePoint = null;
+        for (int i = size-1; i > 0; i--) {
+            for (int j = i-1; j >= 0; j--) {
                 Node iNode = nodes.get(i);
                 Node jNode = nodes.get(j);
                 if(Math.abs(iNode.getXPixel() - jNode.getXPixel()) <= halfNodeWidth*2){
-                    reSetPreviousPoint(nodes,iNode,jNode);
+                    preLevelMovePoint = reSetPreviousPoint(nodes,iNode,jNode);
                 }
             }
         }
+        if(preLevelMovePoint != null){
+            negativeFeedback(nodes);
+        }
     }
-    private void reSetPreviousPoint(List<Node> nodes, Node iNode, Node jNode){
+    private Node reSetPreviousPoint(List<Node> nodes, Node iNode, Node jNode){
+        Node res = null;
         Node iPre = iNode.getPrevious();
         Node jPre = jNode.getPrevious();
         if(iPre.getId() == jPre.getId()){
             // 这种情况不可能出现。
             System.err.println("异常！！！，距离过近的两个节点的直接父节点相同");
-            return;
+            return res;
         }
         if(iPre.getLevel() == jPre.getLevel()){
-            // 这种情况不可能出现。
-            System.err.println("异常！！！，距离过近的两个节点的直接父节点在同一层");
-            return;
+            // 父级相同，靠右的父级往右移动
+            res = iPre.getXPixel() < jPre.getXPixel() ? jPre : iPre;
+        } else {
+            // 由level层级低的一方移动。移动x轴即可
+            res = iPre.getLevel() > jPre.getLevel() ? jPre : iPre;
         }
-        // 由level层级低的一方移动。移动x轴即可
-        Node movedPre = iPre.getLevel() > jPre.getLevel() ? jPre : iPre;
-        rebuildPointFromMovedNode(movedPre);
-        negativeFeedback(nodes);
+        rebuildPointFromMovedNode(res);
+        return res;
     }
     private void rebuildPointFromMovedNode(Node movedNode){
         if(null == movedNode){
@@ -278,7 +281,7 @@ public class DrawFlowTest {
     // ******************************************* basic **************************************************/
     private void imgproc_text(Mat mat, Point point, String text){
         Point tempPoint = new Point(point.x,point.y);
-        Imgproc.putText(mat,text,tempPoint,Imgproc.FONT_HERSHEY_SIMPLEX,1, DEFAULT_TEXT_POINT);
+        Imgproc.putText(mat,text,tempPoint,Imgproc.FONT_HERSHEY_SIMPLEX,0.5, DEFAULT_TEXT_POINT);
     }
 
     private void imgproc_ellipse(Mat mat, Point point){

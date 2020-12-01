@@ -1,20 +1,19 @@
 package com.tester.testercv.draw;
 
-import com.tester.testercv.draw.basic.CheckTypeEnum;
-import com.tester.testercv.draw.basic.FormFieldConditionDO;
-import com.tester.testercv.draw.basic.NodeModelDO;
-import com.tester.testercv.draw.basic.NodeTypeEnum;
+import com.tester.testercv.draw.basic.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
 public class ImgNodeBuilder {
 
 
     private static LinkedNode start;// 来自已有代码。
+    private static List<FormFieldConditionDO> conditions;// 来自已有代码。
 
 
     private Map<Integer,List<Node>> levelNodeMap = new HashMap<>();
@@ -27,7 +26,6 @@ public class ImgNodeBuilder {
 
     public void buildNodeTree(){
         buildNodeTreeSub(startOfImgNode,start);
-        System.out.println(levelNodeMap);
     }
 
     // 完成当前节点，并设置下一节点
@@ -42,66 +40,86 @@ public class ImgNodeBuilder {
             preImgNode = startOfImgNode = new Node()
                     .setId(preDataNode.getNode().getId())
                     .setLevel(0)
+                    .setCol(0)
                     .setPrevious(null)
                     .setType(NodeTypeEnum.START.getValue())
                     .setText("start")
                     .setDown(null)
                     .setRight(null);
             setNodeField(preDataNode,preImgNode);
-            addToMap(0, preImgNode);
+            addToMapAndResetCol(0, preImgNode,0);
         }
         Node tempDown = null;
         Node tempRight = null;
         int level;
+        int col;
         LinkedNode tempLinkedNode;
         if (allNexts.size() > 1) {
             //
             FormFieldConditionDO condition = getConditionByNodeId(preDataNode.getNode().getId());
-            for (LinkedNode nextDataNode : allNexts) {
-                tempLinkedNode = nextDataNode;
-                Long id = tempLinkedNode.getNode().getId();
-                if (id == condition.getTrueNextId()) {
+            LinkedNode linkedNodeDown = Objects.equals(allNexts.get(0).getNode().getId(),condition.getTrueNextId()) ? allNexts.get(0) : allNexts.get(1);
+            LinkedNode linkedNodeRight = !Objects.equals(allNexts.get(0).getNode().getId(),condition.getTrueNextId()) ? allNexts.get(0) : allNexts.get(1);;
+
+                if (linkedNodeDown != null) {
+                    tempLinkedNode = linkedNodeDown;
                     // true 节点往下走
                     level = preImgNode.getLevel() + 1;
+                    col = preImgNode.getCol();
                     tempDown = new Node()
-                            .setId(id)
+                            .setId(tempLinkedNode.getNode().getId())
                             .setLevel(level)
+                            .setCol(col)
                             .setPrevious(preImgNode);
                     setNodeField(tempLinkedNode, tempDown);
-                    addToMap(level, tempDown);
+                    addToMapAndResetCol(level, tempDown,col);
                     buildNodeTreeSub(tempDown, tempLinkedNode);
-                } else {
+                }
+                 if(linkedNodeRight != null){
+                    tempLinkedNode = linkedNodeRight;
                     // false 节点往右走
                     level = preImgNode.getLevel();
+                    col = preImgNode.getCol()+1;
                     tempRight = new Node()
-                            .setId(id)
+                            .setId(tempLinkedNode.getNode().getId())
                             .setLevel(level)
+                            .setCol(col)
                             .setPrevious(preImgNode);
                     setNodeField(tempLinkedNode, tempRight);
-                    addToMap(level, tempRight);
+                    addToMapAndResetCol(level, tempRight,col);
                     buildNodeTreeSub(tempRight, tempLinkedNode);
                 }
-            }
-
         } else {
             tempLinkedNode = allNexts.get(0);
             level = preImgNode.getLevel() + 1;
+            col = preImgNode.getCol();
             tempDown = new Node()
                     .setId(tempLinkedNode.getNode().getId())
                     .setLevel(level)
+                    .setCol(col)
                     .setPrevious(preImgNode);
             setNodeField(tempLinkedNode, tempDown);
-            addToMap(level, tempDown);
+            addToMapAndResetCol(level, tempDown,col);
             buildNodeTreeSub(tempDown, tempLinkedNode);
         }
         preImgNode.setRight(tempRight);
         preImgNode.setDown(tempDown);
     }
-    private void addToMap(int level, Node node){
+    private void addToMapAndResetCol(int level, Node node, int col){
         List<Node> nodes = levelNodeMap.get(level);
-        if(nodes == null){
+        if(CollectionUtils.isEmpty(nodes)){
             nodes = new ArrayList<>();
             levelNodeMap.put(level,nodes);
+            nodes.add(node);
+            return;
+        }
+        Node node1 = nodes.stream().max(Comparator.comparing(Node::getCol)).get();
+        if(node1.getCol() >= col){
+            node.setCol(node1.getCol() + 1);
+            Node tempNode = node.getPrevious();
+            while(tempNode != null && tempNode.getCol() == col){
+                tempNode.setCol(node.getCol());
+                tempNode = tempNode.getPrevious();
+            }
         }
         nodes.add(node);
     }
@@ -136,12 +154,10 @@ public class ImgNodeBuilder {
     }
 
     private FormFieldConditionDO getConditionByNodeId(Long id){
-        if(id == 2L){
-            return new FormFieldConditionDO()
-                    .setCheckType(CheckTypeEnum.LT.getValue())
-                    .setCheckValue("100000")
-                    .setTrueNextId(3L)
-                    .setFalseNextId(4L);
+        for (FormFieldConditionDO condition : conditions) {
+            if(Objects.equals(condition.getNodeId(),id)){
+                return condition;
+            }
         }
         System.err.println("something went wrong, should not going into here.");
         return new FormFieldConditionDO();
@@ -150,9 +166,9 @@ public class ImgNodeBuilder {
 
     @Data
     @Accessors(chain = true)
-    static class LinkedNode{
+    public static class LinkedNode{
         LinkedNode(){}
-        LinkedNode(NodeModelDO node){
+        public LinkedNode(NodeModelDO node){
             this.node = node;
             this.nodeKey = node.getNodeKey();
             this.type = node.getNodeType();
@@ -169,6 +185,23 @@ public class ImgNodeBuilder {
 
 
     static {
+//        start = getFromNew();
+        start = getFromDB();
+        conditions = BasicTool.listConditions();
+    }
+
+
+
+
+
+
+    private static LinkedNode getFromDB(){
+        LinkedNode linkNode = BasicTool.getLinkNode();
+        return linkNode;
+    }
+
+    @Deprecated
+    private static LinkedNode getFromNew(){
         LinkedNode task1 = new LinkedNode()
                 .setNode(new NodeModelDO().setId(3L))
                 .setNodeKey("cv do that")
@@ -194,7 +227,7 @@ public class ImgNodeBuilder {
 
 
         List<LinkedNode> startNext = Arrays.asList(check1);
-        start = new LinkedNode()
+        return new LinkedNode()
                 .setNode(new NodeModelDO().setId(1L))
                 .setNodeKey("start of all")
                 .setAllNexts(startNext)

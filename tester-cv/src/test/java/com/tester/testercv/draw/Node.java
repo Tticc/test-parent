@@ -23,6 +23,11 @@ public class Node {
      **/
     private int level;
     /**
+     * 列。从0开始。<br/>
+     *  其他：down = col; right = col + 1;
+     **/
+    private int col;
+    /**
      * 节点类型
      **/
     private int type;
@@ -54,6 +59,7 @@ public class Node {
     @Override
     public String toString() {
         return "{level:" + level +
+                ", col:" + col +
                 ", type:" + NodeTypeEnum.getByValue(type).getText() +
                 ", text:" + text +
                 ", xPixel:" + xPixel +
