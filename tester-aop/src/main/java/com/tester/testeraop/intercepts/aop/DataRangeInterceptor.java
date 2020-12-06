@@ -1,4 +1,4 @@
-package com.tester.testeraop.aop;
+package com.tester.testeraop.intercepts.aop;
 
 import com.tester.testeraop.annotation.DataRangeChecker;
 import lombok.extern.slf4j.Slf4j;

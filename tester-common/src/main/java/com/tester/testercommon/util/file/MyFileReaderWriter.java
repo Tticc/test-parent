@@ -24,7 +24,8 @@ public class MyFileReaderWriter {
 
     public static byte[] file2Byte(File file){
         byte[] bytes = new byte[(int)file.length()];
-        try(FileInputStream buf = new FileInputStream(file)){
+//        try(FileInputStream buf = new FileInputStream(file)){
+        try(BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file))){
             buf.read(bytes);
         }catch(Exception e){
             e.printStackTrace();
@@ -33,15 +34,15 @@ public class MyFileReaderWriter {
     }
 
     public static void byte2File(byte[] data,File file){
-        InputStream in = new ByteArrayInputStream(data);
-        try(FileOutputStream fos = new FileOutputStream(file)){
-            int len = 0;
-            byte[] buf = new byte[1024];
-            while ((len = in.read(buf)) != -1) {
-                fos.write(buf, 0, len);
+        try(BufferedInputStream in = new BufferedInputStream(new ByteArrayInputStream(data))){
+            try(BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(file))){
+                int len = 0;
+                byte[] buf = new byte[1024];
+                while((len = in.read(buf)) != -1){
+                    fos.write(buf,0,len);
+                }
             }
-            fos.flush();
-        }catch(Exception e){
+        }catch (Exception e){
             e.printStackTrace();
         }
     }

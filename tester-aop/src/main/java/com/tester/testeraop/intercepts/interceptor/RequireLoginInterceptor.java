@@ -1,5 +1,5 @@
 
-package com.tester.testeraop.interceptor;
+package com.tester.testeraop.intercepts.interceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.tester.testeraop.annotation.RequireLogin;
