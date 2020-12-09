@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>tester-rpc</artifactId>
-    <name>tester-common</name>
+    <name>tester-rpc</name>
     <properties>
         <java.version>1.8</java.version>
     </properties>

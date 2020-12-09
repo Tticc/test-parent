@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import java.util.function.Supplier;
 
@@ -74,5 +75,10 @@ public class SpringBeanContextUtil implements ApplicationContextAware, BeanDefin
         } catch (Exception var3) {
             return null;
         }
+    }
+
+    public static ApplicationContext getApplicationContext(){
+        Assert.notNull(applicationContext,"applicationContext null");
+        return applicationContext;
     }
 }
