@@ -14,12 +14,20 @@ import org.springframework.stereotype.Component;
 import java.util.function.Supplier;
 
 /**
+ * 使用 spi将此类注入容器。
+ * <ol>
+ *     <li>这样可以避免无法其他包的Application启动类无法扫描并实例化此类。</li>
+ *     <li>同时可以去掉 @Lazy(false) 注解</li>
+ * </ol>
+ * <br/>
+ * note: resource/META-INF/spring.factories
  * @Author 温昌营
  * @Date 2020-8-21 11:14:58
  */
 @Component
 @Order(-2147483648)
 @Slf4j
+//@Lazy(false)
 public class SpringBeanContextUtil implements ApplicationContextAware, BeanDefinitionRegistryPostProcessor {
     private static ApplicationContext applicationContext;
     private static BeanDefinitionRegistry registry;
