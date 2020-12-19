@@ -2,7 +2,7 @@ server:
   port: 8004
 spring:
   profiles:
-    active: dev
+    active: sit
   application:
     name: tester-web-app
   servlet:

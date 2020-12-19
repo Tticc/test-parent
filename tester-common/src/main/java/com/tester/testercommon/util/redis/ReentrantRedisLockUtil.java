@@ -18,8 +18,8 @@ import java.util.List;
  * @Author 温昌营
  **/
 @Slf4j
-@Component("reentrantRedisLockManager")
-public class ReentrantRedisLockManager {
+@Component("reentrantRedisLockUtil")
+public class ReentrantRedisLockUtil {
     /**
      * traceId 过期时间，默认为10分钟
      **/
@@ -55,6 +55,7 @@ public class ReentrantRedisLockManager {
 
     /**
      * true=成功，false=失败
+     * <p>注：使用线程池技术时，需要设置上下文。@see com.tester.testerasync.config.AsyncConfig#getAsyncExecutor() -- task 装饰器</p>
      * @param key
      * @param timeout
      * @return boolean
@@ -71,6 +72,7 @@ public class ReentrantRedisLockManager {
 
     /**
      * 释放不判断成功失败
+     * <p>注：使用线程池技术时，需要设置上下文。@see com.tester.testerasync.config.AsyncConfig#getAsyncExecutor() -- task 装饰器</p>
      * @param key
      * @return boolean
      * @Date 17:27 2020/11/11
@@ -87,7 +89,7 @@ public class ReentrantRedisLockManager {
      * 接入key。
      * <br/>加prefix是为了保证lua的所有操作key都在同一个slot中。
      * <br/>redis只将 : 前 {} 里面的数据做hash，所以只要保证{}里面的内容一致，就能将lua的key都hash到同一个slot
-     *
+     * <p>注：使用线程池技术时，需要设置上下文。@see com.tester.testerasync.config.AsyncConfig#getAsyncExecutor() -- task 装饰器</p>
      * @param keys
      * @param dataKey
      * @return void

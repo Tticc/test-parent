@@ -2,7 +2,7 @@ package com.tester.testerwebapp.aop;
 
 import com.tester.testercommon.annotation.ReentrantCacheLock;
 import com.tester.testercommon.exception.BusinessException;
-import com.tester.testercommon.util.redis.ReentrantRedisLockManager;
+import com.tester.testercommon.util.redis.ReentrantRedisLockUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 public class ReentrantCacheLockInterceptor {
 
     @Autowired
-    private ReentrantRedisLockManager reentrantRedisLockManager;
+    private ReentrantRedisLockUtil reentrantRedisLockUtil;
 
 
     @Around("@annotation(reentrantCacheLock)")
@@ -62,7 +62,7 @@ public class ReentrantCacheLockInterceptor {
         int retryCount = 0;
         Object obj = null;
         try {
-            while(!this.reentrantRedisLockManager.getLock(lockKey, timeout)) {
+            while(!this.reentrantRedisLockUtil.getLock(lockKey, timeout)) {
                 if (retryCount >= maxRetry) {
                     throw new BusinessException(5008L);
                 }
@@ -74,7 +74,7 @@ public class ReentrantCacheLockInterceptor {
 
             obj = proceedingJoinPoint.proceed();
         } finally {
-            this.reentrantRedisLockManager.removeLock(lockKey);
+            this.reentrantRedisLockUtil.removeLock(lockKey);
         }
         return obj;
     }

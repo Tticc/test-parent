@@ -1,14 +1,17 @@
 package com.tester.testerasync.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -26,6 +29,7 @@ public class AsyncConfig implements AsyncConfigurer {
     @Override
     @Bean("cusThreadPool")
     public Executor getAsyncExecutor(){
+        log.info("====== cusThreadPool starting ======");
         ThreadPoolTaskExecutor tp = new ThreadPoolTaskExecutor();
         tp.setCorePoolSize(5);
         tp.setKeepAliveSeconds(15);
@@ -40,8 +44,27 @@ public class AsyncConfig implements AsyncConfigurer {
          * ThreadPoolExecutor.CallerRunsPolicy 由调用线程处理该任务
          */
         tp.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+
+        //task 装饰器
+        tp.setTaskDecorator(e -> {
+            Map<String, String> copyOfContextMap = MDC.getCopyOfContextMap();
+            if (!CollectionUtils.isEmpty(copyOfContextMap)) {
+                return () -> {
+                    // 放入执行任务线程的上下文，主要是traceId
+                    MDC.setContextMap(copyOfContextMap);
+                    try {
+                        e.run();
+                    } finally {
+                        MDC.clear();
+                    }
+                };
+            } else {
+                return e;
+            }
+        });
         //使用@Bean后，spring容器会自动初始化，不需要执行initialize()
 //        tp.initialize();
+        log.info("====== cusThreadPool started ======");
         return tp;
     }
 

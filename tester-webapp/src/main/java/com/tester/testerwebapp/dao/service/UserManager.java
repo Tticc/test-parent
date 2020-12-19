@@ -1,10 +1,8 @@
 package com.tester.testerwebapp.dao.service;
 
 import com.tester.testercommon.constant.ConstantList;
-import com.tester.testermybatis.config.ThatShouldNotInBeanFactory1;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.dao.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
@@ -21,12 +19,8 @@ import javax.annotation.Resource;
 public class UserManager {
     @Resource
     private UserMapper userMapper;
-
-    @Autowired
-    private ThatShouldNotInBeanFactory1 thatShouldNotInBeanFactory1;
     @Transactional(rollbackFor = Exception.class, transactionManager = ConstantList.NORMAL_MANAGER)
     public Mono<UserDomain> selectUserById(Long id){
-        thatShouldNotInBeanFactory1.sayHello();
         boolean actualTransactionActive = TransactionSynchronizationManager.isActualTransactionActive();
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization(){
             @Override

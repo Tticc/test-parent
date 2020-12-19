@@ -28,10 +28,6 @@ public class MyKeyGenerator {
         }
 
     }
-    @Autowired
-    private ThatShouldNotInBeanFactory1 thatShouldNotInBeanFactory1;
-    @Autowired
-    private ThatShouldNotInBeanFactory2 thatShouldNotInBeanFactory2;
 
 
     private static final String PREFIX = "1";
