@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicStampedReference;
 import java.util.stream.Collectors;
@@ -39,6 +41,15 @@ public class NormalTest_WebApp {
 
     @Test
     public void test_date(){
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println(now);
+        int second = now.getSecond();
+        System.out.println(second);
+        System.out.println(now.getNano());
+        String format = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
+        System.out.println(format);
+        System.out.println();
+        System.out.println();
         Date date = new Date(1288834974657L);
         long time = new Date().getTime();
         System.out.println(time);

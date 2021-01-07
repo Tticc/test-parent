@@ -3,6 +3,8 @@ package com.tester.testercommon.controller;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * @Author 温昌营
@@ -90,6 +92,24 @@ public class RestResult<T> implements Serializable {
     public RestResult<T> message(String message) {
         this.message = message;
         return this;
+    }
+
+    public RestResult<T> message(String message, Object[] params) {
+        if (!message.startsWith("lang.")) {
+            this.message = message;
+            return this;
+        } else {
+            String escapeMessage = message.replace("|", "\\|");
+            if (params != null && params.length > 0) {
+                String escapeParams = (String) Arrays.stream(params).map((e) -> {
+                    return e.toString().replace("|", "\\|").replace(",", "\\,");
+                }).collect(Collectors.joining(","));
+                escapeMessage = escapeMessage + "|" + escapeParams;
+            }
+
+            this.message = escapeMessage;
+            return this;
+        }
     }
 
     public RestResult<T> putTimestamp() {

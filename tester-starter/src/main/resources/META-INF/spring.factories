@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.tester.testerstarter.autoconfigure.TesterAutoConfigure
+  com.tester.testerstarter.autoconfigure.TesterStarterAutoConfigure

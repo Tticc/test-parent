@@ -1,25 +1,31 @@
 package com.tester.testercommon.exception;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.UndeclaredThrowableException;
-import java.text.MessageFormat;
 
 /**
  * @Author 温昌营
  * @Date
  */
+@Setter
+@Getter
 public class BusinessException extends Exception{
     private Object data;
     private Object[] params;
     private long exCode;
     private String exStack;
+    private String exDesc;
     private ExceptionCode exceptionCode;
 
     public BusinessException(long exCode, String exDesc) {
         super(exDesc);
         this.setExCode(exCode);
+        this.setExDesc(exDesc);
     }
 
     public BusinessException(long exCode, String exDesc, Throwable e) {
@@ -101,21 +107,7 @@ public class BusinessException extends Exception{
     }
 
 
-    public String getExStack() {
-        return this.exStack;
-    }
 
-    public void setExStack(String exStack) {
-        this.exStack = exStack;
-    }
-
-    public long getExCode() {
-        return this.exCode;
-    }
-
-    public void setExCode(long exCode) {
-        this.exCode = exCode;
-    }
 
     public String getMessage() {
         String _exCode = super.getMessage();

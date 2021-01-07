@@ -15,7 +15,8 @@ import java.util.Set;
 
 //@MapperScan("com.tester.**.mapper")
 @EnableAsync
-@SpringBootApplication(scanBasePackages = {"com.tester.*"})
+//@SpringBootApplication(scanBasePackages = {"com.tester.*"})
+@SpringBootApplication(scanBasePackages = {"com.tester.testercommon.*","com.tester.testerwebapp.*","com.tester.testermybatis.*"})
 //@SpringBootApplication(scanBasePackages = {"com.aeon.dmc.cloud.office", "com.lingzhi"}, exclude = {DataSourceAutoConfiguration.class})
 public class TesterWebappApplication implements CommandLineRunner, ApplicationRunner {
 

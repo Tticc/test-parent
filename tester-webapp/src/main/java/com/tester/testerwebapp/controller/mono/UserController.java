@@ -10,10 +10,12 @@ import com.tester.testerwebapp.service.ExcelManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
 
+import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -70,6 +72,36 @@ public class UserController extends BaseController {
     public Mono<RestResult<UserDomain>> demoStart(@RequestParam("id")Long id, @RequestParam("name") String name) {
         log.info("controller start here.");
         Mono<UserDomain> userDomainMono = userManager.selectUserById(id);
+        return monoSuccess(userDomainMono);
+    }
+
+    /**
+     * 测试 MethodArgumentNotValidException，不符合@NotNull成功抛出此异常
+     * @param model
+     * @return reactor.core.publisher.Mono<com.tester.testercommon.controller.RestResult<com.tester.testerwebapp.dao.domain.UserDomain>>
+     * @Date 17:21 2021/1/7
+     * @Author 温昌营
+     **/
+    @RequestMapping(value = "/demoStart1", method = RequestMethod.POST)
+    public Mono<RestResult<UserDomain>> demoStart1(@Validated @RequestBody IdAndNameModel model) {
+        log.info("controller start here.");
+        Mono<UserDomain> userDomainMono = userManager.selectUserById(model.getId());
+        return monoSuccess(userDomainMono);
+    }
+
+
+    /**
+     * 测试 ConstraintViolationException。没结果
+     * @param name
+     * @return reactor.core.publisher.Mono<com.tester.testercommon.controller.RestResult<com.tester.testerwebapp.dao.domain.UserDomain>>
+     * @Date 17:20 2021/1/7
+     * @Author 温昌营
+     **/
+    @RequestMapping(value = "/demoStart2/{name}", method = RequestMethod.POST)
+    public Mono<RestResult<UserDomain>> demoStart2(@Size(max = 10, min = 3, message = "name should have between 3 and 10 characters") @PathVariable("name") String name) {
+        log.info("controller start here.");
+        System.out.println(name);
+        Mono<UserDomain> userDomainMono = userManager.selectUserById(1L);
         return monoSuccess(userDomainMono);
     }
 
