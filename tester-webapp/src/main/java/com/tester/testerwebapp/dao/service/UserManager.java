@@ -39,6 +39,11 @@ public class UserManager {
         return Mono.justOrEmpty(userMapper.insert(userDomain));
     }
 
+    @Transactional(rollbackFor = Exception.class, transactionManager = ConstantList.NORMAL_MANAGER)
+    public void insert_Test(UserDomain userDomain){
+        userMapper.insert(userDomain);
+    }
+
     public Mono<Integer> update(){
         return Mono.justOrEmpty(userMapper.updateByPrimaryKey(null));
     }

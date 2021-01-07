@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicStampedReference;
 import java.util.stream.Collectors;
 
 public class NormalTest_WebApp {
@@ -19,6 +20,14 @@ public class NormalTest_WebApp {
         System.gc();
     }
 
+    @Test
+    public void test_AtomicStampedReference(){
+        int start = 0;
+        AtomicStampedReference<Integer> nodeNum = new AtomicStampedReference(start,1);
+        System.out.println(nodeNum.getReference());
+        nodeNum.compareAndSet(nodeNum.getReference(), nodeNum.getReference()+1, nodeNum.getStamp(), nodeNum.getStamp() + 1);
+        System.out.println(nodeNum.getReference());
+    }
 
     @Test
     public void test_jwt() throws Exception {

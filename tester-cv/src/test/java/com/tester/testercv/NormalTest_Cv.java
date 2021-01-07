@@ -3,7 +3,10 @@ package com.tester.testercv;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
+import com.tester.testercommon.exception.BusinessException;
+import com.tester.testercommon.util.MyConsumer;
 import org.junit.Test;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,6 +14,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -28,6 +33,61 @@ public class NormalTest_Cv {
         protected boolean removeEldestEntry(Map.Entry<K,V> eldest){
             return size() > 4;
         }
+    }
+
+
+    @Test
+    public void test_hashMap(){
+        String aaStr = "Aa";
+        String bbStr = "BB";
+        HashMap<String,Integer> map = new HashMap<>();
+        map.put(aaStr,1 );
+        map.put(bbStr,2);
+        int aa = System.identityHashCode(aaStr);
+        int bb = System.identityHashCode(bbStr);
+        System.out.println(aa);
+        System.out.println(bb);
+        System.out.println(aaStr.hashCode());
+        System.out.println(bbStr.hashCode());
+
+        HashMap<String,Integer> map1 = new HashMap<>();
+        map1.put(bbStr,2);
+        HashMap<String,Integer> map3;
+//        System.out.println(map3);
+        System.out.println(map1);
+        System.out.println(map);
+        System.out.println();
+        if((map3 = map1 = map) != null){
+            System.out.println(map3);
+            System.out.println(map1);
+            System.out.println(map);
+        }
+
+    }
+    @Test
+    public void test_mq_tag(){
+        String tags = "sjid||jkdfios";
+        String s = "||";
+        System.out.println(s);
+        String[] split = tags.split(s);
+        for (String s1 : split) {
+            System.out.println(s1);
+        }
+    }
+
+
+    @Test
+    public void test_consumer_proxy() throws BusinessException {
+        consumer((e)->{
+            System.out.println(e);
+        });
+    }
+
+    private void consumer(MyConsumer<Object> consumer) throws BusinessException {
+        String path = consumer.getClass().getResource("").getPath();
+        System.out.println(path);
+        Method[] declaredMethods = consumer.getClass().getDeclaredMethods();
+        consumer.accept(0);
     }
 
     @Test

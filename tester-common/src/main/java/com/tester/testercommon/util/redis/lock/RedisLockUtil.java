@@ -1,5 +1,5 @@
 
-package com.tester.testercommon.util.redis;
+package com.tester.testercommon.util.redis.lock;
 
 import com.tester.testercommon.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +17,8 @@ import java.util.List;
  * @Author 温昌营
  **/
 @Slf4j
-@Component("redisCacheLockManager")
-public class RedisCacheLockManager {
+@Component("redisLockUtil")
+public class RedisLockUtil {
     public static final DefaultRedisScript REMOVE_LOCK_LUA_SCRIPT = new DefaultRedisScript("if redis.call('get',KEYS[1]) == ARGV[1] then return redis.call('del',KEYS[1]) else return -1 end", Long.class);
     public static final DefaultRedisScript GET_LOCK_LUA_SCRIPT = new DefaultRedisScript("if redis.call('setnx', KEYS[1], ARGV[1]) == 1 then return redis.call('pexpire', KEYS[1], ARGV[2]) else return 0 end", Long.class);
 

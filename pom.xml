@@ -52,6 +52,7 @@
         <module>tester-rpc</module>
         <module>tester-pool</module>
         <module>tester-mybatis</module>
+        <module>tester-starter</module>
     </modules>
 
     <dependencyManagement>
@@ -186,6 +187,16 @@
                 <version>${netty.version}</version>
             </dependency>
             <!--netty-->
+
+            <!--dubbo-->
+            <!-- https://mvnrepository.com/artifact/org.apache.dubbo/dubbo-spring-boot-starter -->
+<!--            <dependency>-->
+<!--                <groupId>org.apache.dubbo</groupId>-->
+<!--                <artifactId>dubbo-spring-boot-starter</artifactId>-->
+<!--                <version>2.7.6</version>-->
+<!--            </dependency>-->
+
+            <!--dubbo-->
 
             <!--json-->
             <dependency>

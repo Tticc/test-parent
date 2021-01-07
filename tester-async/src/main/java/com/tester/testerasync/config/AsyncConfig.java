@@ -19,6 +19,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * 在方法上添加@Async("cusThreadPool")使用
  * @Author 温昌营
  * @Date
+ * @see org.springframework.cloud.sleuth.instrument.async.TraceAsyncAspect
  */
 @Slf4j
 @EnableAsync

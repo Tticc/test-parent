@@ -7,6 +7,8 @@ import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.dao.mapper.UserMapper;
 import com.tester.testerwebapp.dao.service.UserManager;
 import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -31,6 +33,17 @@ public class LoginControllerTest extends TestCase {
     private UserManager userManager;
     @Spy
     private UserMapper userMapper;
+
+    private String name;
+
+    @Before
+    public void before(){
+        this.name = "com.tester.testerwebapp.suitecase.controller.LoginControllerTest";
+    }
+    @After
+    public void after(){
+        this.name = null;
+    }
 
     @Test
     public void test_mock_injectMock(){

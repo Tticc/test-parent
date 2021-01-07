@@ -10,15 +10,16 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.MDC;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-@Order(-2147483648)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @Slf4j
 public class ControllerAspect {
-    @Order(-2147483648)
+    @Order(Ordered.HIGHEST_PRECEDENCE)
     @Around("@within(org.springframework.web.bind.annotation.RestController) || @within(org.springframework.stereotype.Controller)")
     public Object execute(ProceedingJoinPoint pjp) throws Throwable {
         MDC.put(ConstantList.TRACE_ID_KEY, CommonUtil.getUUID());

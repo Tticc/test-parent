@@ -1,5 +1,5 @@
 
-package com.tester.testercommon.util.redis;
+package com.tester.testercommon.util.redis.lock;
 
 import com.tester.testercommon.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,9 @@ public class ReentrantRedisLockUtil {
                     "    end\n" +
                     "end", Long.class);
 
-    public static final DefaultRedisScript REMOVE_REENTRANT_LOCK_LUA_SCRIPT = new DefaultRedisScript("if redis.call('get',KEYS[1]) == ARGV[1] then \n" +
+    public static final DefaultRedisScript REMOVE_REENTRANT_LOCK_LUA_SCRIPT = new DefaultRedisScript(
+            "" +
+            "if redis.call('get',KEYS[1]) == ARGV[1] then \n" +
             "    if redis.call('DECR',KEYS[2]) < 1 then\n" +
             "        redis.call('del',KEYS[2])\n" +
             "        return redis.call('del',KEYS[1])\n" +
@@ -46,7 +48,7 @@ public class ReentrantRedisLockUtil {
             "        return 1--释放成功，但是仍然持有锁\n" +
             "    end\n" +
             "else\n" +
-            "    return 1\n" +
+            "    return 1--不存在当前traceId的锁，释放成功\n" +
             "end\n", Long.class);
 
 
@@ -81,6 +83,7 @@ public class ReentrantRedisLockUtil {
     public boolean removeLock(String key) throws BusinessException {
         List<String> keys = new ArrayList<>();
         String traceId = addKeys(keys,key);
+        log.info("keys:{}",keys);
         Object result = this.redisTemplate.execute(REMOVE_REENTRANT_LOCK_LUA_SCRIPT, keys, new Object[]{traceId});
         return String.valueOf(1).equals(String.valueOf(result));
     }

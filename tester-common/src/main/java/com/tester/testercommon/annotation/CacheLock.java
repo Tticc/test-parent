@@ -1,5 +1,7 @@
 package com.tester.testercommon.annotation;
 
+import com.tester.testercommon.constant.ConstantList;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,9 +12,9 @@ import java.lang.annotation.Target;
 public @interface CacheLock {
     String key() default "";
 
-    int timeout() default 10000;
+    int timeout() default ConstantList.defaultTimeout;
 
-    int maxRetry() default 10;
+    int maxRetry() default ConstantList.defaultRetryTime;
 
-    int retryInterval() default 100;
+    int retryInterval() default ConstantList.defaultInterval;
 }

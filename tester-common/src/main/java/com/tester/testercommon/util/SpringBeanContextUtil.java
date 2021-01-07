@@ -15,7 +15,7 @@ import org.springframework.util.Assert;
 import java.util.function.Supplier;
 
 /**
- * 使用 spi将此类注入容器。
+ * 使用 spi规范将此类注入容器。
  * <ol>
  *     <li>这样可以避免无法其他包的Application启动类无法扫描并实例化此类。</li>
  *     <li>同时可以去掉 @Lazy(false) 注解</li>

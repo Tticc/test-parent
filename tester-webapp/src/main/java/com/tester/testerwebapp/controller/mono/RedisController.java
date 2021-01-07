@@ -1,14 +1,19 @@
 package com.tester.testerwebapp.controller.mono;
 
+import com.tester.testercommon.annotation.ReentrantCacheLock;
+import com.tester.testercommon.constant.ConstantList;
 import com.tester.testercommon.controller.BaseController;
 import com.tester.testercommon.controller.RestResult;
 import com.tester.testercommon.exception.BusinessException;
-import com.tester.testercommon.util.redis.RedisCacheLockManager;
+import com.tester.testercommon.model.request.TextRequest;
+import com.tester.testercommon.util.redis.lock.RedisLockUtil;
 import com.tester.testercommon.util.redis.RedisUtilValue;
-import com.tester.testercommon.util.redis.ReentrantRedisLockUtil;
+import com.tester.testercommon.util.redis.lock.ReentrantRedisLockUtil;
 import com.tester.testerwebapp.service.ReentrantLockTestManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +30,7 @@ public class RedisController extends BaseController {
     @Autowired
     private RedisUtilValue redisUtilValue;
     @Autowired
-    private RedisCacheLockManager redisCacheLockManager;
+    private RedisLockUtil redisLockUtil;
     @Autowired
     private ReentrantRedisLockUtil reentrantRedisLockUtil;
     @Autowired
@@ -39,14 +44,14 @@ public class RedisController extends BaseController {
 
     @RequestMapping(value="lock", method = RequestMethod.POST)
     public Mono<RestResult<String>> lock() throws BusinessException {
-        boolean lock = redisCacheLockManager.getLock(key, "12321", 30000);
+        boolean lock = redisLockUtil.getLock(key, "12321", 30000);
         Mono<String> stringMono = Mono.justOrEmpty(String.valueOf(lock));
         return monoSuccess(stringMono);
     }
 
     @RequestMapping(value="unLock", method = RequestMethod.POST)
     public Mono<RestResult<String>> unLock() throws BusinessException {
-        boolean b = redisCacheLockManager.removeLock(key, "12321");
+        boolean b = redisLockUtil.removeLock(key, "12321");
         Mono<String> stringMono = Mono.justOrEmpty(String.valueOf(b));
         return monoSuccess(stringMono);
     }
@@ -56,9 +61,20 @@ public class RedisController extends BaseController {
 
     // ******************* 可重入redis锁 ************************************************************************
     @RequestMapping(value="reentrantLock", method = RequestMethod.POST)
-    public Mono<RestResult<String>> reentrantLock() throws BusinessException {
+    @ReentrantCacheLock(key = ConstantList.LOCK_DEFAULT_KEY+"#request.text")
+    public Mono<RestResult<String>> reentrantLock(@RequestBody @Validated TextRequest request) throws BusinessException {
+        System.out.println(this);
+        reentrantLockTestManager.lock_async(request);
+//        reentrantLockTestManager.lock(key,timeout);
+        Mono<String> stringMono = Mono.justOrEmpty("true");
+        return monoSuccess(stringMono);
+    }
+
+    @Deprecated
+    @RequestMapping(value="reentrantLock0", method = RequestMethod.POST)
+    public Mono<RestResult<String>> reentrantLock0() throws BusinessException {
         boolean lock = reentrantRedisLockUtil.getLock(key,timeout);
-        reentrantLockTestManager.lock_async(key,timeout);
+//        reentrantLockTestManager.lock_async(key,timeout);
 //        reentrantLockTestManager.lock(key,timeout);
         Mono<String> stringMono = Mono.justOrEmpty(String.valueOf(lock));
         return monoSuccess(stringMono);
