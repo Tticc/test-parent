@@ -43,44 +43,44 @@ public class DrawFlowTest {
     public void test_drawFromNode(){
         ImgNodeBuilder imgNodeBuilder = new ImgNodeBuilder();
         imgNodeBuilder.buildNodeTree();
-        Map<Integer, List<Node>> levelNodeMap = imgNodeBuilder.getLevelNodeMap();
-        Node startOfImgNode = imgNodeBuilder.getStartOfImgNode();
+        Map<Integer, List<NodeInImg>> levelNodeMap = imgNodeBuilder.getLevelNodeMap();
+        NodeInImg startOfImgNodeInImg = imgNodeBuilder.getStartOfImgNodeInImg();
 
         int maxNodeLevel = levelNodeMap.size();
         int rows = maxNodeLevel*halfNodeHeight*3;
-        int maxNodeNum = levelNodeMap.values().stream().flatMap(Collection::stream).max(Comparator.comparing(Node::getCol)).get().getCol();
+        int maxNodeNum = levelNodeMap.values().stream().flatMap(Collection::stream).max(Comparator.comparing(NodeInImg::getCol)).get().getCol();
         int cols = (maxNodeNum+1)*halfNodeWidth*3;
 
-        startOfImgNode.setXPixel(halfNodeWidth)
+        startOfImgNodeInImg.setXPixel(halfNodeWidth)
                 .setYPixel(halfNodeHeight);
         for (int i = 1; i < maxNodeLevel; i++) {
-            List<Node> nodes = levelNodeMap.get(i);
-            for (Node node : nodes) {
-                node.setXPixel((node.getCol()*3+1)*halfNodeWidth);
-                node.setYPixel((node.getLevel()*3+1)*halfNodeHeight);
+            List<NodeInImg> nodeInImgs = levelNodeMap.get(i);
+            for (NodeInImg nodeInImg : nodeInImgs) {
+                nodeInImg.setXPixel((nodeInImg.getCol()*3+1)*halfNodeWidth);
+                nodeInImg.setYPixel((nodeInImg.getLevel()*3+1)*halfNodeHeight);
             }
         }
         System.out.println("\n\n\nlevelNodeMap:");
         System.out.println(levelNodeMap);
 
         Mat flowMat = new Mat(rows, cols, CvType.CV_8UC1, new Scalar(0));
-        drawFromNodeTree(flowMat,startOfImgNode,null);
+        drawFromNodeTree(flowMat, startOfImgNodeInImg,null);
         showImg(flowMat,"flow at the very first");
 //        writeImg("img flow",flowMat);
     }
 
-    private void drawFromNodeTree(Mat mat, Node node,Node previous){
-        if(null == node){
+    private void drawFromNodeTree(Mat mat, NodeInImg nodeInImg, NodeInImg previous){
+        if(null == nodeInImg){
             return;
         }
-        drawNode(mat,node);
-        drawLine(mat,previous,node);
-        drawFromNodeTree(mat,node.getDown(),node);
-        drawFromNodeTree(mat,node.getRight(),node);
+        drawNode(mat, nodeInImg);
+        drawLine(mat,previous, nodeInImg);
+        drawFromNodeTree(mat, nodeInImg.getDown(), nodeInImg);
+        drawFromNodeTree(mat, nodeInImg.getRight(), nodeInImg);
     }
-    private void drawNode(Mat mat,Node node){
-        NodeTypeEnum byValue = NodeTypeEnum.getByValue(node.getType());
-        Point point = new Point(node.getXPixel(), node.getYPixel());
+    private void drawNode(Mat mat, NodeInImg nodeInImg){
+        NodeTypeEnum byValue = NodeTypeEnum.getByValue(nodeInImg.getType());
+        Point point = new Point(nodeInImg.getXPixel(), nodeInImg.getYPixel());
         switch (byValue){
             case USER_TASK:
                 imgproc_rectangle(mat,point);
@@ -99,11 +99,11 @@ public class DrawFlowTest {
             default:
                 break;
         }
-        String text = node.getText();
+        String text = nodeInImg.getText();
         Point textPoint = new Point(point.x - halfNodeWidth + 5, point.y);
         imgproc_text(mat,textPoint,text);
     }
-    private void drawLine(Mat mat, Node start, Node end){
+    private void drawLine(Mat mat, NodeInImg start, NodeInImg end){
         if(null == start || end == null){
             return;
         }
@@ -129,33 +129,33 @@ public class DrawFlowTest {
         return y + halfNodeHeight *3;
     }
 
-    private void negativeFeedback(List<Node> nodes){
-        List<Integer> collect1 = nodes.stream().map(e -> e.getXPixel()).collect(Collectors.toList());
+    private void negativeFeedback(List<NodeInImg> nodeInImgs){
+        List<Integer> collect1 = nodeInImgs.stream().map(e -> e.getXPixel()).collect(Collectors.toList());
         System.out.println("xs is:"+collect1);
         int size;
-        if(CollectionUtils.isEmpty(nodes)||(size = nodes.size()) <= 1){
+        if(CollectionUtils.isEmpty(nodeInImgs)||(size = nodeInImgs.size()) <= 1){
             return;
         }
 
         // 从右往左执行
-        Node preLevelMovePoint = null;
+        NodeInImg preLevelMovePoint = null;
         for (int i = size-1; i > 0; i--) {
             for (int j = i-1; j >= 0; j--) {
-                Node iNode = nodes.get(i);
-                Node jNode = nodes.get(j);
-                if(Math.abs(iNode.getXPixel() - jNode.getXPixel()) <= halfNodeWidth*2){
-                    preLevelMovePoint = reSetPreviousPoint(nodes,iNode,jNode);
+                NodeInImg iNodeInImg = nodeInImgs.get(i);
+                NodeInImg jNodeInImg = nodeInImgs.get(j);
+                if(Math.abs(iNodeInImg.getXPixel() - jNodeInImg.getXPixel()) <= halfNodeWidth*2){
+                    preLevelMovePoint = reSetPreviousPoint(nodeInImgs, iNodeInImg, jNodeInImg);
                 }
             }
         }
         if(preLevelMovePoint != null){
-            negativeFeedback(nodes);
+            negativeFeedback(nodeInImgs);
         }
     }
-    private Node reSetPreviousPoint(List<Node> nodes, Node iNode, Node jNode){
-        Node res = null;
-        Node iPre = iNode.getPrevious();
-        Node jPre = jNode.getPrevious();
+    private NodeInImg reSetPreviousPoint(List<NodeInImg> nodeInImgs, NodeInImg iNodeInImg, NodeInImg jNodeInImg){
+        NodeInImg res = null;
+        NodeInImg iPre = iNodeInImg.getPrevious();
+        NodeInImg jPre = jNodeInImg.getPrevious();
         if(iPre.getId() == jPre.getId()){
             // 这种情况不可能出现。
             System.err.println("异常！！！，距离过近的两个节点的直接父节点相同");
@@ -171,15 +171,15 @@ public class DrawFlowTest {
         rebuildPointFromMovedNode(res);
         return res;
     }
-    private void rebuildPointFromMovedNode(Node movedNode){
-        if(null == movedNode){
+    private void rebuildPointFromMovedNode(NodeInImg movedNodeInImg){
+        if(null == movedNodeInImg){
             return;
         }
-        movedNode.setXPixel(getRightPointX(movedNode.getXPixel()));
-        if(movedNode.getDown() != null){
-            movedNode.getDown().setXPixel(movedNode.getXPixel());
+        movedNodeInImg.setXPixel(getRightPointX(movedNodeInImg.getXPixel()));
+        if(movedNodeInImg.getDown() != null){
+            movedNodeInImg.getDown().setXPixel(movedNodeInImg.getXPixel());
         }
-        rebuildPointFromMovedNode(movedNode.getRight());
+        rebuildPointFromMovedNode(movedNodeInImg.getRight());
     }
 
     @Test

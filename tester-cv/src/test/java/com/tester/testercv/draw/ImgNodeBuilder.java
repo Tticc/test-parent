@@ -6,7 +6,6 @@ import lombok.experimental.Accessors;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Data
 public class ImgNodeBuilder {
@@ -16,8 +15,8 @@ public class ImgNodeBuilder {
     private static List<FormFieldConditionDO> conditions;// 来自已有代码。
 
 
-    private Map<Integer,List<Node>> levelNodeMap = new HashMap<>();
-    private Node startOfImgNode = null;
+    private Map<Integer,List<NodeInImg>> levelNodeMap = new HashMap<>();
+    private NodeInImg startOfImgNodeInImg = null;
 
     public static void main(String[] args){
         ImgNodeBuilder imgNodeBuilder = new ImgNodeBuilder();
@@ -25,19 +24,19 @@ public class ImgNodeBuilder {
     }
 
     public void buildNodeTree(){
-        buildNodeTreeSub(startOfImgNode,start);
+        buildNodeTreeSub(startOfImgNodeInImg,start);
     }
 
     // 完成当前节点，并设置下一节点
-    private void buildNodeTreeSub(Node preImgNode, LinkedNode preDataNode) {
+    private void buildNodeTreeSub(NodeInImg preImgNodeInImg, LinkedNode preDataNode) {
         List<LinkedNode> allNexts = preDataNode.getAllNexts();
         if (CollectionUtils.isEmpty(allNexts)) {
             // 下一层节点为空，返回
             return;
         }
-        if (null == preImgNode) {
+        if (null == preImgNodeInImg) {
             // 起始点
-            preImgNode = startOfImgNode = new Node()
+            preImgNodeInImg = startOfImgNodeInImg = new NodeInImg()
                     .setId(preDataNode.getNode().getId())
                     .setLevel(0)
                     .setCol(0)
@@ -46,11 +45,11 @@ public class ImgNodeBuilder {
                     .setText("start")
                     .setDown(null)
                     .setRight(null);
-            setNodeField(preDataNode,preImgNode);
-            addToMapAndResetCol(0, preImgNode,0);
+            setNodeField(preDataNode, preImgNodeInImg);
+            addToMapAndResetCol(0, preImgNodeInImg,0);
         }
-        Node tempDown = null;
-        Node tempRight = null;
+        NodeInImg tempDown = null;
+        NodeInImg tempRight = null;
         int level;
         int col;
         LinkedNode tempLinkedNode;
@@ -63,13 +62,13 @@ public class ImgNodeBuilder {
                 if (linkedNodeDown != null) {
                     tempLinkedNode = linkedNodeDown;
                     // true 节点往下走
-                    level = preImgNode.getLevel() + 1;
-                    col = preImgNode.getCol();
-                    tempDown = new Node()
+                    level = preImgNodeInImg.getLevel() + 1;
+                    col = preImgNodeInImg.getCol();
+                    tempDown = new NodeInImg()
                             .setId(tempLinkedNode.getNode().getId())
                             .setLevel(level)
                             .setCol(col)
-                            .setPrevious(preImgNode);
+                            .setPrevious(preImgNodeInImg);
                     setNodeField(tempLinkedNode, tempDown);
                     addToMapAndResetCol(level, tempDown,col);
                     buildNodeTreeSub(tempDown, tempLinkedNode);
@@ -77,54 +76,54 @@ public class ImgNodeBuilder {
                  if(linkedNodeRight != null){
                     tempLinkedNode = linkedNodeRight;
                     // false 节点往右走
-                    level = preImgNode.getLevel();
-                    col = preImgNode.getCol()+1;
-                    tempRight = new Node()
+                    level = preImgNodeInImg.getLevel();
+                    col = preImgNodeInImg.getCol()+1;
+                    tempRight = new NodeInImg()
                             .setId(tempLinkedNode.getNode().getId())
                             .setLevel(level)
                             .setCol(col)
-                            .setPrevious(preImgNode);
+                            .setPrevious(preImgNodeInImg);
                     setNodeField(tempLinkedNode, tempRight);
                     addToMapAndResetCol(level, tempRight,col);
                     buildNodeTreeSub(tempRight, tempLinkedNode);
                 }
         } else {
             tempLinkedNode = allNexts.get(0);
-            level = preImgNode.getLevel() + 1;
-            col = preImgNode.getCol();
-            tempDown = new Node()
+            level = preImgNodeInImg.getLevel() + 1;
+            col = preImgNodeInImg.getCol();
+            tempDown = new NodeInImg()
                     .setId(tempLinkedNode.getNode().getId())
                     .setLevel(level)
                     .setCol(col)
-                    .setPrevious(preImgNode);
+                    .setPrevious(preImgNodeInImg);
             setNodeField(tempLinkedNode, tempDown);
             addToMapAndResetCol(level, tempDown,col);
             buildNodeTreeSub(tempDown, tempLinkedNode);
         }
-        preImgNode.setRight(tempRight);
-        preImgNode.setDown(tempDown);
+        preImgNodeInImg.setRight(tempRight);
+        preImgNodeInImg.setDown(tempDown);
     }
-    private void addToMapAndResetCol(int level, Node node, int col){
-        List<Node> nodes = levelNodeMap.get(level);
-        if(CollectionUtils.isEmpty(nodes)){
-            nodes = new ArrayList<>();
-            levelNodeMap.put(level,nodes);
-            nodes.add(node);
+    private void addToMapAndResetCol(int level, NodeInImg nodeInImg, int col){
+        List<NodeInImg> nodeInImgs = levelNodeMap.get(level);
+        if(CollectionUtils.isEmpty(nodeInImgs)){
+            nodeInImgs = new ArrayList<>();
+            levelNodeMap.put(level, nodeInImgs);
+            nodeInImgs.add(nodeInImg);
             return;
         }
-        Node node1 = nodes.stream().max(Comparator.comparing(Node::getCol)).get();
-        if(node1.getCol() >= col){
-            node.setCol(node1.getCol() + 1);
-            Node tempNode = node.getPrevious();
-            while(tempNode != null && tempNode.getCol() == col){
-                tempNode.setCol(node.getCol());
-                tempNode = tempNode.getPrevious();
+        NodeInImg nodeInImg1 = nodeInImgs.stream().max(Comparator.comparing(NodeInImg::getCol)).get();
+        if(nodeInImg1.getCol() >= col){
+            nodeInImg.setCol(nodeInImg1.getCol() + 1);
+            NodeInImg tempNodeInImg = nodeInImg.getPrevious();
+            while(tempNodeInImg != null && tempNodeInImg.getCol() == col){
+                tempNodeInImg.setCol(nodeInImg.getCol());
+                tempNodeInImg = tempNodeInImg.getPrevious();
             }
         }
-        nodes.add(node);
+        nodeInImgs.add(nodeInImg);
     }
 
-    private void setNodeField(LinkedNode linkedNode, Node node){
+    private void setNodeField(LinkedNode linkedNode, NodeInImg nodeInImg){
         Integer type = linkedNode.getType();
         String text = linkedNode.getNodeKey();
         NodeTypeEnum byValue = NodeTypeEnum.getByValue(type);
@@ -147,7 +146,7 @@ public class ImgNodeBuilder {
             default:
                 break;
         }
-        node.setDown(null)
+        nodeInImg.setDown(null)
                 .setRight(null)
                 .setType(type)
                 .setText(text);

@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class Node {
+public class NodeInImg {
     /**
      *
      * 节点id
@@ -34,15 +34,15 @@ public class Node {
     /**
      * 下方节点。非 end节点 有down
      **/
-    private Node down;
+    private NodeInImg down;
     /**
      * 右边节点。仅 check节点 有right
      **/
-    private Node right;
+    private NodeInImg right;
     /**
      * 上一个节点。非 start节点有previous
      **/
-    private Node previous;
+    private NodeInImg previous;
     /**
      * 节点文本
      **/

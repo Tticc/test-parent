@@ -156,7 +156,6 @@ public class BusinessExceptionHandler {
                 objectError = (ObjectError)var4.next();
             }
         }
-
         RestResult baseResult = new RestResult();
         if (null != errorMesssage) {
             baseResult.code(ExceptionCode.BAD_REQUEST_PARAMS).message(errorMesssage);
@@ -164,7 +163,6 @@ public class BusinessExceptionHandler {
             BusinessException be = new BusinessException(ExceptionCode.PARAM_BIND_EXCEPTION);
             baseResult.code(be.getExCode()).message(be.getExDesc());
         }
-
         LOG.error(ex.getMessage(), ex);
         return baseResult;
     }
@@ -209,8 +207,8 @@ public class BusinessExceptionHandler {
     }
 
     /**
-     * 暂时不知道什么情况下会抛出这个异常
      * 参数校验不通过
+     * <br/>注：暂时不知道什么情况下会抛出这个异常
      * @param ex
      * @return com.tester.testercommon.controller.RestResult
      * @Date 16:40 2021/1/7
