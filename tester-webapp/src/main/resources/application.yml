@@ -31,5 +31,8 @@ mybatis:
     map-underscore-to-camel-case: true
 
 
-
-
+# restTemplate 超时时间
+my:
+  rest:
+    connectTimeout: 10000
+    readTimeout: 10000
