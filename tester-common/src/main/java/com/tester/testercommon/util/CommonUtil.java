@@ -1,5 +1,7 @@
 package com.tester.testercommon.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tester.testercommon.exception.BusinessException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
@@ -15,13 +17,36 @@ import java.beans.PropertyDescriptor;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 public class CommonUtil {
+
+
+	/**
+	 * 与类似。JSON.toJSONString(T t);<br/>
+	 * 不过可以是@JSONProperty注解起作用,而JSON.toJSONString不能
+	 *  @JsonProperty("Account")
+	 *     private String account;
+	 * @param data
+	 * @return java.lang.String
+	 * @Date 18:53 2021/1/20
+	 * @Author 温昌营
+	 **/
+	private static <T> String formatDataToJson(T data) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(data);
+	}
+
+
+
+	public static String upperFirstLatter(String str){
+		return str.substring(0, 1).toUpperCase()+str.substring(1);
+	}
+	public static String lowerFirstLatter(String str){
+		return str.substring(0, 1).toLowerCase()+str.substring(1);
+	}
 
 
 	/**
