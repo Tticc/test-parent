@@ -1,6 +1,6 @@
 package com.tester.testeraop.service.impl;
 
-import com.tester.testeraop.controller.StackTraceAnnotation;
+import com.tester.testeraop.annotation.StackTraceAnnotation;
 import com.tester.testeraop.service.DaoService;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,5 @@
-package com.tester.testeraop.config;
+package com.tester.testeraop.intercepts.interceptor;
 
-import com.tester.testeraop.intercepts.interceptor.RequireLoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

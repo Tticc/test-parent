@@ -1,4 +1,4 @@
-package com.tester.testeraop.controller;
+package com.tester.testeraop.annotation;
 
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
