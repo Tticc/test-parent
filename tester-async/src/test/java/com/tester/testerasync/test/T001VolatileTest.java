@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class VolatileTest {
+public class T001VolatileTest {
     // volatile 不保证原子性
     @Test
     public void test_atomic(){
