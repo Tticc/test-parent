@@ -61,6 +61,9 @@ logging:
         testermybatis:
           dao:
             mapper : debug
+        testerwebapp:
+          dao:
+            mapper: debug
 
 
 

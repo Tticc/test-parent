@@ -1,5 +1,6 @@
 package com.tester.testerwebapp.controller;
 
+import com.tester.testercommon.controller.RestResult;
 import com.tester.testercommon.util.redis.RedisUtilValue;
 import com.tester.testermybatis.dao.mapper.OrderMemberMapper;
 import com.tester.testermybatis.model.response.MemberJoinItemVO;
@@ -9,9 +10,10 @@ import com.tester.testermybatis.dao.service.OrderItemManager;
 import com.tester.testermybatis.dao.service.OrderMemberManager;
 import com.tester.testermybatis.service.MyKeyGenerator;
 import com.tester.testerwebapp.TesterWebappApplication;
+import com.tester.testerwebapp.controller.mono.UserController;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.dao.mapper.UserMapper;
-import com.tester.testerwebapp.dao.service.UserManager;
+import com.tester.testerwebapp.service.UserManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,16 +21,11 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.data.redis.connection.DefaultStringRedisConnection;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
-import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -81,7 +78,14 @@ public class RestTemplateTest implements InitializingBean {
 
     @Autowired
     private RedisUtilValue redisUtilValue;
+    @Autowired
+    private UserController userController;
 
+
+    @Test
+    public void test_page(){
+        Mono<RestResult<Serializable>> pageInfo = userController.listByName();
+    }
     @Test
     public void test_redisValue(){
         boolean aa = redisUtilValue.setValue("aa", 100L);

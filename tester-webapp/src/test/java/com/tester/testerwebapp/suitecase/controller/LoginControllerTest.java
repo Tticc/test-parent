@@ -5,7 +5,7 @@ import com.tester.testerwebapp.TesterWebappApplication;
 import com.tester.testerwebapp.controller.mono.UserController;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.dao.mapper.UserMapper;
-import com.tester.testerwebapp.dao.service.UserManager;
+import com.tester.testerwebapp.service.UserManager;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
@@ -47,7 +47,7 @@ public class LoginControllerTest extends TestCase {
 
     @Test
     public void test_mock_injectMock(){
-        Mockito.when(userMapper.selectUserById(Mockito.anyLong())).thenReturn(new UserDomain());
+        Mockito.when(userMapper.selectUserId(Mockito.anyLong())).thenReturn(new UserDomain());
 //        Mockito.when(userManager.selectUserById(Mockito.anyLong())).thenCallRealMethod();
 //        Mockito.when(userManager.selectUserById(Mockito.anyLong())).thenReturn(Mono.just(new UserDomain()));
         Mono<RestResult<UserDomain>> name = userController.demoStart(5L, "name");

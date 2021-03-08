@@ -1,7 +1,7 @@
 package com.tester.testerwebapp.suitecase.controller;
 
 import com.tester.testerwebapp.TesterWebappApplication;
-import com.tester.testerwebapp.dao.service.UserManager;
+import com.tester.testerwebapp.service.UserManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

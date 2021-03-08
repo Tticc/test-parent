@@ -1,15 +1,16 @@
 package com.tester.testerwebapp.controller.mono;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.tester.testercommon.controller.BaseController;
 import com.tester.testercommon.controller.RestResult;
 import com.tester.testercommon.model.request.IdAndNameModel;
 import com.tester.testercommon.util.redis.RedisUtilValue;
 import com.tester.testerwebapp.dao.domain.UserDomain;
-import com.tester.testerwebapp.dao.service.UserManager;
+import com.tester.testerwebapp.service.UserManager;
 import com.tester.testerwebapp.service.ExcelManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +22,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
 
 /**
  * @Author 温昌营
@@ -122,6 +124,21 @@ public class UserController extends BaseController {
     public Mono<RestResult<Serializable>> getLogin(){
         Mono<Serializable> just = Mono.justOrEmpty(redisUtilValue.getValue("user::1"));
         return monoSuccess(just);
+    }
+
+    public Mono<RestResult<Serializable>> listByName(){
+//        PageInfo<UserDomain> result = new PageInfo<>();
+        Page<UserDomain> page = PageHelper.startPage(1, 10);
+        IdAndNameModel request = new IdAndNameModel();
+        userManager.listByName(request.setName("name"));
+        List<UserDomain> result = page.getResult();
+        System.out.println();
+        System.out.println();
+        System.out.println("all list is:"+result);
+        System.out.println("list.size:"+result.size());
+        System.out.println("page.getTotal:"+page.getTotal());
+
+        return monoSuccess();
     }
 
 

@@ -158,7 +158,7 @@ public class DateUtil {
 
 	/** yyyyMMddHHmmss，例如：20200302121212*/
 	public static LocalDateTime getLocalDateTime(String dateStr){
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 		return LocalDateTime.parse(dateStr, formatter);
 	}
 	/**

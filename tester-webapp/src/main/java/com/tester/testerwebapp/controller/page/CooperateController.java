@@ -15,7 +15,7 @@ public class CooperateController {
 	private StringBuffer sb = new StringBuffer("init");
 
 	@GetMapping("/init")
-	public String getPage(HttpServletRequest req) {
+	public String getInit(HttpServletRequest req) {
 		String initContent = COOPCONTENT;
 		this.sb.replace(0, this.sb.length(), initContent);
 		req.setAttribute("content", initContent);

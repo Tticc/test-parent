@@ -1,6 +1,7 @@
 package com.tester.testerwebapp.dao.mapper;
 
 import com.tester.testercommon.dao.BaseMapper;
+import com.tester.testercommon.model.request.IdAndNameModel;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -13,8 +14,9 @@ import java.util.List;
  */
 public interface UserMapper extends BaseMapper<UserDomain, Long> {
 
-    @Select("select * from u_person where id = #{id} and deleted = 0")
-    UserDomain selectUserById(@Param("id") Long id);
+    UserDomain selectUserId(@Param("id") Long id);
+
+    List<UserDomain> listByName(IdAndNameModel request);
 
     // todo 未完成
     int batchUpdate(@Param("list") List<UserDomain> list);

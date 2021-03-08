@@ -25,7 +25,7 @@ public class CommonUtil {
 
 
 	/**
-	 * 获取汉子拼音首字母
+	 * 获取汉字拼音首字母
 	 * @param characters
 	 * @return java.lang.String
 	 * @Date 16:35 2020/12/4
@@ -81,8 +81,21 @@ public class CommonUtil {
 	 */
 	public static String toLowerCaseFirstOne(@NonNull String s) {
 		if(Character.isLowerCase(s.charAt(0))) return s;
-		return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
+		return s.substring(0, 1).toLowerCase()+s.substring(1);
 	}
+
+	/**
+	 * 将首字母转为大写。
+	 * @author Wen, Changying
+	 * @param s
+	 * @return
+	 * @date 2021-3-8 10:27:03
+	 */
+	public static String toUpperCaseFirstOne(@NonNull String s) {
+		if(Character.isUpperCase(s.charAt(0))) return s;
+		return s.substring(0, 1).toUpperCase()+s.substring(1);
+	}
+
 	public static String getUUID() {
 		return UUID.randomUUID().toString().replaceAll("-","");
 	}

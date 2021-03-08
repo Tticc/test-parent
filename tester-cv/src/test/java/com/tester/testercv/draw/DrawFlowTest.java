@@ -1,5 +1,6 @@
 package com.tester.testercv.draw;
 
+import com.tester.testercommon.util.DateUtil;
 import com.tester.testercv.Img_GenerateImageTest;
 import com.tester.testercv.draw.basic.NodeTypeEnum;
 import org.junit.Test;
@@ -65,8 +66,8 @@ public class DrawFlowTest {
 
         Mat flowMat = new Mat(rows, cols, CvType.CV_8UC1, new Scalar(0));
         drawFromNodeTree(flowMat, startOfImgNodeInImg,null);
-        showImg(flowMat,"flow at the very first");
-//        writeImg("img flow",flowMat);
+//        showImg(flowMat,"flowImg"+ DateUtil.dateFormat(new Date()));
+        writeImg("flowImg"+ DateUtil.dateFormat(new Date(),"yyyyMMddHHmmss"),flowMat);
     }
 
     private void drawFromNodeTree(Mat mat, NodeInImg nodeInImg, NodeInImg previous){
