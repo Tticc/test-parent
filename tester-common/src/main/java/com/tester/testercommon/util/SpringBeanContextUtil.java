@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  * @Date 2020-8-21 11:14:58
  */
 @Component
-@Order(-2147483648)
+@Order(Integer.MIN_VALUE)
 @Slf4j
 //@Lazy(false)
 public class SpringBeanContextUtil implements ApplicationContextAware, BeanDefinitionRegistryPostProcessor {

@@ -26,7 +26,7 @@ public class ControllerAspect {
 
 
     @Around(value = "execution(* com.tester.testeraop.controller.*.*(..))")
-//    @Around(value = "@annotation(com.tester.testeraop.controller.StackTraceAnnotation)")
+//    @Around(value = "@annotation(com.tester.testeraop.annotation.StackTraceAnnotation)")
     public Object doSomething(ProceedingJoinPoint pjp) throws Throwable {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();

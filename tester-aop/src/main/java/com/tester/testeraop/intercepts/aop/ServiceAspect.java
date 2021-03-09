@@ -1,7 +1,7 @@
 package com.tester.testeraop.intercepts.aop;
 
 import com.tester.testeraop.controller.CloudOfficeException;
-import com.tester.testeraop.controller.StackTraceAnnotation;
+import com.tester.testeraop.annotation.StackTraceAnnotation;
 import com.tester.testeraop.controller.UserOperationDO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.mapping.BoundSql;
@@ -27,7 +27,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-
+/**
+ * 未完成demo
+ */
 @Aspect
 @Component
 @Order(1)
@@ -43,7 +45,7 @@ public class ServiceAspect implements InitializingBean {
 
 
     @Around(value = "execution(* com.tester.testeraop.service.impl.DaoServiceImpl.*(..))")
-//    @Around(value = "@annotation(com.tester.testeraop.controller.StackTraceAnnotation)")
+//    @Around(value = "@annotation(com.tester.testeraop.annotation.StackTraceAnnotation)")
     public Object traceBackgroundThread2(ProceedingJoinPoint pjp) throws Throwable {
         System.out.println("service aspect was triggered!");
         Object[] args = pjp.getArgs();
