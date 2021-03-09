@@ -21,9 +21,9 @@ import java.util.List;
 @Component("reentrantRedisLockUtil")
 public class ReentrantRedisLockUtil {
     /**
-     * traceId 过期时间，默认为10分钟
+     * traceId 过期时间，比主key时间长 5s
      **/
-    private int traceIdTimeout = 1000*60*10;
+    private int traceIdAddTimeout = 1000*5;
 
     public static final DefaultRedisScript GET_REENTRANT_LOCK_LUA_SCRIPT = new DefaultRedisScript(
             "if redis.call('setnx',KEYS[1],ARGV[1]) == 1 then \n" +
@@ -32,7 +32,8 @@ public class ReentrantRedisLockUtil {
                     "    return redis.call('pexpire',KEYS[2],ARGV[3])\n" +
                     "else\n" +
                     "    if redis.call('get',KEYS[1]) == ARGV[1] then \n" +
-                    "        return redis.call('INCR',KEYS[2]) \n" +
+                    "        redis.call('INCR',KEYS[2]) \n" +
+                    "        return 1 \n" +
                     "    else\n" +
                     "        return 0\n" +
                     "    end\n" +
@@ -68,7 +69,8 @@ public class ReentrantRedisLockUtil {
         List<String> keys = new ArrayList<>();
         String traceId = addKeys(keys, key);
         log.info("keys:{}",keys);
-        Object result = this.redisTemplate.execute(GET_REENTRANT_LOCK_LUA_SCRIPT, keys, new Object[]{traceId, String.valueOf(timeout),String.valueOf(traceIdTimeout)});
+        String traceIdTimeout = String.valueOf(traceIdAddTimeout+timeout);
+        Object result = this.redisTemplate.execute(GET_REENTRANT_LOCK_LUA_SCRIPT, keys, new Object[]{traceId, String.valueOf(timeout),traceIdTimeout});
         return Integer.parseInt(String.valueOf(result)) > 0;
     }
 
