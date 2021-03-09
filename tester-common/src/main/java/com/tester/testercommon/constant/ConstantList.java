@@ -1,5 +1,8 @@
 package com.tester.testercommon.constant;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 /**
  * @Author 温昌营
  * @Date
@@ -39,4 +42,15 @@ public class ConstantList {
      * redis 锁默认超时时间(ms)
      **/
     public static final int defaultTimeout = 50*1000;
+
+
+    // StandardCharsets.UTF_8
+    public static final String UTF_8 = "UTF-8";
+    public static final Charset UTF_8_STAND = StandardCharsets.UTF_8;
+
+    public static final String GBK = "GBK";
+
+    public static final String IOS8859_1 = "iso8859-1";
+    public static final Charset IOS8859_1_STAND = StandardCharsets.ISO_8859_1;
+
 }

@@ -7,8 +7,8 @@ import com.tester.testercommon.controller.RestResult;
 import com.tester.testercommon.model.request.IdAndNameModel;
 import com.tester.testercommon.util.redis.RedisUtilValue;
 import com.tester.testerwebapp.dao.domain.UserDomain;
-import com.tester.testerwebapp.service.UserManager;
 import com.tester.testerwebapp.service.ExcelManager;
+import com.tester.testerwebapp.service.UserManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -126,9 +126,10 @@ public class UserController extends BaseController {
         return monoSuccess(just);
     }
 
+    @RequestMapping(value="listByName", method = RequestMethod.POST)
     public Mono<RestResult<Serializable>> listByName(){
 //        PageInfo<UserDomain> result = new PageInfo<>();
-        Page<UserDomain> page = PageHelper.startPage(1, 10);
+        Page<UserDomain> page = PageHelper.startPage(2, 2);
         IdAndNameModel request = new IdAndNameModel();
         userManager.listByName(request.setName("name"));
         List<UserDomain> result = page.getResult();
@@ -137,7 +138,8 @@ public class UserController extends BaseController {
         System.out.println("all list is:"+result);
         System.out.println("list.size:"+result.size());
         System.out.println("page.getTotal:"+page.getTotal());
-
+        Page<UserDomain> page1 = PageHelper.startPage(2, 2);
+        userManager.listByName(request.setName("name"));
         return monoSuccess();
     }
 
