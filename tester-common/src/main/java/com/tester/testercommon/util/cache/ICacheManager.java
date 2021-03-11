@@ -1,5 +1,8 @@
 package com.tester.testercommon.util.cache;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -9,6 +12,8 @@ import java.util.Set;
  * @Author 温昌营
  **/
 public interface ICacheManager {
+
+    Logger log = LoggerFactory.getLogger(ICacheManager.class);
 
     /**
      * 存入缓存
