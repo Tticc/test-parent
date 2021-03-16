@@ -1,81 +1,52 @@
 package com.tester.testerasync;
 
+import io.netty.handler.codec.socks.SocksAddressType;
 import org.junit.Test;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class NormalTest_Async {
 
     private ExecutorService threadPool = Executors.newFixedThreadPool(1);
 
+    @Test
+    public void test_suspend(){
+        Thread xxx = new Thread(() -> System.out.println("xxx"));
+        xxx.start();
+        xxx.stop();
+        xxx.suspend();
+    }
 
     @Test
-    public void test_break(){
-        int count = 0;
-        int countj = 0;
-        aa:
-        for (int i=0;i<100;i++){
-            ++countj;
-            System.out.println("i is:"+i);
-            for(int j=0;j<100;j++) {
-                System.out.println(j);
-                if(j == 10){
-                    continue aa;
-                }
-                ++count;
-                if (count % 1000000000 == 0) {
-                    System.out.println("xxx:" + count);
-                    break aa;
-                }
-            }
+    public void test_classLoader() throws Exception {
+        String s = "";
+        ClassLoader classLoader = this.getClass().getClassLoader();
+        System.out.println(classLoader);
+        ClassLoader classLoader1 = String.class.getClassLoader();
+        System.out.println(classLoader1);
+        ClassLoader classLoader2 = SocksAddressType.class.getClassLoader();
+        System.out.println(classLoader2);
+        ClassLoader classLoader3 = Boolean.class.getClassLoader();
+        System.out.println(classLoader3);
+        Thread.sleep(11);
+    }
+    @Test
+    public void test_syncLock(){
+        testlock();
+    }
+
+    public void testlock() {
+        synchronized (this) {
+            System.out.println("xxx");
         }
     }
 
-    @Test
-    public void test_thread() throws ExecutionException, InterruptedException {
-        threadPool.execute(() -> System.out.println("xx"));
-        Future<Integer> submit = threadPool.submit(() -> {
-            System.out.println("threadId is:"+Thread.currentThread().getId());
-            Thread.sleep(5000);
-            return 1;
-        });
-        System.out.println("threadId is:"+Thread.currentThread().getId());
-        submit.get();
+
+
+
+
+    static {
+        System.out.println("static block");
     }
-
-    @Test
-    public void test_queue() throws InterruptedException {
-
-        BlockingQueue<Integer> blockingQueue = new ArrayBlockingQueue<>(Integer.MAX_VALUE);
-        blockingQueue.put(1);
-    }
-
-
-    @Test
-    public void test_interrupted() throws InterruptedException {
-        Thread xxx = new Thread(() -> {
-            int count = 0;
-            for(;;) {
-                ++count;
-                if(count % 1000 == 0 && !Thread.currentThread().isInterrupted()){
-                    System.out.println("xxx");
-//                    Thread.currentThread().interrupt();
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        });
-        xxx.start();
-        Thread.sleep(1000);
-        System.out.println(xxx.isInterrupted());
-        xxx.interrupt();
-        System.out.println(xxx.isInterrupted());
-        System.out.println(xxx.interrupted());
-        System.out.println(xxx.isInterrupted());
-    }
-
 }
