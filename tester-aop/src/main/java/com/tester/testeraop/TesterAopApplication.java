@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.ApplicationContext;
 
 //@EnableFeignClients(basePackages = {"com.aeon.dmc.cloud.office", "com.lingzhi"})
@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationContext;
 //@SpringBootApplication(scanBasePackages = {"com.tester.testeraop", "com.tester"}, exclude = {DataSourceAutoConfiguration.class})
 //@EnableTransactionManagement
 //@EnableDiscoveryClient
+@ServletComponentScan
 @SpringBootApplication
 public class TesterAopApplication implements CommandLineRunner {
 

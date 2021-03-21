@@ -14,10 +14,11 @@ import java.io.IOException;
  * @Date
  */
 @Slf4j
+//@WebFilter(filterName = "repeatedlyReadFilter",urlPatterns = "/sign/*")
 @WebFilter(filterName = "repeatedlyReadFilter",urlPatterns = "/*")
 @Order(1)
 public class RepeatedlyReadFilter implements Filter {
-    private String str = "xxx";
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         log.info("filterConfig.getFilterName() "+filterConfig.getFilterName());
@@ -38,6 +39,6 @@ public class RepeatedlyReadFilter implements Filter {
 
     @Override
     public void destroy() {
-        this.str = null;
+
     }
 }
