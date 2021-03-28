@@ -1,6 +1,7 @@
 package com.tester.testergateway.config;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,18 +12,17 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.server.PathContainer;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -118,9 +118,9 @@ public class GatewayConfig {
 
     private Mono<Void> badResponse(ServerWebExchange exchange) {
         ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(HttpStatus.NOT_FOUND);
+//        response.setStatusCode(HttpStatus.FORBIDDEN);
 
-        DataBuffer buffer = response.bufferFactory().wrap(HttpStatus.NOT_FOUND.getReasonPhrase().getBytes());
+        DataBuffer buffer = response.bufferFactory().wrap(HttpStatus.FORBIDDEN.getReasonPhrase().getBytes());
         return response.writeWith(Mono.just(buffer));
     }
 
