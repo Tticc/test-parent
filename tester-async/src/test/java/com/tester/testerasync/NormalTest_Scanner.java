@@ -17,6 +17,20 @@ public class NormalTest_Scanner {
 
     @Test
     public void test_distinct(){
+
+        int[] a = new int[]{1,2,3,4,5};
+        int[] b = new int[]{1,2,3,4,5,6};
+
+        int index = 0;
+        for (int i = 0; i < 3; i++) {
+            b[index++] = a[index];
+        }
+        for (int i = 0; i < b.length; i++) {
+            System.out.println(b[i]);
+        }
+
+//        List<Integer> list = Arrays.asList(1, 2);
+//        list.add(111);
 //        Scanner sc = new Scanner(System.in);
 //        int str = sc.nextInt();
 //        int[] xx = new int[str];
