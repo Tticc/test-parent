@@ -23,6 +23,15 @@ spring:
 #    content-type: text/html
 
 
+
+  # 设置请求路径前缀
+  # http://localhost:8004/static/pic.jpg
+  mvc:
+    static-path-pattern: /static/**
+  # 设置静态资源文件夹位置
+  resources:
+    static-locations: classpath:/mystatic
+
 #mybatis
 mybatis:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
