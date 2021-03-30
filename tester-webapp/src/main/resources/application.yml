@@ -29,8 +29,8 @@ spring:
   mvc:
     static-path-pattern: /static/**
   # 设置静态资源文件夹位置
-  resources:
-    static-locations: classpath:/mystatic
+#  resources:
+#    static-locations: classpath:/mystatic
 
 #mybatis
 mybatis:
