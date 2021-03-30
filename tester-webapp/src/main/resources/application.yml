@@ -40,8 +40,14 @@ mybatis:
     map-underscore-to-camel-case: true
 
 
-# restTemplate 超时时间
 my:
+  # 启用redis配置
+  # com.tester.testercommon.util.redis.config.RedisConfig
+  spring:
+    redis:
+
+  # restTemplate 超时时间
+  # com.tester.testerstarter.autoconfigure.RestTemplateAutoConfigure
   rest:
     connectTimeout: 10000
     readTimeout: 10000
