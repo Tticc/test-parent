@@ -3,7 +3,6 @@ package com.tester.testerwebapp.service;
 import com.tester.testercommon.constant.ConstantList;
 import com.tester.testercommon.model.request.IdAndNameModel;
 import com.tester.testerwebapp.dao.domain.UserDomain;
-import com.tester.testerwebapp.dao.mapper.UserMapper;
 import com.tester.testerwebapp.dao.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +21,7 @@ import java.util.List;
 public class UserManager {
     @Resource
     private UserService userService;
+
 
 
     @Transactional(rollbackFor = Exception.class, transactionManager = ConstantList.NORMAL_MANAGER)

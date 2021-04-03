@@ -27,7 +27,9 @@ public class NormalTest_Func {
         map.put(2, new ArrayList<>(Arrays.asList(21, 22, 23, 24, 25)));
         map.put(3, null);
         map.entrySet().stream()
-                .flatMap(e -> e.getValue().stream())
+                .map(e -> e.getValue())
+                .filter(e -> e != null)
+                .flatMap(e -> e.stream())
                 .forEach(System.out::println);
     }
 

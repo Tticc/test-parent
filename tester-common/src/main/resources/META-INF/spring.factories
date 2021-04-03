@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.tester.testercommon.util.SpringBeanContextUtil
+  com.tester.testercommon.util.SpringBeanContextUtil,\
+  com.tester.testercommon.util.redis.config.RedisConfig
