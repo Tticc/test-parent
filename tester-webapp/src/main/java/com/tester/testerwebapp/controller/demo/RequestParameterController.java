@@ -4,8 +4,15 @@ import com.tester.testercommon.controller.BaseController;
 import com.tester.testercommon.controller.RestResult;
 import com.tester.testercommon.exception.BusinessException;
 import com.tester.testercommon.model.request.TextRequest;
+import com.tester.testercommon.model.request.convert.ConvertRequest;
+import com.tester.testercommon.util.SpringBeanContextUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.MutablePropertyValues;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.DefaultDataBinderFactory;
+import org.springframework.web.bind.support.WebBindingInitializer;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import javax.servlet.http.Cookie;
 import javax.validation.Valid;
@@ -98,6 +105,63 @@ public class RequestParameterController extends BaseController {
         sb.append("request is:"+request).append(",").append("<br/><br/>");
         System.out.println(sb.toString());
         return success(sb.toString());
+    }
+
+    /**
+     * postman body类型：form-data
+     * <br/>
+     * @throws BusinessException
+     */
+    @PostMapping(value = "/testRequestBody1")
+    public RestResult<String> testRequestBody1(TextRequest request) throws BusinessException {
+        StringBuilder sb = new StringBuilder();
+        sb.append("request is:"+request).append(",").append("<br/><br/>");
+        System.out.println(sb.toString());
+        return success(sb.toString());
+    }
+
+    /**
+     * 这里使用了自定义的convert。
+     * <br/>
+     * postman body类型：form-data
+     * <br/>
+     * key:testConvertRequest
+     * value:wenc,12
+     * <br/><br/>
+     * 配置位置：com.tester.testerwebapp.config.MyConfig#webMvcConfigurer()
+     * @param request
+     * @return
+     * @throws BusinessException
+     */
+    @PostMapping(value = "/testMyConvert")
+    public RestResult<String> testMyConvert(ConvertRequest request) throws BusinessException {
+        StringBuilder sb = new StringBuilder();
+        sb.append("request is:"+request).append(",").append("<br/><br/>");
+        System.out.println(sb.toString());
+        return success(sb.toString());
+    }
+
+    /**
+     * 数据绑定测试
+     * @return
+     * @throws Exception
+     */
+    @PostMapping(value = "/testRequestDataBinder")
+    public RestResult<String> testRequestDataBinder() throws Exception {
+        TextRequest target = new TextRequest();
+        String paramName = "textRequest";
+        RequestMappingHandlerAdapter requestMappingHandlerAdapter = SpringBeanContextUtil.getBean("requestMappingHandlerAdapter", RequestMappingHandlerAdapter.class);
+        WebBindingInitializer webBindingInitializer = requestMappingHandlerAdapter.getWebBindingInitializer();
+        DefaultDataBinderFactory defaultDataBinderFactory = new DefaultDataBinderFactory(webBindingInitializer);
+
+
+
+        WebDataBinder binder = defaultDataBinderFactory.createBinder(null, target, paramName);
+        MutablePropertyValues propertyValues = new MutablePropertyValues();
+        propertyValues.add("text","ttt");
+        binder.bind(propertyValues);
+        System.out.println(target);
+        return success(target.toString());
     }
 
 }
