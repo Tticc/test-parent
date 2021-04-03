@@ -1,5 +1,6 @@
 package com.tester.testerwebapp;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -13,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import java.util.List;
 import java.util.Set;
 
-//@MapperScan("com.tester.**.mapper")
+@MapperScan("com.tester.**.mapper")
 @EnableAsync
 //@SpringBootApplication(scanBasePackages = {"com.tester.*"})
 @SpringBootApplication(scanBasePackages = {"com.tester.testercommon.*","com.tester.testerwebapp.*","com.tester.testermybatis.*"})

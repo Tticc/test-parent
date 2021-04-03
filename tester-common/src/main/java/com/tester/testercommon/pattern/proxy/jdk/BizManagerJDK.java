@@ -11,7 +11,10 @@ import java.lang.reflect.Proxy;
 public class BizManagerJDK implements BizManager {
 
     public static BizManager getProxy(){
-        Object o = Proxy.newProxyInstance(BizManagerJDK.class.getClassLoader(), new Class<?>[]{BizManager.class}, new ProxyHandler(new BizManagerJDK()));
+        Object o = Proxy.newProxyInstance(
+                BizManagerJDK.class.getClassLoader(),
+                new Class<?>[]{BizManager.class},
+                new ProxyHandler(new BizManagerJDK()));
         return (BizManager)o;
     }
 

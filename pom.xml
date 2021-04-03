@@ -56,6 +56,7 @@
         <module>tester-pool</module>
         <module>tester-mybatis</module>
         <module>tester-starter</module>
+        <module>tester-mytomcat</module>
     </modules>
 
     <dependencyManagement>
