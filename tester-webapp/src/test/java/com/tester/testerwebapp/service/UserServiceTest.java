@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -66,5 +67,10 @@ public class UserServiceTest{
             userDomain.setName("wenc"+i).setCellphone("12498734892").setDataFrom(1).setEmployeeId("0001").setWechatid("1232");
             userManager.insert_Test(userDomain);
         }
+    }
+
+    @Test
+    public void test_s(){
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext();
     }
 }

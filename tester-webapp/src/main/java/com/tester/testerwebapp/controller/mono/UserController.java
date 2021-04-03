@@ -8,9 +8,11 @@ import com.tester.testercommon.model.request.IdAndNameModel;
 import com.tester.testercommon.util.redis.RedisUtilValue;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.service.ExcelManager;
+import com.tester.testerwebapp.service.MyService;
 import com.tester.testerwebapp.service.UserManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +36,8 @@ import java.util.List;
 public class UserController extends BaseController {
     @Autowired
     private UserManager userManager;
+    @Autowired
+    private MyService myService;
     @Autowired
     private RedisUtilValue redisUtilValue;
     @Autowired
@@ -73,6 +77,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/demoStart", method = RequestMethod.POST)
     public Mono<RestResult<UserDomain>> demoStart(@RequestParam("id")Long id, @RequestParam("name") String name) {
         log.info("controller start here.");
+        myService.print();
         Mono<UserDomain> userDomainMono = userManager.selectUserById(id);
         return monoSuccess(userDomainMono);
     }

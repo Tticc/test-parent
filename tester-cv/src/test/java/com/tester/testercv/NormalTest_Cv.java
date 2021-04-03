@@ -19,11 +19,28 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NormalTest_Cv {
 
     private AtomicInteger atomicInteger = new AtomicInteger(0);
 
+
+    @Test
+    public void test_regex1(){
+        String regex = "^(.{0,2}).*";
+        String mobile = "&*（&*（dfda432";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(mobile);
+        boolean isMatch = m.matches();
+        if (isMatch) {
+            String group = m.group(1);
+            System.out.println(group);
+        } else {
+            System.out.println("mismatch");
+        }
+    }
 
     class LRUMap<K,V> extends LinkedHashMap<K,V>{
         public LRUMap(){
