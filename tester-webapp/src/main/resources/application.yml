@@ -31,6 +31,8 @@ spring:
   # 设置静态资源文件夹位置
 #  resources:
 #    static-locations: classpath:/mystatic
+    contentnegotiation:
+      favor-parameter: true
 
 #mybatis
 mybatis:
