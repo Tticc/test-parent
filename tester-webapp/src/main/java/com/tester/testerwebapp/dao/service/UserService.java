@@ -1,6 +1,6 @@
 package com.tester.testerwebapp.dao.service;
 
-import com.tester.testercommon.model.request.IdAndNameModel;
+import com.tester.testercommon.model.request.IdAndNameRequest;
 import com.tester.testercommon.service.BaseService;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 
@@ -14,7 +14,7 @@ public interface UserService extends BaseService<Long, UserDomain> {
 
     UserDomain selectUserId(Long id);
 
-    List<UserDomain> listByName(IdAndNameModel request);
+    List<UserDomain> listByName(IdAndNameRequest request);
 
     int batchUpdate(List<UserDomain> list);
 }

@@ -56,7 +56,7 @@
         and deleted = 0
     </select>
 
-    <select id="listByName" resultMap="baseResultMap" parameterType="com.tester.testercommon.model.request.IdAndNameModel">
+    <select id="listByName" resultMap="baseResultMap" parameterType="com.tester.testercommon.model.request.IdAndNameRequest">
         select <include refid="selectSql"></include>
         from <include refid="table_name"></include>  as t_alias
         <where>

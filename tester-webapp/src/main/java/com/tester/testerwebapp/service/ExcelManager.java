@@ -1,7 +1,7 @@
 package com.tester.testerwebapp.service;
 
 import com.tester.testercommon.exception.BusinessException;
-import com.tester.testercommon.model.response.ExcelUserVO;
+import com.tester.testercommon.model.response.ExcelUserResponse;
 import lombok.SneakyThrows;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -55,7 +55,7 @@ public class ExcelManager {
             }
             titles[i] = cell.getStringCellValue();
         }
-        List<ExcelUserVO> list = new ArrayList<>();
+        List<ExcelUserResponse> list = new ArrayList<>();
         for(int i = 1; i < totalRow; i++){
 
         }

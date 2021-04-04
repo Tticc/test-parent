@@ -1,6 +1,6 @@
 package com.tester.testerwebapp.dao.service.impl;
 
-import com.tester.testercommon.model.request.IdAndNameModel;
+import com.tester.testercommon.model.request.IdAndNameRequest;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.dao.mapper.UserMapper;
 import com.tester.testerwebapp.dao.service.UserService;
@@ -34,7 +34,7 @@ public class UserServiceImpl extends BaseServiceImpl<Long, UserDomain> implement
     }
 
     @Override
-    public List<UserDomain> listByName(IdAndNameModel request) {
+    public List<UserDomain> listByName(IdAndNameRequest request) {
         return userMapper.listByName(request);
     }
 

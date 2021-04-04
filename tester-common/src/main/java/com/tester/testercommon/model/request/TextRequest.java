@@ -1,5 +1,6 @@
 package com.tester.testercommon.model.request;
 
+import com.tester.testercommon.model.BaseDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,7 +11,7 @@ import lombok.Data;
  */
 @ApiModel(description = "TextRequest")
 @Data
-public class TextRequest {
+public class TextRequest extends BaseDTO {
     /**
      * text
      */

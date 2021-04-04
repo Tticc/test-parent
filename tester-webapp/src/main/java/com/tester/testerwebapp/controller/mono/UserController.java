@@ -4,7 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.tester.testercommon.controller.BaseController;
 import com.tester.testercommon.controller.RestResult;
-import com.tester.testercommon.model.request.IdAndNameModel;
+import com.tester.testercommon.model.request.IdAndNameRequest;
 import com.tester.testercommon.util.redis.RedisUtilValue;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.service.ExcelManager;
@@ -12,7 +12,6 @@ import com.tester.testerwebapp.service.MyService;
 import com.tester.testerwebapp.service.UserManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,7 +55,7 @@ public class UserController extends BaseController {
         return success();
     }
     @PostMapping(value = "/uploadForDifSource")
-    public RestResult<Void> uploadForDifSource(@RequestPart("file") MultipartFile file,@ModelAttribute IdAndNameModel model) throws UnsupportedEncodingException {
+    public RestResult<Void> uploadForDifSource(@RequestPart("file") MultipartFile file,@ModelAttribute IdAndNameRequest model) throws UnsupportedEncodingException {
         String originalFileName = file.getOriginalFilename();
         System.out.println(originalFileName);
         originalFileName = URLDecoder.decode(originalFileName, "UTF-8");
@@ -90,7 +89,7 @@ public class UserController extends BaseController {
      * @Author 温昌营
      **/
     @RequestMapping(value = "/demoStart1", method = RequestMethod.POST)
-    public Mono<RestResult<UserDomain>> demoStart1(@Validated @RequestBody IdAndNameModel model) {
+    public Mono<RestResult<UserDomain>> demoStart1(@Validated @RequestBody IdAndNameRequest model) {
         log.info("controller start here.");
         Mono<UserDomain> userDomainMono = userManager.selectUserById(model.getId());
         return monoSuccess(userDomainMono);
@@ -135,7 +134,7 @@ public class UserController extends BaseController {
     public Mono<RestResult<Serializable>> listByName(){
 //        PageInfo<UserDomain> result = new PageInfo<>();
         Page<UserDomain> page = PageHelper.startPage(2, 2);
-        IdAndNameModel request = new IdAndNameModel();
+        IdAndNameRequest request = new IdAndNameRequest();
         userManager.listByName(request.setName("name"));
         List<UserDomain> result = page.getResult();
         System.out.println();

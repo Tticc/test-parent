@@ -4,7 +4,7 @@ package com.tester.testeraop.controller;
 import com.tester.testeraop.service.AopManager;
 import com.tester.testercommon.controller.BaseController;
 import com.tester.testercommon.controller.RestResult;
-import com.tester.testercommon.model.request.IdAndNameModel;
+import com.tester.testercommon.model.request.IdAndNameRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +23,7 @@ public class AopController extends BaseController {
     private AopManager aopManager;
 
     @PostMapping(value = "/test_param")
-    public RestResult test_param(@RequestBody @Valid IdAndNameModel model){
+    public RestResult test_param(@RequestBody @Valid IdAndNameRequest model){
 //        aopManager.test_param(model);
         return success();
     }

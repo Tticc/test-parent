@@ -5,6 +5,7 @@ import com.tester.testercommon.controller.RestResult;
 import com.tester.testercommon.exception.BusinessException;
 import com.tester.testercommon.model.request.TextRequest;
 import com.tester.testercommon.model.request.convert.ConvertRequest;
+import com.tester.testercommon.model.request.convert.TestConvertRequest;
 import com.tester.testercommon.util.SpringBeanContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.MutablePropertyValues;
@@ -133,12 +134,24 @@ public class RequestParameterController extends BaseController {
      * @return
      * @throws BusinessException
      */
-    @PostMapping(value = "/testMyConvert")
-    public RestResult<String> testMyConvert(ConvertRequest request) throws BusinessException {
+    @PostMapping(value = "/testMyRequestConvert")
+    public RestResult<String> testMyRequestConvert(ConvertRequest request) throws BusinessException {
         StringBuilder sb = new StringBuilder();
         sb.append("request is:"+request).append(",").append("<br/><br/>");
         System.out.println(sb.toString());
         return success(sb.toString());
+    }
+
+
+
+    @PostMapping(value = "/testMyResponseConvert")
+    public ConvertRequest testMyResponseConvert() throws BusinessException {
+        ConvertRequest res = new ConvertRequest();
+        TestConvertRequest resData = new TestConvertRequest();
+        resData.setName("cvv");
+        resData.setAge(199);
+//        res.setTestConvertRequest(resData);
+        return res;
     }
 
     /**

@@ -3,7 +3,7 @@ package com.tester.testercv.controller;
 
 import com.tester.testercommon.controller.BaseController;
 import com.tester.testercommon.controller.RestResult;
-import com.tester.testercommon.model.request.IdAndNameModel;
+import com.tester.testercommon.model.request.IdAndNameRequest;
 import com.tester.testercommon.util.SpringBeanContextUtil;
 import com.tester.testercommon.util.file.MyFileReaderWriter;
 import com.tester.testercv.config.OutBean;
@@ -29,7 +29,7 @@ public class CvController extends BaseController {
     private OutBean outBean;
 
     @PostMapping(value = "/test_context")
-    public RestResult test_context(@RequestBody @Valid IdAndNameModel model){
+    public RestResult test_context(@RequestBody @Valid IdAndNameRequest model){
 //        aopManager.test_param(model);
         outBean.doPrint();
         OutBean bean = SpringBeanContextUtil.getBean("containerBeanNamecontainerBeanName",OutBean.class);

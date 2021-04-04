@@ -1,9 +1,6 @@
 package com.tester.testercommon.util.classscanner;
 
 import com.tester.testercommon.dao.BaseDomain;
-import com.tester.testercommon.model.request.IdAndNameModel;
-import com.tester.testercommon.model.request.TextRequest;
-import com.tester.testercommon.model.request.UserModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;

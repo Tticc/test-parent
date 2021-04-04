@@ -1,10 +1,9 @@
 package com.tester.testerwebapp.dao.mapper;
 
 import com.tester.testercommon.dao.BaseMapper;
-import com.tester.testercommon.model.request.IdAndNameModel;
+import com.tester.testercommon.model.request.IdAndNameRequest;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ public interface UserMapper extends BaseMapper<UserDomain, Long> {
 
     UserDomain selectUserId(@Param("id") Long id);
 
-    List<UserDomain> listByName(IdAndNameModel request);
+    List<UserDomain> listByName(IdAndNameRequest request);
 
     // todo 未完成
     int batchUpdate(@Param("list") List<UserDomain> list);

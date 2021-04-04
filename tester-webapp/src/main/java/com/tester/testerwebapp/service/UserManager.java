@@ -1,7 +1,7 @@
 package com.tester.testerwebapp.service;
 
 import com.tester.testercommon.constant.ConstantList;
-import com.tester.testercommon.model.request.IdAndNameModel;
+import com.tester.testercommon.model.request.IdAndNameRequest;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.dao.service.UserService;
 import org.springframework.stereotype.Service;
@@ -38,7 +38,7 @@ public class UserManager {
     }
 
     @Transactional(rollbackFor = Exception.class, transactionManager = ConstantList.NORMAL_MANAGER)
-    public Mono<List<UserDomain>> listByName(IdAndNameModel request){
+    public Mono<List<UserDomain>> listByName(IdAndNameRequest request){
         boolean actualTransactionActive = TransactionSynchronizationManager.isActualTransactionActive();
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization(){
             @Override
