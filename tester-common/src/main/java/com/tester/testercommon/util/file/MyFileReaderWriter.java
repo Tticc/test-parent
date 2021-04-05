@@ -2,6 +2,9 @@ package com.tester.testercommon.util.file;
 
 import java.io.*;
 
+/**
+ * org.springframework.util.FileCopyUtils
+ */
 public class MyFileReaderWriter {
 
     public static String txt2String(File file) throws IOException {
