@@ -1,8 +1,8 @@
 package com.tester.testeraop.intercepts.aop;
 
-import com.tester.testeraop.controller.CloudOfficeException;
 import com.tester.testeraop.annotation.StackTraceAnnotation;
 import com.tester.testeraop.controller.UserOperationDO;
+import com.tester.testercommon.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -22,7 +22,9 @@ import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -62,8 +64,8 @@ public class ServiceAspect implements InitializingBean {
         Object next = null;
         try {
             next = pjp.proceed(args);
-        }catch (CloudOfficeException coe){
-            throw coe;
+        }catch (BusinessException be){
+            throw be;
         }catch (Throwable ex){
             throw ex;
         }

@@ -42,6 +42,7 @@ public class RequireLoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        log.info("start come in HandlerInterceptor preHandle");
         if (handler instanceof ResourceHttpRequestHandler || handler instanceof DefaultServletHttpRequestHandler) {
             // 如果是访问的静态资源不拦截
             return true;
