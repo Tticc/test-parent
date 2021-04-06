@@ -22,7 +22,7 @@ public class DemoSocket {
         out.println("GET / HTTP/1.1");
         out.println("Host: localhost:8080");
         out.println("Connection: Close");
-        out.println();
+        out.println("END");
 
         // 读取请求
         boolean loop = true;
