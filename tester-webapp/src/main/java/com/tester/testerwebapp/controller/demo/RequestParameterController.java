@@ -105,6 +105,9 @@ public class RequestParameterController extends BaseController {
         StringBuilder sb = new StringBuilder();
         sb.append("request is:"+request).append(",").append("<br/><br/>");
         System.out.println(sb.toString());
+        if(true) {
+            throw new BusinessException(1L);
+        }
         return success(sb.toString());
     }
 
@@ -143,7 +146,13 @@ public class RequestParameterController extends BaseController {
     }
 
 
-
+    /**
+     * 测试response消息转换器
+     * <br/>
+     * com.tester.testerwebapp.config.MyConfig
+     * @return
+     * @throws BusinessException
+     */
     @PostMapping(value = "/testMyResponseConvert")
     public ConvertRequest testMyResponseConvert() throws BusinessException {
         ConvertRequest res = new ConvertRequest();

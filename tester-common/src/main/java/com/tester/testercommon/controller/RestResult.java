@@ -95,6 +95,9 @@ public class RestResult<T> implements Serializable {
     }
 
     public RestResult<T> message(String message, Object[] params) {
+        if(null == message){
+            return this;
+        }
         if (!message.startsWith("lang.")) {
             this.message = message;
             return this;

@@ -22,7 +22,7 @@ public class ControllerAspect {
     @Order(Ordered.HIGHEST_PRECEDENCE)
     @Around("@within(org.springframework.web.bind.annotation.RestController) || @within(org.springframework.stereotype.Controller)")
     public Object execute(ProceedingJoinPoint pjp) throws Throwable {
-        MDC.put(ConstantList.TRACE_ID_KEY, CommonUtil.getUUID());
+        MDC.put(ConstantList.MDC_TRACE_ID_KEY, CommonUtil.getUUID());
         Object obj = null;
         try {
             obj = pjp.proceed();

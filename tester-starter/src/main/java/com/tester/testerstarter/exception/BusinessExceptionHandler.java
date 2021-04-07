@@ -1,11 +1,13 @@
 package com.tester.testerstarter.exception;
 
+import com.tester.testercommon.constant.ConstantList;
 import com.tester.testercommon.controller.RestResult;
 import com.tester.testercommon.exception.BusinessException;
 import com.tester.testercommon.exception.ExceptionCode;
 import com.tester.testerstarter.language.LanguageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -38,7 +40,7 @@ import java.util.List;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class BusinessExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(BusinessExceptionHandler.class);
-
+    private static final String SYSTEM_EXCEPTION = "系统异常";
     @Autowired
     private LanguageUtil languageUtil;
 
@@ -184,7 +186,7 @@ public class BusinessExceptionHandler {
         }
 
         RestResult baseResult = new RestResult();
-        baseResult.code(ex.getExCode()).message(ex.getExDesc(), ex.getParams());
+        baseResult.code(ex.getExCode()).message(ex.getExDesc() == null ? SYSTEM_EXCEPTION + MDC.get(ConstantList.MDC_TRACE_ID_KEY) : ex.getExDesc(), ex.getParams());
         baseResult.setData(ex.getData());
         return baseResult;
     }

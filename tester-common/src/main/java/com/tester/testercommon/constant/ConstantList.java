@@ -21,10 +21,6 @@ public class ConstantList {
 
 
 
-    public static final String TRACE_ID_KEY = "X-B3-TraceId";
-
-
-
 
     public static final String LOCK_DEFAULT_KEY = "'lock:test:parent:default:key'+";
 
@@ -52,5 +48,7 @@ public class ConstantList {
 
     public static final String IOS8859_1 = "iso8859-1";
     public static final Charset IOS8859_1_STAND = StandardCharsets.ISO_8859_1;
+
+    public static final String MDC_TRACE_ID_KEY = "X-B3-TraceId";
 
 }

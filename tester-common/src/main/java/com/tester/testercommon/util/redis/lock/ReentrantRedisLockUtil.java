@@ -1,6 +1,7 @@
 
 package com.tester.testercommon.util.redis.lock;
 
+import com.tester.testercommon.constant.ConstantList;
 import com.tester.testercommon.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -102,7 +103,7 @@ public class ReentrantRedisLockUtil {
      * @Author 温昌营
      **/
     private String addKeys(List<String> keys, String dataKey){
-        String traceId = MDC.get("X-B3-TraceId");
+        String traceId = MDC.get(ConstantList.MDC_TRACE_ID_KEY);
 //        traceId = "111";
         String prefix = "{"+dataKey+"}:";
 //        prefix = "{orderNo}:";
