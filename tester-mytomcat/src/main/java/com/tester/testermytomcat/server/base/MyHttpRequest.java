@@ -1,5 +1,7 @@
 package com.tester.testermytomcat.server.base;
 
-public interface MyHttpRequest {
+import javax.servlet.ServletRequest;
+
+public interface MyHttpRequest extends ServletRequest {
     String getUri();
 }

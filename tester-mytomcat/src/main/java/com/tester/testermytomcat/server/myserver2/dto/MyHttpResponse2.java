@@ -2,6 +2,7 @@ package com.tester.testermytomcat.server.myserver2.dto;
 
 import com.tester.testermytomcat.server.CommonMethod;
 import com.tester.testermytomcat.server.Constants;
+import com.tester.testermytomcat.server.base.MyBaseHttpResponse;
 import com.tester.testermytomcat.server.base.MyHttpResponse;
 import lombok.Data;
 
@@ -10,7 +11,7 @@ import javax.servlet.ServletResponse;
 import java.io.*;
 import java.util.Locale;
 
-public class MyHttpResponse2 implements MyHttpResponse, ServletResponse {
+public class MyHttpResponse2 extends MyBaseHttpResponse {
 
     private static final int BUFFER_SIZE = 1024;
 
@@ -74,21 +75,6 @@ public class MyHttpResponse2 implements MyHttpResponse, ServletResponse {
 
 
     /** 实现 ServletResponse 的方法  */
-    @Override
-    public String getCharacterEncoding() {
-        return null;
-    }
-
-    @Override
-    public String getContentType() {
-        return null;
-    }
-
-    @Override
-    public ServletOutputStream getOutputStream() throws IOException {
-        return null;
-    }
-
     /**
      * 实现获取writer
      * @return
@@ -102,63 +88,4 @@ public class MyHttpResponse2 implements MyHttpResponse, ServletResponse {
         return writer;
     }
 
-    @Override
-    public void setCharacterEncoding(String charset) {
-
-    }
-
-    @Override
-    public void setContentLength(int len) {
-
-    }
-
-    @Override
-    public void setContentLengthLong(long length) {
-
-    }
-
-    @Override
-    public void setContentType(String type) {
-
-    }
-
-    @Override
-    public void setBufferSize(int size) {
-
-    }
-
-    @Override
-    public int getBufferSize() {
-        return 0;
-    }
-
-    @Override
-    public void flushBuffer() throws IOException {
-
-    }
-
-    @Override
-    public void resetBuffer() {
-
-    }
-
-    @Override
-    public boolean isCommitted() {
-        return false;
-    }
-
-    @Override
-    public void reset() {
-
-    }
-
-    @Override
-    public void setLocale(Locale loc) {
-
-    }
-
-    @Override
-    public Locale getLocale() {
-        return null;
-    }
 }

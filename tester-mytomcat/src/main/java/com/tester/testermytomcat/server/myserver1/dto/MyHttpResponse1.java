@@ -2,11 +2,11 @@ package com.tester.testermytomcat.server.myserver1.dto;
 
 import com.tester.testermytomcat.server.CommonMethod;
 import com.tester.testermytomcat.server.Constants;
-import com.tester.testermytomcat.server.base.MyHttpResponse;
+import com.tester.testermytomcat.server.base.MyBaseHttpResponse;
 
 import java.io.*;
 
-public class MyHttpResponse1 implements MyHttpResponse {
+public class MyHttpResponse1 extends MyBaseHttpResponse {
 
     private static final int BUFFER_SIZE = 1024;
     MyHttpRequest1 request;
@@ -93,4 +93,9 @@ public class MyHttpResponse1 implements MyHttpResponse {
         String errorMessage = CommonMethod.notFoundResStr();
         output.write(errorMessage.getBytes());
     }
+
+
+
+
+
 }

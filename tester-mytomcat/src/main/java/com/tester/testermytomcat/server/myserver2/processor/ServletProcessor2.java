@@ -4,6 +4,8 @@ import com.tester.testermytomcat.server.CommonMethod;
 import com.tester.testermytomcat.server.Constants;
 import com.tester.testermytomcat.server.base.MyHttpRequest;
 import com.tester.testermytomcat.server.base.MyHttpResponse;
+import com.tester.testermytomcat.server.myserver2.dto.RequestFacade;
+import com.tester.testermytomcat.server.myserver2.dto.ResponseFacade;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.Servlet;
@@ -48,12 +50,13 @@ public class ServletProcessor2 {
             log.error("加载servlet类失败。servletName：{}",servletName,e);
         }
         Servlet servlet = null;
-
+        RequestFacade requestFacade = new RequestFacade(request);
+        ResponseFacade responseFacade = new ResponseFacade(response);
         try {
             servlet = (Servlet)myClass.newInstance();
-            PrintWriter writer = ((ServletResponse) response).getWriter();
+            PrintWriter writer = ((ServletResponse) responseFacade).getWriter();
             writer.println(CommonMethod.successHead());
-            servlet.service((ServletRequest) request, (ServletResponse) response);
+            servlet.service((ServletRequest) requestFacade, (ServletResponse) responseFacade);
         } catch (Exception e) {
             log.error("实例化servlet失败。servletName：{}",servletName,e);
         } catch (Throwable e) {

@@ -1,11 +1,11 @@
 package com.tester.testermytomcat.server.myserver1.dto;
 
 import com.tester.testermytomcat.server.CommonMethod;
-import com.tester.testermytomcat.server.base.MyHttpRequest;
+import com.tester.testermytomcat.server.base.MyBaseHttpRequest;
 
 import java.io.InputStream;
 
-public class MyHttpRequest1 implements MyHttpRequest {
+public class MyHttpRequest1 extends MyBaseHttpRequest {
 
     private InputStream input;
     private String uri;
@@ -28,4 +28,7 @@ public class MyHttpRequest1 implements MyHttpRequest {
     public String getUri() {
         return uri;
     }
+
+
+
 }
