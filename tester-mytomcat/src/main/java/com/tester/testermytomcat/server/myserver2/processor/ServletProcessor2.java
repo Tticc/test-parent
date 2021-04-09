@@ -1,5 +1,6 @@
 package com.tester.testermytomcat.server.myserver2.processor;
 
+import com.tester.testermytomcat.server.CommonMethod;
 import com.tester.testermytomcat.server.Constants;
 import com.tester.testermytomcat.server.base.MyHttpRequest;
 import com.tester.testermytomcat.server.base.MyHttpResponse;
@@ -10,9 +11,11 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLStreamHandler;
+import java.util.Properties;
 
 /**
  * servlet处理器
@@ -27,6 +30,7 @@ public class ServletProcessor2 {
 
         try {
             // create a URLClassLoader
+            // 配置路径为webroot
             URL[] urls = new URL[1];
             URLStreamHandler streamHandler = null;
             File classPath = new File(Constants.WEB_ROOT);
@@ -38,6 +42,7 @@ public class ServletProcessor2 {
         }
         Class myClass = null;
         try {
+            // 读入webroot路径下的servletName.class
             myClass = loader.loadClass(servletName);
         } catch (ClassNotFoundException e) {
             log.error("加载servlet类失败。servletName：{}",servletName,e);
@@ -46,6 +51,8 @@ public class ServletProcessor2 {
 
         try {
             servlet = (Servlet)myClass.newInstance();
+            PrintWriter writer = ((ServletResponse) response).getWriter();
+            writer.println(CommonMethod.successHead());
             servlet.service((ServletRequest) request, (ServletResponse) response);
         } catch (Exception e) {
             log.error("实例化servlet失败。servletName：{}",servletName,e);

@@ -25,7 +25,7 @@ public class MyHttpResponse1 implements MyHttpResponse {
             // todo 流读取待优化
             File file = new File(Constants.WEB_ROOT,request.getUri());
             if(file.exists()) {
-                successHead(file.length());
+                successHead();
                 try (FileInputStream fis = new FileInputStream(file)){
                     int ch = fis.read(bytes, 0, BUFFER_SIZE);
                     while (ch != -1) {
@@ -80,8 +80,8 @@ public class MyHttpResponse1 implements MyHttpResponse {
     /**
      * success head
      */
-    private void successHead(long len) throws IOException {
-        String successHead = CommonMethod.successHead(len);
+    private void successHead() throws IOException {
+        String successHead = CommonMethod.successHead();
         output.write(successHead.getBytes());
     }
 

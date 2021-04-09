@@ -11,10 +11,9 @@ public class CommonMethod {
      * 请求成功返回头
      * @throws IOException
      */
-    public static String successHead(long len)  {
+    public static String successHead()  {
         String successHead = "HTTP/1.1 200 OK\r\n"+
                 "Content-type: text/html\r\n"+
-                "Content-Length: "+len+"\r\n"+
                 "\r\n";
         return successHead;
     }
@@ -26,7 +25,6 @@ public class CommonMethod {
     public static String notFoundResStr() {
         String errorMessage = "HTTP/1.1 404 File Not Found!\r\n"+
                 "Content-type: text/html\r\n"+
-                "Content-Length: 23\r\n"+
                 "\r\n"+
                 "<h1>File Not Found</h1>";
         return errorMessage;
