@@ -7,13 +7,14 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cglib.core.DebuggingClassWriter;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.List;
 import java.util.Set;
 
+@ServletComponentScan("com.tester.testerwebapp.myServlet")
 @MapperScan("com.tester.**.mapper")
 @EnableAsync
 //@SpringBootApplication(scanBasePackages = {"com.tester.*"})

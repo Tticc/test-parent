@@ -127,12 +127,11 @@ public class RequestParameterController extends BaseController {
     /**
      * 这里使用了自定义的convert。
      * <br/>
-     * postman body类型：form-data
+     * postman 请求类型：form-data
+     * 参数：
+     *  testConvertRequest:wenc,12
      * <br/>
-     * key:testConvertRequest
-     * value:wenc,12
-     * <br/><br/>
-     * 配置位置：com.tester.testerwebapp.config.MyConfig#webMvcConfigurer()
+     * 配置位置：com.tester.testerwebapp.config.MyWebMvcConfigurer#addFormatters(org.springframework.format.FormatterRegistry)
      * @param request
      * @return
      * @throws BusinessException
@@ -149,7 +148,10 @@ public class RequestParameterController extends BaseController {
     /**
      * 测试response消息转换器
      * <br/>
-     * com.tester.testerwebapp.config.MyConfig
+     * header 设置：
+     *  Accept:application/x-my-restype
+     * <br/>
+     * com.tester.testerwebapp.config.MyWebMvcConfigurer#extendMessageConverters(java.util.List)
      * @return
      * @throws BusinessException
      */
@@ -159,7 +161,7 @@ public class RequestParameterController extends BaseController {
         TestConvertRequest resData = new TestConvertRequest();
         resData.setName("cvv");
         resData.setAge(199);
-//        res.setTestConvertRequest(resData);
+        res.setTestConvertRequest(resData);
         return res;
     }
 
