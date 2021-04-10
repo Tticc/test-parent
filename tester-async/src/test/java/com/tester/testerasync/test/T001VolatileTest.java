@@ -20,7 +20,8 @@ public class T001VolatileTest {
         while(Thread.activeCount() > 2){
             Thread.yield();
         }
-        System.out.println("aa was changed. "+data.aa);
+        System.out.println("volatile AtomicInteger aa was correct. "+data.aa);
+        System.out.println("volatile int bb was incorrect. "+data.bb);
 
     }
 
@@ -67,22 +68,21 @@ public class T001VolatileTest {
 
 
     class DataClass1 {
-
-        //        volatile int aa = 0;
+        volatile int bb = 0;
         volatile AtomicInteger aa = new AtomicInteger(0);
 
         public void set(){
-//            aa = 222;
+            bb = 222;
             aa = new AtomicInteger(222);
         }
 
         public void add(){
-//            ++aa;
+            ++bb;
             aa.incrementAndGet();
         }
 
         public synchronized void syncAdd(){
-//            ++aa;
+            ++bb;
             aa.incrementAndGet();
         }
     }
