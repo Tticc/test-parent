@@ -46,8 +46,8 @@ public class RestTemplateAutoConfigure {
     private Integer readTimeout = 2000;
 
     private MyRestTemplateInterceptor getMyRestTemplateInterceptor() {
-        MyRestTemplateInterceptor dubheRestTemplateInterceptor = new MyRestTemplateInterceptor(this.languageUtil, this.applicationName);
-        return dubheRestTemplateInterceptor;
+        MyRestTemplateInterceptor myRestTemplateInterceptor = new MyRestTemplateInterceptor(this.languageUtil, this.applicationName);
+        return myRestTemplateInterceptor;
     }
 
     @Bean(name = "restTemplate")

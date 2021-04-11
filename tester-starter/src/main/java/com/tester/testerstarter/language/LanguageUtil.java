@@ -5,7 +5,6 @@ import com.tester.testerstarter.config.LanguageConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -15,7 +14,6 @@ import java.util.Map;
  * @Author 温昌营
  * @Date 2021-1-7 16:04:39
  */
-@Component
 public class LanguageUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(LanguageUtil.class);
     @Autowired

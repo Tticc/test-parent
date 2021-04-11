@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.tester.testercommon.controller.BaseController;
 import com.tester.testercommon.controller.RestResult;
+import com.tester.testercommon.exception.BusinessException;
 import com.tester.testercommon.model.request.IdAndNameRequest;
 import com.tester.testercommon.util.redis.RedisUtilValue;
 import com.tester.testerwebapp.dao.domain.UserDomain;
@@ -147,6 +148,13 @@ public class UserController extends BaseController {
         return monoSuccess();
     }
 
+    @RequestMapping(value="exTest", method = RequestMethod.POST)
+    public Mono<RestResult<String>> exTest() throws BusinessException {
+        if(true){
+            throw new BusinessException(11L);
+        }
+        return monoSuccess();
+    }
 
 
 

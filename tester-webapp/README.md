@@ -56,6 +56,12 @@ port:8004
 > `com.tester.testerwebapp.controller.mono.ContentController`  
 ---  
 
+### 可重入/不可重入 redis锁
+> ReentrantCacheLockInterceptor、CacheLockInterceptor  
+> 具体实现的工具类在common模块。  
+> `@ReentrantCacheLock(key = ConstantList.LOCK_DEFAULT_KEY+"#request.text")`
+---  
+
 
 
 

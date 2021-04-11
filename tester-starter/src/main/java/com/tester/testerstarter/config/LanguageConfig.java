@@ -1,12 +1,11 @@
 package com.tester.testerstarter.config;
 
-import java.util.Arrays;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
-@Component
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 public class LanguageConfig {
     @Value("${tester.language.default:zh_cn}")

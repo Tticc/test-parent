@@ -13,7 +13,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindException;
@@ -36,7 +35,6 @@ import java.util.Iterator;
 import java.util.List;
 
 @ControllerAdvice
-@Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class BusinessExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(BusinessExceptionHandler.class);
