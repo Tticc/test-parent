@@ -36,26 +36,6 @@
         </dependency>
         <!-- swagger2 -->
 
-        <!--mysql-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-        </dependency>
-        <!--mysql-->
-
         <!--httpclient-->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -63,12 +43,6 @@
         </dependency>
 
         <!--httpclient-->
-        <!--tk.mybatis-->
-        <dependency>
-            <groupId>tk.mybatis</groupId>
-            <artifactId>mapper-spring-boot-starter</artifactId>
-        </dependency>
-        <!--tk.mybatis-->
 
         <dependency>
             <groupId>org.projectlombok</groupId>
