@@ -67,21 +67,21 @@
     </appender>
 
 
+
+    <!-- 本地环境配置 -->
+    <springProfile name="local,dev,sit">
+        <root level="${logLevel}">
+            <!-- 只打印到控制台，不记录到文件中 -->
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="LOG_FILE"/>
+            <appender-ref ref="ERROR_FILE"/>
+        </root>
+    </springProfile>
     <!-- 非本地环境配置 -->
     <springProfile name="!local">
         <root level="${logLevel}">
             <!--<appender-ref ref="STDOUT"/>-->
             <!-- 开启info日志和error日志，error日志会打印到本地 -->
-            <appender-ref ref="LOG_FILE"/>
-            <appender-ref ref="ERROR_FILE"/>
-        </root>
-    </springProfile>
-
-    <!-- 本地环境配置 -->
-    <springProfile name="local,dev">
-        <root level="${logLevel}">
-            <!-- 只打印到控制台，不记录到文件中 -->
-            <appender-ref ref="STDOUT"/>
             <appender-ref ref="LOG_FILE"/>
             <appender-ref ref="ERROR_FILE"/>
         </root>
