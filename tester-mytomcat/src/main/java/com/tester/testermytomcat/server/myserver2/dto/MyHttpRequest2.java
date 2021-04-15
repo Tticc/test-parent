@@ -18,10 +18,9 @@ import java.util.Map;
 public class MyHttpRequest2 extends MyBaseHttpRequest {
 
 
-    private InputStream input;
     private String uri;
     public MyHttpRequest2(InputStream input){
-        this.input = input;
+        super(input);
     }
 
     private String parseUri(String requestString){

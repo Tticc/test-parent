@@ -1,4 +1,4 @@
-package com.tester.testermytomcat.server.myserver2.processor;
+package com.tester.testermytomcat.server.myserver3.processor;
 
 import com.tester.testermytomcat.server.CommonMethod;
 import com.tester.testermytomcat.server.Constants;
@@ -22,7 +22,7 @@ import java.net.URLStreamHandler;
  * servlet处理器
  */
 @Slf4j
-public class ServletProcessor2 {
+public class ServletProcessor3 {
 
     public void process(MyHttpRequest request, MyHttpResponse response){
         String uri = request.getUri();
@@ -56,6 +56,7 @@ public class ServletProcessor2 {
             PrintWriter writer = ((ServletResponse) myResponseFacade).getWriter();
             writer.println(CommonMethod.successHead());
             servlet.service((ServletRequest) myRequestFacade, (ServletResponse) myResponseFacade);
+            ((MyHttpResponse) response).finishResponse();
         } catch (Exception e) {
             log.error("实例化servlet失败。servletName：{}",servletName,e);
         } catch (Throwable e) {

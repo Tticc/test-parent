@@ -8,12 +8,9 @@ import java.io.*;
 
 public class MyHttpResponse1 extends MyBaseHttpResponse {
 
-    private static final int BUFFER_SIZE = 1024;
-    MyHttpRequest1 request;
-    OutputStream output;
 
     public MyHttpResponse1(OutputStream output){
-        this.output = output;
+        super(output);
     }
     public void setRequest(MyHttpRequest1 request) {
         this.request = request;

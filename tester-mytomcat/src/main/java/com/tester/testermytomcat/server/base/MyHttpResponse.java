@@ -7,4 +7,6 @@ import java.io.IOException;
 public interface MyHttpResponse extends ServletResponse {
 
     void sendStaticResource() throws IOException;
+
+    void finishResponse();
 }

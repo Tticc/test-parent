@@ -1,4 +1,4 @@
-package com.tester.testermytomcat.server.myserver2.dto;
+package com.tester.testermytomcat.server.base.dto;
 
 import com.tester.testermytomcat.server.base.MyHttpRequest;
 
@@ -15,11 +15,11 @@ import java.util.Map;
  * @Author 温昌营
  * @Date 2021-4-9 12:00:06
  */
-public class RequestFacade implements ServletRequest {
+public class MyRequestFacade implements ServletRequest {
 
     private ServletRequest request = null;
 
-    public RequestFacade(MyHttpRequest request) {
+    public MyRequestFacade(MyHttpRequest request) {
         this.request = request;
     }
 
@@ -55,7 +55,7 @@ public class RequestFacade implements ServletRequest {
 
     @Override
     public String getContentType() {
-        return getContentType();
+        return request.getContentType();
     }
 
     @Override

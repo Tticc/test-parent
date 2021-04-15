@@ -7,10 +7,9 @@ import java.io.InputStream;
 
 public class MyHttpRequest1 extends MyBaseHttpRequest {
 
-    private InputStream input;
     private String uri;
     public MyHttpRequest1(InputStream input) {
-        this.input = input;
+        super(input);
     }
 
     public void parse(){

@@ -1,4 +1,4 @@
-package com.tester.testermytomcat.server.myserver2.dto;
+package com.tester.testermytomcat.server.base.dto;
 
 import com.tester.testermytomcat.server.base.MyHttpResponse;
 
@@ -12,10 +12,10 @@ import java.util.Locale;
  * @Author 温昌营
  * @Date
  */
-public class ResponseFacade implements ServletResponse {
+public class MyResponseFacade implements ServletResponse {
     private ServletResponse response = null;
 
-    public ResponseFacade(MyHttpResponse response){
+    public MyResponseFacade(MyHttpResponse response){
         this.response = response;
     }
 

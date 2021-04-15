@@ -13,13 +13,8 @@ import java.util.Locale;
 
 public class MyHttpResponse2 extends MyBaseHttpResponse {
 
-    private static final int BUFFER_SIZE = 1024;
-
-    MyHttpRequest2 request;
-    OutputStream output;
-    PrintWriter writer;
     public MyHttpResponse2(OutputStream output) {
-        this.output = output;
+        super(output);
     }
 
 
@@ -74,18 +69,5 @@ public class MyHttpResponse2 extends MyBaseHttpResponse {
 
 
 
-    /** 实现 ServletResponse 的方法  */
-    /**
-     * 实现获取writer
-     * @return
-     * @throws IOException
-     */
-    @Override
-    public PrintWriter getWriter() throws IOException {
-        // autoflush is true, println() will flush,
-        // but print() will not.
-        writer = new PrintWriter(output, true);
-        return writer;
-    }
 
 }
