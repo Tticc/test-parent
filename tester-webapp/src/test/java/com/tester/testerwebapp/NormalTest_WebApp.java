@@ -4,6 +4,7 @@ import com.tester.testercommon.util.file.MyFileReaderWriter;
 import com.tester.testercommon.util.jwt.JwtDataModel;
 import com.tester.testercommon.util.jwt.JwtHelper;
 import org.junit.Test;
+import org.springframework.util.Assert;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +21,82 @@ public class NormalTest_WebApp {
         System.out.println("hello,world");
         byte[] placeholder=new byte[64*1024*1024];
         System.gc();
+    }
+
+
+    @Test
+    public void test_str(){
+        String str = "1";
+        String str1 = getStr(str);
+        System.out.println(str1);
+        str1 = getStr(null);
+        System.out.println(str1);
+    }
+
+    private String getStr(String code){
+        Assert.hasLength(code,"code should not empty");
+        switch (code){
+            case "1":
+                return "one";
+            case "2":
+                break;
+            case "3":
+                break;
+            default:
+                break;
+        }
+        return code;
+    }
+    @Test
+    public void test_set(){
+        HashSet<String> set = new HashSet<>();
+        set.add("key");
+
+        TreeSet<String> treeSet = new TreeSet<>();
+        treeSet.add("ji");
+        treeSet.remove("ji");
+
+        LinkedHashSet<String> linkedHashSet = new LinkedHashSet<>();
+        linkedHashSet.add("jdi");
+
+    }
+
+
+    @Test
+    public void test_array(){
+        Integer[] ints = {1,2,4,5};
+        Integer[] arr = new Integer[5];
+        Integer[] addedArr = new Integer[]{1,2};
+        int endPoint = arr.length;
+        // 扩容
+        arr = Arrays.copyOf(arr, endPoint+addedArr.length);
+        System.out.println("arr.length: "+arr.length);
+        for (Integer integer : arr) {
+            System.out.println(integer);
+        }
+        // 拼接
+        System.arraycopy(addedArr, 0, arr, endPoint, addedArr.length);
+        for (Integer integer : arr) {
+            System.out.println(integer);
+        }
+    }
+    @Test
+    public void test_list(){
+
+        List<String> strs = new LinkedList<>();
+        strs.add("a");
+        strs.add("b");
+        strs.add("c");
+        strs.add("d");
+        strs.get(9);
+        try {
+            for (String str : strs) {
+                strs.remove(2);
+            }
+        }catch (ConcurrentModificationException e){
+            e.printStackTrace();
+        }
+        System.out.println(strs);
     }
 
     @Test
