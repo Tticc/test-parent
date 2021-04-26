@@ -37,7 +37,7 @@
         <shardingsphere.version>4.0.0-RC2</shardingsphere.version>
         <pagehelper.version>5.1.10</pagehelper.version>
         <fileupload.version>1.4</fileupload.version>
-        <commonsio.version>2.6</commonsio.version>
+        <commonsio.version>2.7</commonsio.version>
         <jwt.version>0.9.0</jwt.version>
         <rocketmq-spring-boot-starter.version>2.0.3</rocketmq-spring-boot-starter.version>
         <commons-pool2.version>2.7.0</commons-pool2.version>
