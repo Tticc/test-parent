@@ -1,9 +1,6 @@
 package com.tester.testermybatis.config;
 
-import com.tester.testermybatis.config.prop.ComplexDatabaseShardingAlgorithm;
-import com.tester.testermybatis.config.prop.ComplexTableShardingAlgorithm;
-import com.tester.testermybatis.config.prop.MyDatabaseProperties;
-import com.tester.testermybatis.config.prop.ShardingDatabaseProperties;
+import com.tester.testermybatis.config.prop.*;
 import com.tester.testercommon.constant.ConstantList;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Data;
@@ -38,9 +35,10 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * 分库分表数据源<br/>
+ * 分库分表数据源。<br/>
  *
- *
+ * 普通数据源配置：NormalDataBaseConfiguration
+ * <br/>
  *
  *
  * <p>数据库内容：</p>
@@ -168,10 +166,10 @@ public class MyDataBaseConfiguration implements InitializingBean {
     }
 
     private ComplexShardingStrategyConfiguration databaseComplexShardStrategy() {
-        return new ComplexShardingStrategyConfiguration("member_id,order_no", new ComplexDatabaseShardingAlgorithm());
+        return new ComplexShardingStrategyConfiguration(AbstractComplexShardingAlgorithm.SHARDING_COLUMNS, new ComplexDatabaseShardingAlgorithm());
     }
     private ComplexShardingStrategyConfiguration tableComplexShardStrategy() {
-        return new ComplexShardingStrategyConfiguration("member_id,order_no", new ComplexTableShardingAlgorithm());
+        return new ComplexShardingStrategyConfiguration(AbstractComplexShardingAlgorithm.SHARDING_COLUMNS, new ComplexTableShardingAlgorithm());
     }
 
     private Map<String, DataSource> createDataSourceMap() {

@@ -63,7 +63,12 @@ public class ShardingJdbcTestController extends BaseController {
     @PostMapping(value = "/listByPhone")
     public RestResult<List<OrderMemberDomain>> listByPhone() throws BusinessException {
         OrderMemberDomain listDomain = new OrderMemberDomain();
+
+        // 查询非分库分表映射字段是，会全库全表扫描。
 //        listDomain.setMemberPhone("8374924232");
+
+        // 查询分库分表映射字段是，会根据策略查到具体表
+        // 分表策略 com.tester.testermybatis.config.prop.ComplexTableShardingAlgorithm
         listDomain.setOrderNo(315418401587201001L);
         List<OrderMemberDomain> list = orderMemberManager.list(listDomain);
         return success(list);

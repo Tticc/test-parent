@@ -72,22 +72,22 @@
         select <include refid="selectSql"/> from <include refid="table_name"></include> as t
         <where>
             <if test="id != null">
-                id = #{id}
+                and id = #{id}
             </if>
             <if test="memberId != null">
-                member_id = #{memberId}
+                and member_id = #{memberId}
             </if>
             <if test="orderNo != null">
-                order_no = #{orderNo}
+                and order_no = #{orderNo}
             </if>
             <if test="memberAccount != null">
-                member_account = #{memberAccount}
+                and member_account = #{memberAccount}
             </if>
             <if test="memberPhone != null">
-                member_phone = #{memberPhone}
+                and member_phone = #{memberPhone}
             </if>
             <if test="deleted != null">
-                deleted = #{deleted}
+                and deleted = #{deleted}
             </if>
         </where>
     </select>
