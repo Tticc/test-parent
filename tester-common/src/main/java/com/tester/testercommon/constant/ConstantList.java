@@ -51,4 +51,10 @@ public class ConstantList {
 
     public static final String MDC_TRACE_ID_KEY = "X-B3-TraceId";
 
+
+
+    public static final int ZERO = 0;
+
+    public static final int ONE = 1;
+
 }

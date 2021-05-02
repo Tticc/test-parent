@@ -1,6 +1,6 @@
 package com.tester.testermybatis.interceptor;
 
-import com.tester.testercommon.enums.YesNoEnum;
+import com.tester.testercommon.constant.ConstantList;
 import com.tester.testercommon.util.endecrypt.AesSecurityHex;
 import com.tester.testermybatis.annotation.DecryptDomain;
 import com.tester.testermybatis.annotation.DecryptField;
@@ -10,7 +10,10 @@ import org.apache.ibatis.executor.resultset.DefaultResultSetHandler;
 import org.apache.ibatis.executor.resultset.ResultSetHandler;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ResultMap;
-import org.apache.ibatis.plugin.*;
+import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.plugin.Intercepts;
+import org.apache.ibatis.plugin.Invocation;
+import org.apache.ibatis.plugin.Signature;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Field;
@@ -245,6 +248,6 @@ public class ParamDecryptInterceptor implements Interceptor {
      **/
     @Override
     public void setProperties(Properties properties) {
-        enable = Boolean.valueOf(properties.getProperty("enable", "true"));
+        enable = Objects.equals(Integer.valueOf(properties.getProperty("enable", "1")), ConstantList.ONE);
     }
 }

@@ -38,11 +38,16 @@
     </settings>
 
     <plugins>
+        <!--拦截器由下往上执行-->
         <plugin interceptor="com.github.pagehelper.PageInterceptor"/>
         <plugin interceptor="com.tester.testermybatis.interceptor.FillExecuteParamInterceptor"/>
         <plugin interceptor="com.tester.testermybatis.interceptor.ParamDecryptInterceptor">
             <!-- 是否启用字段加密-->
-            <property name="enable" value="true"/>
+            <property name="enable" value="1"/>
+        </plugin>
+        <plugin interceptor="com.tester.testermybatis.interceptor.ParamEncryptInterceptor">
+            <!-- 是否启用字段加密-->
+            <property name="enable" value="1"/>
         </plugin>
     </plugins>
 </configuration>

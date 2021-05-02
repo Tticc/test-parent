@@ -47,7 +47,7 @@ public class MyDatabaseProperties implements InitializingBean {
     /**
      * 是否打印真实sql
      */
-    private boolean showSql = false;
+    private boolean showSql = true;
 
     /**
      * 分库数量。<br/>

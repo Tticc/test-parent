@@ -1,15 +1,65 @@
 package com.tester.testerasync;
 
+import com.tester.testerasync.spring.SubClass;
 import io.netty.handler.codec.socks.SocksAddressType;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.TreeSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class NormalTest_Async {
 
-    private ExecutorService threadPool = Executors.newFixedThreadPool(1);
+    private static ExecutorService threadPool = Executors.newFixedThreadPool(1);
 
+    @Test
+    public void test_change(){
+        char c = (char) (8 + '0');
+        System.out.println(c);
+        char cc = (char) (18 + '0');
+        System.out.println(cc);
+    }
+
+    @Test
+    public void testsdf(){
+        SubClass subClass = new SubClass();
+        TreeSet<Object> objects = new TreeSet<>();
+        objects.add(1);
+        objects.add(2);
+        objects.add(2);
+        objects.add(2);
+        System.out.println(objects);
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("1","1");
+        map.put("2","2");
+        map.put("1","1");
+        map.putIfAbsent("1","1");
+        System.out.println(map);
+
+
+        int a = 99;
+        Integer aa = new Integer(99);
+        System.out.println(aa == a);
+    }
+
+    @Test
+    public void test_Thread() throws InterruptedException {
+        Thread thread = new Thread(() -> {
+            try {
+                System.out.println("sleeping");
+                Thread.currentThread().sleep(10000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
+        Thread.currentThread().sleep(3000L);
+        thread.interrupt();
+        Thread.currentThread().sleep(3000L);
+
+    }
     @Test
     public void test_suspend(){
         Thread xxx = new Thread(() -> System.out.println("xxx"));

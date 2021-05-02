@@ -14,4 +14,6 @@ public interface OrderMemberMapper extends BaseMapper<OrderMemberDomain, Long> {
     List<MemberJoinItemVO> testJoinTable2(@Param("id") Long id);
 
     int insert(OrderMemberDomain domain);
+
+    List<OrderMemberDomain> list(OrderMemberDomain domain);
 }

@@ -28,4 +28,9 @@ public class OrderMemberManager {
         return memberJoinItemVOS;
     }
 
+
+    public List<OrderMemberDomain> list(OrderMemberDomain domain){
+        return orderMemberMapper.list(domain);
+    }
+
 }

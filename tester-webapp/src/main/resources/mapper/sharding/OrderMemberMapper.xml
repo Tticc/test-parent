@@ -64,4 +64,31 @@
             <include refid="insertSql"/>
         </trim>
     </insert>
+
+
+
+    <select id="list" parameterType="com.tester.testermybatis.dao.domain.OrderMemberDomain"
+            resultType="com.tester.testermybatis.dao.domain.OrderMemberDomain">
+        select <include refid="selectSql"/> from <include refid="table_name"></include> as t
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="memberId != null">
+                member_id = #{memberId}
+            </if>
+            <if test="orderNo != null">
+                order_no = #{orderNo}
+            </if>
+            <if test="memberAccount != null">
+                member_account = #{memberAccount}
+            </if>
+            <if test="memberPhone != null">
+                member_phone = #{memberPhone}
+            </if>
+            <if test="deleted != null">
+                deleted = #{deleted}
+            </if>
+        </where>
+    </select>
 </mapper>
