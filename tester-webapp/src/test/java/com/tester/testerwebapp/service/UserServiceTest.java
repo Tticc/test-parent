@@ -1,5 +1,6 @@
 package com.tester.testerwebapp.service;
 
+import com.tester.testercommon.exception.BusinessException;
 import com.tester.testercommon.util.redis.RedisUtilValue;
 import com.tester.testermybatis.dao.mapper.OrderMemberMapper;
 import com.tester.testermybatis.dao.service.OrderItemManager;
@@ -19,6 +20,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
+import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 
@@ -60,6 +62,11 @@ public class UserServiceTest{
     @Autowired
     private RedisUtilValue redisUtilValue;
 
+    @Test
+    public void test_propagation() throws BusinessException {
+        Mono<UserDomain> userDomainMono = userManager.selectUserById_required(1L);
+        System.out.println(userDomainMono.subscribe(System.out::println));
+    }
     @Test
     public void test_insert(){
         UserDomain userDomain = new UserDomain().init();
