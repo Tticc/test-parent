@@ -13,7 +13,7 @@
         <setting name="multipleResultSetsEnabled" value="true"/>
         <!-- 允许使用列标签代替列名 -->
         <setting name="useColumnLabel" value="true"/>
-        <!-- 不允许使用自定义的主键值(比如由程序生成的UUID 32位编码作为键值)，数据表的PK生成策略将被覆盖 -->
+        <!-- 不允许使用自定义的主键值(比如由程序生成的UUID 32位编码作为键值)，数据表的PK生成策略将被覆盖。对接口映射起作用，对xml映射不起作用 -->
         <setting name="useGeneratedKeys" value="false"/>
         <!-- 给予被嵌套的resultMap以字段-属性的映射支持 FULL,PARTIAL -->
         <setting name="autoMappingBehavior" value="PARTIAL"/>
