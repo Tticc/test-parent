@@ -1,2 +1,19 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   org.springframework.boot.autoconfigure.data.redis.MyLettuceConnectionConfiguration
+
+
+
+
+# Application Context Initializers
+org.springframework.context.ApplicationContextInitializer=\
+com.tester.testerwebapp.listener.MyApplicationContextInitializer
+
+# Application Listeners
+org.springframework.context.ApplicationListener=\
+com.tester.testerwebapp.listener.MyApplicationListener
+
+
+
+# Run Listeners
+org.springframework.boot.SpringApplicationRunListener=\
+com.tester.testerwebapp.listener.MySpringApplicationRunListener
