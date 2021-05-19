@@ -3,6 +3,7 @@ package com.tester.testercommon.util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.config.SingletonBeanRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
@@ -46,13 +47,6 @@ public class SpringBeanContextUtil implements ApplicationContextAware, BeanDefin
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         SpringBeanContextUtil.applicationContext = applicationContext;
     }
-    public static void registryBean(String name, final Object object) {
-        registry.registerBeanDefinition(name, BeanDefinitionBuilder.genericBeanDefinition(object.getClass(), new Supplier() {
-            public Object get() {
-                return object;
-            }
-        }).getBeanDefinition());
-    }
 
     public static Object getBean(String name) {
         try {
@@ -80,5 +74,17 @@ public class SpringBeanContextUtil implements ApplicationContextAware, BeanDefin
     public static ApplicationContext getApplicationContext(){
         Assert.notNull(applicationContext,"applicationContext null");
         return applicationContext;
+    }
+
+    public static void registryBean(String name, final Object object) {
+        registry.registerBeanDefinition(name, BeanDefinitionBuilder.genericBeanDefinition(object.getClass(), new Supplier() {
+            public Object get() {
+                return object;
+            }
+        }).getBeanDefinition());
+    }
+
+    public static void registerSingleton(String name, final Object object) {
+        ((SingletonBeanRegistry) registry).registerSingleton(name, object);
     }
 }

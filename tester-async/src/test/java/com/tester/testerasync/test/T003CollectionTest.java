@@ -9,6 +9,17 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class T003CollectionTest {
 
+
+    @Test
+    public void test_hashMap(){
+        HashMap<String,String> map = new HashMap<>();
+        map.put("1","1");
+        map.put("1","2");
+        map.putIfAbsent("1","3");
+        System.out.println(map);
+
+    }
+
     @Test
     public void test_list(){
         ArrayList<Integer> list = new ArrayList<>();
