@@ -17,6 +17,8 @@ public abstract class AbstractComplexShardingAlgorithm {
 
     static final String FIELD_ORDER_NO = "order_no";
 
+    public static final String SHARDING_COLUMNS = "member_id,order_no";
+
     /**
      * 分库数量。
      */

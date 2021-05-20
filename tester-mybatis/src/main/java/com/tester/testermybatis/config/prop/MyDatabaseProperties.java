@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 结合ShardingDatabaseProperties配置数据源。
+ * 当前默认使用分库分表
  * @Author 温昌营
  * @Date 2020-8-20 18:20:54
  */
@@ -47,7 +49,7 @@ public class MyDatabaseProperties implements InitializingBean {
     /**
      * 是否打印真实sql
      */
-    private boolean showSql = false;
+    private boolean showSql = true;
 
     /**
      * 分库数量。<br/>
@@ -78,6 +80,7 @@ public class MyDatabaseProperties implements InitializingBean {
             allDbNum = lastDbIndex + 1;
         }
 
+        // 这里应该是配置在配置文件中，懒得写配置文件，所以直接在这里put 2021-5-2 12:05:06
         datasource.put("server1",new ShardingDatabaseProperties(
                 "com.mysql.cj.jdbc.Driver",
                 "jdbc:mysql://localhost:3306/",

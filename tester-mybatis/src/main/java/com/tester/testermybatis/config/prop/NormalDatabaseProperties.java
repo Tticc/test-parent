@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * 用于非分库分表的普通数据源属性。
  * @Author 温昌营
  * @Date 2020-8-20 18:23:28
  */

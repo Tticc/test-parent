@@ -11,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -34,6 +36,28 @@ public class UserManager {
     @Autowired
     private UserManager userManager;
 
+
+    @Transactional(rollbackFor = Exception.class, transactionManager = ConstantList.NORMAL_MANAGER,propagation = Propagation.REQUIRED)
+    public Mono<UserDomain> selectUserById_required(Long id) throws BusinessException {
+        UserDomain userDomain = new UserDomain().init();
+        userDomain.setName("20210418_2").setCellphone("123498734892").setDataFrom(1).setEmployeeId("0001").setWechatid("1232");
+        userService.save(userDomain);
+        try {
+            Mono<UserDomain> userDomainMono = userManager.selectUserById_nested(id);
+        }catch (Exception e){
+            log.error("error");
+        }
+        return null;
+    }
+
+    @Transactional(rollbackFor = Exception.class, transactionManager = ConstantList.NORMAL_MANAGER,propagation = Propagation.REQUIRES_NEW)
+    public Mono<UserDomain> selectUserById_nested(Long id) throws BusinessException {
+        UserDomain userDomain = userService.selectUserId(id);
+        if(userDomain != null){
+            throw new BusinessException(10);
+        }
+        return Mono.justOrEmpty(userDomain);
+    }
 
 
     @Transactional(rollbackFor = Exception.class, transactionManager = ConstantList.NORMAL_MANAGER)

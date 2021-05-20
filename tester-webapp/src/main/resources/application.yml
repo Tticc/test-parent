@@ -38,7 +38,7 @@ spring:
 mybatis:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
   configuration:
-    # 自动匹配字段驼峰规则
+    # 自动匹配字段驼峰规则。mybatis-config.xml也可以配置 <setting name="mapUnderscoreToCamelCase" value="true"/>
     map-underscore-to-camel-case: true
 
 

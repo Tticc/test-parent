@@ -27,6 +27,9 @@ import java.sql.SQLException;
 
 /**
  * 非分库分表数据源
+ * <br/>
+ * 分库分表数据源配置：MyDataBaseConfiguration
+ * <br/>
  * @Author 温昌营
  * @Date 2020-8-20 18:18:22
  */

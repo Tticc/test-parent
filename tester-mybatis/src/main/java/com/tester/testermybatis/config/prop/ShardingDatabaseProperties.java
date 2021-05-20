@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * 用于shardingjdbc分库分表用的属性集合。与NormalDatabaseProperties同等级别。
  * @Author 温昌营
  * @Date 2020-8-20 18:23:28
  */
