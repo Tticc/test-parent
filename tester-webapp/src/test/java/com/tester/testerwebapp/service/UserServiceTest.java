@@ -7,6 +7,7 @@ import com.tester.testermybatis.dao.service.OrderItemManager;
 import com.tester.testermybatis.dao.service.OrderMemberManager;
 import com.tester.testermybatis.service.MyKeyGenerator;
 import com.tester.testerwebapp.TesterWebappApplication;
+import com.tester.testerwebapp.config.ReadByPropertySourceAndValue;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.dao.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +62,15 @@ public class UserServiceTest{
 
     @Autowired
     private RedisUtilValue redisUtilValue;
+
+    @Autowired
+    private ReadByPropertySourceAndValue readByPropertySourceAndValue;
+
+    @Test
+    public void test_read(){
+        String name = readByPropertySourceAndValue.getName();
+        System.out.println(name);
+    }
 
     @Test
     public void test_propagation() throws BusinessException {
