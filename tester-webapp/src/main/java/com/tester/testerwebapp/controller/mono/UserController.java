@@ -6,6 +6,7 @@ import com.tester.testercommon.controller.BaseController;
 import com.tester.testercommon.controller.RestResult;
 import com.tester.testercommon.exception.BusinessException;
 import com.tester.testercommon.model.request.IdAndNameRequest;
+import com.tester.testercommon.model.request.TextRequest;
 import com.tester.testercommon.util.redis.RedisUtilValue;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.service.ExcelManager;
@@ -153,6 +154,24 @@ public class UserController extends BaseController {
         if(true){
             throw new BusinessException(11L);
         }
+        return monoSuccess();
+    }
+
+    @RequestMapping(value="test_asyncTransaction", method = RequestMethod.POST)
+    public Mono<RestResult<String>> test_asyncTransaction(@Validated @RequestBody TextRequest request) throws BusinessException {
+        userManager.test_asyncTransaction(request);
+        return monoSuccess();
+    }
+
+    @RequestMapping(value="test_onlyTransaction", method = RequestMethod.POST)
+    public Mono<RestResult<String>> test_onlyTransaction(@Validated @RequestBody TextRequest request) throws BusinessException {
+        userManager.test_onlyTransaction(request);
+        return monoSuccess();
+    }
+
+    @RequestMapping(value="test_catchException", method = RequestMethod.POST)
+    public Mono<RestResult<String>> test_catchException(@Validated @RequestBody TextRequest request) throws BusinessException {
+        userManager.test_catchException(request);
         return monoSuccess();
     }
 

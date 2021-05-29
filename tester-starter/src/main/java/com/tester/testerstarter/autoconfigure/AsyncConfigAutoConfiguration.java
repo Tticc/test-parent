@@ -1,4 +1,4 @@
-package com.tester.testerasync.config;
+package com.tester.testerstarter.autoconfigure;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -24,7 +24,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 @EnableAsync
 @Configuration
-public class AsyncConfig implements AsyncConfigurer {
+public class AsyncConfigAutoConfiguration implements AsyncConfigurer {
 
 
     @Override

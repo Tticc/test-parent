@@ -3,8 +3,14 @@ package com.tester.testerwebapp.service;
 import com.tester.testercommon.constant.ConstantList;
 import com.tester.testercommon.exception.BusinessException;
 import com.tester.testercommon.model.request.IdAndNameRequest;
+import com.tester.testercommon.model.request.TextRequest;
+import com.tester.testercommon.util.CommonUtil;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.dao.service.UserService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.Async;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -25,9 +31,10 @@ import java.util.List;
 public class UserManager {
     @Resource
     private UserService userService;
-    @Resource
-    private UserManager userManager;
 
+    @Lazy
+    @Autowired
+    private UserManager userManager;
 
 
     @Transactional(rollbackFor = Exception.class, transactionManager = ConstantList.NORMAL_MANAGER,propagation = Propagation.REQUIRED)
@@ -96,5 +103,77 @@ public class UserManager {
         userDomain.setId(1L);
         userDomain.setNote("update 11");
         return Mono.justOrEmpty(userService.update(userDomain));
+    }
+
+    @Transactional(rollbackFor = Exception.class, transactionManager = ConstantList.NORMAL_MANAGER)
+    public void test_asyncTransaction(TextRequest request) throws BusinessException {
+        UserDomain userDomain = new UserDomain();
+        userDomain.setId(1L);
+        userDomain.setNote(request.getText());
+        userService.update(userDomain);
+        CommonUtil.doAfterTransactionCommitted((e) -> {
+            userManager.testAsync(request);
+        });
+    }
+
+    @Transactional(rollbackFor = Exception.class, transactionManager = ConstantList.NORMAL_MANAGER)
+    public void test_onlyTransaction(TextRequest request) throws BusinessException {
+        UserDomain userDomain = new UserDomain();
+        userDomain.setId(1L);
+        userDomain.setNote(request.getText());
+        userService.update(userDomain);
+        CommonUtil.doAfterTransactionCommitted((e) -> {
+            userManager.finalUpdate(request);
+        });
+    }
+
+
+    @Async("cusThreadPool")
+    public void testAsync(TextRequest request) throws BusinessException {
+        try {
+            Thread.sleep(5000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        userManager.finalUpdate(request);
+    }
+
+
+
+    @Transactional(rollbackFor = Exception.class, transactionManager = ConstantList.NORMAL_MANAGER)
+    public void finalUpdate(TextRequest request) throws BusinessException {
+        UserDomain userDomain = new UserDomain();
+        userDomain.setId(2L);
+        userDomain.setNote(request.getText());
+        int update = userService.update(userDomain);
+        System.out.println("updated = "+update);
+
+        // 抛异常
+        throw new BusinessException(1L);
+    }
+
+
+
+    /**
+     * 如果子方法包含进了当前事务,而且子方法抛出了异常，且被捕捉了。那么
+     * 整个方法都会报错：
+     * <br/>
+     * Transaction rolled back because it has been marked as rollback-only
+     * @param request
+     * @return void
+     * @Date 17:33 2021/5/17
+     * @Author 温昌营
+     **/
+    @Transactional(rollbackFor = Exception.class, transactionManager = ConstantList.NORMAL_MANAGER)
+    public void test_catchException(TextRequest request) throws BusinessException {
+        UserDomain userDomain = new UserDomain();
+        userDomain.setId(1L);
+        userDomain.setNote(request.getText());
+        userService.update(userDomain);
+        try {
+            userManager.finalUpdate(request);
+        }catch (Exception e){
+            log.error("error:{}",e.getMessage());
+        }
     }
 }

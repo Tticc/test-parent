@@ -57,6 +57,7 @@
         <module>tester-mybatis</module>
         <module>tester-starter</module>
         <module>tester-mytomcat</module>
+        <module>tester-normaltest</module>
     </modules>
 
     <dependencyManagement>
