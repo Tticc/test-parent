@@ -13,15 +13,19 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class UserRequest extends BaseDTO {
-    @ApiModelProperty(value = "id", example = "1209",required = true)
+
+    @ApiModelProperty(name = "id", value = "id", example = "1209")
     private Long id;
-    @ApiModelProperty(value = "名称", example = "看看",required = true)
+
+    @ApiModelProperty(name = "name", value = "名称", example = "看看")
     private String name;
+
+    @ApiModelProperty(name = "email",value = "邮箱", example = "wjio@qq.com",required = true)
 //    @Email(message = "invalid email",regexp = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$")
     @Email(message = "invalid email",regexp = "^(\\w+?)@(\\w+?)\\.([a-zA-Z]{2,})$")
     private String email;
 
-    @ApiModelProperty(value = "地址", example = "看看",required = true)
+    @ApiModelProperty(name = "address",value = "地址", example = "看看")
     private List<String> address;
 
 }

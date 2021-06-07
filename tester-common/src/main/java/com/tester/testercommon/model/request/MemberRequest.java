@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @Accessors(chain = true)
 public class MemberRequest extends BaseDTO {
 
-    @ApiModelProperty(value = "会员ID", required = true)
+    @ApiModelProperty(name = "memberId", value = "会员ID", example = "texxxxxx", required = true)
     @NotNull(message = "memberId not null")
     private Long memberId;
 }

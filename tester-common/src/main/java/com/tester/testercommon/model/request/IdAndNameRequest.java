@@ -7,18 +7,20 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @ApiModel(description = "id和名字VO")
 @Data
 @Accessors(chain = true)
 public class IdAndNameRequest extends BaseDTO {
-    @ApiModelProperty(value = "id", example = "1209",required = true)
+    @ApiModelProperty(name = "id", value = "id", example = "1209")
     private Long id;
-    @ApiModelProperty(value = "名称", example = "看看",required = true)
-    @NotNull(message = "name not null")
+
+    @ApiModelProperty(name = "name", value = "名称", example = "看看")
+    @NotBlank(message = "name not null")
     private String name;
-//    @Email(message = "invalid email",regexp = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$")
+
+    @ApiModelProperty(name = "email", value = "邮箱", example = "xxx1@qq.com",required = true)
     @Email(message = "invalid email",regexp = "^(\\w+?)@(\\w+?)\\.([a-zA-Z]{2,})$")
     private String email;
 }
