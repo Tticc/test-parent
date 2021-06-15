@@ -1,6 +1,5 @@
 package com.tester.testerwebapp;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @ServletComponentScan("com.tester.testerwebapp.myServlet")
-@MapperScan("com.tester.**.mapper")
+//@MapperScan("com.tester.**.mapper") mapperScan的配置在 mybatis模块的NormalDataBaseConfiguration里配置
 @EnableAsync
 //@SpringBootApplication(scanBasePackages = {"com.tester.*"})
 @SpringBootApplication(scanBasePackages = {"com.tester.testercommon.*","com.tester.testerwebapp.*","com.tester.testermybatis.*"})
