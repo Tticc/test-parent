@@ -22,8 +22,8 @@ public class OrderItemManager {
     }
 
 
-    public int insert(OrderItemDomain domain){
-        int insert = orderItemMapper.insert(domain);
+    public int save(OrderItemDomain domain){
+        int insert = orderItemMapper.save(domain);
         return insert;
     }
 

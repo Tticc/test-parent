@@ -2,11 +2,7 @@ package com.tester.testercommon.dao;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import tk.mybatis.mapper.annotation.LogicDelete;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -23,13 +19,10 @@ public class BaseDomain implements Serializable, Cloneable {
         return this;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date createTime;
     private Date updateTime;
 
-    @LogicDelete
     private Integer deleted;
     private Integer revision;
 }

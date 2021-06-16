@@ -170,14 +170,14 @@ public class RestTemplateTest implements InitializingBean {
                 .setSalePrice(new BigDecimal("0.00"))
                 .setSaleUnit("zhang")
                 .setWeight(new BigDecimal("0.00"));
-        int insert = orderItemManager.insert(domain);
+        int insert = orderItemManager.save(domain);
 
         OrderMemberDomain orderMemberDomain = new OrderMemberDomain().init();
         orderMemberDomain.setMemberAccount("account129039")
                 .setMemberId(memberId)
                 .setMemberPhone("8374924232")
                 .setOrderNo(aLong);
-        int insert1 = orderMemberManager.insert(orderMemberDomain);
+        int insert1 = orderMemberManager.save(orderMemberDomain);
 //        List<OrderItemDomain> orderItemDomains = orderItemManager.listByOrderNo(31131020L);
         System.out.println(domain);
     }

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @ServletComponentScan("com.tester.testerwebapp.myServlet")
-//@MapperScan("com.tester.**.mapper") mapperScan的配置在 mybatis模块的NormalDataBaseConfiguration里配置
+//@MapperScan("com.tester.**.mapper") mapperScan的配置在 mybatis模块的 NormalDataBaseConfiguration 里配置
 @EnableAsync
 //@SpringBootApplication(scanBasePackages = {"com.tester.*"})
 @SpringBootApplication(scanBasePackages = {"com.tester.testercommon.*","com.tester.testerwebapp.*","com.tester.testermybatis.*"})

@@ -38,9 +38,6 @@ public class UserServiceImpl extends BaseServiceImpl<Long, UserDomain> implement
         return userMapper.listByName(request);
     }
 
-    @Override
-    public int batchUpdate(List<UserDomain> list) {
-        return userMapper.batchUpdate(list);
-    }
+
 }
 

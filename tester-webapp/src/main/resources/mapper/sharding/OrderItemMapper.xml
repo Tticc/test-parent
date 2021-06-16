@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tester.testermybatis.dao.mapper.OrderItemMapper">
-    <resultMap type="com.tester.testermybatis.dao.domain.OrderItemDomain" id="baseResultMap">
-        <result property="id" column="id"/>
-        <result property="memberId" column="member_id"/>
-        <result property="orderNo" column="order_no"/>
-        <result property="productId" column="product_id"/>
-        <result property="skuId" column="invoice_head_type"/>
-        <result property="skuName" column="invoice_head"/>
-        <result property="saleQty" column="invoice_content"/>
-        <result property="salePrice" column="invoice_taxpayer"/>
-        <result property="weight" column="invoice_no"/>
-        <result property="saleUnit" column="invoice_amount"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateTime" column="update_time"/>
-        <result property="revision" column="revision"/>
-        <result property="deleted" column="deleted"/>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tester.testermybatis.dao.domain.OrderItemDomain">
+        <id column="id" property="id" />
+        <result column="member_id" property="memberId" />
+        <result column="order_no" property="orderNo" />
+        <result column="product_id" property="productId" />
+        <result column="sku_id" property="skuId" />
+        <result column="sku_name" property="skuName" />
+        <result column="sale_qty" property="saleQty" />
+        <result column="sale_price" property="salePrice" />
+        <result column="weight" property="weight" />
+        <result column="sale_unit" property="saleUnit" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="revision" property="revision" />
+        <result column="deleted" property="deleted" />
     </resultMap>
+
     <sql id="baseSelectSql">
 		member_id
         ,order_no
@@ -37,40 +39,137 @@
         <include refid="baseSelectSql"></include>
     </sql>
 
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+    ${tableName}.id,
+    ${tableName}.member_id,
+    ${tableName}.order_no,
+    ${tableName}.product_id,
+    ${tableName}.sku_id,
+    ${tableName}.sku_name,
+    ${tableName}.sale_qty,
+    ${tableName}.sale_price,
+    ${tableName}.weight,
+    ${tableName}.sale_unit,
+    ${tableName}.create_time,
+    ${tableName}.update_time,
+    ${tableName}.revision,
+    ${tableName}.deleted
+    </sql>
 
-    <sql id="insertSql">
-		#{memberId},
-        #{orderNo},
-        #{productId},
-        #{skuId},
-        #{skuName},
-        #{saleQty},
-        #{salePrice},
-        #{weight},
-        #{saleUnit},
-        #{createTime},
-        #{updateTime},
-        #{revision},
-        #{deleted}
-	</sql>
 
     <sql id="table_name">
         order_item
     </sql>
 
-    <select id="listByOrderNo" resultMap="baseResultMap">
+    <select id="listByOrderNo" resultMap="BaseResultMap">
         select <include refid="selectSql"></include>
         from <include refid="table_name"></include>
         where order_no = #{orderNo}
         and deleted = 0
     </select>
-    <insert id="insert" parameterType="com.tester.testermybatis.dao.domain.OrderItemDomain">
-        insert into <include refid="table_name"></include>
-        <trim prefix="(" suffix=")" >
-            <include refid="baseSelectSql"/>
-        </trim>
-        <trim prefix="values (" suffix=")" >
-            <include refid="insertSql"/>
-        </trim>
+
+
+    <!--基础CRUD、分页、列表部分 begin-->
+    <insert id="save" parameterType="com.tester.testermybatis.dao.domain.OrderItemDomain"
+            keyProperty="id" useGeneratedKeys="true">
+        insert into order_item_0
+        (
+            id,
+            member_id,
+            order_no,
+            product_id,
+            sku_id,
+            sku_name,
+            sale_qty,
+            sale_price,
+            weight,
+            sale_unit,
+            create_time,
+            update_time,
+            revision,
+            deleted
+        )
+        values
+        (
+            #{id},
+            #{memberId},
+            #{orderNo},
+            #{productId},
+            #{skuId},
+            #{skuName},
+            #{saleQty},
+            #{salePrice},
+            #{weight},
+            #{saleUnit},
+            #{createTime},
+            #{updateTime},
+            #{revision},
+            #{deleted}
+
+        )
     </insert>
+
+    <update id="update" parameterType="com.tester.testermybatis.dao.domain.OrderItemDomain">
+        update order_item_0
+        <set>
+            <if test="memberId != null">
+                member_id = #{memberId},
+            </if>
+            <if test="orderNo != null">
+                order_no = #{orderNo},
+            </if>
+            <if test="productId != null">
+                product_id = #{productId},
+            </if>
+            <if test="skuId != null">
+                sku_id = #{skuId},
+            </if>
+            <if test="skuName != null and skuName != ''">
+                sku_name = #{skuName},
+            </if>
+            <if test="saleQty != null">
+                sale_qty = #{saleQty},
+            </if>
+            <if test="salePrice != null">
+                sale_price = #{salePrice},
+            </if>
+            <if test="weight != null">
+                weight = #{weight},
+            </if>
+            <if test="saleUnit != null and saleUnit != ''">
+                sale_unit = #{saleUnit},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="revision != null">
+                revision = #{revision},
+            </if>
+            <if test="deleted != null">
+                deleted = #{deleted},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="delete">
+        update order_item_0
+        <set>
+            deleted = 1,
+            updated_at = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="get" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List">
+            <property name="tableName" value="t_alias"></property>
+        </include>
+        from order_item_0 t_alias
+        where t_alias.id = #{id}
+        and t_alias.deleted = 0
+    </select>
+
 </mapper>

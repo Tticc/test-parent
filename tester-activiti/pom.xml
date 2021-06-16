@@ -38,12 +38,6 @@
 <!--        </dependency>-->
         <!--mysql-->
 
-        <!--tk.mybatis-->
-        <!--<dependency>
-            <groupId>tk.mybatis</groupId>
-            <artifactId>mapper-spring-boot-starter</artifactId>
-        </dependency>-->
-        <!--tk.mybatis-->
 
 
         <dependency>

@@ -9,5 +9,4 @@ import java.util.List;
 public interface OrderItemMapper extends BaseMapper<OrderItemDomain, Long> {
 
     List<OrderItemDomain> listByOrderNo(@Param("orderNo") Long orderNo);
-    int insert(OrderItemDomain domain);
 }

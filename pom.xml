@@ -25,6 +25,7 @@
         <PKCS7.version>1.46</PKCS7.version>
         <mysql.version>8.0.16</mysql.version>
         <mybatis.version>2.1.1</mybatis.version>
+        <jpa.version>1.0</jpa.version>
         <datasource.version>3.3.1</datasource.version>
         <persistence.version>1.0.2</persistence.version>
         <fastjson.version>1.2.60</fastjson.version>
@@ -143,31 +144,6 @@
                 <artifactId>reactor-core</artifactId>
                 <version>${reactor.version}</version>
             </dependency>
-            <!--tk.mybatis-->
-            <dependency>
-                <groupId>tk.mybatis</groupId>
-                <artifactId>mapper-spring-boot-starter</artifactId>
-                <version>${tkmybatis.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter-jdbc</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.mybatis</groupId>
-                        <artifactId>mybatis</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.mybatis</groupId>
-                        <artifactId>mybatis-spring</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <!--tk.mybatis-->
 
             <!-- shardingsphere -->
             <dependency>
@@ -215,6 +191,14 @@
                 <version>${mybatis.version}</version>
             </dependency>
             <!--mysql-->
+
+            <!--jpa-->
+            <dependency>
+                <groupId>javax.persistence</groupId>
+                <artifactId>persistence-api</artifactId>
+                <version>${jpa.version}</version>
+            </dependency>
+            <!--jpa-->
 
             <!--netty-->
             <dependency>

@@ -16,5 +16,4 @@ public interface UserService extends BaseService<Long, UserDomain> {
 
     List<UserDomain> listByName(IdAndNameRequest request);
 
-    int batchUpdate(List<UserDomain> list);
 }

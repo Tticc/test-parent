@@ -18,8 +18,8 @@ public class OrderMemberManager {
     private OrderMemberMapper orderMemberMapper;
 
 
-    public int insert(OrderMemberDomain domain){
-        int insert = orderMemberMapper.insert(domain);
+    public int save(OrderMemberDomain domain){
+        int insert = orderMemberMapper.save(domain);
         return insert;
     }
 
