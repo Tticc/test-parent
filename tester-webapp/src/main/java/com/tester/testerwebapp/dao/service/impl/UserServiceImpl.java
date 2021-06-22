@@ -38,6 +38,11 @@ public class UserServiceImpl extends BaseServiceImpl<Long, UserDomain> implement
         return userMapper.listByName(request);
     }
 
+    @Override
+    public int batchSaveUser(List<UserDomain> list){
+        return userMapper.batchSaveUser(list);
+    }
+
 
 }
 

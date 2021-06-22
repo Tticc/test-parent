@@ -204,4 +204,51 @@
         where t_alias.id = #{id}
         and t_alias.deleted = 0
     </select>
+
+
+    <insert id="batchSaveUser" parameterType="java.util.List"
+            keyProperty="id" useGeneratedKeys="true">
+        insert into u_person
+        (
+        id,
+        name,
+        ext_person_id,
+        employee_id,
+        cellphone,
+        gender,
+        email,
+        enname,
+        wechatid,
+        status,
+        note,
+        create_time,
+        update_time,
+        revision,
+        deleted,
+        data_from
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.name},
+            #{item.extPersonId},
+            #{item.employeeId},
+            #{item.cellphone},
+            #{item.gender},
+            #{item.email},
+            #{item.enname},
+            #{item.wechatid},
+            #{item.status},
+            #{item.note},
+            #{item.createTime},
+            #{item.updateTime},
+            #{item.revision},
+            #{item.deleted},
+            #{item.dataFrom}
+
+            )
+        </foreach>
+    </insert>
+
 </mapper>

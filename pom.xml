@@ -43,6 +43,8 @@
         <rocketmq-spring-boot-starter.version>2.0.3</rocketmq-spring-boot-starter.version>
         <commons-pool2.version>2.7.0</commons-pool2.version>
         <xxl-job.version>2.0.1</xxl-job.version>
+        <cglib.version>3.3.0</cglib.version>
+
 
 
     </properties>
@@ -318,6 +320,13 @@
             </dependency>
             <!--xxlJob-->
 
+
+            <!-- https://mvnrepository.com/artifact/cglib/cglib -->
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>${cglib.version}</version>
+            </dependency>
 
 
 

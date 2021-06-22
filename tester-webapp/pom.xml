@@ -20,6 +20,11 @@
             <artifactId>tester-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/cglib/cglib -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.tester</groupId>
