@@ -1,5 +1,6 @@
 package com.tester.testerwebapp;
 
+import com.tester.testercommon.util.PasswordUtil;
 import com.tester.testercommon.util.file.MyFileReaderWriter;
 import com.tester.testercommon.util.jwt.JwtDataModel;
 import com.tester.testercommon.util.jwt.JwtHelper;
@@ -23,6 +24,13 @@ public class NormalTest_WebApp {
         System.gc();
     }
 
+
+    @Test
+    public void test_pwd_rule(){
+        String pwd = "qswssssww$";
+        boolean b = PasswordUtil.checkPwd(pwd);
+        System.out.println(b);
+    }
 
     @Test
     public void test_str(){
