@@ -1,4 +1,4 @@
-package com.tester.testerwebapp;
+package com.tester.testercv.rateCount;
 
 import com.tester.testercommon.util.MySupplier;
 

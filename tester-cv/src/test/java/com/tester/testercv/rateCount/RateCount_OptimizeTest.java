@@ -1,15 +1,17 @@
-package com.tester.testerwebapp;
+package com.tester.testercv.rateCount;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.junit.Test;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StopWatch;
 
 import java.util.*;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
 
 public class RateCount_OptimizeTest {
 
@@ -20,13 +22,13 @@ public class RateCount_OptimizeTest {
     /**
      * 尝试次数。（抽奖次数）
      **/
-    private Integer tryNum = 11;
+    private Integer tryNum = 14;
     /**
      * 当次数大于asyncTryNum的时候开始使用异步。通过asyncTryNum和asyncLevel来限制异步线程的工作量
      **/
     private Integer asyncTryNum = 14 - 1; //Integer.MAX_VALUE;
     /**
-     * 第几层开始作为异步任务分发出去。默认是1，也就是第一轮循环就异步。
+     * 第几层开始作为异步任务分发出去。默认是1，从第二轮循环开始异步。
      **/
     private int asyncLevel = 1;
 
@@ -41,6 +43,11 @@ public class RateCount_OptimizeTest {
      **/
     @Test
     public void test_rate_cal() {
+        System.out.println("********************************* verify area start *********************************");
+        Map<Integer, Double> rateMap = getRateMap();
+        verifyRateMap(rateMap);
+        System.out.println("********************************* verify area end *********************************");
+        System.out.println();
         doProcess();
 
     }
@@ -109,7 +116,6 @@ public class RateCount_OptimizeTest {
                                    Integer curNum,
                                    Double curRate) {
         if (initData.getTargetLevel() > asyncTryNum && curLevel == asyncLevel) {
-            System.out.println("async!");
             // async
             doAsync(initData, curLevel, curNum, curRate);
         } else {
@@ -167,7 +173,7 @@ public class RateCount_OptimizeTest {
                 ++i;
             } catch (Exception e) {
                 // 超时或其他异常则继续do while循环
-                System.out.println(e.getMessage() + e.toString());
+//                System.out.println(e.getMessage() + e.toString());
             }
         } while (i < futureList.size());
         // 设置、累加
@@ -214,29 +220,6 @@ public class RateCount_OptimizeTest {
         return collect;
     }
 
-
-    /**
-     * 初始化 价值数量-概率 列表
-     *
-     * @param
-     * @return java.util.Map<java.lang.Integer, java.lang.Double>
-     * @Date 18:23 2021/7/2
-     * @Author 温昌营
-     **/
-    private Map<Integer, Double> getRateMap() {
-        Map<Integer, Double> rateMap = new HashMap<>();
-        rateMap.put(5, 0.28d);
-        rateMap.put(10, 0.283d);
-        rateMap.put(50, 0.21d);
-        rateMap.put(100, 0.15d);
-        rateMap.put(300, 0.04d);
-        rateMap.put(500, 0.02d);
-        rateMap.put(1000, 0.01d);
-        rateMap.put(2000, 0.005d);
-        rateMap.put(5000, 0.002d);
-        return rateMap;
-    }
-
     private PersistData getInitData(Integer totalLevel, Integer targetNum, Double totalRate) {
         PersistData persistData = new PersistData();
         return persistData.setTargetLevel(totalLevel)
@@ -263,6 +246,60 @@ public class RateCount_OptimizeTest {
                     .setSize(new Long(this.getSize().longValue()))
                     .setEntryList(this.getEntryList());
         }
+    }
+
+    private void verifyRateMap(Map<Integer, Double> rateMap){
+        if (CollectionUtils.isEmpty(rateMap)) {
+            System.out.println("rateMap is empty!!!");
+            return;
+        }
+        Set<Map.Entry<Integer, Double>> entries = rateMap.entrySet();
+        System.out.println("map size: " + entries.size());
+        System.out.println("average: " + getAverage(rateMap).intValue());
+        Double reduce = entries.stream().map(e -> e.getValue()).reduce(0.0, (a, b) -> a + b);
+        System.out.println("total rate: " + reduce);
+    }
+
+    /**
+     * 初始化 价值数量-概率 列表
+     *
+     * @param
+     * @return java.util.Map<java.lang.Integer, java.lang.Double>
+     * @Date 18:23 2021/7/2
+     * @Author 温昌营
+     **/
+    private Map<Integer, Double> getRateMap() {
+//        Map<Integer, Double> rateMap = new HashMap<>();
+//        rateMap.put(5, 0.28d);
+//        rateMap.put(10, 0.283d);
+//        rateMap.put(50, 0.21d);
+//        rateMap.put(100, 0.15d);
+//        rateMap.put(300, 0.04d);
+//        rateMap.put(500, 0.02d);
+//        rateMap.put(1000, 0.01d);
+//        rateMap.put(2000, 0.005d);
+//        rateMap.put(5000, 0.002d);
+
+        Map<Integer, Double> rateMap = new HashMap<>();
+        rateMap.put(5, 0.38d);
+        rateMap.put(15, 0.4222d);
+        rateMap.put(24, 0.1d);
+        rateMap.put(35, 0.035d);
+        rateMap.put(55, 0.021d);
+        rateMap.put(75, 0.009d);
+        rateMap.put(150, 0.008d);
+        rateMap.put(250, 0.007d);
+        rateMap.put(350, 0.006d);
+        rateMap.put(450, 0.005d);
+        rateMap.put(550, 0.004d);
+        rateMap.put(650, 0.001d);
+        rateMap.put(750, 0.0005d);
+        rateMap.put(850, 0.0004d);
+        rateMap.put(950, 0.0003d);
+        rateMap.put(2000, 0.0002d);
+        rateMap.put(4000, 0.0002d);
+        rateMap.put(5000, 0.0002d);
+        return rateMap;
     }
 
 }

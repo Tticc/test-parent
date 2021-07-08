@@ -23,10 +23,23 @@ public class DecimalUtil {
      * BigDecimal格式化
      */
     public static String format(BigDecimal value) {
+        return format(value,2);
+    }
+    /**
+     * BigDecimal格式化
+     */
+    public static String format(BigDecimal value, Integer len) {
         if (value == null) {
             return "";
         }
-        DecimalFormat decimalFormat = new DecimalFormat("0.##");
+        if (null == len || len < 1) {
+            len = 2;
+        }
+        StringBuilder pattern = new StringBuilder("0.");
+        for (int i = 0; i < len; i++) {
+            pattern.append("#");
+        }
+        DecimalFormat decimalFormat = new DecimalFormat(pattern.toString());
         decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
         return decimalFormat.format(value);
     }
