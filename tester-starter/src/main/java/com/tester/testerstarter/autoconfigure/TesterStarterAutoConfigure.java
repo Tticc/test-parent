@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Import;
 //@EnableConfigurationProperties(RocketMQProperties.class)
 //@ConditionalOnClass({ MQAdmin.class, ObjectMapper.class })
 //@ConditionalOnProperty(prefix = "rocketmq", value = "name-server")
-@Import({ LanguageConfig.class})
+@Import({ LanguageConfig.class,ReadinessPointAutoConfiguration.class})
 //@AutoConfigureAfter(JacksonAutoConfiguration.class)
 public class TesterStarterAutoConfigure {
 
