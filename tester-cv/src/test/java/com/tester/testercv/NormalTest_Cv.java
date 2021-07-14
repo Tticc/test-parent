@@ -5,6 +5,7 @@ import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
 import com.tester.testercommon.exception.BusinessException;
 import com.tester.testercommon.util.MyConsumer;
+import org.apache.catalina.util.StandardSessionIdGenerator;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,14 @@ public class NormalTest_Cv {
 
     private AtomicInteger atomicInteger = new AtomicInteger(0);
 
+    @Test
+    public void generateSessionId(){
+        StandardSessionIdGenerator standardSessionIdGenerator = new StandardSessionIdGenerator();
+        String s = standardSessionIdGenerator.generateSessionId("");
+        // 1574FEDE7AFA975BAFC97DBA9A6DB4E7
+        // 9886F5679A7B794C4F2DA90B03D2270A
+        System.out.println(s);
+    }
 
     @Test
     public void test_regex1(){
