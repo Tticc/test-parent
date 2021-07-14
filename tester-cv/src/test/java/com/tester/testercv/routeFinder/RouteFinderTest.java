@@ -56,9 +56,9 @@ public class RouteFinderTest {
     }
 
     private void findNext(Mat mat, int[][] matrix, String str, int preI, int preJ, List<Point> oriChain) {
-        saveMatStep(mat, oriChain);
+//        saveMatStep(mat,oriChain);
         if (checkRouteDone(matrix)) {
-            saveMatStep(mat, oriChain);
+            saveResult(mat, oriChain);
             routes.add(str);
             targetChain = oriChain;
             return;
@@ -95,6 +95,26 @@ public class RouteFinderTest {
         return false;
     }
 
+
+    private void saveResult(Mat mat, List<Point> oriChain) {
+        String picName = "";
+        int step = stepCount.getAndIncrement();
+        if (step < 10) {
+            picName = "0000" + step;
+        } else if (step < 100) {
+            picName = "000" + step;
+        } else if (step < 1000) {
+            picName = "00" + step;
+        } else if (step < 10000) {
+            picName = "0" + step;
+        } else {
+            picName = "" + step;
+        }
+        Mat clone = mat.clone();
+        linkPoint(clone, oriChain);
+        CommonImgHelper.writeImg(picName, clone, "resultFolder");
+    }
+
     private void saveMatStep(Mat mat, List<Point> oriChain) {
         String picName = "";
         int step = stepCount.getAndIncrement();
@@ -109,12 +129,9 @@ public class RouteFinderTest {
         } else {
             picName = "" + step;
         }
-//        System.out.println(picName);
-        if (step > 209300) {
-            Mat clone = mat.clone();
-            linkPoint(clone, oriChain);
-            CommonImgHelper.writeImg(picName, clone, "stepFolder");
-        }
+        Mat clone = mat.clone();
+        linkPoint(clone, oriChain);
+        CommonImgHelper.writeImg(picName, clone, "stepFolder");
     }
 
 
