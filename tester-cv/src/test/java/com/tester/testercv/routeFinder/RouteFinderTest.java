@@ -20,6 +20,8 @@ public class RouteFinderTest {
     private static List<String> routes = new ArrayList<>();
     private static List<Point> targetChain = new ArrayList<>();
     AtomicInteger stepCount = new AtomicInteger(1);
+    private static Point startPoint;
+    private static Point endPoint;
 
 
     // VMOption = -Djava.library.path=E:\opencv\opencv\build\java\x64
@@ -38,7 +40,13 @@ public class RouteFinderTest {
     private void getRoute() {
         int count = 0;
         for (int i = 0; i < maxLen; i++) {
+            if(startPoint.y != i){
+                continue;
+            }
             for (int j = 0; j < maxLen; j++) {
+                if(startPoint.x != j){
+                    continue;
+                }
                 Mat mat = initMat();
                 String str = "[" + i + "," + j + "];";
                 if (matrix[i][j] == 1) {
@@ -58,6 +66,9 @@ public class RouteFinderTest {
     private void findNext(Mat mat, int[][] matrix, String str, int preI, int preJ, List<Point> oriChain) {
 //        saveMatStep(mat,oriChain);
         if (checkRouteDone(matrix)) {
+            if(preI != endPoint.y || preJ != endPoint.x){
+                return;
+            }
             saveResult(mat, oriChain);
             routes.add(str);
             targetChain = oriChain;
@@ -301,6 +312,11 @@ public class RouteFinderTest {
         matrix[8][6] = 0;
         matrix[8][7] = 0;
         matrix[8][8] = 0;
+
+//        startPoint = CommonImgHelper.getPoint(y * 100 + 50, x * 100 + 50);
+        startPoint = CommonImgHelper.getPoint(3, 0);
+        endPoint = CommonImgHelper.getPoint(3, 8);
+
     }
 
 }
