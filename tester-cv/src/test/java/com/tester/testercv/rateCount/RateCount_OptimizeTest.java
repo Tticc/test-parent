@@ -31,7 +31,7 @@ public class RateCount_OptimizeTest {
     /**
      * 当次数大于asyncTryNum的时候开始使用异步。通过asyncTryNum和asyncLevel来限制异步线程的工作量
      **/
-    private Integer asyncTryNum = 13 - 1; //Integer.MAX_VALUE;
+    private Integer asyncTryNum = 12; //Integer.MAX_VALUE;
     /**     * 第几层开始作为异步任务分发出去。默认是1，从第二轮循环开始异步。
      **/
     private int asyncLevel = 1;
@@ -67,7 +67,7 @@ public class RateCount_OptimizeTest {
         Map<Integer, Double> rateMap = getRateMap();
         for (int i = 1; i <= times; i++) {
             // 目标值：默认为平均值可能值，以此，计算特定次数下，获得平均值以上价值数量的概率
-            Integer target = null == targetNumPer ? getAverage(rateMap).intValue() * i : targetNumPer * i;
+            Integer target = null == targetNumPer ? getAverage(rateMap).intValue() * i : targetNumPer;
             // 初始化数据，异步task需要而做的改造
             PersistData initData = getInitData(i, target, 0.0);
             StopWatch sw = new StopWatch();
@@ -125,7 +125,7 @@ public class RateCount_OptimizeTest {
                                    Integer curLevel,
                                    Integer curNum,
                                    Double curRate) {
-        if (initData.getTargetLevel() > asyncTryNum && curLevel == asyncLevel) {
+        if (initData.getTargetLevel() >= asyncTryNum && curLevel == asyncLevel) {
             // async
             doAsync(initData, curLevel, curNum, curRate);
         } else {
@@ -279,36 +279,24 @@ public class RateCount_OptimizeTest {
      * @Author 温昌营
      **/
     private Map<Integer, Double> getRateMap() {
+//        Map<Integer, Double> rateMap = new HashMap<>();
+//        rateMap.put(6, 0.25d);
+//        rateMap.put(15, 0.35d);
+//        rateMap.put(35, 0.25d);
+//        rateMap.put(150, 0.1d);
+//        rateMap.put(500, 0.05d);
+
         Map<Integer, Double> rateMap = new HashMap<>();
-        rateMap.put(5, 0.28d);
-        rateMap.put(10, 0.283d);
-        rateMap.put(50, 0.21d);
-        rateMap.put(100, 0.15d);
-        rateMap.put(300, 0.04d);
+        rateMap.put(5, 0.05d);
+        rateMap.put(10, 0.245d);
+        rateMap.put(30, 0.2d);
+        rateMap.put(50, 0.17d);
+        rateMap.put(80, 0.15d);
+        rateMap.put(100, 0.1d);
+        rateMap.put(200, 0.05d);
         rateMap.put(500, 0.02d);
         rateMap.put(1000, 0.01d);
         rateMap.put(2000, 0.005d);
-        rateMap.put(5000, 0.002d);
-
-//        Map<Integer, Double> rateMap = new HashMap<>();
-//        rateMap.put(5, 0.38d);
-//        rateMap.put(15, 0.4222d);
-//        rateMap.put(24, 0.1d);
-//        rateMap.put(35, 0.035d);
-//        rateMap.put(55, 0.021d);
-//        rateMap.put(75, 0.009d);
-//        rateMap.put(150, 0.008d);
-//        rateMap.put(250, 0.007d);
-//        rateMap.put(350, 0.006d);
-//        rateMap.put(450, 0.005d);
-//        rateMap.put(550, 0.004d);
-//        rateMap.put(650, 0.001d);
-//        rateMap.put(750, 0.0005d);
-//        rateMap.put(850, 0.0004d);
-//        rateMap.put(950, 0.0003d);
-//        rateMap.put(2000, 0.0002d);
-//        rateMap.put(4000, 0.0002d);
-//        rateMap.put(5000, 0.0002d);
         return rateMap;
     }
 

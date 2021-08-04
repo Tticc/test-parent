@@ -11,9 +11,9 @@ public class ProxyHandler implements InvocationHandler {
     }
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        System.out.println("JDK dynamic proxy start");
+//        System.out.println("JDK dynamic proxy start");
         Object invoke = method.invoke(bizManager, args);
-        System.out.println("JDK dynamic proxy end");
+//        System.out.println("JDK dynamic proxy end");
         return invoke;
     }
 }

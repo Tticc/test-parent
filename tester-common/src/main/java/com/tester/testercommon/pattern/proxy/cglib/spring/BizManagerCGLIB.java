@@ -1,4 +1,4 @@
-package com.tester.testercommon.pattern.proxy.cglib;
+package com.tester.testercommon.pattern.proxy.cglib.spring;
 
 import com.tester.testercommon.pattern.proxy.BizManager;
 import org.springframework.cglib.proxy.Enhancer;
@@ -15,6 +15,10 @@ public class BizManagerCGLIB implements BizManager {
 
     @Override
     public void doBiz(){
+        doCallByBiz();
+    }
 
+    public void doCallByBiz(){
+        System.out.println("doCallByBiz");
     }
 }
