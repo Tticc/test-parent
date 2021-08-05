@@ -1,11 +1,9 @@
 package com.tester.testercv;
 
 
-import com.tester.testerpool.config.AsyncExecutorConfig;
 import com.tester.testerpool.config.AsyncScheduleExecutorConfig;
 import com.tester.testerpool.config.PoolBeanConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.util.Assert;

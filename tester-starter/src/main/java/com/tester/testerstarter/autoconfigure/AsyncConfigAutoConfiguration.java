@@ -16,7 +16,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * 在方法上添加@Async("cusThreadPool")使用
+ * 在方法上添加@Async使用。配置默认的executor。
+ * <br/> 同一个服务最多只能有一个实现AsyncConfigurer接口的实例，否则会报错
+ * <br/> 但是，线程池可以配置多个，通过@Async("xxxx")来显式指定线程池
  * @Author 温昌营
  * @Date
  * @see org.springframework.cloud.sleuth.instrument.async.TraceAsyncAspect
@@ -27,6 +29,14 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class AsyncConfigAutoConfiguration implements AsyncConfigurer {
 
 
+    /**
+     * 这个方法重写自AsyncConfigurer，这将会是默认的executor。
+     * <br/>如果不配置这里，那么就不会有默认的executor，必须要使用@Async("xxxx")来显式指定executor
+     * @param
+     * @return java.util.concurrent.Executor
+     * @Date 15:19 2021/8/5
+     * @Author 温昌营
+     **/
     @Override
     @Bean("cusThreadPool")
     public Executor getAsyncExecutor(){
