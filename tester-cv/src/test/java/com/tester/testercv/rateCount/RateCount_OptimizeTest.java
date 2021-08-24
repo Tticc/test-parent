@@ -23,11 +23,12 @@ public class RateCount_OptimizeTest {
     /**
      * 平均每次目标数量。如果为null，那么取概率的均值。
      **/
+
     private Integer targetNumPer = null;
     /**
      * 尝试次数。（抽奖次数）
      **/
-    private Integer tryNum = 14;
+    private Integer tryNum = 19;
     /**
      * 当次数大于asyncTryNum的时候开始使用异步。通过asyncTryNum和asyncLevel来限制异步线程的工作量
      **/
@@ -287,16 +288,15 @@ public class RateCount_OptimizeTest {
 //        rateMap.put(500, 0.05d);
 
         Map<Integer, Double> rateMap = new HashMap<>();
-        rateMap.put(5, 0.05d);
-        rateMap.put(10, 0.245d);
-        rateMap.put(30, 0.2d);
-        rateMap.put(50, 0.17d);
-        rateMap.put(80, 0.15d);
-        rateMap.put(100, 0.1d);
-        rateMap.put(200, 0.05d);
+        rateMap.put(5, 0.28d);
+        rateMap.put(10, 0.283d);
+        rateMap.put(50, 0.21d);
+        rateMap.put(100, 0.15d);
+        rateMap.put(300, 0.04d);
         rateMap.put(500, 0.02d);
         rateMap.put(1000, 0.01d);
         rateMap.put(2000, 0.005d);
+        rateMap.put(5000, 0.002d);
         return rateMap;
     }
 

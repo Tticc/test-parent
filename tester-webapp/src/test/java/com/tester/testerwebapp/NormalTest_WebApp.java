@@ -27,9 +27,11 @@ public class NormalTest_WebApp {
 
     @Test
     public void test_pwd_rule(){
-        String pwd = "qswssssww$";
+        String pwd = "qs1wssssww$";
         boolean b = PasswordUtil.checkPwd(pwd);
+        boolean b2 = PasswordUtil.checkPwd2(pwd);
         System.out.println(b);
+        System.out.println(b2);
     }
 
     @Test
