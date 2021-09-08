@@ -1,12 +1,17 @@
 package com.tester.testerwebapp;
 
+import com.tester.testercommon.model.request.TextRequest;
 import com.tester.testercommon.util.PasswordUtil;
 import com.tester.testercommon.util.file.MyFileReaderWriter;
 import com.tester.testercommon.util.jwt.JwtDataModel;
 import com.tester.testercommon.util.jwt.JwtHelper;
 import org.junit.Test;
+import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Assert;
 
+import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -20,13 +25,31 @@ public class NormalTest_WebApp {
 
     public static void main(String[] args) {
         System.out.println("hello,world");
-        byte[] placeholder=new byte[64*1024*1024];
+        byte[] placeholder = new byte[64 * 1024 * 1024];
         System.gc();
+    }
+
+    @Test
+    public void test_prop(){
+        TextRequest request = new TextRequest();
+        BeanWrapperImpl beanWrapper = new BeanWrapperImpl(request);
+        PropertyDescriptor[] propertyDescriptors = beanWrapper.getPropertyDescriptors();
+        System.out.println("xx");
+
+        int l = 10_000;
+        System.out.println(l);
+
+
+    }
+
+    @Test
+    public void test_app() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:conf/**/application.yml");
     }
 
 
     @Test
-    public void test_pwd_rule(){
+    public void test_pwd_rule() {
         String pwd = "qs1wssssww$";
         boolean b = PasswordUtil.checkPwd(pwd);
         boolean b2 = PasswordUtil.checkPwd2(pwd);
@@ -35,7 +58,7 @@ public class NormalTest_WebApp {
     }
 
     @Test
-    public void test_str(){
+    public void test_str() {
         String str = "1";
         String str1 = getStr(str);
         System.out.println(str1);
@@ -43,9 +66,9 @@ public class NormalTest_WebApp {
         System.out.println(str1);
     }
 
-    private String getStr(String code){
-        Assert.hasLength(code,"code should not empty");
-        switch (code){
+    private String getStr(String code) {
+        Assert.hasLength(code, "code should not empty");
+        switch (code) {
             case "1":
                 return "one";
             case "2":
@@ -57,8 +80,9 @@ public class NormalTest_WebApp {
         }
         return code;
     }
+
     @Test
-    public void test_set(){
+    public void test_set() {
         HashSet<String> set = new HashSet<>();
         set.add("key");
 
@@ -73,14 +97,14 @@ public class NormalTest_WebApp {
 
 
     @Test
-    public void test_array(){
-        Integer[] ints = {1,2,4,5};
+    public void test_array() {
+        Integer[] ints = {1, 2, 4, 5};
         Integer[] arr = new Integer[5];
-        Integer[] addedArr = new Integer[]{1,2};
+        Integer[] addedArr = new Integer[]{1, 2};
         int endPoint = arr.length;
         // 扩容
-        arr = Arrays.copyOf(arr, endPoint+addedArr.length);
-        System.out.println("arr.length: "+arr.length);
+        arr = Arrays.copyOf(arr, endPoint + addedArr.length);
+        System.out.println("arr.length: " + arr.length);
         for (Integer integer : arr) {
             System.out.println(integer);
         }
@@ -90,8 +114,9 @@ public class NormalTest_WebApp {
             System.out.println(integer);
         }
     }
+
     @Test
-    public void test_list(){
+    public void test_list() {
 
         List<String> strs = new LinkedList<>();
         strs.add("a");
@@ -103,18 +128,18 @@ public class NormalTest_WebApp {
             for (String str : strs) {
                 strs.remove(2);
             }
-        }catch (ConcurrentModificationException e){
+        } catch (ConcurrentModificationException e) {
             e.printStackTrace();
         }
         System.out.println(strs);
     }
 
     @Test
-    public void test_AtomicStampedReference(){
+    public void test_AtomicStampedReference() {
         int start = 0;
-        AtomicStampedReference<Integer> nodeNum = new AtomicStampedReference(start,1);
+        AtomicStampedReference<Integer> nodeNum = new AtomicStampedReference(start, 1);
         System.out.println(nodeNum.getReference());
-        nodeNum.compareAndSet(nodeNum.getReference(), nodeNum.getReference()+1, nodeNum.getStamp(), nodeNum.getStamp() + 1);
+        nodeNum.compareAndSet(nodeNum.getReference(), nodeNum.getReference() + 1, nodeNum.getStamp(), nodeNum.getStamp() + 1);
         System.out.println(nodeNum.getReference());
     }
 
@@ -127,7 +152,7 @@ public class NormalTest_WebApp {
     }
 
     @Test
-    public void test_date(){
+    public void test_date() {
         LocalDateTime now = LocalDateTime.now();
         System.out.println(now);
         int second = now.getSecond();
@@ -150,14 +175,16 @@ public class NormalTest_WebApp {
         // 1001001110000010000011000010100000010001011001000000000000
         // 1001000000101010110000111001110100000010001011001000000000000
     }
+
     @Test
-    public void test_linkedHashMap(){
+    public void test_linkedHashMap() {
         LinkedHashMap<Object, Object> map = new LinkedHashMap<>();
-        map.put("jo","jo");
+        map.put("jo", "jo");
         System.out.println(map);
     }
+
     @Test
-    public void test_num_shift(){
+    public void test_num_shift() {
         long time = new Date().getTime();
         System.out.println(time);
         String str = "89374294893248392";
@@ -165,42 +192,46 @@ public class NormalTest_WebApp {
         String substring = str.substring(str.length() - 10);
         System.out.println(substring);
         System.out.println(substring.length());
-        System.out.println((-1L<<5));
+        System.out.println((-1L << 5));
     }
 
 
     @Test
-    public void test_value(){
-        int i = 9883210%6;
+    public void test_value() {
+        int i = 9883210 % 6;
         System.out.println(i);
     }
+
     @Test
-    public void test_order_no(){
+    public void test_order_no() {
         Long memberId = 9883210L;
         Long aLong = generateOrderNo(10L, memberId, 1);
         System.out.println(aLong);
-        String suffix = getSuffixdb("order_item", "order_no", aLong%1000);
+        String suffix = getSuffixdb("order_item", "order_no", aLong % 1000);
         System.out.println(suffix);
 
         String suffix1 = getSuffixtb("order_item", "order_no", aLong % 1000);
         System.out.println(suffix1);
 
     }
+
     public String getSuffixdb(String logicTableName, String columnName, Long shardValue) {
         Integer dbNum = 3;
         Integer tableShardNum = 2;
         Long suffix;
-        suffix = shardValue/10;
-        return "_"+(suffix<10?"0"+suffix:suffix);
+        suffix = shardValue / 10;
+        return "_" + (suffix < 10 ? "0" + suffix : suffix);
     }
+
     public String getSuffixtb(String logicTableName, String columnName, Long shardValue) {
         Integer dbNum = 3;
         Integer tableShardNum = 2;
         Long suffix;
         suffix = (shardValue / 10) * tableShardNum + shardValue % 10;
-        return "_"+(suffix<10?"0"+suffix:suffix);
+        return "_" + (suffix < 10 ? "0" + suffix : suffix);
     }
-    public Long generateOrderNo(Long serialNo, Long memberId, Integer orderType){
+
+    public Long generateOrderNo(Long serialNo, Long memberId, Integer orderType) {
         Integer tableIndex = getTableIndex(memberId);
         Integer dbIndex = getDbIndex(tableIndex);
         Integer tableIndexInDb = getTableIndexInDb(tableIndex);
@@ -213,19 +244,20 @@ public class NormalTest_WebApp {
         Integer tableShardNum = 2;
         return (int) (memberId % (dbNum * tableShardNum));
     }
+
     private Integer getDbIndex(Integer tableIndex) {
         Integer tableShardNum = 2;
         return tableIndex / tableShardNum;
     }
+
     private Integer getTableIndexInDb(Integer tableIndex) {
         Integer tableShardNum = 2;
         return tableIndex - (tableIndex / tableShardNum) * tableShardNum;
     }
 
 
-
     @Test
-    public void test_equal(){
+    public void test_equal() {
         int a = 125577;
         Integer b = new Integer(125577);
         System.out.println(b.equals(a));
@@ -240,31 +272,34 @@ public class NormalTest_WebApp {
         System.out.println(pisSet.contains("02000355"));
         List<String> collect = pisSet.stream().filter(e -> ppSet.contains(e)).collect(Collectors.toList());
         List<String> collect2 = pisSet.stream().filter(e -> !ppSet.contains(e)).collect(Collectors.toList());
-        System.out.println("有效人员："+collect.size());
-        System.out.println("无效人员："+collect2.size());
-        for (String e:collect2) {
+        System.out.println("有效人员：" + collect.size());
+        System.out.println("无效人员：" + collect2.size());
+        for (String e : collect2) {
             System.out.println(e);
         }
     }
 
     /**
      * person in person
+     *
      * @return
      */
     private String[] getPp() throws IOException {
         File file = new File("C:\\Users\\wenc\\Desktop\\ppa.txt");
-        String[] text = MyFileReaderWriter.txt2String(file,";").split(";");
-        System.out.println("pp.size:"+text.length);
+        String[] text = MyFileReaderWriter.txt2String(file, ";").split(";");
+        System.out.println("pp.size:" + text.length);
         return text;
     }
+
     /**
      * person in station
+     *
      * @return
      */
     private String[] getPis() throws IOException {
         File file = new File("C:\\Users\\wenc\\Desktop\\pisa.txt");
-        String[] text = MyFileReaderWriter.txt2String(file,";").split(";");
-        System.out.println("pis.size:"+text.length);
+        String[] text = MyFileReaderWriter.txt2String(file, ";").split(";");
+        System.out.println("pis.size:" + text.length);
         return text;
     }
 

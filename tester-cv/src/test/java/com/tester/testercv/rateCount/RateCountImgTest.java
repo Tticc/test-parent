@@ -46,19 +46,21 @@ public class RateCountImgTest {
 
 
     public void draw(Map<Integer, Double> points){
+        int xTimes = 100;
+        double yTimes = 10000.0d;
         Set<Map.Entry<Integer, Double>> entries = points.entrySet();
         Map.Entry<Integer, Double> integerDoubleEntry = entries.stream()
 //                .sorted((a, b) -> b.getKey().compareTo(a.getKey())) // 逆序排序
                 .sorted((a, b) -> a.getKey().compareTo(b.getKey())) // 正序排序
                 .reduce((a, b) -> {
-                    int startX = a.getKey()*100;
-                    int startY = row_y_height - (int) (a.getValue() * 10000);
-                    int endX = b.getKey()*100;
-                    int endY = row_y_height - (int) (b.getValue() * 10000);
+                    int startX = a.getKey()*xTimes;
+                    int startY = row_y_height - (int) (a.getValue() * yTimes);
+                    int endX = b.getKey()*xTimes;
+                    int endY = row_y_height - (int) (b.getValue() * yTimes);
                     for (int i = -4; i <= 4; i++) {
                         drawLine(mat, startX, startY+i, endX, endY+i);
                     }
-                    drawText(mat,startX+28,startY+28, "["+startX+","+(row_y_height - startY)+"]");
+                    drawText(mat,startX+28,startY+28, "[tryNum:"+startX/xTimes+", rate:"+(row_y_height - startY)/yTimes+"]");
                     return b;
                 }).get();
         writeImg("rateImg"+ DateUtil.dateFormat(new Date(),"MMddHHmmss"),mat);
