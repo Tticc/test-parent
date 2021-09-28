@@ -9,6 +9,7 @@ import reactor.core.Exceptions;
 import reactor.core.publisher.*;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
+import reactor.test.StepVerifier;
 import reactor.util.function.Tuple2;
 
 import java.awt.event.ActionEvent;
@@ -45,6 +46,41 @@ public class ReactorTest {
     public void test_getCPUProcessNumber(){
 
         System.out.println(Runtime.getRuntime().availableProcessors());
+    }
+
+
+    @Test
+    public void test_Flux1() {
+        Flux.just(1, 2, 3, 4, 5, 6)
+                .sort((a,b) -> {
+                    return b.compareTo(a);
+                })
+                .map(e -> {
+                    return ""+e;
+                })
+                .sort((a,b) -> {
+                    return a.compareTo(b);
+                })
+                .subscribe(e -> {
+                    System.out.println(e);
+                });
+    }
+
+    private Flux<Integer> generateFluxFrom1To6() {
+        return Flux.just(1, 2, 3, 4, 5, 6);
+    }
+    private Mono<Integer> generateMonoWithError() {
+        return Mono.error(new Exception("some error"));
+    }
+    @Test
+    public void testViaStepVerifier() {
+        StepVerifier.create(generateFluxFrom1To6())
+                .expectNext(1, 2, 3, 4, 5, 6)
+                .expectComplete()
+                .verify();
+        StepVerifier.create(generateMonoWithError())
+                .expectErrorMessage("some error")
+                .verify();
     }
     @Test
     public void test_Parallel() throws InterruptedException {
@@ -421,10 +457,10 @@ public class ReactorTest {
     public void test_fluxCreate_create(){
         List<ActionListener> listeners = new ArrayList<>();
 
-        Flux.create(sink -> {
+        Flux<ActionEvent> objectFlux = Flux.create(sink -> {
             listeners.add(evt -> sink.next(evt));
-        })
-                .subscribe(System.out::println);
+        });
+        objectFlux.subscribe(e -> System.out.println("e.getActionCommand() = " + e.getActionCommand()));
 
         listeners.forEach(action -> action.actionPerformed(
                 new ActionEvent(ReactorTest.class, 0, "shit happens"))
@@ -497,10 +533,14 @@ public class ReactorTest {
         Mono<List<Integer>> listMono = Flux.range(1, 7)
                 .collectList();
         // process list within Mono
-        listMono.subscribe(System.out::println);
+//        listMono.subscribe(System.out::println);
         // get list from Mono
-        List<Integer> block = listMono.block();
-        System.out.println(block);
+        listMono = listMono.map(e -> {
+            System.out.println("e = " + e);
+            return e;
+        });
+        List<Integer> block = listMono.block(Duration.ofSeconds(33));
+        System.out.println("block = " + block);
     }
 
     @Test
