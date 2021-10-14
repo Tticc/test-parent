@@ -25,7 +25,7 @@ public class RpcNormalTest {
     @Test
     public void test_DiscardServer() throws Exception{
         int port = 8080;
-        new DiscardServer(port).run();
+//        new DiscardServer(port).run();
     }
 
     @Test
