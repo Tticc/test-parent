@@ -101,8 +101,8 @@ public class RpcServiceClient {
 
 	// 初始化 mft。
 	private MyFutureTask<Object> mft = new MyFutureTask<Object>();
-	//private final String HOST = "127.0.0.1";
-	private static String host = "192.168.99.1";
+	private static String host = "127.0.0.1";
+//	private static String host = "192.168.99.1";
 	private static int port = 8000;
 	public RpcServiceClient setMft(MyFutureTask<Object> mft) {
 		this.mft = mft;
