@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
@@ -21,6 +20,13 @@ import java.util.stream.Stream;
  */
 @Slf4j
 public class RpcNormalTest {
+
+
+    @Test
+    public void test_DiscardServer() throws Exception{
+        int port = 8080;
+        new DiscardServer(port).run();
+    }
 
     @Test
     public void test_flux_flatMap(){
@@ -102,6 +108,12 @@ public class RpcNormalTest {
                 new Thread(() -> {
                     for (int j = 0; j < 5; j++) {
                         fluxSink.next("element "+j+" from tid: "+Thread.currentThread().getId());
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        fluxSink.next("element!!!!!!!!!! "+j+" from tid: "+Thread.currentThread().getId());
                     }
                 }).start();
             }
@@ -109,7 +121,7 @@ public class RpcNormalTest {
             System.out.println("print tid:"+Thread.currentThread().getId()+", value: "+e);
         });
         try {
-            Thread.sleep(3000L);
+            Thread.sleep(9000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -1,4 +1,4 @@
-package com.tester.testerrpc.netty.demo;
+package com.tester.testerrpc;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
@@ -69,13 +69,11 @@ public class DiscardServer {
             try {
                 while (in.isReadable()) { // (1)
                     System.out.print((char) in.readByte());
-                    System.out.flush();
+//                    System.out.flush();
                     ctx.writeAndFlush(msg);
                 }
             } finally {
-                System.out.println("finally");
-
-                // 断开连接
+                System.out.println("\r\n");
 //                ReferenceCountUtil.release(msg); // (2)
             }
         }

@@ -1,16 +1,13 @@
 package com.tester.testerfuncprogram;
 
-import com.tester.testerfuncprogram.interfaces.AddAllFunction;
 import org.junit.Test;
 import org.reactivestreams.Subscription;
 import org.springframework.util.StopWatch;
-import reactor.core.Disposable;
 import reactor.core.Exceptions;
 import reactor.core.publisher.*;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 import reactor.test.StepVerifier;
-import reactor.util.function.Tuple2;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,14 +18,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.*;
 
 /**
  * <a href = "https://projectreactor.io/docs/core/release/reference/#core-features">reactor url</a>
@@ -52,18 +45,12 @@ public class ReactorTest {
     @Test
     public void test_Flux1() {
         Flux.just(1, 2, 3, 4, 5, 6)
-                .sort((a,b) -> {
-                    return b.compareTo(a);
-                })
                 .map(e -> {
                     return ""+e;
                 })
-                .sort((a,b) -> {
-                    return a.compareTo(b);
-                })
                 .subscribe(e -> {
                     System.out.println(e);
-                });
+                }, err -> System.out.println("err = " + err));
     }
 
     private Flux<Integer> generateFluxFrom1To6() {
