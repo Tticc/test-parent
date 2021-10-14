@@ -3,6 +3,7 @@ package com.tester.testercv;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
+import com.google.common.collect.LinkedListMultimap;
 import com.tester.testercommon.exception.BusinessException;
 import com.tester.testercommon.util.MyConsumer;
 import org.apache.catalina.util.StandardSessionIdGenerator;
@@ -26,6 +27,20 @@ import java.util.regex.Pattern;
 public class NormalTest_Cv {
 
     private AtomicInteger atomicInteger = new AtomicInteger(0);
+
+
+    @Test
+    public void test_mulMap(){
+        LinkedListMultimap<String, String> mulMap = LinkedListMultimap.create();
+        mulMap.put("111","111");
+        mulMap.put("111","222");
+        mulMap.put("222","111");
+        mulMap.put("222","111");
+        System.out.println(mulMap);
+        System.out.println(mulMap.get("222"));
+
+    }
+
 
     @Test
     public void generateSessionId(){

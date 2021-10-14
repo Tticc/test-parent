@@ -30,13 +30,16 @@ public class ReadinessPointAutoConfiguration {
     public ReadinessPoint readinessPoint(HealthEndpoint health, WebEndpointProperties properties) {
         ReadinessPoint readinessPoint = new ReadinessPoint(health);
 
-        // 启动即强制将readiness加入include列表，使之可用
-        // 或者通过属性配置方式配置（各个服务自己配置）：
-        // management:
-        // endpoints:
-        // web:
-        // exposure:
-        // include: readiness,health,info
+        /**
+         * 启动即强制将readiness加入include列表，使之可用
+         * 或者通过属性配置方式配置（各个服务自己配置）：
+         * management:
+         *   endpoints:
+         *     web:
+         *       exposure:
+         *         include: readiness,health,info
+         * 
+         **/
         WebEndpointProperties.Exposure exposure = properties.getExposure();
         Set<String> include = exposure.getInclude();
         include.add("readiness");
