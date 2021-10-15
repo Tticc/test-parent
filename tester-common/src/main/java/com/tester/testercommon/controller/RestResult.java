@@ -13,8 +13,11 @@ import java.util.stream.Collectors;
 @Data
 public class RestResult<T> implements Serializable {
     // "状态码；200：成功， 非200：失败"
-    protected static long code = 200L;
+    protected static long success = 200L;
     protected static long err = 500L;
+
+
+    protected long code = 200L;
     // "响应消息"
     protected String message = "执行成功！";
     // "时间戳"
@@ -48,7 +51,7 @@ public class RestResult<T> implements Serializable {
         return fail(err,message,data);
     }
     public static <T> RestResult<T> fail(long code, String message,T data) {
-        return (new RestResult()).code(code).message(message).putTimestamp().data((Object)null);
+        return (new RestResult()).code(code).message(message).putTimestamp().data(data);
     }
 
 

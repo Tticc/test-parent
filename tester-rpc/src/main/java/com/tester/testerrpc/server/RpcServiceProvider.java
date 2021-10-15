@@ -116,6 +116,9 @@ public class RpcServiceProvider {
                                  * 4.client需要对应修改调用失败的代码返回。已经改好
                                  */
                                 RestResult requestObject = (RestResult) msg;
+                                if(requestObject.getCode() == 88){
+                                    return;
+                                }
                                 System.out.println("input: " + requestObject.toString());
                                 Object req = requestObject.getData(); // 得到一个String，所以不需要做null判断。是吗？
                                 if (req instanceof String) {
