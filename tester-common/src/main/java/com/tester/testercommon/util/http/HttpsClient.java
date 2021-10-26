@@ -2,6 +2,7 @@ package com.tester.testercommon.util.http;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -11,10 +12,13 @@ import javax.net.ssl.TrustManager;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
+import java.util.Map;
+import java.util.Set;
 /**
- * https
- */
+ * https/http请求管理
+ * @Date 11:15 2021/10/22
+ * @Author 温昌营
+ **/
 @Slf4j
 public class HttpsClient {
 
@@ -38,24 +42,26 @@ public class HttpsClient {
     }
 
 
-    public static JSONObject commonGetRequest(String url){
+    public static JSONObject commonHttpsGetRequest(String url){
         String wenc1 = httpsRequestRetry(url,
                 GET_METHOD,
                 null,
                 0,
                 false,
                 true,
-                "commonGetRequest");
+                "commonGetRequest",
+                null);
         return (JSONObject)JSONObject.parse(wenc1);
     }
-    public static JSONObject commonPostRequest(JSONObject obj, String url){
+    public static JSONObject commonHttpsPostRequest(JSONObject obj, String url){
         String wenc1 = httpsRequestRetry(url,
                 POST_METHOD,
                 obj.toString(),
                 0,
                 false,
                 true,
-                "commonPostRequest");
+                "commonPostRequest",
+                null);
         return (JSONObject)JSONObject.parse(wenc1);
     }
     /**
@@ -75,7 +81,8 @@ public class HttpsClient {
                                            int retryCount,
                                            boolean isBizmpvers,
                                            boolean isHttps,
-                                           String requestId) {
+                                           String requestId,
+                                           Map<String, String> propMap) {
         long strat = System.currentTimeMillis();
         if(retryCount>2){//最多重试3次
             return null;
@@ -109,8 +116,19 @@ public class HttpsClient {
             // 设置请求方式（GET/POST）
             httpUrlConn.setRequestMethod(requestMethod);
 
+            if(!CollectionUtils.isEmpty(propMap)){
+                Set<Map.Entry<String, String>> entries = propMap.entrySet();
+                for (Map.Entry<String, String> entry : entries) {
+                    // such as
+                    // httpUrlConn.setRequestProperty("Cookie","_ga=GA1.2.254215258.1610677327; SERVERID=10.10.36.74:8083; JSESSIONID=6498FC4F1154F1AB554875BDC386498C");
+                    // httpUrlConn.setRequestProperty("Content-Type","application/json;charset=UTF-8");
+                    httpUrlConn.setRequestProperty(entry.getKey(),entry.getValue());
+                }
+            }
+
             if (GET_METHOD.equalsIgnoreCase(requestMethod))
                 httpUrlConn.connect();
+
 
             // 当有数据需要提交时
             if (null != outputStr) {
@@ -138,7 +156,7 @@ public class HttpsClient {
         } catch (IOException ce) {
             log.error("httprequest error uuid=" + thisRequestId
                     + ";server connection timed out.", ce);
-            return httpsRequestRetry(requestUrl, requestMethod, outputStr, retryCount, isBizmpvers, isHttps, requestId);
+            return httpsRequestRetry(requestUrl, requestMethod, outputStr, retryCount, isBizmpvers, isHttps, requestId, propMap);
         } catch (Exception e) {
             log.error("httprequest error uuid=" + thisRequestId + ";", e);
         } finally {
