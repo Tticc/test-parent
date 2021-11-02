@@ -1,4 +1,4 @@
-package com.tester.testerrpc.netty.demo;
+package com.tester.testerrpc.demo.netty.demo;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;

@@ -1,4 +1,4 @@
-package com.tester.testerrpc.netty.helper;
+package com.tester.testerrpc.demo.netty.client;
 
 /**
  * @Author 温昌营

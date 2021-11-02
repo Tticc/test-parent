@@ -1,5 +1,6 @@
 package com.tester.testerfuncprogram;
 
+import lombok.Data;
 import org.junit.Test;
 import org.reactivestreams.Subscription;
 import org.springframework.util.StopWatch;
@@ -41,6 +42,17 @@ public class ReactorTest {
         System.out.println(Runtime.getRuntime().availableProcessors());
     }
 
+    @Data
+    class Text{
+        Text(String test){this.test = test;}
+        String test;
+    }
+    @Test
+    public void test_distinct(){
+        List<Text> strings = Arrays.asList(new Text("aa"),new Text("bb"),new Text("cc"),new Text("aa"));
+        List<Text> block = Flux.fromIterable(strings).distinct(e -> e.getTest()).collectList().block();
+        System.out.println("block = " + block);
+    }
 
     @Test
     public void test_Flux1() {

@@ -2,6 +2,7 @@ package com.tester.testerrpc;
 
 import com.tester.testercommon.exception.BusinessException;
 import com.tester.testercommon.model.request.MemberRequest;
+import com.tester.testerrpc.server.http.helper.ResponseHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,11 @@ import java.util.stream.Stream;
 @Slf4j
 public class RpcNormalTest {
 
+    @Test
+    public void test_len(){
+        byte[] lengthByte = ResponseHelper.getLengthLine(60);
+        System.out.println("lengthByte = " + lengthByte);
+    }
 
     /**
      * 对象 -> obj输出流<br/>

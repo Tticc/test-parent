@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 将初始化器拆分出来
  * @Author 温昌营
  * @Date 2021-10-18 13:54:51
  */
