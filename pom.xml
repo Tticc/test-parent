@@ -32,7 +32,7 @@
         <tkmybatis.version>2.1.5</tkmybatis.version>
         <mockito.version>1.10.19</mockito.version>
         <netty.version>4.1.39.Final</netty.version>
-        <httpclient.version>4.5.8</httpclient.version>
+        <httpclient.version>4.5.13</httpclient.version>
         <swagger.version>2.9.2</swagger.version>
         <poi.version>3.8</poi.version>
         <shardingsphere.version>4.0.0-RC2</shardingsphere.version>
