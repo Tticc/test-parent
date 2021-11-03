@@ -2,24 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tester.testerwebapp.dao.mapper.UserMapper">
     <!--<cache type="org.apache.ibatis.cache.impl.PerpetualCache"></cache>-->
-    <resultMap id="baseResultMap" type="com.tester.testerwebapp.dao.domain.UserDomain">
-        <result property="id" column="id"/>
-        <result property="employeeId" column="employee_id"/>
-        <result property="extPersonId" column="ext_person_id"/>
-        <result property="name" column="name"/>
-        <result property="cellphone" column="cellphone"/>
-        <result property="gender" column="gender"/>
-        <result property="email" column="email"/>
-        <result property="enname" column="enname"/>
-        <result property="status" column="status"/>
-        <result property="wechatid" column="wechatid"/>
-        <result property="note" column="note"/>
-        <result property="dataFrom" column="data_from"/>
-
-        <result property="createTime" column="create_time"/>
-        <result property="updateTime" column="update_time"/>
-        <result property="revision" column="revision"/>
-        <result property="deleted" column="deleted"/>
+    <resultMap id="BaseResultMap" type="com.tester.testerwebapp.dao.domain.UserDomain">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="ext_person_id" property="extPersonId" />
+        <result column="employee_id" property="employeeId" />
+        <result column="cellphone" property="cellphone" />
+        <result column="gender" property="gender" />
+        <result column="email" property="email" />
+        <result column="enname" property="enname" />
+        <result column="wechatid" property="wechatid" />
+        <result column="status" property="status" />
+        <result column="note" property="note" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="revision" property="revision" />
+        <result column="deleted" property="deleted" />
+        <result column="data_from" property="dataFrom" />
     </resultMap>
 
     <sql id="table_name">
@@ -48,15 +47,35 @@
         <include refid="baseSelectSql"></include>
     </sql>
 
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+    ${tableName}.id,
+    ${tableName}.name,
+    ${tableName}.ext_person_id,
+    ${tableName}.employee_id,
+    ${tableName}.cellphone,
+    ${tableName}.gender,
+    ${tableName}.email,
+    ${tableName}.enname,
+    ${tableName}.wechatid,
+    ${tableName}.status,
+    ${tableName}.note,
+    ${tableName}.create_time,
+    ${tableName}.update_time,
+    ${tableName}.revision,
+    ${tableName}.deleted,
+    ${tableName}.data_from
+    </sql>
 
-    <select id="selectUserId" resultMap="baseResultMap">
+
+    <select id="selectUserId" resultMap="BaseResultMap">
         select <include refid="selectSql"></include>
         from <include refid="table_name"></include> as t_alias
         where id = #{id}
         and deleted = 0
     </select>
 
-    <select id="listByName" resultMap="baseResultMap" parameterType="com.tester.testercommon.model.request.IdAndNameRequest">
+    <select id="listByName" resultMap="BaseResultMap" parameterType="com.tester.testercommon.model.request.IdAndNameRequest">
         select <include refid="selectSql"></include>
         from <include refid="table_name"></include>  as t_alias
         <where>
@@ -73,29 +92,163 @@
         and deleted = 0
     </select>
 
-    <!--todo 未完成-->
-    <update id="batchUpdate" parameterType="com.tester.testerwebapp.dao.domain.UserDomain">
-        <foreach collection="list" item="item" index="index" separator=";">
-            update
-            <include refid="table_name"/>
-            <set>
-                <if test="item.invoiceInfoId != null">invoice_info_id = #{item.invoiceInfoId,jdbcType=BIGINT},</if>
-                <if test="item.orderNo != null">order_no = #{item.orderNo,jdbcType=BIGINT},</if>
-                <if test="item.memberId != null">member_id = #{item.memberId,jdbcType=BIGINT},</if>
-                <if test="item.sellerTaxNo != null">seller_tax_no = #{item.sellerTaxNo,jdbcType=VARCHAR},</if>
-                <if test="item.invoiceCode != null">invoice_code = #{item.invoiceCode,jdbcType=VARCHAR},</if>
-                <if test="item.invoiceNo != null">invoice_no = #{item.invoiceNo,jdbcType=VARCHAR},</if>
-                <if test="item.invoiceDate != null">invoice_date = #{item.invoiceDate,jdbcType=TIMESTAMP},</if>
-                <if test="item.taxControlCode != null">tax_control_code = #{item.taxControlCode,jdbcType=VARCHAR},</if>
-                <if test="item.invoiceQrCode != null">invoice_qr_code = #{item.invoiceQrCode,jdbcType=VARCHAR},</if>
-                <if test="item.invoiceUrl != null">invoice_url = #{item.invoiceUrl,jdbcType=VARCHAR},</if>
-                <if test="item.invoiceMainInfo != null">invoice_main_info = #{item.invoiceMainInfo,jdbcType=VARCHAR},
-                </if>
-                version = version + 1,
-            </set>
-            where
-            id = #{item.id, jdbcType=BIGINT} and deleted = 0
-            and version = #{item.version, jdbcType=INTEGER}
-        </foreach>
+
+
+    <!--基础CRUD、分页、列表部分 begin-->
+    <insert id="save" parameterType="com.tester.testerwebapp.dao.domain.UserDomain"
+            keyProperty="id" useGeneratedKeys="true">
+        insert into u_person
+        (
+            id,
+            name,
+            ext_person_id,
+            employee_id,
+            cellphone,
+            gender,
+            email,
+            enname,
+            wechatid,
+            status,
+            note,
+            create_time,
+            update_time,
+            revision,
+            deleted,
+            data_from
+        )
+        values
+        (
+            #{id},
+            #{name},
+            #{extPersonId},
+            #{employeeId},
+            #{cellphone},
+            #{gender},
+            #{email},
+            #{enname},
+            #{wechatid},
+            #{status},
+            #{note},
+            #{createTime},
+            #{updateTime},
+            #{revision},
+            #{deleted},
+            #{dataFrom}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.tester.testerwebapp.dao.domain.UserDomain">
+        update u_person
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="extPersonId != null and extPersonId != ''">
+                ext_person_id = #{extPersonId},
+            </if>
+            <if test="employeeId != null and employeeId != ''">
+                employee_id = #{employeeId},
+            </if>
+            <if test="cellphone != null and cellphone != ''">
+                cellphone = #{cellphone},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="enname != null and enname != ''">
+                enname = #{enname},
+            </if>
+            <if test="wechatid != null and wechatid != ''">
+                wechatid = #{wechatid},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="note != null and note != ''">
+                note = #{note},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="revision != null">
+                revision = #{revision},
+            </if>
+            <if test="deleted != null">
+                deleted = #{deleted},
+            </if>
+            <if test="dataFrom != null">
+                data_from = #{dataFrom},
+            </if>
+        </set>
+        where id = #{id}
     </update>
+
+    <update id="delete">
+        update u_person
+        <set>
+            deleted = 1,
+            updated_at = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="get" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List">
+            <property name="tableName" value="t_alias"></property>
+        </include>
+        from u_person t_alias
+        where t_alias.id = #{id}
+        and t_alias.deleted = 0
+    </select>
+
+
+    <insert id="batchSaveUser" parameterType="java.util.List"
+            keyProperty="id" useGeneratedKeys="true">
+        insert into u_person
+        (
+        id,
+        name,
+        ext_person_id,
+        employee_id,
+        cellphone,
+        gender,
+        email,
+        enname,
+        wechatid,
+        status,
+        note,
+        create_time,
+        update_time,
+        revision,
+        deleted,
+        data_from
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.name},
+            #{item.extPersonId},
+            #{item.employeeId},
+            #{item.cellphone},
+            #{item.gender},
+            #{item.email},
+            #{item.enname},
+            #{item.wechatid},
+            #{item.status},
+            #{item.note},
+            #{item.createTime},
+            #{item.updateTime},
+            #{item.revision},
+            #{item.deleted},
+            #{item.dataFrom}
+
+            )
+        </foreach>
+    </insert>
+
 </mapper>

@@ -39,6 +39,16 @@ public class T004LockTest {
     }
 
 
+    /**
+     * 不同线程的同步控制。
+     * <br/>
+     *
+     * org.apache.rocketmq.common.CountDownLatch2.reset()
+     * @param  
+     * @return void 
+     * @Date 17:56 2021/5/28
+     * @Author 温昌营 
+     **/
     @Test
     public void test_countDownLatch() throws InterruptedException {
         CountDownLatch countDownLatch = new CountDownLatch(3);
@@ -58,6 +68,13 @@ public class T004LockTest {
     }
 
 
+    /**
+     * 栅栏。等待所有线程进入相同位置再往下走
+     * @param
+     * @return void
+     * @Date 9:36 2021/5/28
+     * @Author 温昌营
+     **/
     @Test
     public void test_cyclicBarrier() throws Exception{
         CyclicBarrier cyclicBarrier = new CyclicBarrier(6,()-> System.out.println("all done"));
@@ -82,6 +99,13 @@ public class T004LockTest {
         Thread.sleep(4000L);
     }
 
+    /**
+     * 信号量。信号量消耗完后就停止。可以用来控制并发数量（rocketMQ）
+     * @param
+     * @return void
+     * @Date 9:35 2021/5/28
+     * @Author 温昌营
+     **/
     @Test
     public void test_semaphore() throws Exception{
         Semaphore semaphore = new Semaphore(3);
@@ -101,6 +125,6 @@ public class T004LockTest {
                 }
             },String.valueOf(i)).start();
         }
-        Thread.sleep(4000L);
+        Thread.sleep(40000L);
     }
 }

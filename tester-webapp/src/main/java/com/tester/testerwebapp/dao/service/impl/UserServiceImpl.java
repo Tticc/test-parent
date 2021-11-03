@@ -39,8 +39,10 @@ public class UserServiceImpl extends BaseServiceImpl<Long, UserDomain> implement
     }
 
     @Override
-    public int batchUpdate(List<UserDomain> list) {
-        return userMapper.batchUpdate(list);
+    public int batchSaveUser(List<UserDomain> list){
+        return userMapper.batchSaveUser(list);
     }
+
+
 }
 

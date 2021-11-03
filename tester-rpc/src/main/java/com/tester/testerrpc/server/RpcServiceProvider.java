@@ -12,6 +12,8 @@ import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -30,16 +32,20 @@ import java.util.concurrent.Executors;
  */
 public class RpcServiceProvider {
 
+    Logger log = LoggerFactory.getLogger(RpcServiceProvider.class);
+
+
     public static void main(String[] args) throws Exception {
         doProvide(1, 8000);
     }
 
-    private static ExecutorService threadPool = Executors.newFixedThreadPool(1);
+    public static ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     /**
      * 将 dubbo server放到线程池中。提供service服务。<br/>
      * 为了避免当前server的线程意外终止导致服务不可用，在初始化的时候将taskNum-1个任务放入等待队列，
      * 利用线程池特性，即使线程意外终止，也能立刻启动下一个线程，并重新提供服务。
+     * 前提是 - 线程池永远只有一个线程！！！！！！
      *
      * @param taskNum 等待任务数
      * @param port    端口
@@ -74,7 +80,6 @@ public class RpcServiceProvider {
     public void providedOAnnotation(int port) throws Exception {
         if (port <= 0 || port > 65536)
             throw new IllegalArgumentException("invalid port " + port);
-        System.out.println("service provided on port " + port);
         EventLoopGroup listener = new NioEventLoopGroup();
         EventLoopGroup worker = new NioEventLoopGroup();
         try {
@@ -83,88 +88,7 @@ public class RpcServiceProvider {
             b.channel(NioServerSocketChannel.class);
             b.option(ChannelOption.SO_BACKLOG, 128);
             b.childOption(ChannelOption.SO_KEEPALIVE, true);
-            b.childHandler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                protected void initChannel(SocketChannel ch) throws Exception {
-                    // outBound
-                    // ObjectEncoder 将Java Object转为ByteBuf
-                    ch.pipeline().addLast(new ObjectEncoder());
-                    ch.pipeline().addLast(new ChannelOutboundHandlerAdapter() {
-                    });
-
-                    // inBound
-                    // ObjectDecoder 将ByteBuf转为Java Object
-                    ch.pipeline().addLast(new ObjectDecoder(Integer.MAX_VALUE,
-                            ClassResolvers.cacheDisabled(null)));
-                    ch.pipeline().addLast(new ChannelInboundHandlerAdapter() {
-                        @Override
-                        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-                            RestResult result = null;
-                            ServiceMap.ServiceNode sn = null;
-                            Object service = null;
-                            Method m = null;
-
-                            Map<String, Object> resultMap = new HashMap<String, Object>();
-                            resultMap.put("requestData", msg);
-                            try {
-
-                                /**
-                                 * 待测试项
-                                 * 1.Object req = requestObject.getData();拿到的是String还是JSONObject？ 是String
-                                 * 2.有参方法的调用和无参方法的调用可以兼容吗？ 可以兼容
-                                 * 3.缺少参数的话，能正确提示吗？ 可以
-                                 * 4.client需要对应修改调用失败的代码返回。已经改好
-                                 */
-                                RestResult requestObject = (RestResult) msg;
-                                System.out.println("input: " + requestObject.toString());
-                                Object req = requestObject.getData(); // 得到一个String，所以不需要做null判断。是吗？
-                                if (req instanceof String) {
-                                    System.out.println("this is a String");
-                                }
-                                if (req instanceof JSONObject) {
-                                    System.out.println("this is a JSONObject");
-                                }
-                                JSONObject obj = JSONObject.parseObject(req.toString());
-                                String methodName = String.valueOf(obj.get("serviceKey"));
-                                if ("".equals(methodName) || "null".equals(methodName))
-                                    throw new Exception("未提供serviceKey.");
-
-                                if ((sn = ServiceMap.getServiceNodesMap().get(methodName)) == null ||
-                                        (m = sn.getMethod()) == null ||
-                                        (service = sn.getSerivceImpl()) == null)
-                                    throw new Exception("没有找到对于serviceKey:" + methodName + "对应的service方法,请更正serviceKey!");
-//								Method m = ServiceMap.serviceMap.get(methodName);
-//								if(m == null) 
-                                Parameter[] paramName = m.getParameters();
-                                // 当前方法无参。需要if吗？不需要，可以兼容
-//								if(paramName != null && paramName.length == 0) {
-//									result = ResultVOUtil.success(generateResultMap(obj,m.invoke(new ServiceImpl())));
-//								}else {
-                                Map<String, Object> params = (Map<String, Object>) obj.get("params");
-                                Class<?>[] paramClass = m.getParameterTypes();
-                                Object[] param = new Object[paramName.length];
-                                for (int i = 0; i < paramName.length; i++) {
-                                    Object paramObject = params.get(paramName[i].getName());
-                                    if (paramObject == null) {
-                                        throw new Exception("缺少参数：" + paramName[i].getName());
-                                    }
-                                    param[i] = paramObject;
-                                }
-                                // 正常返回
-                                //result = ;
-                                //resultMap.put("responseData", m.invoke(new ServiceImpl(), param));
-                                resultMap.put("responseData", m.invoke(service, param));
-                                result = RestResult.success(resultMap);
-//								}
-                            } catch (Exception e) {
-                                resultMap.put("responseData", e.getMessage());
-                                result = RestResult.fail(e.getMessage(), resultMap);
-                            }
-                            ctx.writeAndFlush(result);
-                        }
-                    });
-                }
-            });
+            b.childHandler(new MyChannelInitializer());
             ChannelFuture f = b.bind(port).sync();
             f.channel().closeFuture().sync();
 

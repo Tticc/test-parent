@@ -109,7 +109,7 @@ public class QywxRequestTest {
         String token = getAccessToken(contactSecret);
         String deptId = "1000";
         String URI = String.format(deleteDeptURI, token,deptId);
-        JSONObject jsonObject = HttpsClient.commonGetRequest(URI);
+        JSONObject jsonObject = HttpsClient.commonHttpsGetRequest(URI);
         System.out.println(jsonObject);
 
     }
@@ -122,7 +122,7 @@ public class QywxRequestTest {
         obj.put("starttime", "1492617600");
         obj.put("endtime", "1492790400");
         obj.put("useridlist",new ArrayList<String>());
-        JSONObject jsonObject = HttpsClient.commonPostRequest(obj, URI);
+        JSONObject jsonObject = HttpsClient.commonHttpsPostRequest(obj, URI);
         System.out.println(jsonObject);
     }
 
@@ -139,7 +139,7 @@ public class QywxRequestTest {
                 .setEnable(1)
                 .setDepartment(integers);
         JSONObject o = (JSONObject)JSONObject.toJSON(nu);
-        JSONObject jsonObject = HttpsClient.commonPostRequest(o, URI);
+        JSONObject jsonObject = HttpsClient.commonHttpsPostRequest(o, URI);
         System.out.println(jsonObject);
 
     }
@@ -164,7 +164,8 @@ public class QywxRequestTest {
                 0,
                 false,
                 true,
-                "getUserByCode");
+                "getUserByCode",
+                null);
         return (JSONObject)JSONObject.parse(wenc);
     }
 
@@ -187,7 +188,8 @@ public class QywxRequestTest {
                 0,
                 false,
                 true,
-                "getToken");
+                "getToken",
+                null);
         System.out.println(newToken);
         JSONObject parse1 = (JSONObject)JSONObject.parse(newToken);
         return String.valueOf(parse1.get("access_token"));
@@ -199,7 +201,8 @@ public class QywxRequestTest {
                 0,
                 false,
                 true,
-                "getUser");
+                "getUser",
+                null);
         return (JSONObject)JSONObject.parse(wenc);
     }
     /** InfoMessage*/
@@ -210,7 +213,8 @@ public class QywxRequestTest {
                 0,
                 false,
                 true,
-                "updateUser");
+                "updateUser",
+                null);
         return (JSONObject)JSONObject.parse(wenc1);
     }
     /** JSONObject*/
@@ -221,7 +225,8 @@ public class QywxRequestTest {
                 0,
                 false,
                 true,
-                "updateUser");
+                "updateUser",
+                null);
         return (JSONObject)JSONObject.parse(wenc1);
     }
 }

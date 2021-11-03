@@ -22,18 +22,18 @@ public class BaseServiceImpl<PK extends Serializable, E extends BaseDomain> impl
     }
 
     public int save(E entity) {
-        return this.baseMapper.insert(entity);
+        return this.baseMapper.save(entity);
     }
 
     public int delete(PK id) {
-        return this.baseMapper.deleteByPrimaryKey(id);
+        return this.baseMapper.delete(id);
     }
 
     public int update(E entity) {
-        return this.baseMapper.updateByPrimaryKey(entity);
+        return this.baseMapper.update(entity);
     }
 
     public E get(PK id) {
-        return this.baseMapper.selectByPrimaryKey(id);
+        return this.baseMapper.get(id);
     }
 }

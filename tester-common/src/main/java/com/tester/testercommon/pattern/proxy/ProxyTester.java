@@ -1,6 +1,7 @@
 package com.tester.testercommon.pattern.proxy;
 
-import com.tester.testercommon.pattern.proxy.cglib.BizManagerCGLIB;
+import com.tester.testercommon.pattern.proxy.cglib.cglib.DefaultBizManagerCGLIB;
+import com.tester.testercommon.pattern.proxy.cglib.spring.BizManagerCGLIB;
 import com.tester.testercommon.pattern.proxy.jdk.BizManagerJDK;
 
 public class ProxyTester {
@@ -10,5 +11,9 @@ public class ProxyTester {
 
         BizManagerCGLIB proxy = BizManagerCGLIB.getProxy();
         proxy.doBiz();
+
+        DefaultBizManagerCGLIB oriBean = new DefaultBizManagerCGLIB();
+        DefaultBizManagerCGLIB defaultProxy = DefaultBizManagerCGLIB.getProxy(oriBean);
+        defaultProxy.doBiz();
     }
 }

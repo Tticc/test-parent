@@ -17,7 +17,5 @@ public interface UserMapper extends BaseMapper<UserDomain, Long> {
 
     List<UserDomain> listByName(IdAndNameRequest request);
 
-    // todo 未完成
-    int batchUpdate(@Param("list") List<UserDomain> list);
-
+    int batchSaveUser(List<UserDomain> list);
 }

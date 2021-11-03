@@ -30,7 +30,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+/**
+ * 自动配置RestTemplate
+ * @Date 11:18 2021/6/7
+ * @Author 温昌营
+ * @see org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration RestTemplateAutoConfiguration
+ **/
 @Configuration
 @ConditionalOnProperty(prefix = "my.rest",name = {"connectTimeout"})
 @ConfigurationProperties(prefix = "my.rest")

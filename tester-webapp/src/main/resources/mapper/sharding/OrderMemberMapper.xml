@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tester.testermybatis.dao.mapper.OrderMemberMapper">
-    <resultMap type="com.tester.testermybatis.dao.domain.OrderMemberDomain" id="baseResultMap">
-        <result property="id" column="id"/>
-        <result property="memberId" column="member_id"/>
-        <result property="orderNo" column="order_no"/>
-        <result property="memberAccount" column="member_account"/>
-        <result property="memberPhone" column="member_phone"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateTime" column="update_time"/>
-        <result property="revision" column="revision"/>
-        <result property="deleted" column="deleted"/>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tester.testermybatis.dao.domain.OrderMemberDomain">
+        <id column="id" property="id" />
+        <result column="order_no" property="orderNo" />
+        <result column="member_id" property="memberId" />
+        <result column="member_account" property="memberAccount" />
+        <result column="member_phone" property="memberPhone" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="revision" property="revision" />
+        <result column="deleted" property="deleted" />
     </resultMap>
     <sql id="baseSelectSql">
 		member_id
@@ -28,19 +29,21 @@
     </sql>
 
 
-    <sql id="insertSql">
-		#{memberId},
-        #{orderNo},
-        #{memberAccount},
-        #{memberPhone},
-        #{createTime},
-        #{updateTime},
-        #{revision},
-        #{deleted}
-	</sql>
-
     <sql id="table_name">
         order_member
+    </sql>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+    ${tableName}.id,
+    ${tableName}.order_no,
+    ${tableName}.member_id,
+    ${tableName}.member_account,
+    ${tableName}.member_phone,
+    ${tableName}.create_time,
+    ${tableName}.update_time,
+    ${tableName}.revision,
+    ${tableName}.deleted
     </sql>
 
     <select id="testJoinTable" resultType="com.tester.testermybatis.model.response.MemberJoinItemVO">
@@ -54,16 +57,6 @@
         from order_member as om join order_item as oi on om.id = oi.id
         where om.id = #{id} and oi.deleted = 0 and om.deleted = 0
     </select>
-
-    <insert id="insert" parameterType="com.tester.testermybatis.dao.domain.OrderMemberDomain">
-        insert into <include refid="table_name"></include>
-        <trim prefix="(" suffix=")" >
-            <include refid="baseSelectSql"/>
-        </trim>
-        <trim prefix="values (" suffix=")" >
-            <include refid="insertSql"/>
-        </trim>
-    </insert>
 
 
 
@@ -90,5 +83,83 @@
                 and deleted = #{deleted}
             </if>
         </where>
+    </select>
+
+
+    <!--基础CRUD、分页、列表部分 begin-->
+    <insert id="save" parameterType="com.tester.testermybatis.dao.domain.OrderMemberDomain"
+            keyProperty="id" useGeneratedKeys="true">
+        insert into order_member_0
+        (
+            id,
+            order_no,
+            member_id,
+            member_account,
+            member_phone,
+            create_time,
+            update_time,
+            revision,
+            deleted
+        )
+        values
+        (
+            #{id},
+            #{orderNo},
+            #{memberId},
+            #{memberAccount},
+            #{memberPhone},
+            #{createTime},
+            #{updateTime},
+            #{revision},
+            #{deleted}
+
+        )
+    </insert>
+
+    <update id="update" parameterType="com.tester.testermybatis.dao.domain.OrderMemberDomain">
+        update order_member_0
+        <set>
+            <if test="orderNo != null">
+                order_no = #{orderNo},
+            </if>
+            <if test="memberId != null">
+                member_id = #{memberId},
+            </if>
+            <if test="memberAccount != null and memberAccount != ''">
+                member_account = #{memberAccount},
+            </if>
+            <if test="memberPhone != null and memberPhone != ''">
+                member_phone = #{memberPhone},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="revision != null">
+                revision = #{revision},
+            </if>
+            <if test="deleted != null">
+                deleted = #{deleted},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="delete">
+        update order_member_0
+        <set>
+            deleted = 1,
+            updated_at = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="get" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List">
+            <property name="tableName" value="t_alias"></property>
+        </include>
+        from order_member_0 t_alias
+        where t_alias.id = #{id}
+        and t_alias.deleted = 0
     </select>
 </mapper>

@@ -49,14 +49,14 @@ public class ShardingJdbcTestController extends BaseController {
                 .setSalePrice(new BigDecimal("0.00"))
                 .setSaleUnit("zhang")
                 .setWeight(new BigDecimal("0.00"));
-        int insert = orderItemManager.insert(domain);
+        int insert = orderItemManager.save(domain);
 
         OrderMemberDomain orderMemberDomain = new OrderMemberDomain().init();
         orderMemberDomain.setMemberAccount("account129039")
                 .setMemberId(memberId)
                 .setMemberPhone("" + memberId)
                 .setOrderNo(aLong);
-        int insert1 = orderMemberManager.insert(orderMemberDomain);
+        int insert1 = orderMemberManager.save(orderMemberDomain);
         return success(domain);
     }
 

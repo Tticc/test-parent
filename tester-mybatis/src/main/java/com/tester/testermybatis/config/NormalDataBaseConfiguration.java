@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ import java.sql.SQLException;
  */
 @Configuration
 @EnableConfigurationProperties({MybatisProperties.class})
-@tk.mybatis.spring.annotation.MapperScan(basePackages = {"com.tester.testerwebapp.dao.mapper"}, sqlSessionFactoryRef = "normalSqlSessionFactory")
+@MapperScan(basePackages = {"com.tester.testerwebapp.dao.mapper"}, sqlSessionFactoryRef = "normalSqlSessionFactory")
 @Data
 @Slf4j
 public class NormalDataBaseConfiguration implements InitializingBean {

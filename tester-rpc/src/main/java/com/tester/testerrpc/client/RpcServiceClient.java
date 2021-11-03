@@ -25,12 +25,6 @@ import java.util.concurrent.*;
  */
 public class RpcServiceClient {
 	public static void main(String[] args) throws InterruptedException {
-		// 初始化并启动client。
-		RpcServiceClient dsa = RpcServiceClient.getInstance();
-		Thread.sleep(5000);
-
-		// 调用 dubbo 服务
-
 		JSONObject params = new JSONObject();
 		new Thread(new Runnable() {
 			@Override
@@ -44,65 +38,12 @@ public class RpcServiceClient {
 				System.out.println("done!");
 			}
 		}, "Tticc").start();
-
-/*		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				// 单例测试 成功
-				JSONObject par = new JSONObject();
-				DubboService ds = DubboService.getInstance();
-				System.out.println(ds.toString());
-				System.out.println("Tticc ****************************************************");
-				System.out.println("output in thread:"+ds.getDubboService("sayBye", par));
-			}
-		}, "Tticc").start();*/
-
-/*		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				DubboService ds = DubboService.getInstance();
-				System.out.println(ds.toString());
-				System.out.println("Tticc1 ****************************************************");
-				params.put("name", "Tticc1");
-				System.out.println("output in thread:"+ds.getDubboService("sayHello", params));
-			}
-		},"Tticc1").start();
-
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				DubboService ds = DubboService.getInstance();
-				System.out.println(ds.toString());
-				System.out.println("Tticc2 ****************************************************");
-				params.put("name", "Tticc2");
-				System.out.println("output in thread:"+ds.getDubboService("sayHello", params));
-			}
-		}, "Tticc2").start();
-
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				DubboService ds = DubboService.getInstance();
-				System.out.println(ds.toString());
-				System.out.println("Tticc3 ****************************************************");
-				params.put("name", "Tticc3");
-				System.out.println("output in thread:"+ds.getDubboService("sayHello", params));
-			}
-		}, "Tticc3").start();*/
-
-//		System.out.println("output in main:" + params);
-//		Thread.sleep(4000);
-//		params.put("name", "tticc, please go into");
-//		params = (JSONObject) ds.getDubboService("sayHello", params);
-//		System.out.println("output in main 2:" + params);
-
-
 	}
 
 	// 初始化 mft。
 	private MyFutureTask<Object> mft = new MyFutureTask<Object>();
-	//private final String HOST = "127.0.0.1";
-	private static String host = "192.168.99.1";
+	private static String host = "127.0.0.1";
+//	private static String host = "192.168.99.1";
 	private static int port = 8000;
 	public RpcServiceClient setMft(MyFutureTask<Object> mft) {
 		this.mft = mft;
@@ -168,8 +109,8 @@ public class RpcServiceClient {
 				lastWriteFuture.sync();
 			}*/
 
-			//阻塞 60s 等待返回
-			return mft.myGet(50,TimeUnit.SECONDS);
+			//阻塞 5s 等待返回
+			return mft.myGet(5,TimeUnit.SECONDS);
 		}catch(TimeoutException te) {
 			te.printStackTrace();
 			errMsg = "调用超时！";
@@ -229,6 +170,17 @@ public class RpcServiceClient {
 									returnVO = RestResult.fail(result.getMessage(),resultMap.get("responseData"));
 								}
 								mft.set(threadID, returnVO);
+								if(result.getCode() != 88){
+									System.out.println("going into done");
+									JSONObject requestJson = new JSONObject();
+									requestJson.put("threadID", String.valueOf(threadID));
+									requestJson.put("serviceKey", "SHUTDOWNNOW");
+									requestJson.put("params", new JSONObject());
+									lbq.add(requestJson.toString());
+									RestResult<String> success = RestResult.success("88");
+									success.setCode(88);
+									ctx.close();
+								}
 							}catch(ClassCastException cce) {
 								cce.printStackTrace();
 							}catch(com.alibaba.fastjson.JSONException je) {
@@ -265,19 +217,25 @@ public class RpcServiceClient {
 				requestStr = lbq.take();
 				// 每隔 5s 与server通信一次
 				//requestStr = lbq.poll(5, TimeUnit.SECONDS);
-				
+
 				System.out.println("requestStr is:"+requestStr);
 				if(null == requestStr) {
 					requestStr = "geek";
 				}
+				JSONObject json = JSONObject.parseObject(requestStr, JSONObject.class);
+				Object serviceKey = json.get("serviceKey");
+				if ("SHUTDOWNNOW".equals(serviceKey.toString())) {
+					ChannelFuture sync = ch.closeFuture().sync();
+					sync.addListener((future) -> {
+						System.out.println("xxxxxx threadPool shutdowning");
+						threadPool.shutdownNow();
+					});
+					System.out.println("xxxxxxx client was closed");
+					break;
+				}
 				lastWriteFuture = ch.writeAndFlush(RestResult.success(requestStr));
 				if (lastWriteFuture != null) {
 					lastWriteFuture.sync();
-				}
-				//Thread.sleep(2500);
-				if ("SHUTDOWNNOW".equals(requestStr)) {
-					 ch.closeFuture().sync();
-					 break;
 				}
 			}
 		}catch (InterruptedException e) {
@@ -285,6 +243,7 @@ public class RpcServiceClient {
 				Thread.currentThread().interrupt();
 		}finally {
 			worker.shutdownGracefully();
+			System.out.println("xxxx worker shutdown");
 		}
 	}
 

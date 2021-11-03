@@ -12,9 +12,7 @@ import lombok.Data;
 @ApiModel(description = "TextRequest")
 @Data
 public class TextRequest extends BaseDTO {
-    /**
-     * text
-     */
-    @ApiModelProperty(value = "text", name = "text")
+
+    @ApiModelProperty(value = "text", name = "text", example = "texxxxxx")
     private String text;
 }

@@ -25,12 +25,13 @@
         <PKCS7.version>1.46</PKCS7.version>
         <mysql.version>8.0.16</mysql.version>
         <mybatis.version>2.1.1</mybatis.version>
+        <jpa.version>1.0</jpa.version>
         <datasource.version>3.3.1</datasource.version>
         <persistence.version>1.0.2</persistence.version>
         <fastjson.version>1.2.60</fastjson.version>
         <tkmybatis.version>2.1.5</tkmybatis.version>
         <mockito.version>1.10.19</mockito.version>
-        <netty.version>4.1.45.Final</netty.version>
+        <netty.version>4.1.39.Final</netty.version>
         <httpclient.version>4.5.8</httpclient.version>
         <swagger.version>2.9.2</swagger.version>
         <poi.version>3.8</poi.version>
@@ -41,6 +42,9 @@
         <jwt.version>0.9.0</jwt.version>
         <rocketmq-spring-boot-starter.version>2.0.3</rocketmq-spring-boot-starter.version>
         <commons-pool2.version>2.7.0</commons-pool2.version>
+        <xxl-job.version>2.0.1</xxl-job.version>
+        <cglib.version>3.3.0</cglib.version>
+
 
 
     </properties>
@@ -142,31 +146,6 @@
                 <artifactId>reactor-core</artifactId>
                 <version>${reactor.version}</version>
             </dependency>
-            <!--tk.mybatis-->
-            <dependency>
-                <groupId>tk.mybatis</groupId>
-                <artifactId>mapper-spring-boot-starter</artifactId>
-                <version>${tkmybatis.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter-jdbc</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.mybatis</groupId>
-                        <artifactId>mybatis</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.mybatis</groupId>
-                        <artifactId>mybatis-spring</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <!--tk.mybatis-->
 
             <!-- shardingsphere -->
             <dependency>
@@ -214,6 +193,14 @@
                 <version>${mybatis.version}</version>
             </dependency>
             <!--mysql-->
+
+            <!--jpa-->
+            <dependency>
+                <groupId>javax.persistence</groupId>
+                <artifactId>persistence-api</artifactId>
+                <version>${jpa.version}</version>
+            </dependency>
+            <!--jpa-->
 
             <!--netty-->
             <dependency>
@@ -325,6 +312,21 @@
             </dependency>
             <!--cv and capture-->
 
+            <!--xxlJob-->
+            <dependency>
+                <groupId>com.xuxueli</groupId>
+                <artifactId>xxl-job-core</artifactId>
+                <version>${xxl-job.version}</version>
+            </dependency>
+            <!--xxlJob-->
+
+
+            <!-- https://mvnrepository.com/artifact/cglib/cglib -->
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>${cglib.version}</version>
+            </dependency>
 
 
 
