@@ -12,6 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.*;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +24,24 @@ import java.util.stream.Stream;
  */
 @Slf4j
 public class RpcNormalTest {
+
+    public class Super{
+        public void superPrint(){
+
+        }
+    }
+    public class Sub extends Super{
+//        @Override
+//        public void superPrint(){
+//
+//        }
+    }
+
+    @Test
+    public void test_getMethod() throws Exception {
+        Method superPrint = Sub.class.getMethod("superPrint");
+        System.out.println("superPrint = " + superPrint);
+    }
 
     @Test
     public void test_len(){

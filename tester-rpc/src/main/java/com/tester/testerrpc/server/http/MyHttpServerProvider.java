@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
  * http服务提供。<br/>
  * 浏览器输入地址：http://localhost:8000
  * <br/><br/>
- * 或者socket的方式
+ * 或者socket的方式（socket可以建立连接，但是由于socket的协议原因，这里无法读取消息。可用：MyWebSocketServerProvider）
  * @Date 15:23 2021/11/2
  * @Author 温昌营
  **/
