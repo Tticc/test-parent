@@ -75,7 +75,18 @@ public class HttpsClient {
         propertyMap.put("Content-Type", "application/json;charset=UTF-8");
         return (JSONObject) JSONObject.parse(requestForString(url, POST_METHOD, params, propertyMap, null));
     }
-
+    /**
+     * 发送请求，将返回转为字符串
+     *
+     * @Date 10:19 2021/11/9
+     * @Author 温昌营
+     **/
+    public static String requestForString(String url,
+                                          String requestMethod,
+                                          @Nullable JSONObject reqParams,
+                                          @Nullable Map<String, String> propertyMap) throws BusinessException {
+        return requestForString(url, requestMethod, reqParams, propertyMap,null);
+    }
 
     /**
      * 发送请求，将返回转为字符串
@@ -89,7 +100,7 @@ public class HttpsClient {
                                           @Nullable Map<String, String> propertyMap,
                                           @Nullable Proxy proxy) throws BusinessException {
         AtomicReference<String> resContainer = new AtomicReference<>(null);
-        doHttpRequest(url, requestMethod, reqParams, propertyMap, proxy, (inputStream) -> {
+        doHttpRequest_sub(url, requestMethod, reqParams, propertyMap, proxy, (inputStream) -> {
             try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
                  BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
                 String str;
@@ -110,6 +121,19 @@ public class HttpsClient {
         });
         return resContainer.get();
     }
+    /**
+     * 发送请求，将返回的数据流写入文件
+     *
+     * @Date 10:26 2021/11/9
+     * @Author 温昌营
+     **/
+    public static void requestForFile(String url,
+                                      String requestMethod,
+                                      @Nullable JSONObject reqParams,
+                                      @Nullable Map<String, String> propertyMap,
+                                      File outFile) throws BusinessException {
+        requestForFile(url, requestMethod, reqParams, propertyMap, outFile,null);
+    }
 
     /**
      * 发送请求，将返回的数据流写入文件
@@ -123,7 +147,7 @@ public class HttpsClient {
                                       @Nullable Map<String, String> propertyMap,
                                       File outFile,
                                       @Nullable Proxy proxy) throws BusinessException {
-        doHttpRequest(url, requestMethod, reqParams, propertyMap, proxy, (inputStream) -> {
+        doHttpRequest_sub(url, requestMethod, reqParams, propertyMap, proxy, (inputStream) -> {
             try (FileOutputStream fo = new FileOutputStream(outFile)) {
                 byte[] bytes = new byte[1024];
                 int len = 0;
@@ -150,12 +174,12 @@ public class HttpsClient {
      * @Date 9:43 2021/11/9
      * @Author 温昌营
      **/
-    public static void doHttpRequest(String requestUrl,
-                                     String requestMethod,
-                                     @Nullable JSONObject reqParams,
-                                     @Nullable Map<String, String> propertyMap,
-                                     @Nullable Proxy proxy,
-                                     MyFunction<InputStream, String> function) throws BusinessException {
+    public static void doHttpRequest_sub(String requestUrl,
+                                         String requestMethod,
+                                         @Nullable JSONObject reqParams,
+                                         @Nullable Map<String, String> propertyMap,
+                                         @Nullable Proxy proxy,
+                                         MyFunction<InputStream, String> function) throws BusinessException {
         assert !StringUtils.isEmpty(requestUrl) : "requestUrl empty";
         assert !StringUtils.isEmpty(requestMethod) : "requestMethod empty";
         assert !StringUtils.isEmpty(requestMethod) : "requestMethod empty";
