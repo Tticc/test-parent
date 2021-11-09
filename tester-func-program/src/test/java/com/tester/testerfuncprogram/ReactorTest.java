@@ -36,6 +36,12 @@ import java.util.stream.Stream;
  */
 public class ReactorTest {
 
+    private Mono<Void> generateFluxFrom1To61(int k) {
+        if(k == 1){
+            return Mono.error(new Exception());
+        }
+        return Mono.empty();
+    }
     @Test
     public void test_getCPUProcessNumber(){
 
