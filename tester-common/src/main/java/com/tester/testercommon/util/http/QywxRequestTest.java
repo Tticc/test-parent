@@ -12,9 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 企业微信接口测试 - qywx
  * @Author 温昌营
  * @Date
  */
+@Deprecated
 public class QywxRequestTest {
 
     private static String getUrl =  "https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=%s&userid=%s";
@@ -66,7 +68,7 @@ public class QywxRequestTest {
 //        getCheckInData();
 
         // 删除部门
-        deleteDept();
+//        deleteDept();
 
         // 2.更新企业微信用户的手机号 - 失败
         // 获取user
@@ -105,44 +107,44 @@ public class QywxRequestTest {
 //        System.out.println(jsonObject);
     }
 
-    private static void deleteDept(){
-        String token = getAccessToken(contactSecret);
-        String deptId = "1000";
-        String URI = String.format(deleteDeptURI, token,deptId);
-        JSONObject jsonObject = HttpsClient.commonHttpsGetRequest(URI);
-        System.out.println(jsonObject);
+//    private static void deleteDept(){
+//        String token = getAccessToken(contactSecret);
+//        String deptId = "1000";
+//        String URI = String.format(deleteDeptURI, token,deptId);
+//        JSONObject jsonObject = HttpsClient.commonHttpsGetRequest(URI);
+//        System.out.println(jsonObject);
+//
+//    }
 
-    }
+//    private static void getCheckInData(){
+//        String token = getAccessToken(checkInSecret);
+//        String URI = String.format(checkInDataUrl, token);
+//        JSONObject obj = new JSONObject();
+//        obj.put("opencheckindatatype", "3");
+//        obj.put("starttime", "1492617600");
+//        obj.put("endtime", "1492790400");
+//        obj.put("useridlist",new ArrayList<String>());
+//        JSONObject jsonObject = HttpsClient.commonHttpsPostRequest(obj, URI);
+//        System.out.println(jsonObject);
+//    }
 
-    private static void getCheckInData(){
-        String token = getAccessToken(checkInSecret);
-        String URI = String.format(checkInDataUrl, token);
-        JSONObject obj = new JSONObject();
-        obj.put("opencheckindatatype", "3");
-        obj.put("starttime", "1492617600");
-        obj.put("endtime", "1492790400");
-        obj.put("useridlist",new ArrayList<String>());
-        JSONObject jsonObject = HttpsClient.commonHttpsPostRequest(obj, URI);
-        System.out.println(jsonObject);
-    }
-
-    private static void createUser(){
-        String token = getAccessToken(contactSecret);
-        String URI = String.format(createUserInfoURI, token);
-        QywxUserInfoMessage nu = new QywxUserInfoMessage();
-        ArrayList<Integer> integers = new ArrayList<>();
-        integers.add(4);
-        integers.add(null);
-        nu.setEmail("00005@qq.com")
-                .setName("ccccc")
-                .setUserid("00000125")
-                .setEnable(1)
-                .setDepartment(integers);
-        JSONObject o = (JSONObject)JSONObject.toJSON(nu);
-        JSONObject jsonObject = HttpsClient.commonHttpsPostRequest(o, URI);
-        System.out.println(jsonObject);
-
-    }
+//    private static void createUser(){
+//        String token = getAccessToken(contactSecret);
+//        String URI = String.format(createUserInfoURI, token);
+//        QywxUserInfoMessage nu = new QywxUserInfoMessage();
+//        ArrayList<Integer> integers = new ArrayList<>();
+//        integers.add(4);
+//        integers.add(null);
+//        nu.setEmail("00005@qq.com")
+//                .setName("ccccc")
+//                .setUserid("00000125")
+//                .setEnable(1)
+//                .setDepartment(integers);
+//        JSONObject o = (JSONObject)JSONObject.toJSON(nu);
+//        JSONObject jsonObject = HttpsClient.commonHttpsPostRequest(o, URI);
+//        System.out.println(jsonObject);
+//
+//    }
 
     public static QywxUserExtInfo generateAttr(String name, String value){
         QywxUserExtInfo ex = new QywxUserExtInfo();
@@ -154,20 +156,20 @@ public class QywxRequestTest {
         return ex;
     }
 
-    public static JSONObject getUserByCode(String code){
-        String token = getAccessToken(hdSecret);
-//        String token = getAccessToken(contactSecret);
-        String url = String.format(getUserURI_miapp,token,code);
-        String wenc = HttpsClient.httpsRequestRetry(url,
-                GET_METHOD,
-                null,
-                0,
-                false,
-                true,
-                "getUserByCode",
-                null);
-        return (JSONObject)JSONObject.parse(wenc);
-    }
+//    public static JSONObject getUserByCode(String code){
+//        String token = getAccessToken(hdSecret);
+////        String token = getAccessToken(contactSecret);
+//        String url = String.format(getUserURI_miapp,token,code);
+//        String wenc = HttpsClient.httpsRequestRetry(url,
+//                GET_METHOD,
+//                null,
+//                0,
+//                false,
+//                true,
+//                "getUserByCode",
+//                null);
+//        return (JSONObject)JSONObject.parse(wenc);
+//    }
 
     public static String DateToTimeStamp(String dateStr, String formats) {
         try {
@@ -181,52 +183,52 @@ public class QywxRequestTest {
         }
         return "";
     }
-    public static String getAccessToken(String secret){
-        String newToken = HttpsClient.httpsRequestRetry(String.format(getToken, corpId, secret),
-                GET_METHOD,
-                null,
-                0,
-                false,
-                true,
-                "getToken",
-                null);
-        System.out.println(newToken);
-        JSONObject parse1 = (JSONObject)JSONObject.parse(newToken);
-        return String.valueOf(parse1.get("access_token"));
-    }
-    public static JSONObject getUser(String userId, String token){
-        String wenc = HttpsClient.httpsRequestRetry(String.format(getUrl, token, userId),
-                GET_METHOD,
-                null,
-                0,
-                false,
-                true,
-                "getUser",
-                null);
-        return (JSONObject)JSONObject.parse(wenc);
-    }
+//    public static String getAccessToken(String secret){
+//        String newToken = HttpsClient.httpsRequestRetry(String.format(getToken, corpId, secret),
+//                GET_METHOD,
+//                null,
+//                0,
+//                false,
+//                true,
+//                "getToken",
+//                null);
+//        System.out.println(newToken);
+//        JSONObject parse1 = (JSONObject)JSONObject.parse(newToken);
+//        return String.valueOf(parse1.get("access_token"));
+//    }
+//    public static JSONObject getUser(String userId, String token){
+//        String wenc = HttpsClient.httpsRequestRetry(String.format(getUrl, token, userId),
+//                GET_METHOD,
+//                null,
+//                0,
+//                false,
+//                true,
+//                "getUser",
+//                null);
+//        return (JSONObject)JSONObject.parse(wenc);
+//    }
     /** InfoMessage*/
-    public static JSONObject updateUser(QywxUserInfoMessage user, String token){
-        String wenc1 = HttpsClient.httpsRequestRetry(String.format(updateUrl, token),
-                POST_METHOD,
-                user.toString(),
-                0,
-                false,
-                true,
-                "updateUser",
-                null);
-        return (JSONObject)JSONObject.parse(wenc1);
-    }
+//    public static JSONObject updateUser(QywxUserInfoMessage user, String token){
+//        String wenc1 = HttpsClient.httpsRequestRetry(String.format(updateUrl, token),
+//                POST_METHOD,
+//                user.toString(),
+//                0,
+//                false,
+//                true,
+//                "updateUser",
+//                null);
+//        return (JSONObject)JSONObject.parse(wenc1);
+//    }
     /** JSONObject*/
-    public static JSONObject updateUser(JSONObject user, String token){
-        String wenc1 = HttpsClient.httpsRequestRetry(String.format(updateUrl, token),
-                POST_METHOD,
-                user.toString(),
-                0,
-                false,
-                true,
-                "updateUser",
-                null);
-        return (JSONObject)JSONObject.parse(wenc1);
-    }
+//    public static JSONObject updateUser(JSONObject user, String token){
+//        String wenc1 = HttpsClient.httpsRequestRetry(String.format(updateUrl, token),
+//                POST_METHOD,
+//                user.toString(),
+//                0,
+//                false,
+//                true,
+//                "updateUser",
+//                null);
+//        return (JSONObject)JSONObject.parse(wenc1);
+//    }
 }

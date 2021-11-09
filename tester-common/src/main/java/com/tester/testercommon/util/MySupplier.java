@@ -31,6 +31,7 @@ import com.tester.testercommon.exception.BusinessException;
  * 比自带的Supplier多了一个异常抛出声明
  * @Date 2020-6-23
  * @Author 温昌营
+ * @see java.util.function.Supplier
  **/
 @FunctionalInterface
 public interface MySupplier<T> {

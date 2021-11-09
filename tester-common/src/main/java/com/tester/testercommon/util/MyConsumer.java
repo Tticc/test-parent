@@ -32,6 +32,7 @@ import java.util.Objects;
  * 比自带的Consumer多了一个异常抛出声明
  * @Date 2020-6-23
  * @Author 温昌营
+ * @see java.util.function.Consumer
  **/
 @FunctionalInterface
 public interface MyConsumer<T> {
