@@ -1,4 +1,4 @@
-package com.tester.testercv;
+package com.tester.testercv.img.start;
 
 import com.tester.testercommon.util.http.HttpsClient;
 import com.tester.testercommon.util.pool.DefaultPool;
@@ -64,14 +64,22 @@ public class ImgDownload {
      * @Date 18:04 2021/11/10
      * @Author 温昌营
      **/
-    public void pushTask(int startIndex, int endIndex, String prefixUrl, String prefixFilePath) {
+    public void pushTask(int startIndex, int endIndex, String prefixUrl, String folderPath) {
+        File dir = new File(folderPath);
+        if(!dir.exists()){
+            if(dir.mkdirs()){
+                System.out.println("dir create success. --" + folderPath);
+            }else{
+                System.out.println("dir create failed! --" + folderPath);
+            }
+        }
         DownloadTask downloadTask = new DownloadTask()
                 .setStartIndex(startIndex)
                 .setEndIndex(endIndex)
                 .setCurrentIndex(startIndex)
                 .setPrefixUrl(prefixUrl)
 //                .setPostfixUrl(oriTask.getPostfixUrl())
-                .setPrefixFilePath(prefixFilePath);
+                .setPrefixFilePath(folderPath);
         putEle(downloadTask);
     }
 
