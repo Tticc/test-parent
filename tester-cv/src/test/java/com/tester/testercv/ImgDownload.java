@@ -21,7 +21,9 @@ public class ImgDownload {
 
     private static BlockingQueue<DownloadTask> queue = new LinkedBlockingQueue<>();
 
-    private static Thread theThread;
+    private static Thread monitorThread;
+
+    private static Proxy proxy = HttpsClient.getProxy("127.0.0.1", 10809);
 
     /**
      * main方法启动
@@ -51,7 +53,7 @@ public class ImgDownload {
         });
         MonitorTask monitorTask = new MonitorTask(consumer);
         Thread thread = new Thread(monitorTask, "my-monitor-deamon");
-        theThread = thread;
+        monitorThread = thread;
         thread.setDaemon(true);
         thread.start();
     }
@@ -131,8 +133,7 @@ public class ImgDownload {
         public void run() {
             try {
                 while (this.currentIndex <= this.endIndex) {
-                    Proxy proxy = HttpsClient.getProxy("127.0.0.1", 10809);
-                    String url = this.prefixUrl + this.currentIndex + this.postfixUrl;
+                    String url = getUrl(this.prefixUrl, this.currentIndex, this.postfixUrl);
                     File outFile = new File(getFileName(this.prefixFilePath, this.currentIndex, ".jpg"));
                     HttpsClient.requestForFile(url, HttpsClient.GET_METHOD, null, null, outFile, proxy);
                     ++this.currentIndex;
@@ -146,8 +147,14 @@ public class ImgDownload {
     public static void putEle(DownloadTask task) {
         boolean offer = queue.offer(task);
         if (offer) {
-            LockSupport.unpark(theThread);
+            LockSupport.unpark(monitorThread);
         }
+    }
+
+    private static String getUrl(String prefixUrl, int currentIndex, String postfixUrl){
+         String mid = ""+currentIndex;
+//        String mid = currentIndex+"/pexels-photo-"+currentIndex;
+        return prefixUrl + mid + postfixUrl;
     }
 
     private static String getFileName(String prefixFilePath, int currentIndex, String postfixFilePath) {
