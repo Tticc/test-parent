@@ -1,9 +1,8 @@
 package com.tester.testerrpc.server.http.helper;
 
+import com.tester.testercommon.util.MyHexUtils;
 import com.tester.testercommon.util.endecrypt.SHA1Encrypt;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.coyote.http11.Constants;
-import org.apache.tomcat.util.buf.HexUtils;
 
 import java.util.Arrays;
 
@@ -12,11 +11,21 @@ import java.util.Arrays;
  * @Date 2021-10-27 11:47:38
  */
 public class ResponseHelper {
+    /**
+     * CR.
+     */
+    public static final byte CR = (byte) '\r';
+
+
+    /**
+     * LF.
+     */
+    public static final byte LF = (byte) '\n';
 
     public static final String SOCKET_KEY_SIGN_POSTFIX = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 
 
-    private static final byte[] ENTER_BYTES = new byte[]{Constants.CR,Constants.LF};
+    private static final byte[] ENTER_BYTES = new byte[]{CR,LF};
 
     /**
      * 可用
@@ -97,14 +106,14 @@ public class ResponseHelper {
         int maxLen = 10;
         byte[] chunkHeader = new byte[maxLen];
         chunkHeader[7] = (byte)0;
-        chunkHeader[8] = Constants.CR;
-        chunkHeader[9] = Constants.LF;
+        chunkHeader[8] = CR;
+        chunkHeader[9] = LF;
         int pos = 8;
         int current = len;
         while (current > 0) {
             int digit = current % 16;
             current = current / 16;
-            chunkHeader[--pos] = HexUtils.getHex(digit);
+            chunkHeader[--pos] = MyHexUtils.getHex(digit);
         }
         byte[] res = new byte[maxLen-pos];
         for (int i = 0; i < res.length; i++) {

@@ -9,6 +9,7 @@ import java.io.File;
 import java.net.Proxy;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
 
 /**
@@ -19,6 +20,10 @@ public class ImgDownload {
 
 
     private static BlockingQueue<DownloadTask> queue = new LinkedBlockingQueue<>();
+
+    private static Thread monitorThread;
+
+    private static Proxy proxy = HttpsClient.getProxy("127.0.0.1", 10809);
 
     /**
      * main方法启动
@@ -48,6 +53,7 @@ public class ImgDownload {
         });
         MonitorTask monitorTask = new MonitorTask(consumer);
         Thread thread = new Thread(monitorTask, "my-monitor-deamon");
+        monitorThread = thread;
         thread.setDaemon(true);
         thread.start();
     }
@@ -66,7 +72,7 @@ public class ImgDownload {
                 .setPrefixUrl(prefixUrl)
 //                .setPostfixUrl(oriTask.getPostfixUrl())
                 .setPrefixFilePath(prefixFilePath);
-        queue.offer(downloadTask);
+        putEle(downloadTask);
     }
 
 
@@ -89,11 +95,12 @@ public class ImgDownload {
             while (this.state != STOPPED) {
                 DownloadTask poll = queue.poll();
                 if (null == poll) {
-                    try {
-                        Thread.sleep(1000L);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    LockSupport.park();
+//                    try {
+//                        Thread.sleep(1000L);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
                 } else {
                     consumer.accept(poll);
                 }
@@ -126,16 +133,28 @@ public class ImgDownload {
         public void run() {
             try {
                 while (this.currentIndex <= this.endIndex) {
-                    Proxy proxy = HttpsClient.getProxy("127.0.0.1", 10809);
-                    String url = this.prefixUrl + this.currentIndex + this.postfixUrl;
+                    String url = getUrl(this.prefixUrl, this.currentIndex, this.postfixUrl);
                     File outFile = new File(getFileName(this.prefixFilePath, this.currentIndex, ".jpg"));
                     HttpsClient.requestForFile(url, HttpsClient.GET_METHOD, null, null, outFile, proxy);
                     ++this.currentIndex;
                 }
             } catch (Exception e) {
-                queue.offer(this);
+                putEle(this);
             }
         }
+    }
+
+    public static void putEle(DownloadTask task) {
+        boolean offer = queue.offer(task);
+        if (offer) {
+            LockSupport.unpark(monitorThread);
+        }
+    }
+
+    private static String getUrl(String prefixUrl, int currentIndex, String postfixUrl){
+         String mid = ""+currentIndex;
+//        String mid = currentIndex+"/pexels-photo-"+currentIndex;
+        return prefixUrl + mid + postfixUrl;
     }
 
     private static String getFileName(String prefixFilePath, int currentIndex, String postfixFilePath) {
