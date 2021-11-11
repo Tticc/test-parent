@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+	<header th:replace="header::headerFragment('index')"></header>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1"/>
+    <meta name="renderer" content="webkit"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+</head>
+<body>
+
+<div th:replace="header::header-body('home')"></div>
+<br/>
+<h2>hello world</h2>
+<h3 th:text="${someAttr}"></h3>
+<button id="getContent" class="btn">click it</button>
+
+</body>
+</html>
+  <script>
+    $(document).ready(function() {
+    });
+  </script>
