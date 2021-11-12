@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicStampedReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class NormalTest_WebApp {
@@ -27,6 +29,14 @@ public class NormalTest_WebApp {
         System.out.println("hello,world");
         byte[] placeholder = new byte[64 * 1024 * 1024];
         System.gc();
+    }
+
+    Pattern isPic = Pattern.compile(".*?\\.(jpg|gif|jpeg)+$");
+    @Test
+    public void test_regex(){
+        Matcher matcher = isPic.matcher("0001.mp4");
+        boolean matches = matcher.matches();
+        System.out.println("matches = " + matches);
     }
 
     @Test
