@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -116,8 +115,15 @@ public class ImgController {
         flush(response, "path" + index, (out) -> {
             out.println("<style>");
             out.println("body{text-align:center;padding-top: 1%;padding-bottom: 1%;} ");
+            out.println(".tail {");
+            out.println("padding-left: 5%;");
+            out.println("padding-top: 1%;");
+            out.println("padding-bottom: 1%;");
+            out.println("}");
             out.println("</style>");
+            out.println("<div class=\"tail\">");
             out.println(sb.toString());
+            out.println("</div>");
         });
     }
 
@@ -142,8 +148,8 @@ public class ImgController {
                         .append(picIndex)
                         .append("/")
                         .append(picName)
-//                    .append("\" width=\"100%\"/>");
-                        .append("\"/>");
+                    .append("\" width=\"100%\"/>");
+//                        .append("\"/>");
             }else {
                 sb.append("<video width = \"840\" height = \"540\" controls autoplay>");
                 sb.append("<source src=\"/static/img/path")
@@ -189,6 +195,15 @@ public class ImgController {
                 .collect(Collectors.toList());
         StringBuilder sb = new StringBuilder();
         //<a href="/img/path/1"><h1>path1</h1></a>
+
+        sb.append("<style>");
+        sb.append(".tail {");
+        sb.append("padding-left: 5%;");
+        sb.append("padding-top: 1%;");
+        sb.append("padding-bottom: 1%;");
+        sb.append("}");
+        sb.append("</style>");
+        sb.append("<div class=\"tail\">");
         for (File file : collect) {
             sb.append("<h1><a href=\"/img/path/")
                     .append(file.getName().replaceAll("[a-z]|[A-Z]", ""))
@@ -197,6 +212,7 @@ public class ImgController {
                     .append("</a></h1>")
                     .append("<br/>");
         }
+        sb.append("</div>");
         return sb.toString();
     }
 
@@ -231,6 +247,7 @@ public class ImgController {
         if (next != -1) {
             out.println("<h1><a href=\"/img/path/" + pathIndex + "/pic/" + collect.get(next) + "\">next</a> </h1>");
         }
+        out.println("</div>");
     }
 
     /**
