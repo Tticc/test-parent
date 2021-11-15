@@ -29,6 +29,10 @@ public class NormalTest_WebApp {
         System.out.println("hello,world");
         byte[] placeholder = new byte[64 * 1024 * 1024];
         System.gc();
+
+        String str = "0011";
+        int i = Integer.parseInt(str);
+        System.out.println("i = " + i);
     }
 
     Pattern isPic = Pattern.compile(".*?\\.(jpg|gif|jpeg)+$");
