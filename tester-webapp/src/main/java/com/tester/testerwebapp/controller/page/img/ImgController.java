@@ -8,10 +8,13 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -58,13 +61,89 @@ public class ImgController {
         }
         return "img/home";
     }
-
     /**
-     * 用户验证
+     * test
      *
-     * @Date 14:43 2021/11/12
+     * @Date 11:47 2021/11/12
      * @Author 温昌营
      **/
+    @GetMapping("/test")
+    public String getTest(HttpServletRequest req, HttpSession session) {
+        return "img/test";
+    }
+    @RequestMapping(value = "/path/{pathIndex}/pic/{picIndex}/img/{imgIndex}", method = RequestMethod.GET)
+    public void getImg(HttpServletResponse response, @PathVariable int pathIndex, @PathVariable int picIndex, @PathVariable int imgIndex) throws IOException, BusinessException {
+        String imgPath = IMG_ROOT_PATH + "/path" + pathIndex + "/pic" + picIndex;
+        String imgName = getImgIndexStrByIndex(imgIndex)+".jpg";
+        imgPath = imgPath +"/"+ imgName;
+        ClassPathResource classPathResource = new ClassPathResource(imgPath);
+        File file = classPathResource.getFile();
+        BufferedImage read = ImageIO.read(new FileInputStream(file));
+        System.out.println(read.getWidth());
+        System.out.println(read.getHeight());
+        int width = read.getWidth();
+        int height = read.getHeight();
+        height = height + height/2;
+
+        StringBuilder sb = new StringBuilder();
+        String style = "<style>\n" +
+                "        .divp {\n" +
+                "            height: "+height+"px;\n" +
+                "            margin: 0 auto;\n" +
+                "            overflow: hidden;\n" +
+                "        }\n" +
+                "\n" +
+                "        .divl, .divr {\n" +
+                "            float: left;\n" +
+                "            width: 50%;\n" +
+                "            height: "+height+"px;\n" +
+                "            position: relative;\n" +
+                "            top: -"+height+"px;\n" +
+                "            left:0px;\n" +
+                "        }\n" +
+                "\n" +
+                "        .divp img {\n" +
+                "            float: left;\n" +
+                "            width: 100%;\n" +
+                "        }\n" +
+                "\n" +
+                "    </style>";
+        String div = "<div class=\"divp\" id=\"divp\">\n" +
+                "    <div>\n" +
+                "        <img id=\"timg\" src=\"/static/img/path"+pathIndex+"/pic"+picIndex+"/"+imgName+"\">\n" +
+                "    </div>\n" +
+                "    <div class=\"divl\" id=\"divl\"></div>\n" +
+                "    <div class=\"divr\" id=\"divr\"></div>\n" +
+                "</div>";
+
+        String script = "<script type=\"text/javascript\">\n" +
+                "    window.onload = function () {\n" +
+                "        var divl = document.getElementById(\"divl\");\n" +
+                "        var divr = document.getElementById(\"divr\");\n" +
+                "\n" +
+                "        divl.onclick = function () {\n" +
+                "            location.href = ('/img/path/"+pathIndex+"/pic/"+picIndex+"/img/"+(imgIndex-1)+"');\n" +
+                "        };\n" +
+                "        divr.onclick = function () {\n" +
+                "            location.href = ('/img/path/"+pathIndex+"/pic/"+picIndex+"/img/"+(imgIndex+1)+"');\n" +
+                "        };\n" +
+                "    };\n" +
+                "</script>";
+        sb.append(style).append(div).append(script);
+
+        flush(response, "" + imgIndex, (out) -> {
+            out.println(sb.toString());
+        });
+    }
+
+
+
+        /**
+         * 用户验证
+         *
+         * @Date 14:43 2021/11/12
+         * @Author 温昌营
+         **/
     @ResponseBody
     @RequestMapping(value = "/credential", method = RequestMethod.POST)
     public String credential(String pwd, HttpSession session) {
@@ -100,25 +179,27 @@ public class ImgController {
     public void listPath(HttpServletRequest request, HttpServletResponse response, @PathVariable int index) throws IOException, BusinessException {
         String path = IMG_ROOT_PATH + "/path" + index;
         List<File> files = getFiles(path);
+        List<File> collect = sortByIndex(files);
         StringBuilder sb = new StringBuilder();
-        for (File item : files) {
+        for (File item : collect) {
             String picIndex = item.getName().replaceAll("[a-z]|[A-Z]", "");
             sb.append("<a href=\"/img/path/")
                     .append(index)
                     .append("/pic/")
                     .append(picIndex)
-                    .append("\"> <h1>pic")
+                    .append("\"> pic")
                     .append(picIndex)
-                    .append("</h1> </a>")
-                    .append("<br/>");
+                    .append(" </a>")
+                    .append("<br/><br/>");
         }
         flush(response, "path" + index, (out) -> {
             out.println("<style>");
-            out.println("body{text-align:center;padding-top: 1%;padding-bottom: 1%;} ");
+            out.println("body{padding-top: 1%;padding-bottom: 1%;} ");
             out.println(".tail {");
             out.println("padding-left: 5%;");
             out.println("padding-top: 1%;");
             out.println("padding-bottom: 1%;");
+            out.println("font-size:80px");
             out.println("}");
             out.println("</style>");
             out.println("<div class=\"tail\">");
@@ -186,13 +267,7 @@ public class ImgController {
      **/
     private String buildHomeContent() {
         List<File> files = getFiles(IMG_ROOT_PATH);
-        List<File> collect = files.stream()
-                .sorted((a, b) -> {
-                    Integer ta = Integer.valueOf(a.getName().replaceAll("[a-z]|[A-Z]", ""));
-                    Integer tb = Integer.valueOf(b.getName().replaceAll("[a-z]|[A-Z]", ""));
-                    return ta.compareTo(tb);
-                })
-                .collect(Collectors.toList());
+        List<File> collect = sortByIndex(files);
         StringBuilder sb = new StringBuilder();
         //<a href="/img/path/1"><h1>path1</h1></a>
 
@@ -201,16 +276,17 @@ public class ImgController {
         sb.append("padding-left: 5%;");
         sb.append("padding-top: 1%;");
         sb.append("padding-bottom: 1%;");
+        sb.append("font-size:80px");
         sb.append("}");
         sb.append("</style>");
         sb.append("<div class=\"tail\">");
         for (File file : collect) {
-            sb.append("<h1><a href=\"/img/path/")
+            sb.append("<a href=\"/img/path/")
                     .append(file.getName().replaceAll("[a-z]|[A-Z]", ""))
                     .append("\">")
                     .append(file.getName())
-                    .append("</a></h1>")
-                    .append("<br/>");
+                    .append("</a>")
+                    .append("<br/><br/>");
         }
         sb.append("</div>");
         return sb.toString();
@@ -225,18 +301,19 @@ public class ImgController {
     private void putPicTail(PrintWriter out, int pathIndex, int picIndex) {
         String path = IMG_ROOT_PATH + "/path" + pathIndex;
         List<File> files = getFiles(path);
-        List<Integer> collect = files.stream()
+        List<File> sorted = sortByIndex(files);
+
+        List<Integer> collect = sorted.stream()
                 .map(e -> e.getName())
                 .map(e -> e.replaceAll("[a-z]|[A-Z]", ""))
                 .map(Integer::parseInt)
-                .sorted()
                 .collect(Collectors.toList());
         int pre = 0;
         int next = 0;
         for (int i = 0; i < collect.size(); i++) {
             if (collect.get(i) == picIndex) {
                 pre = i - 1 < 0 ? -1 : i - 1;
-                next = i + 1 > collect.size() - 1 ? -1 : collect.size() - 1;
+                next = i + 1 > collect.size() - 1 ? -1 : i + 1;
             }
         }
         out.println("<div class=\"tail\">");
@@ -247,6 +324,8 @@ public class ImgController {
         if (next != -1) {
             out.println("<h1><a href=\"/img/path/" + pathIndex + "/pic/" + collect.get(next) + "\">next</a> </h1>");
         }
+        out.println("<br/><br/>");
+        out.println("<h1><a href=\"" + HOME_URL + "\">HOME</a> </h1>");
         out.println("</div>");
     }
 
@@ -272,6 +351,32 @@ public class ImgController {
         }
         return res;
     }
+
+    private List<File> sortByIndex(List<File> files){
+        List<File> collect = files.stream()
+                .sorted((a, b) -> {
+                    Integer ta = Integer.valueOf(a.getName().replaceAll("[a-z]|[A-Z]", ""));
+                    Integer tb = Integer.valueOf(b.getName().replaceAll("[a-z]|[A-Z]", ""));
+                    return ta.compareTo(tb);
+                })
+                .collect(Collectors.toList());
+        return collect;
+    }
+
+    private String getImgIndexStrByIndex(int imgIndex){
+        String indexStr = "";
+        if (imgIndex < 10) {
+            indexStr = "000" + imgIndex;
+        } else if (imgIndex < 100) {
+            indexStr = "00" + imgIndex;
+        } else if (imgIndex < 1000) {
+            indexStr = "0" + imgIndex;
+        } else {
+            indexStr = "" + imgIndex;
+        }
+        return indexStr;
+    }
+
 
     /**
      * 公共response构建方法
