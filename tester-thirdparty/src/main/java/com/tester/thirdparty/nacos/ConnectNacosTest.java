@@ -1,8 +1,7 @@
-package com.tester.testercv;
+package com.tester.thirdparty.nacos;
 
 import com.google.common.net.HttpHeaders;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
@@ -34,12 +33,26 @@ public class ConnectNacosTest {
     private static final String LOCAL_NAMESPACE_ID = "244cede4-d276-4f64-8ede-8c7fc944ca05"; // dev-api
 //    private static final String NAMESPACE_ID = "6b9123fb-8a52-41c7-b206-0ad2c0adbe3d"; // dev-backend
 
+    // nacos地址
+    private static final String NACOS_PORTAL = "http://xx-nacos.xx.com:80/"; // dev-backend
+
 
     private static final String port = "8080"; // dev-api
 
+    /**
+     * 用来将本地 ip:port 注册到nacos，强行加入服务列表
+     * @Date 14:50 2021/11/16
+     * @Author 温昌营
+     **/
+    public static void main(String[] args) throws Exception {
+        ConnectNacosTest connectNacosTest = new ConnectNacosTest();
+        connectNacosTest.test_regAndKeepAlive();
+//        connectNacosTest.test_reg();
+//        connectNacosTest.test_keep_alive();
+    }
 
-    @Test
     public void test_regAndKeepAlive() throws Exception {
+        // local ip
         String ipPrefix = "10.100.69.";
         int startIndex = 67;
         int endIndex = 68;
@@ -56,7 +69,7 @@ public class ConnectNacosTest {
         }
     }
 
-    @Test
+    @Deprecated
     public void test_reg() throws InterruptedException {
         String ipPrefix = "10.100.69.";
 //        while (true) {
@@ -68,7 +81,7 @@ public class ConnectNacosTest {
 //        }
     }
 
-    @Test
+    @Deprecated
     public void test_keep_alive() throws InterruptedException {
         String ipPrefix = "10.100.69.";
         while (true){
@@ -80,8 +93,8 @@ public class ConnectNacosTest {
         }
     }
 
-    public void keep_alive(String ip){
-        String url = "http://dev-nacos.aeonbuy.com/nacos/v1/ns/instance/beat";
+    private void keep_alive(String ip){
+        String url = NACOS_PORTAL+"nacos/v1/ns/instance/beat";
         Map<String,String> params = new HashMap<>();
         params.put(CommonParams.NAMESPACE_ID, LOCAL_NAMESPACE_ID);
         params.put("serviceName",serviceName);
@@ -96,8 +109,8 @@ public class ConnectNacosTest {
     }
 
 
-    public void doReg(String ip){
-        String url = "http://dev-nacos.aeonbuy.com:80/nacos/v1/ns/instance";
+    private void doReg(String ip){
+        String url = NACOS_PORTAL+"nacos/v1/ns/instance";
         Map<String,String> params = new HashMap<>();
         params.put(CommonParams.NAMESPACE_ID, LOCAL_NAMESPACE_ID);
 //        params.put(CommonParams.SERVICE_NAME, serviceName);
@@ -123,7 +136,7 @@ public class ConnectNacosTest {
 
 
 
-    public static HttpResult request(String url, List<String> headers, Map<String, String> paramValues, String encoding, String method) {
+    private static HttpResult request(String url, List<String> headers, Map<String, String> paramValues, String encoding, String method) {
         HttpURLConnection conn = null;
         try {
             String encodedContent = encodingParams(paramValues, encoding);
@@ -167,7 +180,7 @@ public class ConnectNacosTest {
             }
         }
     }
-    public List<String> builderHeaders() {
+    private List<String> builderHeaders() {
         List<String> headers = Arrays.asList("Client-Version", "Nacos-Java-Client:v1.1.1",
                 "User-Agent", "Nacos-Java-Client:v1.1.1",
                 "Accept-Encoding", "gzip,deflate,sdch",
@@ -175,7 +188,7 @@ public class ConnectNacosTest {
                 "RequestId", generateUuid(), "Request-Module", "Naming");
         return headers;
     }
-    public static String generateUuid() {
+    private static String generateUuid() {
         return UUID.randomUUID().toString();
     }
 
@@ -242,7 +255,7 @@ public class ConnectNacosTest {
         return new HttpResult(respCode, MytoString(inputStream, getCharset(conn)), respHeaders);
     }
 
-    static public String MytoString(InputStream input, String encoding) {
+    private static String MytoString(InputStream input, String encoding) {
 
         try {
             return (null == encoding) ? toString(new InputStreamReader(input, UTF_8))
@@ -252,12 +265,12 @@ public class ConnectNacosTest {
             return "";
         }
     }
-    static public String toString(Reader reader) throws IOException {
+    private static String toString(Reader reader) throws IOException {
         CharArrayWriter sw = new CharArrayWriter();
         copy(reader, sw);
         return sw.toString();
     }
-    static public long copy(Reader input, Writer output) throws IOException {
+    private static long copy(Reader input, Writer output) throws IOException {
         char[] buffer = new char[1 << 12];
         long count = 0;
         for (int n = 0; (n = input.read(buffer)) >= 0; ) {
@@ -288,7 +301,7 @@ public class ConnectNacosTest {
 
         return charset;
     }
-    public static class HttpResult {
+    private static class HttpResult {
         final public int code;
         final public String content;
         final private Map<String, String> respHeaders;
@@ -304,7 +317,7 @@ public class ConnectNacosTest {
         }
     }
 
-    public class CommonParams {
+    private class CommonParams {
 
         public static final String SERVICE_NAME = "serviceName";
 

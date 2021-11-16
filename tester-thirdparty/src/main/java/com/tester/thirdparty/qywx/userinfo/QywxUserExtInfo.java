@@ -1,4 +1,4 @@
-package com.tester.testercommon.util.sqlgenerator.qywxuserinfo;
+package com.tester.thirdparty.qywx.userinfo;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

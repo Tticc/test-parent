@@ -5,6 +5,7 @@ import com.tester.testercommon.util.PasswordUtil;
 import com.tester.testercommon.util.file.MyFileReaderWriter;
 import com.tester.testercommon.util.jwt.JwtDataModel;
 import com.tester.testercommon.util.jwt.JwtHelper;
+import io.undertow.server.session.SecureRandomSessionIdGenerator;
 import org.junit.Test;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.context.ApplicationContext;
@@ -24,6 +25,8 @@ import java.util.stream.Collectors;
 
 public class NormalTest_WebApp {
 
+    Pattern isPic = Pattern.compile(".*?\\.(jpg|gif|jpeg)+$");
+
 
     public static void main(String[] args) {
         System.out.println("hello,world");
@@ -35,7 +38,26 @@ public class NormalTest_WebApp {
         System.out.println("i = " + i);
     }
 
-    Pattern isPic = Pattern.compile(".*?\\.(jpg|gif|jpeg)+$");
+
+
+    @Test
+    public void test_generateSessionId(){
+        // undertow JSESSIONID
+        SecureRandomSessionIdGenerator secureRandomSessionIdGenerator = new SecureRandomSessionIdGenerator();
+        String sessionId = secureRandomSessionIdGenerator.createSessionId();
+        System.out.println("sessionId = " + sessionId);
+    }
+
+//    @Test
+//    public void generateSessionId(){
+//        // tomcat JSESSIONID
+//        StandardSessionIdGenerator standardSessionIdGenerator = new StandardSessionIdGenerator();
+//        String s = standardSessionIdGenerator.generateSessionId("");
+//        // 1574FEDE7AFA975BAFC97DBA9A6DB4E7
+//        // 9886F5679A7B794C4F2DA90B03D2270A
+//        System.out.println(s);
+//    }
+
     @Test
     public void test_regex(){
         Matcher matcher = isPic.matcher("0001.mp4");
@@ -52,8 +74,6 @@ public class NormalTest_WebApp {
 
         int l = 10_000;
         System.out.println(l);
-
-
     }
 
     @Test

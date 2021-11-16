@@ -62,6 +62,7 @@
         <module>tester-starter</module>
         <module>tester-mytomcat</module>
         <module>tester-normaltest</module>
+        <module>tester-thirdparty</module>
     </modules>
 
     <dependencyManagement>

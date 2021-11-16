@@ -3,6 +3,7 @@ package com.tester.testercommon.util.http;
 import com.alibaba.fastjson.JSONObject;
 import com.tester.testercommon.enums.BussinessExceptionEnum;
 import com.tester.testercommon.exception.BusinessException;
+import com.tester.testercommon.util.MyConsumer;
 import com.tester.testercommon.util.MyFunction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
@@ -99,6 +100,21 @@ public class HttpsClient {
                                           @Nullable JSONObject reqParams,
                                           @Nullable Map<String, String> propertyMap,
                                           @Nullable Proxy proxy) throws BusinessException {
+        return requestForString(url, requestMethod, reqParams, propertyMap,proxy,null);
+    }
+
+    /**
+     * 发送请求，将返回转为字符串
+     *
+     * @Date 10:19 2021/11/9
+     * @Author 温昌营
+     **/
+    public static String requestForString(String url,
+                                          String requestMethod,
+                                          @Nullable JSONObject reqParams,
+                                          @Nullable Map<String, String> propertyMap,
+                                          @Nullable Proxy proxy,
+                                          @Nullable MyConsumer<HttpURLConnection> consumer) throws BusinessException {
         AtomicReference<String> resContainer = new AtomicReference<>(null);
         doHttpRequest_sub(url, requestMethod, reqParams, propertyMap, proxy, (inputStream) -> {
             try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
@@ -118,7 +134,7 @@ public class HttpsClient {
                 throw new BusinessException(BussinessExceptionEnum.IO_ERROR.getCode());
             }
             return resContainer.get();
-        });
+        },consumer);
         return resContainer.get();
     }
     /**
@@ -147,6 +163,22 @@ public class HttpsClient {
                                       @Nullable Map<String, String> propertyMap,
                                       File outFile,
                                       @Nullable Proxy proxy) throws BusinessException {
+        requestForFile(url, requestMethod, reqParams, propertyMap, outFile,proxy,null);
+    }
+
+    /**
+     * 发送请求，将返回的数据流写入文件
+     *
+     * @Date 10:26 2021/11/9
+     * @Author 温昌营
+     **/
+    public static void requestForFile(String url,
+                                      String requestMethod,
+                                      @Nullable JSONObject reqParams,
+                                      @Nullable Map<String, String> propertyMap,
+                                      File outFile,
+                                      @Nullable Proxy proxy,
+                                      @Nullable MyConsumer<HttpURLConnection> consumer) throws BusinessException {
         doHttpRequest_sub(url, requestMethod, reqParams, propertyMap, proxy, (inputStream) -> {
             try (FileOutputStream fo = new FileOutputStream(outFile)) {
                 byte[] bytes = new byte[1024];
@@ -159,7 +191,7 @@ public class HttpsClient {
                 throw new BusinessException(BussinessExceptionEnum.IO_ERROR.getCode());
             }
             return "FILE";
-        });
+        }, consumer);
     }
 
 
@@ -179,7 +211,8 @@ public class HttpsClient {
                                          @Nullable JSONObject reqParams,
                                          @Nullable Map<String, String> propertyMap,
                                          @Nullable Proxy proxy,
-                                         MyFunction<InputStream, String> function) throws BusinessException {
+                                         MyFunction<InputStream, String> function,
+                                         @Nullable MyConsumer<HttpURLConnection> consumer) throws BusinessException {
         assert !StringUtils.isEmpty(requestUrl) : "requestUrl empty";
         assert !StringUtils.isEmpty(requestMethod) : "requestMethod empty";
         assert !StringUtils.isEmpty(requestMethod) : "requestMethod empty";
@@ -227,6 +260,11 @@ public class HttpsClient {
                 outputStream.close();
             }
             try (InputStream inputStream = httpUrlConn.getInputStream()) {
+                // 这里可以读取返回头
+                if(consumer != null){
+                    consumer.accept(httpUrlConn);
+                }
+                // 读取返回体数据流
                 res = function.apply(inputStream);
             } catch (Exception e) {
                 log.error("stream process error");

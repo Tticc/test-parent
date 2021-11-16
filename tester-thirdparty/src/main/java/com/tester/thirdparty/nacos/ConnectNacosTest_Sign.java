@@ -1,11 +1,11 @@
-package com.tester.testercv;
+package com.tester.thirdparty.nacos;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.*;
+import java.util.Map;
 
 @Slf4j
 public class ConnectNacosTest_Sign {

@@ -16,7 +16,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.Proxy;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -45,16 +44,6 @@ public class NormalTest_Cv {
         System.out.println(mulMap.get("222"));
 
     }
-
-
-//    @Test
-//    public void generateSessionId(){
-//        StandardSessionIdGenerator standardSessionIdGenerator = new StandardSessionIdGenerator();
-//        String s = standardSessionIdGenerator.generateSessionId("");
-//        // 1574FEDE7AFA975BAFC97DBA9A6DB4E7
-//        // 9886F5679A7B794C4F2DA90B03D2270A
-//        System.out.println(s);
-//    }
 
 
     @Test

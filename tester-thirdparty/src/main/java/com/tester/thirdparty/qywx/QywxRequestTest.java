@@ -1,13 +1,10 @@
-package com.tester.testercommon.util.http;
+package com.tester.thirdparty.qywx;
 
-import com.alibaba.fastjson.JSONObject;
-import com.tester.testercommon.util.http.userinfo.QywxUserExtInfo;
-import com.tester.testercommon.util.http.userinfo.QywxUserInfoMessage;
+import com.tester.thirdparty.qywx.userinfo.QywxUserExtInfo;
 import org.springframework.util.StringUtils;
 
 import javax.net.ssl.SSLSocketFactory;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
