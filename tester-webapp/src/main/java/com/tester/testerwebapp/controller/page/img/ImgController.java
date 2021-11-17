@@ -140,9 +140,10 @@ public class ImgController {
 
     @RequestMapping(value = "/path/{pathIndex}/pic/{picIndex}/img/{imgIndex}", method = RequestMethod.GET)
     public void getImg(HttpServletResponse response, @PathVariable int pathIndex, @PathVariable int picIndex, @PathVariable int imgIndex) throws IOException, BusinessException {
-        String s = imageManager.getImg(pathIndex, picIndex, imgIndex);
-        ImgCommon.flush(response, "" + imgIndex, (out) -> {
-            out.println(s);
+        StringBuilder sb = new StringBuilder();
+        String title = imageManager.getImg(sb, pathIndex, picIndex, imgIndex);
+        ImgCommon.flush(response, title, (out) -> {
+            out.println(sb.toString());
         });
     }
 

@@ -38,6 +38,7 @@ public class ImageManager {
                         .append(s)
                         .append("\" type=\"video/mp4\">");
                 sb.append("</video>");
+                sb.append("<br/><br/><h1>"+picName+"</h1>");
             }
         }
         appendPicTail(sb, pathIndex, picIndex);
@@ -50,12 +51,21 @@ public class ImageManager {
      * @Date 16:06 2021/11/15
      * @Author 温昌营
      **/
-    public String getImg(int pathIndex, int picIndex, int imgIndex) {
-        List<File> files = ImgCommon.getFiles(pathIndex, picIndex, imgIndex);
-        File file = files.get(0);
+    public String getImg(StringBuilder sb, int pathIndex, int picIndex, int imgIndex) {
+        List<File> files = ImgCommon.getFiles(pathIndex, picIndex);
+        List<File> sorted = ImgCommon.sortFilesByIndex(files);
+        int preIndex = -1;
+        int nextIndex = -1;
+        File file = null;
+        for (int i = 0; i < sorted.size(); i++) {
+            if(imgIndex == ImgCommon.getIndexByName(sorted.get(i).getName())){
+                file = sorted.get(i);
+                preIndex = i - 1 >= 0 ? ImgCommon.getIndexByName(sorted.get(i-1).getName()) : -1;
+                nextIndex = i + 1 > sorted.size() ? -1 : ImgCommon.getIndexByName(sorted.get(i + 1).getName());
+            }
+        }
         String path = file.getPath();
         String s = getPicHttpUrl(path);
-        StringBuilder sb = new StringBuilder();
         String style = "    <style>\n" +
                 "        .shadow{\n" +
                 "            width:50%;\n" +
@@ -89,10 +99,10 @@ public class ImageManager {
                 "        var divr = document.getElementById(\"divr\");\n" +
                 "\n" +
                 "        divl.onclick = function () {\n" +
-                "            location.href = ('/img/path/" + pathIndex + "/pic/" + picIndex + "/img/" + (imgIndex - 1) + "');\n" +
+                "            location.href = ('/img/path/" + pathIndex + "/pic/" + picIndex + "/img/" + preIndex + "');\n" +
                 "        };\n" +
                 "        divr.onclick = function () {\n" +
-                "            location.href = ('/img/path/" + pathIndex + "/pic/" + picIndex + "/img/" + (imgIndex + 1) + "');\n" +
+                "            location.href = ('/img/path/" + pathIndex + "/pic/" + picIndex + "/img/" + nextIndex + "');\n" +
                 "        };\n" +
                 "    };\n" +
                 "    document.getElementById(\"timg\").onload = function () {\n" +
@@ -104,7 +114,7 @@ public class ImageManager {
                 "    }" +
                 "</script>";
         sb.append(style).append(div).append(script);
-        return sb.toString();
+        return imgIndex + " of " + sorted.size();
     }
 
     /**

@@ -2,6 +2,7 @@ package com.tester.testercv.movie;
 
 
 import com.tester.testercommon.exception.BusinessException;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.util.StringUtils;
@@ -17,6 +18,7 @@ import java.net.URLConnection;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * movie
@@ -56,15 +58,15 @@ public class Movie4 {
 
 
     //合并后的视频文件名称
-    private String fileName = "ppp.mp4";
+    private String fileName = "Shitsuji AIBU Kissa Part2 Pornhub.mp4";
 
-    private String folderPath = "C:\\Users\\wenc\\Desktop\\captureImg\\movie6";
+    private String folderPath = "C:\\Users\\wenc\\Desktop\\captureImg\\movie\\movie1117";
 
-    public static final String downloadUrl = "https://xxxx/index.m3u8";
+    public static final String downloadUrl = "https://vip4.ddyunbo.com/20210114/e9xQeUwO/index.m3u8";
     // 网页获取的
-    public static final String hardKeyUrl = "https://xxx/index.m3u8";
+    public static final String hardKeyUrl = "https://vip4.ddyunbo.com/20210114/e9xQeUwO/600kb/hls/index.m3u8";
     // 网页获取的key
-    public static final String retryKey = "https://xx/key.key";
+    public static final String retryKey = "https://vip6.3sybf.com/20210717/wdahEg58/2000kb/hls/key.key";
 
 
     @Test
@@ -200,8 +202,23 @@ public class Movie4 {
         File file1 = new File(folderPath);
         if (!file1.exists())
             file1.mkdirs();
+
+        LinkedBlockingQueue<KVModel> queue = new LinkedBlockingQueue();
         for(int i =0;i<urlList.size();i++){
-            String subUrlPath = urlList.get(i);
+            KVModel kvModel = new KVModel();
+            kvModel.setKey(i);
+            kvModel.setValue(urlList.get(i));
+            queue.offer(kvModel);
+        }
+
+        do{
+            KVModel take = queue.poll();
+            if(take == null){
+                Thread.sleep(1000L);
+                continue;
+            }
+            int i = take.getKey();
+            String subUrlPath = take.getValue();
             String fileOutPath = folderPath + File.separator + i + ".ts";
             int tempI = i;
             try{
@@ -210,20 +227,18 @@ public class Movie4 {
                     String s = "";
                     try {
                         s = downloadNet(subUrlPath, fileOutPath);
+                        keyFileMap.put(tempI, s);
+                        System.out.println(Thread.currentThread().getName() + "-成功："+ (tempI + 1) +"/" + urlList.size()+"--keyMap size:"+keyFileMap.size());
                     }catch (Exception e){
                         System.err.println("*************失败："+ (tempI + 1) +"/" + urlList.size()+"************************************************************************");
+                        queue.offer(take);
                     }
-                    keyFileMap.put(tempI, s);
-                    System.out.println("成功："+ (tempI + 1) +"/" + urlList.size());
                 });
             }catch (Exception e){
-                System.err.println("*************失败："+ (i + 1) +"/" + urlList.size()+"************************************************************************");
+                queue.offer(take);
+                System.err.println("*************失败out："+ (i + 1) +"/" + urlList.size()+"************************************************************************");
             }
-        }
-        while(keyFileMap.size() < urlList.size()){
-          Thread.sleep(3000L);
-            System.out.println("sleep ----------------------");
-        };
+        }while (keyFileMap.size() != urlList.size());
         composeFile(keyFileMap);
 
         return  keyFileMap;
@@ -308,6 +323,12 @@ public class Movie4 {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    @Data
+    class KVModel{
+        private int key;
+        private String value;
     }
 
 }

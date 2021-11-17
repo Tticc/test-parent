@@ -18,7 +18,7 @@ public class ThreadPool {
         /** 最大线程数 */
         threadPoolTaskExecutor.setMaxPoolSize(64);
         /** 线程队列大小 */
-        threadPoolTaskExecutor.setQueueCapacity(4);
+        threadPoolTaskExecutor.setQueueCapacity(4000);
         /** 线程最大空闲时间 */
         threadPoolTaskExecutor.setKeepAliveSeconds(60);
         /** 线程前缀名 */
