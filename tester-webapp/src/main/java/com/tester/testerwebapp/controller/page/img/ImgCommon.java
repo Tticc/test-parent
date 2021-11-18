@@ -2,7 +2,9 @@ package com.tester.testerwebapp.controller.page.img;
 
 import com.tester.testercommon.exception.BusinessException;
 import com.tester.testercommon.util.MyConsumer;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -22,7 +24,16 @@ import java.util.stream.Collectors;
  */
 public class ImgCommon {
 
-    public static final String IMG_ROOT_PATH = "static" + File.separator + "img";
+
+    private static final ResourceLoader resourceLoader = new DefaultResourceLoader();
+
+    // 配置文件实际位置。可以配置在本地文件，也可以配置到资源文件。
+//    public static final String IMG_ROOT_PATH = "classpath:static" + File.separator + "img";
+    public static final String IMG_ROOT_PATH = "file:C:\\Users\\Admin\\Desktop\\captureImg\\img\\";
+
+    // 配置图片文件请求前缀。所有这个前缀，都会走特定位置。
+    // 配置：com.tester.testerwebapp.controller.page.img.ImgWebConfig
+    public static final String IMG_HTTP_URL_PREFIX = "/static/img";
 
     public static final Pattern isPic = Pattern.compile(".*?\\.(jpg|gif|jpeg)+$");
 
@@ -126,10 +137,10 @@ public class ImgCommon {
     public static List<File> getFiles(String path) {
         List<File> res = null;
         try {
-            ClassPathResource classPathResource = new ClassPathResource(path);
+            Resource resource = resourceLoader.getResource(path);
             File file;
             File[] files;
-            if (!(file = classPathResource.getFile()).isDirectory()
+            if (!(file = resource.getFile()).isDirectory()
                     || (files = file.listFiles()) == null) {
                 return res;
             }
@@ -166,8 +177,13 @@ public class ImgCommon {
      * @Author 温昌营
      **/
     public static String fileUrl2HttpUrl(String fileUrl) {
-        String s = fileUrl.replaceAll("\\\\", "/");
-        return s;
+        int i = IMG_ROOT_PATH.indexOf(":");
+        String pathPrefix = IMG_ROOT_PATH.substring(i+1); // 如果没有，i是-1，从第0位开始读。如果第1位从第2位开始读，其他照常
+        int i1 = fileUrl.indexOf(pathPrefix);
+        String relativePath = fileUrl.substring(i1 + pathPrefix.length());
+        String s = relativePath.replaceAll("\\\\", "/");
+        s = s.startsWith("/") ? s : "/" + s;
+        return IMG_HTTP_URL_PREFIX + s;
     }
 
     /**

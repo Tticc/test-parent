@@ -165,10 +165,6 @@ public class ImageManager {
      * @Author 温昌营
      **/
     private String getPicHttpUrl(String filePath) {
-        int i = filePath.indexOf(ImgCommon.IMG_ROOT_PATH);
-        String relativePath = filePath.substring(i);
-        String s = ImgCommon.fileUrl2HttpUrl(relativePath);
-        s = s.startsWith("/") ? s : "/" + s;
-        return s;
+        return ImgCommon.fileUrl2HttpUrl(filePath);
     }
 }
