@@ -83,28 +83,37 @@ public class ImageManager {
                 "            margin: 0px;\n" +
                 "        }\n" +
                 "    </style>";
+        String href = "/img/path/" + pathIndex + "/pic/" + picIndex + "/img/index/" + ImgCommon.getIndexByName(file.getName());
+
         String div = "<div class=\"divp\" id=\"divp\">\n" +
                 "    <div id=\"divImg\">\n" +
-                "        <img width = \"100%\" id=\"timg\" src=\"" + s + "\">\n" +
+                "    <a href = '"+href+"'>\n" +
+                "        <img width = \"100%\" src=\"" + s + "\">\n" +
+                "    </a>\n" +
                 "    </div>\n" +
                 "</div>";
-
         String script = "<script type=\"text/javascript\">\n" +
                 "    window.onscroll = throttle(Date.now(), function () {\n" +
                 "        var scrollTop = $(this).scrollTop(); //滚动条距离顶部的高度\n" +
                 "        var scrollHeight = $(document).height(); //当前页面的总高度\n" +
                 "        var clientHeight = $(this).height(); //当前可视的页面高度\n" +
-                "        if (scrollTop < 10) {\n" +
-                "            getData(true,scrollHeight);\n" +
-                "        }else if (scrollTop + clientHeight >= scrollHeight - 10) { //距离顶部+当前高度 >=文档总高度 即代表滑动到底部\n" +
-                "            getData(false,scrollHeight);\n" +
+                "        var bodyHeight1 = document.body.scrollHeight; //可见区域高度\n" +
+                "        var clientHeight1 = window.screen.height; //屏幕分辨率的高\n" +
+                "        var scrollTop1 = document.body.scrollTop; //网页被卷去的高\n" +
+                "        if (scrollTop1 < 100) {\n" +
+                "            getData(true,bodyHeight1);\n" +
+                "        }else if (bodyHeight1 - scrollTop1 <=  2000) { //距离顶部+当前高度 >=文档总高度 即代表滑动到底部\n" +
+                "            getData(false,bodyHeight1);\n" +
                 "        }\n" +
                 "    }, 400);\n" +
                 "    function getData(isUp,scrollHeight) {\n" +
                 "        let divImg = document.getElementById(\"divImg\");\n" +
                 "        let eleArr = divImg.children;\n" +
-                "        let first = eleArr[0];\n" +
+                "        let firstImg = eleArr[0];\n" +
+                "        let first = firstImg.children[0];\n" +
+
                 "        let last = eleArr[eleArr.length-1];\n" +
+                "        last = last.children[0];\n" +
                 "        let currUrl = isUp ? first.src : last.src;\n" +
                 "        let innerIsUp = isUp;\n" +
                 "        let innerScrollHeight = scrollHeight;\n" +
@@ -118,13 +127,19 @@ public class ImageManager {
                 "                    return;\n" +
                 "                }\n" +
                 "                // 追加子节点\n" +
+
                 "                let img = document.createElement(\"img\");\n" +
                 "                img.setAttribute('src', data.newOneSrc);\n" +
                 "                img.setAttribute('width', '100%');\n" +
+
+                "                let url = document.createElement(\"a\");\n" +
+                "                url.setAttribute('href', data.newOneHref);\n" +
+                "                url.appendChild(img);\n" +
+
                 "                if(innerIsUp){\n" +
-                "                    divImg.insertBefore(img,first);\n" +
+                "                    divImg.insertBefore(url,firstImg);\n" +
                 "                }else {\n" +
-                "                    divImg.appendChild(img);\n" +
+                "                    divImg.appendChild(url);\n" +
                 "                }\n" +
                 "                // 重设高度\n" +
                 "                img.onload = function () {\n" +
@@ -137,6 +152,9 @@ public class ImageManager {
                 "            }\n" +
                 "        });\n" +
                 "    };\n" +
+                "\n" +
+                "\n" +
+
                 "    function throttle(startTime, func,delay){     //延缓滚动加载次数  防止抖动\n" +
                 "        var timer = null;\n" +
                 "        return function(){\n" +

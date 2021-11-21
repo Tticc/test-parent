@@ -199,11 +199,14 @@ public class ImgController {
         }
         File targetFile = isUp ? preFile : nextFile;
         String s = "";
+        String href = "";
         if(targetFile != null){
             s = ImgCommon.fileUrl2HttpUrl(targetFile.getPath());
+            href = "/img/path/" + pathIndex + "/pic/" + picIndex + "/img/index/" + ImgCommon.getIndexByName(targetFile.getName());
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("newOneSrc",s);
+        jsonObject.put("newOneHref",href);
         return jsonObject.toString();
     }
 
