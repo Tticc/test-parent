@@ -28,7 +28,9 @@ public class ImageManager {
             String s = getPicHttpUrl(item.getPath());
             String picName = item.getName();
             if (ImgCommon.isPic.matcher(picName).matches()) {
-                sb.append("<a href=\"/img/path/" + pathIndex + "/pic/" + picIndex + "/img/" + ImgCommon.getIndexByName(picName) + "\">")
+                // 使用定位模式：   xxx/img/index/xxxx
+                // 使用单图片模式： xxx/img/xxxx
+                sb.append("<a href=\"/img/path/" + pathIndex + "/pic/" + picIndex + "/img/index/" + ImgCommon.getIndexByName(picName) + "\">")
                         .append("<img src=\"")
                         .append(s)
                         .append("\" width=\"100%\"/>");
@@ -43,6 +45,117 @@ public class ImageManager {
         }
         appendPicTail(sb, pathIndex, picIndex);
         return sorted.size();
+    }
+
+    /**
+     * 定位指定图片
+     *
+     * @Date 16:06 2021/11/15
+     * @Author 温昌营
+     **/
+    public String getImgIndex(StringBuilder sb, int pathIndex, int picIndex, int imgIndex) {
+        List<File> files = ImgCommon.getFiles(pathIndex, picIndex);
+        List<File> sorted = ImgCommon.sortFilesByIndex(files);
+        File file = null;
+        for (int i = 0; i < sorted.size(); i++) {
+            if(imgIndex == ImgCommon.getIndexByName(sorted.get(i).getName())){
+                file = sorted.get(i);
+            }
+        }
+        String path = file.getPath();
+        String s = getPicHttpUrl(path);
+        String style = "    <style>\n" +
+                "        .shadow{\n" +
+                "            width:50%;\n" +
+                "            position:absolute;\n" +
+                "            top:0;\n" +
+                "            z-index:998;\n" +
+                "            display:block;\n" +
+                "        }\n" +
+                "        .shadow-left{\n" +
+                "            left:0;\n" +
+                "        }\n" +
+                "        .shadow-right{\n" +
+                "            right:0;\n" +
+                "        }\n" +
+                "        body {\n" +
+                "            display: block;\n" +
+                "            margin: 0px;\n" +
+                "        }\n" +
+                "    </style>";
+        String div = "<div class=\"divp\" id=\"divp\">\n" +
+                "    <div id=\"divImg\">\n" +
+                "        <img width = \"100%\" id=\"timg\" src=\"" + s + "\">\n" +
+                "    </div>\n" +
+                "</div>";
+
+        String script = "<script type=\"text/javascript\">\n" +
+                "    window.onscroll = throttle(Date.now(), function () {\n" +
+                "        var scrollTop = $(this).scrollTop(); //滚动条距离顶部的高度\n" +
+                "        var scrollHeight = $(document).height(); //当前页面的总高度\n" +
+                "        var clientHeight = $(this).height(); //当前可视的页面高度\n" +
+                "        if (scrollTop < 10) {\n" +
+                "            getData(true,scrollHeight);\n" +
+                "        }else if (scrollTop + clientHeight >= scrollHeight - 10) { //距离顶部+当前高度 >=文档总高度 即代表滑动到底部\n" +
+                "            getData(false,scrollHeight);\n" +
+                "        }\n" +
+                "    }, 400);\n" +
+                "    function getData(isUp,scrollHeight) {\n" +
+                "        let divImg = document.getElementById(\"divImg\");\n" +
+                "        let eleArr = divImg.children;\n" +
+                "        let first = eleArr[0];\n" +
+                "        let last = eleArr[eleArr.length-1];\n" +
+                "        let currUrl = isUp ? first.src : last.src;\n" +
+                "        let innerIsUp = isUp;\n" +
+                "        let innerScrollHeight = scrollHeight;\n" +
+                "        $.ajax({\n" +
+                "            type: \"POST\",\n" +
+                "            dataType: \"json\",\n" +
+                "            url: \"/img/scrollGet\" ,\n" +
+                "            data: {'currUrl':currUrl, 'isUp':innerIsUp},\n" +
+                "            success: function (data) {\n" +
+                "                if(data.newOneSrc == ''){\n" +
+                "                    return;\n" +
+                "                }\n" +
+                "                // 追加子节点\n" +
+                "                let img = document.createElement(\"img\");\n" +
+                "                img.setAttribute('src', data.newOneSrc);\n" +
+                "                img.setAttribute('width', '100%');\n" +
+                "                if(innerIsUp){\n" +
+                "                    divImg.insertBefore(img,first);\n" +
+                "                }else {\n" +
+                "                    divImg.appendChild(img);\n" +
+                "                }\n" +
+                "                // 重设高度\n" +
+                "                img.onload = function () {\n" +
+                "                    let divp = document.getElementById(\"divp\");\n" +
+                "                    divp.style.height = innerScrollHeight+img.clientHeight+'px';\n" +
+                "                }\n" +
+                "            },\n" +
+                "            error : function(err) {\n" +
+                "                alert(err.responseJSON === undefined ? \"unknown error\" : err.responseJSON.message);\n" +
+                "            }\n" +
+                "        });\n" +
+                "    };\n" +
+                "    function throttle(startTime, func,delay){     //延缓滚动加载次数  防止抖动\n" +
+                "        var timer = null;\n" +
+                "        return function(){\n" +
+                "            var curTime = Date.now();\n" +
+                "            var remaining = delay - (curTime - startTime);\n" +
+                "            var context = this;\n" +
+                "            var args = arguments;\n" +
+                "            clearTimeout(timer);\n" +
+                "            if(remaining <= 0){\n" +
+                "                func.apply(context,args);\n" +
+                "                startTime = Date.now();\n" +
+                "            }else{\n" +
+                "                timer = setTimeout(func,remaining);\n" +
+                "            }\n" +
+                "        }\n" +
+                "    };"+
+                "</script>";
+        sb.append(style).append(div).append(script);
+        return imgIndex + " of " + sorted.size();
     }
 
     /**
@@ -86,7 +199,7 @@ public class ImageManager {
                 "        }\n" +
                 "    </style>";
         String div = "<div class=\"divp\" id=\"divp\">\n" +
-                "    <div>\n" +
+                "    <div id=\"divImg\">\n" +
                 "        <img width = \"100%\" id=\"timg\" src=\"" + s + "\">\n" +
                 "    </div>\n" +
                 "    <div id=\"divl\" class=\"shadow shadow-left\"></div>\n" +

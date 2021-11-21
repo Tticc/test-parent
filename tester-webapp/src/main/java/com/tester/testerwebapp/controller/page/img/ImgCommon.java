@@ -217,6 +217,7 @@ public class ImgCommon {
         out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
         out.println("<html>");
         out.println("<head>");
+        out.println("<script src=\"/static/js/jquery.min.js\" charset=\"utf-8\"></script>");
         out.println("<title>" + title + "</title>");
 
         out.println("<meta http-equiv=\"pragma\" content=\"no-cache\">");
