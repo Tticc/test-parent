@@ -58,6 +58,7 @@ public class RouteManager {
                         .append("<br/><br/>");
             }
         });
+        stringBuilder.append("<h1><a href=\"" + ImgController.HOME_URL + "\">HOME</a> </h1>");
         return stringBuilder.toString();
     }
 

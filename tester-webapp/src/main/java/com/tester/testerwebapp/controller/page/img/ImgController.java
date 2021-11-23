@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 查看 templates/img/home.html
@@ -63,6 +65,7 @@ public class ImgController {
     public String getTest(HttpServletRequest req, HttpSession session) {
         return "img/test";
     }
+
 
 
     /**
@@ -137,7 +140,11 @@ public class ImgController {
         });
     }
 
-
+    /**
+     * 单图片
+     * @Date 2021-11-21 16:07:31
+     * @Author 温昌营
+     */
     @RequestMapping(value = "/path/{pathIndex}/pic/{picIndex}/img/{imgIndex}", method = RequestMethod.GET)
     public void getImg(HttpServletResponse response, @PathVariable int pathIndex, @PathVariable int picIndex, @PathVariable int imgIndex) throws IOException, BusinessException {
         StringBuilder sb = new StringBuilder();
@@ -145,6 +152,62 @@ public class ImgController {
         ImgCommon.flush(response, title, (out) -> {
             out.println(sb.toString());
         });
+    }
+
+    /**
+     * 图片位置
+     * @Date 2021-11-21 16:07:36
+     * @Author 温昌营
+     */
+    @RequestMapping(value = "/path/{pathIndex}/pic/{picIndex}/img/index/{imgIndex}", method = RequestMethod.GET)
+    public void getImgIndex(HttpServletResponse response, @PathVariable int pathIndex, @PathVariable int picIndex, @PathVariable int imgIndex) throws IOException, BusinessException {
+        StringBuilder sb = new StringBuilder();
+        String title = imageManager.getImgIndex(sb, pathIndex, picIndex, imgIndex);
+        ImgCommon.flush(response, title, (out) -> {
+            out.println(sb.toString());
+        });
+    }
+
+    /**
+     * scrollGet
+     *
+     * @Date 2021-11-21 16:07:42
+     * @Author 温昌营
+     **/
+    @ResponseBody
+    @PostMapping("/scrollGet")
+    public String scrollGet(@RequestParam("currUrl") String currUrl, @RequestParam("isUp") Boolean isUp) {
+        int i1 = currUrl.indexOf(ImgCommon.IMG_HTTP_URL_PREFIX);
+        String replace = currUrl.substring(i1 + ImgCommon.IMG_HTTP_URL_PREFIX.length());
+        if(replace.startsWith("/")){
+            replace = replace.substring(1);
+        }
+        String[] split = replace.split("/");
+        int pathIndex = ImgCommon.getIndexByName(split[0]);
+        int picIndex = ImgCommon.getIndexByName(split[1]);
+        int imgIndex = ImgCommon.getIndexByName(split[2]);
+
+        List<File> files = ImgCommon.getFiles(pathIndex, picIndex);
+        List<File> sorted = ImgCommon.sortFilesByIndex(files);
+        File preFile = null;
+        File nextFile = null;
+        for (int i = 0; i < sorted.size(); i++) {
+            if(imgIndex == ImgCommon.getIndexByName(sorted.get(i).getName())){
+                preFile = i - 1 >= 0 ? sorted.get(i-1) : null;
+                nextFile = i + 1 >= sorted.size() ? null : sorted.get(i + 1);
+            }
+        }
+        File targetFile = isUp ? preFile : nextFile;
+        String s = "";
+        String href = "";
+        if(targetFile != null){
+            s = ImgCommon.fileUrl2HttpUrl(targetFile.getPath());
+            href = "/img/path/" + pathIndex + "/pic/" + picIndex + "/img/index/" + ImgCommon.getIndexByName(targetFile.getName());
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("newOneSrc",s);
+        jsonObject.put("newOneHref",href);
+        return jsonObject.toString();
     }
 
 
