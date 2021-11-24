@@ -1,5 +1,6 @@
 package com.tester.testerstarter.autoconfigure;
 
+import com.tester.testerstarter.point.MyDefaultHealthIndicator;
 import com.tester.testerstarter.point.ReadinessPoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.actuate.autoconfigure.endpoint.EndpointAutoConfiguration;
@@ -17,15 +18,27 @@ import java.util.Set;
 /**
  * readiness
  * //  http://localhost:8004/actuator/readiness
+ *
  * @Author 温昌营
  * @Date 2021-7-12 15:55:11
  */
 @Slf4j
 @Configuration
 @AutoConfigureAfter(EndpointAutoConfiguration.class)
-@AutoConfigureBefore(WebEndpointAutoConfiguration .class)
+@AutoConfigureBefore(WebEndpointAutoConfiguration.class)
 @EnableConfigurationProperties(WebEndpointProperties.class)
 public class ReadinessPointAutoConfiguration {
+
+    /**
+     * 配置默认indicator
+     * @Date 14:00 2021/11/24
+     * @Author 温昌营
+     **/
+    @Bean
+    public MyDefaultHealthIndicator myHealthIndicator() {
+        return new MyDefaultHealthIndicator();
+    }
+
     @Bean
     public ReadinessPoint readinessPoint(HealthEndpoint health, WebEndpointProperties properties) {
         ReadinessPoint readinessPoint = new ReadinessPoint(health);
@@ -38,7 +51,7 @@ public class ReadinessPointAutoConfiguration {
          *     web:
          *       exposure:
          *         include: readiness,health,info
-         * 
+         *
          **/
         WebEndpointProperties.Exposure exposure = properties.getExposure();
         Set<String> include = exposure.getInclude();

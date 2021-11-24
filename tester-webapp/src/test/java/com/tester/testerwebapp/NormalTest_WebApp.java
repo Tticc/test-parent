@@ -1,5 +1,6 @@
 package com.tester.testerwebapp;
 
+import com.tester.testercommon.model.request.IdAndNameRequest;
 import com.tester.testercommon.model.request.TextRequest;
 import com.tester.testercommon.util.PasswordUtil;
 import com.tester.testercommon.util.file.MyFileReaderWriter;
@@ -10,6 +11,13 @@ import org.junit.Test;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.TypedValue;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.SimpleEvaluationContext;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.util.Assert;
 
 import java.beans.PropertyDescriptor;
@@ -38,6 +46,30 @@ public class NormalTest_WebApp {
         System.out.println("i = " + i);
     }
 
+
+    @Test
+    public void test_Spel(){
+        ExpressionParser parser = new SpelExpressionParser();
+//        Expression exp = parser.parseExpression("'hello world'");
+//        String message = (String) exp.getValue();
+//        System.out.println("message = " + message);
+
+//        Expression exp1 = parser.parseExpression("'Hello World'.bytes");
+//        byte[] bytes = (byte[]) exp1.getValue();
+//
+//        System.out.println("bytes = " + bytes);
+
+
+        IdAndNameRequest name = new IdAndNameRequest();
+        name.setName("wenc");
+        EvaluationContext builder = SimpleEvaluationContext.forReadOnlyDataBinding().build();
+        builder.setVariable("name",name);
+        ExpressionParser parser1 = new SpelExpressionParser();
+        Object value = parser1.parseExpression("#name.name").getValue(builder);
+        System.out.println("value = " + value);
+
+
+    }
 
 
     @Test

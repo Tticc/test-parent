@@ -1,9 +1,9 @@
 server:
   port: 8004
   ssl:
-    key-store: classpath:keystore.jks
-#    key-password: changeit
-    key-store-password: changeit
+    key-store: classpath:server.jks
+#    key-password: a123456
+    key-store-password: a123456
     key-store-type: JKS
 spring:
 #  aop:
