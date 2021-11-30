@@ -10,6 +10,7 @@ spring:
 #    proxy-target-class: false # false时使用jdk动态代理,默认为true
   profiles:
     active: sit
+#    active: ${env}
   application:
     name: tester-web-app
   servlet:
