@@ -10,9 +10,9 @@ public class FfmpegTest {
 
     @Test
     public void test_command(){
-        String folderUrl = "C:\\Users\\wenc\\Desktop\\captureImg\\img\\img\\path0\\pic7_r_逆天清纯颜值小姐姐\\";
-        String fileName = "逆天清纯颜值小姐姐.mp4";
-        String fileFullName = "逆天清纯颜值小姐姐";
+        String folderUrl = "C:\\Users\\wenc\\Desktop\\\\";
+        String fileName = "xxljj.mp4";
+        String fileFullName = "xxljj";
         List<String> command = new ArrayList<>();
         command.add("C:\\Users\\wenc\\Desktop\\ffmpeg\\bin\\ffmpeg.exe");
         command.add("-i");
