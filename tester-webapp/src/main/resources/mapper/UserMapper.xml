@@ -88,8 +88,26 @@
             <if test="id != null">
                 and t_alias.id = #{email}
             </if>
+            and deleted = 0
         </where>
-        and deleted = 0
+    </select>
+
+    <select id="listByName2" resultMap="BaseResultMap" parameterType="com.tester.testercommon.model.request.IdAndNameRequest">
+        select <include refid="selectSql"></include>
+        from <include refid="table_name"></include>  as t_alias
+        where
+        <trim prefixOverrides="AND | OR">
+            <if test="name != null and name != ''">
+                and t_alias.name like CONCAT('%', #{name}, '%')
+            </if>
+            <if test="email != null and email != ''">
+                and t_alias.email like CONCAT('%', #{email}, '%')
+            </if>
+            <if test="id != null">
+                and t_alias.id = #{email}
+            </if>
+            and deleted = 0
+         </trim>
     </select>
 
 
