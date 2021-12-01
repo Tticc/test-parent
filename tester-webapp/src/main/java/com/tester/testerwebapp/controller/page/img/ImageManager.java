@@ -24,6 +24,10 @@ public class ImageManager {
     public int listPic(StringBuilder sb, int pathIndex, int picIndex) throws IOException, BusinessException {
         List<File> files = ImgCommon.getFiles(pathIndex, picIndex);
         List<File> sorted = ImgCommon.sortFilesByIndex(files);
+        if(processM3U8(sb,sorted)){
+            appendPicTail(sb, pathIndex, picIndex);
+            return sorted.size();
+        }
         for (File item : sorted) {
             String s = getPicHttpUrl(item.getPath());
             String picName = item.getName();
@@ -45,6 +49,48 @@ public class ImageManager {
         }
         appendPicTail(sb, pathIndex, picIndex);
         return sorted.size();
+    }
+
+    private boolean processM3U8(StringBuilder sb, List<File> sorted){
+        File target = null;
+        for (File file : sorted) {
+            String picName = file.getName();
+            if(picName.contains(".m3u8")){
+                target = file;
+            }
+        }
+        if(target == null){
+            return false;
+        }
+        String s = getPicHttpUrl(target.getPath());
+        sb.append("\n" +
+                "    <script src=\"/static/js/video.js\" charset=\"utf-8\"></script>\n" +
+                "    <script src=\"/static/js/videojs-contrib-hls.min.js\" charset=\"utf-8\"></script>\n" +
+                "    <link href=\"/static/css/video-js.css\" rel=\"stylesheet\">");
+        sb.append("<div>");
+//                sb.append("<video width = \"840\" height = \"540\" controls autoplay>");
+//                sb.append("<source src=\"")
+//                        .append(s)
+//                        .append("\" type=\"video/mp4\">");
+//                sb.append("</video>");
+
+        sb.append("<video id=\"welcomeVideo\" class=\"video-js vjs-default-skin vjs-big-play-centered vjs-progress-holder vjs-progress-control\">");
+        sb.append("<source id=\"source\" src=\""+s+"\" type=\"application/x-mpegURL\" />");
+        sb.append("</video>");
+        sb.append("</div>");
+        sb.append("<br/><br/><h1>"+target.getName()+"</h1>");
+
+        sb.append("<script type=\"text/javascript\">\n" +
+                "    var player = videojs('welcomeVideo', {\n" +
+                "        loop: true,\n" +
+                "        controls: true,\n" +
+                "        preload: 'auto',\n" +
+                "        autoplay: false,\n" +
+                "        height: 500,\n" +
+                "        width: 780\n" +
+                "    });\n" +
+                "</script>");
+        return true;
     }
 
     /**
