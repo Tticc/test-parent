@@ -30,10 +30,11 @@ public class MyForwardFilter implements Filter {
             response.getWriter().println("{\"status\":\"UP\"}");
             return;
         }
-        String newUri = requestURI;
         if (requestURI.startsWith(ORI_CONTEXT_PATH + "/") || ORI_CONTEXT_PATH.equals(requestURI)) {
-            newUri = requestURI.substring(ORI_CONTEXT_PATH.length());
+            String newUri = requestURI.substring(ORI_CONTEXT_PATH.length());
+            httpRequest.getRequestDispatcher(newUri).forward(request, response);
+        }else{
+            chain.doFilter(request,response);
         }
-        httpRequest.getRequestDispatcher(newUri).forward(request, response);
     }
 }
