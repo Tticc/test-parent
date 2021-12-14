@@ -1,14 +1,10 @@
 package com.tester.testercv;
 
-import com.google.common.base.Charsets;
 import org.junit.Test;
 import org.opencv.core.*;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @Author 温昌营
