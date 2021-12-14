@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author 温昌营
@@ -31,6 +32,11 @@ public class UserServiceImpl extends BaseServiceImpl<Long, UserDomain> implement
     @Override
     public UserDomain selectUserId(Long id) {
         return userMapper.selectUserId(id);
+    }
+
+    @Override
+    public List<UserDomain> listByIds(Set<Long> ids) {
+        return userMapper.listByIds(ids);
     }
 
     @Override

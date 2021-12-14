@@ -110,6 +110,19 @@
          </trim>
     </select>
 
+    <select id="listByIds" resultMap="BaseResultMap" parameterType="com.tester.testercommon.model.request.IdAndNameRequest">
+        select <include refid="selectSql"></include>
+        from <include refid="table_name"></include>  as t_alias
+        <where>
+            <if test="ids !=null and ids.size > 0">
+                and t_alias.id in
+                <foreach collection="ids" item="item" open="(" close=")" separator=",">
+                    #{item,jdbcType=BIGINT}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
 
 
     <!--基础CRUD、分页、列表部分 begin-->

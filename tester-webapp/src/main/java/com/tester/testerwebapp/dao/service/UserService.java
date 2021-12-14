@@ -5,6 +5,7 @@ import com.tester.testercommon.service.BaseService;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author 温昌营
@@ -13,6 +14,8 @@ import java.util.List;
 public interface UserService extends BaseService<Long, UserDomain> {
 
     UserDomain selectUserId(Long id);
+
+    List<UserDomain> listByIds(Set<Long> ids);
 
     List<UserDomain> listByName(IdAndNameRequest request);
 

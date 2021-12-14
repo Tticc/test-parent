@@ -6,6 +6,7 @@ import com.tester.testerwebapp.dao.domain.UserDomain;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author 温昌营
@@ -18,6 +19,8 @@ public interface UserMapper extends BaseMapper<UserDomain, Long> {
     List<UserDomain> listByName(IdAndNameRequest request);
 
     List<UserDomain> listByName2(IdAndNameRequest request);
+
+    List<UserDomain> listByIds(@Param("ids") Set<Long> ids);
 
     int batchSaveUser(List<UserDomain> list);
 }
