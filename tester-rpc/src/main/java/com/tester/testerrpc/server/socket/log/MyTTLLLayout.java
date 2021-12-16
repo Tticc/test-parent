@@ -16,6 +16,12 @@ public class MyTTLLLayout extends TTLLLayout {
     ThrowableProxyConverter tpc = new ThrowableProxyConverter();
 
     @Override
+    public void start() {
+        tpc.start();
+        super.start();
+    }
+
+    @Override
     public String doLayout(ILoggingEvent event) {
         if (!isStarted()) {
             return CoreConstants.EMPTY_STRING;
