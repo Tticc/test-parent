@@ -15,5 +15,7 @@ public class ImgWebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(ImgCommon.IMG_HTTP_URL_PREFIX+"/**").addResourceLocations(ImgCommon.IMG_ROOT_PATH);
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
     }
 }

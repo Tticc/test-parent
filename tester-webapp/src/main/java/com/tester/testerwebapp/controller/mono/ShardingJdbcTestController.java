@@ -10,6 +10,8 @@ import com.tester.testermybatis.dao.domain.OrderMemberDomain;
 import com.tester.testermybatis.dao.service.OrderItemManager;
 import com.tester.testermybatis.dao.service.OrderMemberManager;
 import com.tester.testermybatis.service.MyKeyGenerator;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.util.List;
 
+@Api(tags = "ShardingJdbc测试模块")
 @RestController
 @RequestMapping("/sharding")
 @Slf4j
@@ -35,6 +38,7 @@ public class ShardingJdbcTestController extends BaseController {
     private MyKeyGenerator myKeyGenerator;
 
 
+    @ApiOperation(value = "orderItem插入", notes = "", httpMethod = "POST")
     @PostMapping(value = "/insertOrderItem")
     public RestResult<OrderItemDomain> insertOrderItem(@RequestBody @Validated MemberRequest request) throws BusinessException {
         Long memberId = request.getMemberId();
@@ -60,6 +64,7 @@ public class ShardingJdbcTestController extends BaseController {
         return success(domain);
     }
 
+    @ApiOperation(value = "listByPhone", notes = "", httpMethod = "POST")
     @PostMapping(value = "/listByPhone")
     public RestResult<List<OrderMemberDomain>> listByPhone() throws BusinessException {
         OrderMemberDomain listDomain = new OrderMemberDomain();

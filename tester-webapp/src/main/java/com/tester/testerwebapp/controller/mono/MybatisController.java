@@ -6,6 +6,8 @@ import com.tester.testercommon.controller.RestResult;
 import com.tester.testercommon.model.request.IdAndNameRequest;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.dao.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +25,7 @@ import java.util.List;
  * @Author 温昌营
  * @Date 2021-6-11 10:21:44
  */
+@Api(tags = "Mybatis测试模块")
 @RestController
 @RequestMapping("/mybatis")
 @Slf4j
@@ -30,8 +33,9 @@ public class MybatisController extends BaseController {
     @Autowired
     private UserService userService;
 
+    @ApiOperation(value = "select", notes = "", httpMethod = "POST")
     @RequestMapping(value = "/select", method = RequestMethod.POST)
-    @Transactional(transactionManager = ConstantList.NORMAL_MANAGER ,rollbackFor = Exception.class)
+    @Transactional(transactionManager = ConstantList.NORMAL_MANAGER, rollbackFor = Exception.class)
     public Mono<RestResult<UserDomain>> demoStart1(@RequestBody @Validated IdAndNameRequest model) {
         log.info("controller start here.");
         UserDomain userDomain = userService.selectUserId(model.getId());
@@ -40,6 +44,7 @@ public class MybatisController extends BaseController {
     }
 
 
+    @ApiOperation(value = "batchSave", notes = "", httpMethod = "POST")
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public Mono<RestResult<Integer>> insert() {
         log.info("controller start here.");
@@ -48,8 +53,9 @@ public class MybatisController extends BaseController {
         return monoSuccess(Mono.justOrEmpty(userService.save(userDomain)));
     }
 
+    @ApiOperation(value = "batchSave", notes = "", httpMethod = "POST")
     @RequestMapping(value = "/batchSave", method = RequestMethod.POST)
-    public Mono<RestResult<Integer>> batchSave(){
+    public Mono<RestResult<Integer>> batchSave() {
         log.info("controller start here.");
         List<UserDomain> list = new ArrayList<>();
         list.add(new UserDomain().init().setName("wenc").setCellphone("123498734892").setDataFrom(1).setEmployeeId("0001").setWechatid("1232"));
@@ -60,6 +66,7 @@ public class MybatisController extends BaseController {
     }
 
 
+    @ApiOperation(value = "update", notes = "", httpMethod = "POST")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Mono<RestResult<Integer>> update(@RequestBody @Validated IdAndNameRequest model) {
         log.info("controller start here.");

@@ -202,4 +202,15 @@ public class CommonUtil {
 			}
 		}
 	}
+
+
+
+	public static String getFileSuffix(String fileName) {
+		if (fileName != null && !"".equals(fileName.trim())) {
+			int pointIndex = fileName.lastIndexOf(".");
+			return pointIndex == -1 ? "" : fileName.substring(pointIndex).replace(".", "");
+		} else {
+			return "";
+		}
+	}
 }

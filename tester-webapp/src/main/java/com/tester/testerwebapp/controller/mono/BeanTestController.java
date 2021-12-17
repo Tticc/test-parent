@@ -9,6 +9,8 @@ import com.tester.testerwebapp.service.spring.lifecycle.LifecycleService;
 import com.tester.testerwebapp.service.spring.scope.PrototypeScopeService;
 import com.tester.testerwebapp.service.spring.scope.RequestScopeService;
 import com.tester.testerwebapp.service.spring.scope.SessionScopeService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
@@ -26,9 +28,11 @@ import javax.annotation.PostConstruct;
 
 /**
  * 测试bean
+ *
  * @Author 温昌营
  * @Date 2021-7-5 15:56:13
  */
+@Api(tags = "测试bean模块")
 @RestController
 @RequestMapping("/bean")
 @Slf4j
@@ -45,14 +49,17 @@ public class BeanTestController extends BaseController implements ApplicationCon
     @Autowired
     private AwareService awareService;
 
-    @RequestMapping(value="/prototype", method = RequestMethod.GET)
+    @ApiOperation(value = "prototype", notes = "", httpMethod = "POST")
+    @RequestMapping(value = "/prototype", method = RequestMethod.GET)
     public Mono<RestResult<String>> prototype() throws BusinessException {
         PrototypeScopeService prototypeService = this.applicationContext.getBean("prototypeScopeService", PrototypeScopeService.class);
         prototypeService.printMySelf();
         Mono<String> stringMono = Mono.justOrEmpty("success");
         return monoSuccess(stringMono);
     }
-    @RequestMapping(value="/request", method = RequestMethod.GET)
+
+    @ApiOperation(value = "request", notes = "", httpMethod = "POST")
+    @RequestMapping(value = "/request", method = RequestMethod.GET)
     public Mono<RestResult<String>> request() throws BusinessException {
         RequestScopeService requestScopeService = this.applicationContext.getBean("requestScopeService", RequestScopeService.class);
         System.out.println(requestScopeService);
@@ -60,14 +67,15 @@ public class BeanTestController extends BaseController implements ApplicationCon
         Mono<String> stringMono = Mono.justOrEmpty("success");
         return monoSuccess(stringMono);
     }
-    private void doPrint(){
+
+    private void doPrint() {
         RequestAttributes attributes = RequestContextHolder.currentRequestAttributes();
-        RequestScopeService requestScopeService = (RequestScopeService)attributes.getAttribute("requestScopeService", RequestAttributes.SCOPE_REQUEST);
+        RequestScopeService requestScopeService = (RequestScopeService) attributes.getAttribute("requestScopeService", RequestAttributes.SCOPE_REQUEST);
         requestScopeService.printMySelf();
     }
 
 
-    @RequestMapping(value="/session", method = RequestMethod.GET)
+    @RequestMapping(value = "/session", method = RequestMethod.GET)
     public Mono<RestResult<String>> session() throws BusinessException {
         SessionScopeService sessionScopeService = this.applicationContext.getBean("sessionScopeService", SessionScopeService.class);
         System.out.println(sessionScopeService);
@@ -75,34 +83,32 @@ public class BeanTestController extends BaseController implements ApplicationCon
         Mono<String> stringMono = Mono.justOrEmpty("success");
         return monoSuccess(stringMono);
     }
-    private void doPrintSession(){
+
+    private void doPrintSession() {
         RequestAttributes attributes = RequestContextHolder.currentRequestAttributes();
-        SessionScopeService sessionScopeService = (SessionScopeService)attributes.getAttribute("sessionScopeService", RequestAttributes.SCOPE_SESSION);
+        SessionScopeService sessionScopeService = (SessionScopeService) attributes.getAttribute("sessionScopeService", RequestAttributes.SCOPE_SESSION);
         sessionScopeService.printMySelf();
     }
 
 
-    @RequestMapping(value="/awareService", method = RequestMethod.GET)
+    @RequestMapping(value = "/awareService", method = RequestMethod.GET)
     public Mono<RestResult<String>> awareService() throws BusinessException {
 //        awareService.doPublishEvent();
         return monoSuccess(Mono.justOrEmpty("success"));
     }
 
 
-
-
-
     @Autowired
     private ApplicationContext applicationContext;
+
     public void setApplicationContext(
             ApplicationContext applicationContext) throws BeansException {
 //        this.applicationContext = applicationContext;
     }
 
 
-
     @PostConstruct
-    public void post(){
+    public void post() {
         System.out.println("xxx");
 //        System.out.println(requestScopeService);
         System.out.println(prototypeScopeService);

@@ -9,28 +9,25 @@ import com.tester.testercommon.model.request.IdAndNameRequest;
 import com.tester.testercommon.model.request.TextRequest;
 import com.tester.testercommon.util.redis.RedisUtilValue;
 import com.tester.testerwebapp.dao.domain.UserDomain;
-import com.tester.testerwebapp.service.ExcelManager;
 import com.tester.testerwebapp.service.MyService;
 import com.tester.testerwebapp.service.UserManager;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
 
 import javax.validation.constraints.Size;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.List;
 
 /**
  * @Author 温昌营
  * @Date
  */
+@Api(tags = "user模块")
 @RestController
 @RequestMapping("/demo")
 @Slf4j
@@ -41,30 +38,6 @@ public class UserController extends BaseController {
     private MyService myService;
     @Autowired
     private RedisUtilValue redisUtilValue;
-    @Autowired
-    private ExcelManager excelManager;
-    @PostMapping(value = "/uploadExcel")
-    public RestResult<String> uploadExcel(@RequestPart("file") MultipartFile file) throws IOException {
-        InputStream inputStream = file.getInputStream();
-        String filename = file.getOriginalFilename();
-        try {
-            excelManager.parseExcel(inputStream, filename);
-        }finally {
-            if(null != inputStream){
-                inputStream.close();
-            }
-        }
-        return success();
-    }
-    @PostMapping(value = "/uploadForDifSource")
-    public RestResult<Void> uploadForDifSource(@RequestPart("file") MultipartFile file,@ModelAttribute IdAndNameRequest model) throws UnsupportedEncodingException {
-        String originalFileName = file.getOriginalFilename();
-        System.out.println(originalFileName);
-        originalFileName = URLDecoder.decode(originalFileName, "UTF-8");
-        System.out.println(originalFileName);
-        System.out.println(model);
-        return success();
-    }
 
     /*@RequestMapping(value = "/demoStart", method = RequestMethod.POST)
     public Mono<UserDomain> demoStart(@RequestParam("id")Long id, @RequestParam("name") String name) {
@@ -75,8 +48,9 @@ public class UserController extends BaseController {
         });
         return userDomainMono;
     }*/
+    @ApiOperation(value = "demoStart", notes = "", httpMethod = "POST")
     @RequestMapping(value = "/demoStart", method = RequestMethod.POST)
-    public Mono<RestResult<UserDomain>> demoStart(@RequestParam("id")Long id, @RequestParam("name") String name) {
+    public Mono<RestResult<UserDomain>> demoStart(@RequestParam("id") Long id, @RequestParam("name") String name) {
         log.info("controller start here.");
         myService.print();
         Mono<UserDomain> userDomainMono = userManager.selectUserById(id);
@@ -85,11 +59,13 @@ public class UserController extends BaseController {
 
     /**
      * 测试 MethodArgumentNotValidException，不符合@NotNull成功抛出此异常
+     *
      * @param model
-     * @return reactor.core.publisher.Mono<com.tester.testercommon.controller.RestResult<com.tester.testerwebapp.dao.domain.UserDomain>>
+     * @return reactor.core.publisher.Mono<com.tester.testercommon.controller.RestResult < com.tester.testerwebapp.dao.domain.UserDomain>>
      * @Date 17:21 2021/1/7
      * @Author 温昌营
      **/
+    @ApiOperation(value = "demoStart1", notes = "", httpMethod = "POST")
     @RequestMapping(value = "/demoStart1", method = RequestMethod.POST)
     public Mono<RestResult<UserDomain>> demoStart1(@Validated @RequestBody IdAndNameRequest model) {
         log.info("controller start here.");
@@ -100,11 +76,13 @@ public class UserController extends BaseController {
 
     /**
      * 测试 ConstraintViolationException。没结果
+     *
      * @param name
-     * @return reactor.core.publisher.Mono<com.tester.testercommon.controller.RestResult<com.tester.testerwebapp.dao.domain.UserDomain>>
+     * @return reactor.core.publisher.Mono<com.tester.testercommon.controller.RestResult < com.tester.testerwebapp.dao.domain.UserDomain>>
      * @Date 17:20 2021/1/7
      * @Author 温昌营
      **/
+    @ApiOperation(value = "demoStart2", notes = "", httpMethod = "POST")
     @RequestMapping(value = "/demoStart2/{name}", method = RequestMethod.POST)
     public Mono<RestResult<UserDomain>> demoStart2(@Size(max = 10, min = 3, message = "name should have between 3 and 10 characters") @PathVariable("name") String name) {
         log.info("controller start here.");
@@ -113,6 +91,7 @@ public class UserController extends BaseController {
         return monoSuccess(userDomainMono);
     }
 
+    @ApiOperation(value = "insert", notes = "", httpMethod = "POST")
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public Mono<RestResult<Integer>> insert() {
         log.info("controller start here.");
@@ -120,20 +99,23 @@ public class UserController extends BaseController {
         return monoSuccess(userDomainMono);
     }
 
-    @RequestMapping(value="login", method = RequestMethod.POST)
-    public Mono<RestResult<Serializable>> login(){
-        redisUtilValue.setValue("user::login::1","123231");
+    @ApiOperation(value = "login", notes = "", httpMethod = "POST")
+    @RequestMapping(value = "login", method = RequestMethod.POST)
+    public Mono<RestResult<Serializable>> login() {
+        redisUtilValue.setValue("user::login::1", "123231");
         return monoSuccess();
     }
 
-    @RequestMapping(value="glogin", method = RequestMethod.POST)
-    public Mono<RestResult<Serializable>> getLogin(){
+    @ApiOperation(value = "glogin", notes = "", httpMethod = "POST")
+    @RequestMapping(value = "glogin", method = RequestMethod.POST)
+    public Mono<RestResult<Serializable>> getLogin() {
         Mono<Serializable> just = Mono.justOrEmpty(redisUtilValue.getValue("user::1"));
         return monoSuccess(just);
     }
 
-    @RequestMapping(value="listByName", method = RequestMethod.POST)
-    public Mono<RestResult<Serializable>> listByName(){
+    @ApiOperation(value = "listByName", notes = "", httpMethod = "POST")
+    @RequestMapping(value = "listByName", method = RequestMethod.POST)
+    public Mono<RestResult<Serializable>> listByName() {
 //        PageInfo<UserDomain> result = new PageInfo<>();
         Page<UserDomain> page = PageHelper.startPage(2, 2);
         IdAndNameRequest request = new IdAndNameRequest();
@@ -141,40 +123,43 @@ public class UserController extends BaseController {
         List<UserDomain> result = page.getResult();
         System.out.println();
         System.out.println();
-        System.out.println("all list is:"+result);
-        System.out.println("list.size:"+result.size());
-        System.out.println("page.getTotal:"+page.getTotal());
+        System.out.println("all list is:" + result);
+        System.out.println("list.size:" + result.size());
+        System.out.println("page.getTotal:" + page.getTotal());
         Page<UserDomain> page1 = PageHelper.startPage(2, 2);
         userManager.listByName(request.setName("name"));
         return monoSuccess();
     }
 
-    @RequestMapping(value="exTest", method = RequestMethod.POST)
+    @ApiOperation(value = "exTest", notes = "", httpMethod = "POST")
+    @RequestMapping(value = "exTest", method = RequestMethod.POST)
     public Mono<RestResult<String>> exTest() throws BusinessException {
-        if(true){
+        if (true) {
             throw new BusinessException(11L);
         }
         return monoSuccess();
     }
 
-    @RequestMapping(value="test_asyncTransaction", method = RequestMethod.POST)
+    @ApiOperation(value = "test_asyncTransaction", notes = "", httpMethod = "POST")
+    @RequestMapping(value = "test_asyncTransaction", method = RequestMethod.POST)
     public Mono<RestResult<String>> test_asyncTransaction(@Validated @RequestBody TextRequest request) throws BusinessException {
         userManager.test_asyncTransaction(request);
         return monoSuccess();
     }
 
-    @RequestMapping(value="test_onlyTransaction", method = RequestMethod.POST)
+    @ApiOperation(value = "test_onlyTransaction", notes = "", httpMethod = "POST")
+    @RequestMapping(value = "test_onlyTransaction", method = RequestMethod.POST)
     public Mono<RestResult<String>> test_onlyTransaction(@Validated @RequestBody TextRequest request) throws BusinessException {
         userManager.test_onlyTransaction(request);
         return monoSuccess();
     }
 
-    @RequestMapping(value="test_catchException", method = RequestMethod.POST)
+    @ApiOperation(value = "test_catchException", notes = "", httpMethod = "POST")
+    @RequestMapping(value = "test_catchException", method = RequestMethod.POST)
     public Mono<RestResult<String>> test_catchException(@Validated @RequestBody TextRequest request) throws BusinessException {
         userManager.test_catchException(request);
         return monoSuccess();
     }
-
 
 
 }
