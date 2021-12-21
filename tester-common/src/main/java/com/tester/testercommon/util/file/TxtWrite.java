@@ -1,12 +1,10 @@
 package com.tester.testercommon.util.file;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * @Author 温昌营
@@ -14,70 +12,94 @@ import java.io.PrintWriter;
  */
 @Slf4j
 public class TxtWrite {
-    public static String createTxtFile(String absFilePath, String fileName) throws IOException {
-        String absFileName = absFilePath + File.separator + fileName;
-        File contentFile = new File(absFileName);
-        File checkDir= new File(absFilePath);
-        if (!checkDir.exists()) {
-            checkDir.mkdir();//创建文件夹
+
+
+    public static void string2File(final String str, final String fileName) throws IOException {
+
+        String tmpFile = fileName + ".tmp";
+        string2FileNotSafe(str, tmpFile);
+
+        String bakFile = fileName + ".bak";
+        String prevContent = file2String(fileName);
+        if (prevContent != null) {
+            string2FileNotSafe(prevContent, bakFile);
         }
-        if (!contentFile.exists()) {
-            boolean newFile = contentFile.createNewFile();
-            if(!newFile){
-                log.error("文件夹创建失败");
-            }
-        }
-        return absFileName;
+
+        File file = new File(fileName);
+        file.delete();
+
+        file = new File(tmpFile);
+        file.renameTo(new File(fileName));
     }
 
-    public static boolean writeTxtFile(String absFilePath,String content) throws Exception {
-        if(StringUtils.isEmpty(content)){
-            return true;
+    public static void string2FileNotSafe(final String str, final String fileName) throws IOException {
+        File file = new File(fileName);
+        File fileParent = file.getParentFile();
+        if (fileParent != null) {
+            fileParent.mkdirs();
         }
-        if(StringUtils.isEmpty(absFilePath)){
-            log.error("writeTxtFile - 异常。写入文件路径为空！");
-            return false;
-        }
-        boolean flag = false;
-//        FileInputStream fis = null;
-//        InputStreamReader isr = null;
-//        BufferedReader br = null;
+        FileWriter fileWriter = null;
 
-        FileOutputStream fos = null;
-        PrintWriter pw = null;
         try {
-            // 文件路径
-            File file = new File(absFilePath);
-            // 将文件读入输入流
-//            fis = new FileInputStream(file);
-//            isr = new InputStreamReader(fis);
-//            br = new BufferedReader(isr);
-            StringBuffer buf = new StringBuffer();
-            buf.append(content);
-            fos = new FileOutputStream(file);
-            pw = new PrintWriter(fos);
-            pw.write(buf.toString().toCharArray());
-            pw.flush();
-            flag = true;
-        } catch (IOException e1) {
-            throw e1;
+            fileWriter = new FileWriter(file);
+            fileWriter.write(str);
+        } catch (IOException e) {
+            throw e;
         } finally {
-            if (pw != null) {
-                pw.close();
+            if (fileWriter != null) {
+                fileWriter.close();
             }
-            if (fos != null) {
-                fos.close();
-            }
-//            if (br != null) {
-//                br.close();
-//            }
-//            if (isr != null) {
-//                isr.close();
-//            }
-//            if (fis != null) {
-//                fis.close();
-//            }
         }
-        return flag;
+    }
+
+    public static String file2String(final String fileName) throws IOException {
+        File file = new File(fileName);
+        return file2String(file);
+    }
+
+    public static String file2String(final File file) throws IOException {
+        if (file.exists()) {
+            byte[] data = new byte[(int) file.length()];
+            boolean result;
+
+            FileInputStream inputStream = null;
+            try {
+                inputStream = new FileInputStream(file);
+                int len = inputStream.read(data);
+                result = len == data.length;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            }
+
+            if (result) {
+                return new String(data);
+            }
+        }
+        return null;
+    }
+
+    public static String file2String(final URL url) {
+        InputStream in = null;
+        try {
+            URLConnection urlConnection = url.openConnection();
+            urlConnection.setUseCaches(false);
+            in = urlConnection.getInputStream();
+            int len = in.available();
+            byte[] data = new byte[len];
+            in.read(data, 0, len);
+            return new String(data, "UTF-8");
+        } catch (Exception ignored) {
+        } finally {
+            if (null != in) {
+                try {
+                    in.close();
+                } catch (IOException ignored) {
+                }
+            }
+        }
+
+        return null;
     }
 }
