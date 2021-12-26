@@ -6,7 +6,9 @@
         <groupId>com.tester</groupId>
         <artifactId>test-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <!-- relativePath设定一个空值将始终从仓库中获取，不从本地路径获取  -->
+        <!-- 由于没有仓库，所以注释掉 -->
+<!--        <relativePath/>-->
     </parent>
     <artifactId>tester-async</artifactId>
     <name>tester-async</name>
