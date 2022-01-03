@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * movie
+ * movie new one
  */
 @Slf4j
 public class Movie1 {
@@ -179,9 +179,9 @@ public class Movie1 {
                 continue;
             }
             int i = s.lastIndexOf("/");
-            finalM3U8Str.append(s.substring(i + 1));
+            finalM3U8Str.append(s.substring(i + 1)).append("\n");
         }
-        String path = folderPath + "index.m3u8";
+        String path = folderPath + File.separator + "index.m3u8";
         try (FileOutputStream fs = new FileOutputStream(path)) {
             fs.write(finalM3U8Str.toString().getBytes());
         }
