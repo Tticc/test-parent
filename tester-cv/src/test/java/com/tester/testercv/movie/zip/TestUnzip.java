@@ -1,4 +1,4 @@
-package com.tester.testercv.movie;
+package com.tester.testercv.movie.zip;
 
 import de.idyl.winzipaes.AesZipFileDecrypter;
 import de.idyl.winzipaes.impl.AESDecrypter;

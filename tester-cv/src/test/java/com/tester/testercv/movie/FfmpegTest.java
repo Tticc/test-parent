@@ -1,4 +1,4 @@
-package com.tester.testercv;
+package com.tester.testercv.movie;
 
 import org.junit.Test;
 
@@ -9,14 +9,14 @@ import java.util.List;
 public class FfmpegTest {
 
     @Test
-    public void test_command(){
+    public void test_command() {
         String folderUrl = "C:\\Users\\wenc\\Desktop\\\\";
         String fileName = "xxljj.mp4";
         String fileFullName = "xxljj";
         List<String> command = new ArrayList<>();
         command.add("C:\\Users\\wenc\\Desktop\\ffmpeg\\bin\\ffmpeg.exe");
         command.add("-i");
-        command.add(folderUrl+fileName);
+        command.add(folderUrl + fileName);
         command.add("-c:v");
         command.add("libx264");
         command.add("-hls_time");
@@ -29,15 +29,15 @@ public class FfmpegTest {
         command.add("-2");
         command.add("-f");
         command.add("hls");
-        command.add(folderUrl+fileFullName+".m3u8");
-        try{
+        command.add(folderUrl + fileFullName + ".m3u8");
+        try {
             ProcessBuilder pb = new ProcessBuilder();
             pb.command(command);
             Process p = pb.start();
             int i = doWaitFor(p);
 
-        }catch (Exception e){
-            
+        } catch (Exception e) {
+
         }
     }
 
@@ -45,27 +45,27 @@ public class FfmpegTest {
         InputStream in = null;
         InputStream err = null;
         int exitValue = -1;
-        try{
+        try {
             in = p.getInputStream();
             err = p.getErrorStream();
             boolean finish = false;
-            while (!finish){
-                try{
-                    while (in.available() > 0){
-                        Character c = new Character((char)in.read());
+            while (!finish) {
+                try {
+                    while (in.available() > 0) {
+                        Character c = new Character((char) in.read());
                         System.out.print(c);
                     }
-                    while (err.available() > 0){
-                        Character c = new Character((char)err.read());
+                    while (err.available() > 0) {
+                        Character c = new Character((char) err.read());
                         System.out.print(c);
                     }
                     exitValue = p.exitValue();
                     finish = true;
-                }catch (IllegalThreadStateException itse){
+                } catch (IllegalThreadStateException itse) {
                     Thread.currentThread().sleep(500);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         return exitValue;

@@ -1,4 +1,4 @@
-package com.tester.testercv.movie;
+package com.tester.testercv.movie.zip;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
