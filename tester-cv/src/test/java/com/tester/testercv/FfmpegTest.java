@@ -20,7 +20,7 @@ public class FfmpegTest {
         command.add("-c:v");
         command.add("libx264");
         command.add("-hls_time");
-        command.add("20");
+        command.add("1");
         command.add("-hls_list_size");
         command.add("0");
         command.add("-c:a");
