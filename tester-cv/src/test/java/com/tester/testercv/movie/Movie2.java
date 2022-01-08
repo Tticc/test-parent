@@ -52,7 +52,7 @@ public class Movie2 {
         List<String> tsList = getTSListAndMethod(trueListUrl);
         setDecryptKey(trueKey);
 
-        startTask(10);
+        startTask(3);
 
         Map<Integer, String> map = downLoadIndexFile(tsList, trueListUrl);
 
@@ -77,6 +77,10 @@ public class Movie2 {
             if (s.contains("#EXTINF")) {
                 boolean hasRelativePath = false;
                 String tempUrl = split[++i];
+                if(tempUrl.startsWith("http://")||tempUrl.startsWith("https://")){
+                    tsList.add(tempUrl);
+                    continue;
+                }
                 if (tempUrl.contains("/")) {
                     hasRelativePath = true;
                 }
@@ -180,7 +184,7 @@ public class Movie2 {
                 keyFileMap.put(i, fileOutPath + fileOutName);
                 System.out.println("成功：" + (i + 1) + "/" + size);
             } catch (Exception ex) {
-                System.err.println("*************失败：" + (i + 1) + "/" + size + "****等待下一次重试********************************************************************");
+                System.err.println("*************失败：" + (i + 1) + "/" + size + "****等待下一次重试*********"+subUrlPath+"***********************************************************");
                 MyConsumer<String> myConsumer = buildTask(subUrlPath, fileOutPath, fileOutName, keyFileMap, i, size);
                 queue.offer(myConsumer);
             }
