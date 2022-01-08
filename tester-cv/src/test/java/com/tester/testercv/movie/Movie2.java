@@ -217,6 +217,8 @@ public class Movie2 {
 
         URL url = new URL(fullUrlPath);
         URLConnection conn = url.openConnection();
+        conn.setConnectTimeout(20*1000);
+        conn.setReadTimeout(20*1000);
         try (InputStream inStream = conn.getInputStream();
              FileOutputStream fs = new FileOutputStream(tempFile)) {
             byte[] buffer = new byte[1204];
