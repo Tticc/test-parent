@@ -7,6 +7,8 @@ import lombok.experimental.Accessors;
 
 import java.io.File;
 import java.net.Proxy;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.LockSupport;
@@ -34,10 +36,13 @@ public class ImgDownload {
     public static void main(String[] args) throws Exception {
         ImgDownload imgDownload = new ImgDownload();
         imgDownload.start(DefaultPool::exec);
+        Map<String, String> propertyMap = new HashMap<>();
+        propertyMap.put("user-agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36");
         imgDownload.pushTask(1,
                 199,
                 "http://www.xxx.xx.com",
-                "C:\\Users\\Admin\\Desktop\\captureImg\\img\\");
+                "C:\\Users\\Admin\\Desktop\\captureImg\\img\\",
+                propertyMap);
 
     }
 
@@ -64,7 +69,7 @@ public class ImgDownload {
      * @Date 18:04 2021/11/10
      * @Author 温昌营
      **/
-    public void pushTask(int startIndex, int endIndex, String prefixUrl, String folderPath) {
+    public void pushTask(int startIndex, int endIndex, String prefixUrl, String folderPath,Map<String, String> propertyMap) {
         File dir = new File(folderPath);
         if(!dir.exists()){
             if(dir.mkdirs()){
@@ -79,7 +84,8 @@ public class ImgDownload {
                 .setCurrentIndex(startIndex)
                 .setPrefixUrl(prefixUrl)
 //                .setPostfixUrl(oriTask.getPostfixUrl())
-                .setPrefixFilePath(folderPath);
+                .setPrefixFilePath(folderPath)
+                .setPropertyMap(propertyMap);
         putEle(downloadTask);
     }
 
@@ -126,6 +132,7 @@ public class ImgDownload {
         private String prefixUrl;
         private String postfixUrl = ".jpg";
         private String prefixFilePath = "";
+        Map<String, String> propertyMap = null;
 
         public static DownloadTask copyFrom(DownloadTask oriTask, int currentIndex) {
             return new DownloadTask()
@@ -143,7 +150,7 @@ public class ImgDownload {
                 while (this.currentIndex <= this.endIndex) {
                     String url = getUrl(this.prefixUrl, this.currentIndex, this.postfixUrl);
                     File outFile = new File(getFileName(this.prefixFilePath, this.currentIndex, ".jpg"));
-                    HttpsClient.requestForFile(url, HttpsClient.GET_METHOD, null, null, outFile, proxy);
+                    HttpsClient.requestForFile(url, HttpsClient.GET_METHOD, null, propertyMap, outFile, proxy);
                     ++this.currentIndex;
                 }
             } catch (Exception e) {
