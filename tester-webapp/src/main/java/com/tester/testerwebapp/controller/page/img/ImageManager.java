@@ -28,14 +28,17 @@ public class ImageManager {
             appendPicTail(sb, pathIndex, picIndex);
             return sorted.size();
         }
+        boolean needUrl = sorted.size() > 100;
         for (File item : sorted) {
             String s = getPicHttpUrl(item.getPath());
             String picName = item.getName();
             if (ImgCommon.isPic.matcher(picName).matches()) {
                 // 使用定位模式：   xxx/img/index/xxxx
                 // 使用单图片模式： xxx/img/xxxx
-                sb.append("<a href=\"/img/path/" + pathIndex + "/pic/" + picIndex + "/img/index/" + ImgCommon.getIndexByName(picName) + "\">")
-                        .append("<img src=\"")
+                if(needUrl){
+                    sb.append("<a href=\"/img/path/" + pathIndex + "/pic/" + picIndex + "/img/index/" + ImgCommon.getIndexByName(picName) + "\">");
+                }
+                sb.append("<img src=\"")
                         .append(s)
                         .append("\" width=\"100%\"/>");
             } else {
