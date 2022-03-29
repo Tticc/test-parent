@@ -2,8 +2,10 @@ package com.tester.testerwebapp;
 
 import com.tester.testercommon.model.request.IdAndNameRequest;
 import com.tester.testercommon.model.request.TextRequest;
+import com.tester.testercommon.util.DateUtil;
 import com.tester.testercommon.util.PasswordUtil;
 import com.tester.testercommon.util.file.MyFileReaderWriter;
+import com.tester.testercommon.util.file.TxtWrite;
 import com.tester.testercommon.util.jwt.JwtDataModel;
 import com.tester.testercommon.util.jwt.JwtHelper;
 import io.undertow.server.session.SecureRandomSessionIdGenerator;
@@ -22,10 +24,12 @@ import org.springframework.util.Assert;
 
 import java.beans.PropertyDescriptor;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicStampedReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,6 +49,50 @@ public class NormalTest_WebApp {
         int i = Integer.parseInt(str);
         System.out.println("i = " + i);
     }
+
+    @Test
+    public void test_sleep() throws InterruptedException {
+        Thread thread = new Thread(() -> sleep111());
+        thread.start();
+        Thread thread2 = new Thread(() -> sleep111());
+        thread2.start();
+        TimeUnit.SECONDS.sleep(5   );
+        synchronized (this) {
+            notify();
+            notify();
+        }
+        TimeUnit.SECONDS.sleep(7   );
+    }
+
+    public synchronized void  sleep111()  {
+        System.out.println("start. time:"+ DateUtil.dateFormat(new Date()));
+        try {
+            wait();
+            TimeUnit.SECONDS.sleep(3   );
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("end. time:"+ DateUtil.dateFormat(new Date()));
+    }
+
+
+    @Test
+    public void test_read() throws IOException {
+        String string = TxtWrite.file2String(new File("C:\\Users\\Admin\\Desktop\\order_text.txt"));
+        String[] split = string.split(",");
+        System.out.println(split.length);
+        StringBuffer sb=new StringBuffer();
+        for (String s : split) {
+            String[] split1 = s.split(":");
+            Long memberId = Long.valueOf(split1[1]);
+            Long num = memberId%64;
+            String businessNo = split1[0];
+            sb.append("select * from store_coupon_give_record_").append(num<10?"0"+num:num).append(" t where t.business_no = '").append(businessNo).append("' and t.member_id=").append(Long.valueOf(memberId)).append("").append("\r\n");
+            sb.append("union all").append("\r\n");
+        }
+        System.out.println(sb);
+    }
+
 
 
     @Test

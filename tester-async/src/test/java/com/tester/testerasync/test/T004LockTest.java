@@ -101,6 +101,7 @@ public class T004LockTest {
 
     /**
      * 信号量。信号量消耗完后就停止。可以用来控制并发数量（rocketMQ）
+     * org.apache.rocketmq.remoting.netty.NettyRemotingAbstract#invokeOnewayImpl(io.netty.channel.Channel, org.apache.rocketmq.remoting.protocol.RemotingCommand, long)
      * @param
      * @return void
      * @Date 9:35 2021/5/28
@@ -114,7 +115,7 @@ public class T004LockTest {
                 try {
                     semaphore.acquire();
                     System.out.println(Thread.currentThread().getName()+": in");
-                    TimeUnit.SECONDS.sleep(1);
+                    TimeUnit.SECONDS.sleep(10);
                     System.out.println(Thread.currentThread().getName()+": out");
                 } catch (InterruptedException e) {
                     e.printStackTrace();

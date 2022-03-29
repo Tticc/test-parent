@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class T001VolatileTest {
     // volatile 不保证原子性
+    // 因此，并非每次结果都是20000
     @Test
     public void test_atomic(){
         DataClass1 data = new DataClass1();
