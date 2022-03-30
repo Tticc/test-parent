@@ -65,8 +65,8 @@ public class NormalTest_Scanner {
         List<String> collect = Stream.of(s).sorted().collect(Collectors.toList());
         System.out.println(collect);
 
-        Optional<String> reduce = Stream.of(s).sorted().reduce((a, b) -> a + "," + b);
-        String s1 = reduce.get();
+        String s1 = Stream.of(s).sorted().reduce("", (a, b) -> a + "," + b);
+        System.out.println("s1 = " + s1);
     }
     @Test
     public void test_scan(){

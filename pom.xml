@@ -40,10 +40,13 @@
         <fileupload.version>1.4</fileupload.version>
         <commonsio.version>2.6</commonsio.version>
         <jwt.version>0.9.0</jwt.version>
-        <rocketmq-spring-boot-starter.version>2.0.3</rocketmq-spring-boot-starter.version>
         <commons-pool2.version>2.7.0</commons-pool2.version>
         <xxl-job.version>2.1.1</xxl-job.version>
         <cglib.version>3.3.0</cglib.version>
+
+        <!-- rocketmq -->
+        <rocketmq.vresion>4.5.1</rocketmq.vresion>
+        <rocketmq-spring-boot-starter.version>2.0.3</rocketmq-spring-boot-starter.version>
 
 
 
@@ -164,8 +167,24 @@
             <!--rocket mq-->
             <dependency>
                 <groupId>org.apache.rocketmq</groupId>
-                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <artifactId>rocketmq-spring-boot-parent</artifactId>
                 <version>${rocketmq-spring-boot-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-client</artifactId>
+                <version>${rocketmq.vresion}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-acl</artifactId>
+                <version>${rocketmq.vresion}</version>
             </dependency>
             <!--rocket mq-->
 
