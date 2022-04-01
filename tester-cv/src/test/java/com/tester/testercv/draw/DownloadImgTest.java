@@ -1,4 +1,4 @@
-package com.tester.testerasync;
+package com.tester.testercv.draw;
 
 import com.alibaba.fastjson.asm.FieldWriter;
 import com.tester.testercommon.util.http.MyX509TrustManager;
