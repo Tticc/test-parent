@@ -3,6 +3,7 @@ package com.tester.testermybatis.config.prop;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * 用于非分库分表的普通数据源属性。
@@ -12,28 +13,29 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ConfigurationProperties(prefix = "normal-datasource")
 public class NormalDatabaseProperties extends ConnectionPoolProperties{
     /**
      * 驱动类
      */
-    private String driverClassName = "com.mysql.cj.jdbc.Driver";
+    private String driverClassName;
 
     /**
      * 数据库jdbc连接
      * 当只配置数据库服务器时，该属性不包含db实例名 jdbc:mysql://IP:PORT/
      * 当配置数据库实例时，该属性包含db实例名 jdbc:mysql://IP:PORT/DB_NAME
      */
-    private String jdbcUrl = "jdbc:mysql://localhost:3306/test_parent?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8";
+    private String jdbcUrl;
 
     /**
      * 用户名
      */
-    private String username = "root";
+    private String username;
 
     /**
      * 密码
      */
-    private String password = "123456";
+    private String password;
 
 
 }

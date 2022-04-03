@@ -50,6 +50,10 @@ public class MyDatabaseProperties implements InitializingBean {
      * 是否打印真实sql
      */
     private boolean showSql = true;
+    /**
+     * 是否打印真实sql
+     */
+    private String jdbcUrl;
 
     /**
      * 分库数量。<br/>
@@ -83,7 +87,7 @@ public class MyDatabaseProperties implements InitializingBean {
         // 这里应该是配置在配置文件中，懒得写配置文件，所以直接在这里put 2021-5-2 12:05:06
         datasource.put("server1",new ShardingDatabaseProperties(
                 "com.mysql.cj.jdbc.Driver",
-                "jdbc:mysql://localhost:3306/",
+                jdbcUrl,
                 "?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8",
                 "root",
                 "123456",

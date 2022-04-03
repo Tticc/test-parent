@@ -35,7 +35,7 @@ import java.sql.SQLException;
  * @Date 2020-8-20 18:18:22
  */
 @Configuration
-@EnableConfigurationProperties({MybatisProperties.class})
+@EnableConfigurationProperties({MybatisProperties.class,NormalDatabaseProperties.class})
 @MapperScan(basePackages = {"com.tester.testerwebapp.dao.mapper"}, sqlSessionFactoryRef = "normalSqlSessionFactory")
 @Data
 @Slf4j
@@ -46,14 +46,12 @@ public class NormalDataBaseConfiguration implements InitializingBean {
 
     private final ResourceLoader resourceLoader;
 
-    private NormalDatabaseProperties normalDatabaseProperties = new NormalDatabaseProperties();
-
 
     @Bean("normalSqlSessionFactory")
-    public SqlSessionFactory normalSqlSessionFactory() throws Exception {
+    public SqlSessionFactory normalSqlSessionFactory(NormalDatabaseProperties normalDatabaseProperties) throws Exception {
         log.info("====== normalSqlSessionFactory init ======");
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(normalDataSource());
+        sqlSessionFactoryBean.setDataSource(normalDataSource(normalDatabaseProperties));
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         Resource[] resources = resolver.getResources("classpath:mybatis-config.xml");
         if(resources.length>0){
@@ -66,7 +64,7 @@ public class NormalDataBaseConfiguration implements InitializingBean {
     }
 
     @Bean("normalDataSource")
-    public DataSource normalDataSource() throws SQLException {
+    public DataSource normalDataSource(NormalDatabaseProperties normalDatabaseProperties) throws SQLException {
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setPoolName("normalDataSourcePool");
         dataSource.setDriverClassName(normalDatabaseProperties.getDriverClassName());
@@ -85,8 +83,8 @@ public class NormalDataBaseConfiguration implements InitializingBean {
     }
 
     @Bean(ConstantList.NORMAL_MANAGER)
-    public DataSourceTransactionManager getDataSourceTransactionManager() throws SQLException {
-        return new DataSourceTransactionManager(normalDataSource());
+    public DataSourceTransactionManager getDataSourceTransactionManager(NormalDatabaseProperties normalDatabaseProperties) throws SQLException {
+        return new DataSourceTransactionManager(normalDataSource(normalDatabaseProperties));
     }
 
 

@@ -19,6 +19,10 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,6 +30,48 @@ import java.util.regex.Pattern;
 public class NormalTest_Cv {
 
     private AtomicInteger atomicInteger = new AtomicInteger(0);
+
+
+    @Test
+    public void test_str(){
+        String test1 = "test";
+        String test2 = "test";
+        String test3 = new String("test");
+        System.out.println(test1 == test2);
+        System.out.println(test1 == test3);
+    }
+
+    @Test
+    public void test_norm() throws Exception {
+        double pow = Math.pow(0.94, 16);
+        System.out.println("pow = " + pow);
+
+        Callable<String> callable = new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                return "hello";
+            }
+        };
+
+        FutureTask<String> stringFutureTask = new FutureTask<>(callable);
+
+        Thread thread = new Thread(stringFutureTask);
+//        thread.start();
+
+        String s = stringFutureTask.get(5, TimeUnit.SECONDS);
+        System.out.println("s = " + s);
+
+
+    }
+    @Test
+    public void test_norm1(){
+        HashMap<Object, Object> objectObjectHashMap = new HashMap<>(16);
+        for (int i = 0; i < 11; i++) {
+            objectObjectHashMap.put(i,i);
+        }
+        objectObjectHashMap.put(99,99);
+
+    }
 
     @Test
     public void test_newClient() throws BusinessException {
