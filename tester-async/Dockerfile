@@ -5,7 +5,7 @@ FROM tticc/openjdk:8-alpine3.15.3
 WORKDIR .
 COPY ./target/tester-async.jar app.jar
 #ENTRYPOINT exec java -jar app.jar --dev
-ENTRYPOINT ["sh","-c","java -jar app.jar --spring.profiles.active=dev"]
+ENTRYPOINT ["sh","-c","java -jar app.jar --spring.profiles.active=$activeEnv"]
 
 # syntax=docker/dockerfile:1
 

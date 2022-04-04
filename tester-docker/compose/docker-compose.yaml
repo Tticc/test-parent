@@ -1,0 +1,36 @@
+version: "2"
+services:
+  tester-async:
+    image: tticc/tester:tester-async
+    container_name: tester-async
+    env_file:
+      - ../env/tester-cluster.env
+    depends_on:
+      - redis
+    restart: always
+  tester-webapp:
+    image: tticc/tester:tester-webapp
+    container_name: tester-webapp
+    env_file:
+      - ../env/tester-cluster.env
+    ports:
+      - "8004:8004"
+    depends_on:
+      - redis
+    restart: always
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  nacos:
+    container_name: nacos
+    image: nacos/nacos-server:latest
+    env_file:
+      - ../env/nacos-mysql.env
+    volumes:
+      - ./cluster-logs/nacos1:/home/nacos/logs
+      - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
+    ports:
+      - "8848:8848"

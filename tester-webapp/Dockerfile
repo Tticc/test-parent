@@ -13,4 +13,4 @@ WORKDIR .
 COPY ./target/tester-webapp.jar app.jar
 
 #ENTRYPOINT exec java -jar app.jar --dev
-ENTRYPOINT ["sh","-c","java -jar app.jar --spring.profiles.active=dev"]
+ENTRYPOINT ["sh","-c","java -jar app.jar --spring.profiles.active=$activeEnv"]
