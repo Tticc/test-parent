@@ -20,17 +20,17 @@ services:
     restart: always
   redis:
     container_name: redis
-    image: redis:latest
+    image: redis:6.0
     ports:
       - "6379:6379"
 
   nacos:
     container_name: nacos
-    image: nacos/nacos-server:latest
+    image: nacos/nacos-server:2.0.3
     env_file:
       - ../env/nacos-mysql.env
     volumes:
-      - ./cluster-logs/nacos1:/home/nacos/logs
+      - ./standalone-logs/:/home/nacos/logs
       - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
     ports:
       - "8848:8848"
