@@ -14,7 +14,7 @@
         <java.version>1.8</java.version>
         <spring.version>2.1.8.RELEASE</spring.version>
 <!--        <spring.version>2.3.12.RELEASE</spring.version>-->
-        <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
+        <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
         <spring-cloud-alibaba.version>2.1.0.RELEASE</spring-cloud-alibaba.version>
 <!--        <spring-cloud-alibaba.version>2.2.7.RELEASE</spring-cloud-alibaba.version>-->
         <lombok.version>1.18.10</lombok.version>
@@ -84,6 +84,8 @@
         <module>tester-mytomcat</module>
         <module>tester-normaltest</module>
         <module>tester-thirdparty</module>
+        <module>tester.microservice.starter</module>
+        <module>tester.base.dto</module>
     </modules>
 
     <dependencyManagement>
@@ -180,12 +182,6 @@
             <dependency>
                 <groupId>org.apache.rocketmq</groupId>
                 <artifactId>rocketmq-spring-boot-parent</artifactId>
-                <version>${rocketmq-spring-boot-starter.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.rocketmq</groupId>
-                <artifactId>rocketmq-spring-boot-starter</artifactId>
                 <version>${rocketmq-spring-boot-starter.version}</version>
             </dependency>
             <dependency>

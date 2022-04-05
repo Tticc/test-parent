@@ -2,7 +2,7 @@ server:
   port: 8006
 spring:
   profiles:
-    active: sit
+    active: dev
   application:
     name: tester-async
   main:

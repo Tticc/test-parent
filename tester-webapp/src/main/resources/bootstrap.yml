@@ -11,8 +11,6 @@ spring:
   profiles:
     active: sit
 #    active: ${env}
-  application:
-    name: tester-web-app
   servlet:
     multipart:
       enabled: false
