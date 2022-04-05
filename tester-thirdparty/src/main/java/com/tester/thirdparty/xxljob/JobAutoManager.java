@@ -3,7 +3,7 @@ package com.tester.thirdparty.xxljob;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.http.HttpsClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;

@@ -24,7 +24,7 @@
  */
 package com.tester.testercommon.util;
 
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.exception.BusinessException;
 
 import java.util.Objects;
 

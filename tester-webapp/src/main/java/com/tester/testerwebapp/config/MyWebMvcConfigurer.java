@@ -1,6 +1,6 @@
 package com.tester.testerwebapp.config;
 
-import com.tester.testercommon.model.request.convert.TestConvertRequest;
+import com.tester.base.dto.model.request.convert.TestConvertRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;

@@ -1,7 +1,7 @@
 package com.tester.testeraop.controller;
 
 import com.tester.testercommon.controller.BaseController;
-import com.tester.testercommon.controller.RestResult;
+import com.tester.base.dto.controller.RestResult;
 import com.tester.testercommon.model.request.UserRequest;
 import com.tester.testercommon.util.endecrypt.RSAEncrypt;
 import lombok.extern.slf4j.Slf4j;

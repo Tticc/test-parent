@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ctrip.framework.apollo.openapi.dto.NamespaceReleaseDTO;
 import com.ctrip.framework.apollo.openapi.dto.OpenAppDTO;
 import com.ctrip.framework.apollo.openapi.dto.OpenItemDTO;
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.http.HttpsClient;
 import com.tester.thirdparty.apollo.request.ApolloCommonRequest;
 import com.tester.thirdparty.apollo.response.ApolloCommonResponse;

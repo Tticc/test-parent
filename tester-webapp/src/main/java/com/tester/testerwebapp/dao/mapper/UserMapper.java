@@ -1,7 +1,7 @@
 package com.tester.testerwebapp.dao.mapper;
 
-import com.tester.testercommon.dao.BaseMapper;
-import com.tester.testercommon.model.request.IdAndNameRequest;
+import com.tester.base.dto.dao.BaseMapper;
+import com.tester.base.dto.model.request.IdAndNameRequest;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import org.apache.ibatis.annotations.Param;
 

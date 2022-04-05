@@ -1,7 +1,7 @@
 package com.tester.testercommon.model.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.tester.testercommon.model.BaseDTO;
+import com.tester.base.dto.model.BaseDTO;
 import com.tester.testercommon.util.DecimalUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

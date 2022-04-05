@@ -1,7 +1,7 @@
 package com.tester.testerwebapp.aop;
 
 import com.tester.testercommon.annotation.ReentrantCacheLock;
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.redis.lock.ReentrantRedisLockHelper;
 import com.tester.testercommon.util.redis.lock.ReentrantRedisLockUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;

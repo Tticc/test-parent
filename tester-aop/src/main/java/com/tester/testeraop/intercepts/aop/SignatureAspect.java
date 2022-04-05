@@ -2,8 +2,8 @@ package com.tester.testeraop.intercepts.aop;
 
 import com.alibaba.fastjson.JSON;
 import com.tester.testeraop.intercepts.filter.RequestWrapper;
-import com.tester.testercommon.controller.RestResult;
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.controller.RestResult;
+import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.endecrypt.RSAEncrypt;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;

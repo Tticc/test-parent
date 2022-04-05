@@ -1,6 +1,6 @@
 package com.tester.testerwebapp.dao.service.impl;
 
-import com.tester.testercommon.model.request.IdAndNameRequest;
+import com.tester.base.dto.model.request.IdAndNameRequest;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.dao.mapper.UserMapper;
 import com.tester.testerwebapp.dao.service.UserService;

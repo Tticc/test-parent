@@ -1,7 +1,7 @@
 package com.tester.testerrpc.client;
 
 import com.alibaba.fastjson.JSONObject;
-import com.tester.testercommon.controller.RestResult;
+import com.tester.base.dto.controller.RestResult;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;

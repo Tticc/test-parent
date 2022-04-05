@@ -1,6 +1,6 @@
 package com.tester.testercommon.util.classscanner;
 
-import com.tester.testercommon.dao.BaseDomain;
+import com.tester.base.dto.dao.BaseDomain;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;

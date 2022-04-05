@@ -1,7 +1,7 @@
 package com.tester.testactiviti.dao.mapper;
 
 import com.tester.testactiviti.dao.domain.BusinessTaskModelDO;
-import com.tester.testercommon.dao.mapper.BaseMapper;
+import com.tester.base.dto.dao.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

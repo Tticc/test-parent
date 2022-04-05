@@ -86,6 +86,7 @@
         <module>tester-thirdparty</module>
         <module>tester.microservice.starter</module>
         <module>tester.base.dto</module>
+        <module>tester.feign.client</module>
     </modules>
 
     <dependencyManagement>

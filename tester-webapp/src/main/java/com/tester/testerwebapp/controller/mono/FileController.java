@@ -1,9 +1,9 @@
 package com.tester.testerwebapp.controller.mono;
 
 import com.tester.testercommon.controller.BaseController;
-import com.tester.testercommon.controller.RestResult;
-import com.tester.testercommon.model.request.IdAndNameRequest;
-import com.tester.testercommon.model.request.TextRequest;
+import com.tester.base.dto.controller.RestResult;
+import com.tester.base.dto.model.request.IdAndNameRequest;
+import com.tester.base.dto.model.request.TextRequest;
 import com.tester.testercommon.model.response.QuotationResponse;
 import com.tester.testercommon.util.ExcelUtil;
 import com.tester.testerwebapp.config.MultiFileConfig;

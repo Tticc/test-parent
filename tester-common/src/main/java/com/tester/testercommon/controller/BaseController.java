@@ -1,7 +1,8 @@
 package com.tester.testercommon.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.controller.RestResult;
+import com.tester.base.dto.exception.BusinessException;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;

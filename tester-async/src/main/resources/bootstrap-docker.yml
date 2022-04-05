@@ -28,12 +28,13 @@ spring:
     # 连接超时时间（毫秒）
     timeout: 2000
 
-#mybatis
-#mybatis:
-#  mapper-locations: classpath*:mapper/**/*Mapper.xml
-#  configuration:
-#    map-underscore-to-camel-case: true
-
+  cloud:
+    nacos:
+      discovery:
+        server-addr: nacos:8848
+        watchDelay: 10000
+        registerEnabled: true
+        namespace: 9a4fc705-e6df-44f9-b035-9b2e9a434617
 
 
 

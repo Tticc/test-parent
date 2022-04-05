@@ -2,7 +2,7 @@ package com.tester.testerasync.controller;
 
 import com.tester.testerasync.service.AsyncMethodManager;
 import com.tester.testercommon.controller.BaseController;
-import com.tester.testercommon.controller.RestResult;
+import com.tester.base.dto.controller.RestResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,8 +1,8 @@
 package com.tester.testerwebapp.controller.demo;
 
 import com.tester.testercommon.controller.BaseController;
-import com.tester.testercommon.controller.RestResult;
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.controller.RestResult;
+import com.tester.base.dto.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

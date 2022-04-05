@@ -1,6 +1,6 @@
 package com.tester.testerrpc;
 
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.model.request.MemberRequest;
 import com.tester.testerrpc.server.http.helper.ResponseHelper;
 import lombok.extern.slf4j.Slf4j;

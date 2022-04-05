@@ -3,7 +3,7 @@ package com.tester.testeraop.intercepts.interceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.tester.testeraop.annotation.RequireLogin;
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;

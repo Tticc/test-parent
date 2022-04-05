@@ -1,7 +1,7 @@
 package com.tester.testerstarter.autoconfigure;
 
 import com.tester.testerstarter.interceptor.MyRestTemplateInterceptor;
-import com.tester.testerstarter.language.LanguageUtil;
+import com.tester.base.dto.language.LanguageUtil;
 import com.tester.testerstarter.util.RestTemplateUtil;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustStrategy;
@@ -19,7 +19,6 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;

@@ -2,8 +2,8 @@ package com.tester.testerwebapp.controller.mono;
 
 import com.tester.testercommon.constant.ConstantList;
 import com.tester.testercommon.controller.BaseController;
-import com.tester.testercommon.controller.RestResult;
-import com.tester.testercommon.model.request.IdAndNameRequest;
+import com.tester.base.dto.controller.RestResult;
+import com.tester.base.dto.model.request.IdAndNameRequest;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.dao.service.UserService;
 import io.swagger.annotations.Api;

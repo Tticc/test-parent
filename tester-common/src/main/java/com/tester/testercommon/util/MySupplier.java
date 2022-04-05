@@ -25,7 +25,7 @@
 package com.tester.testercommon.util;
 
 
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.exception.BusinessException;
 
 /**
  * 比自带的Supplier多了一个异常抛出声明

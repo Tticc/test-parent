@@ -1,6 +1,6 @@
 package com.tester.testactiviti.dao.domain;
 
-import com.tester.testercommon.dao.domain.BaseDomain;
+import com.tester.base.dto.dao.domain.BaseDomain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

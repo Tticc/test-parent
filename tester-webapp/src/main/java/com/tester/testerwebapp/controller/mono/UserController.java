@@ -3,10 +3,10 @@ package com.tester.testerwebapp.controller.mono;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.tester.testercommon.controller.BaseController;
-import com.tester.testercommon.controller.RestResult;
-import com.tester.testercommon.exception.BusinessException;
-import com.tester.testercommon.model.request.IdAndNameRequest;
-import com.tester.testercommon.model.request.TextRequest;
+import com.tester.base.dto.controller.RestResult;
+import com.tester.base.dto.exception.BusinessException;
+import com.tester.base.dto.model.request.IdAndNameRequest;
+import com.tester.base.dto.model.request.TextRequest;
 import com.tester.testercommon.util.redis.RedisUtilValue;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.service.MyService;
@@ -61,7 +61,7 @@ public class UserController extends BaseController {
      * 测试 MethodArgumentNotValidException，不符合@NotNull成功抛出此异常
      *
      * @param model
-     * @return reactor.core.publisher.Mono<com.tester.testercommon.controller.RestResult < com.tester.testerwebapp.dao.domain.UserDomain>>
+     * @return reactor.core.publisher.Mono<com.tester.base.dto.controller.RestResult < com.tester.testerwebapp.dao.domain.UserDomain>>
      * @Date 17:21 2021/1/7
      * @Author 温昌营
      **/
@@ -78,7 +78,7 @@ public class UserController extends BaseController {
      * 测试 ConstraintViolationException。没结果
      *
      * @param name
-     * @return reactor.core.publisher.Mono<com.tester.testercommon.controller.RestResult < com.tester.testerwebapp.dao.domain.UserDomain>>
+     * @return reactor.core.publisher.Mono<com.tester.base.dto.controller.RestResult < com.tester.testerwebapp.dao.domain.UserDomain>>
      * @Date 17:20 2021/1/7
      * @Author 温昌营
      **/

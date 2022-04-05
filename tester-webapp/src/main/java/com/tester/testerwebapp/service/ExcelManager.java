@@ -1,6 +1,6 @@
 package com.tester.testerwebapp.service;
 
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.model.response.ExcelUserResponse;
 import com.tester.testercommon.model.response.QuotationResponse;
 import com.tester.testercommon.util.ExcelUtil;

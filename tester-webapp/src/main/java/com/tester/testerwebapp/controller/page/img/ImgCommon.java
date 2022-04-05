@@ -1,6 +1,6 @@
 package com.tester.testerwebapp.controller.page.img;
 
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.MyConsumer;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;

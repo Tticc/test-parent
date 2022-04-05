@@ -2,8 +2,8 @@ package com.tester.testercv.controller;
 
 
 import com.tester.testercommon.controller.BaseController;
-import com.tester.testercommon.controller.RestResult;
-import com.tester.testercommon.model.request.IdAndNameRequest;
+import com.tester.base.dto.controller.RestResult;
+import com.tester.base.dto.model.request.IdAndNameRequest;
 import com.tester.testercommon.util.SpringBeanContextUtil;
 import com.tester.testercommon.util.file.MyFileReaderWriter;
 import com.tester.testercv.config.OutBean;

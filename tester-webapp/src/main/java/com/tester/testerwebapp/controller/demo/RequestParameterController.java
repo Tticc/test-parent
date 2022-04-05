@@ -1,11 +1,11 @@
 package com.tester.testerwebapp.controller.demo;
 
 import com.tester.testercommon.controller.BaseController;
-import com.tester.testercommon.controller.RestResult;
-import com.tester.testercommon.exception.BusinessException;
-import com.tester.testercommon.model.request.TextRequest;
-import com.tester.testercommon.model.request.convert.ConvertRequest;
-import com.tester.testercommon.model.request.convert.TestConvertRequest;
+import com.tester.base.dto.controller.RestResult;
+import com.tester.base.dto.exception.BusinessException;
+import com.tester.base.dto.model.request.TextRequest;
+import com.tester.base.dto.model.request.convert.ConvertRequest;
+import com.tester.base.dto.model.request.convert.TestConvertRequest;
 import com.tester.testercommon.util.SpringBeanContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.MutablePropertyValues;

@@ -1,10 +1,10 @@
 package com.tester.testerstarter.exception;
 
 import com.tester.testercommon.constant.ConstantList;
-import com.tester.testercommon.controller.RestResult;
-import com.tester.testercommon.exception.BusinessException;
-import com.tester.testercommon.exception.ExceptionCode;
-import com.tester.testerstarter.language.LanguageUtil;
+import com.tester.base.dto.controller.RestResult;
+import com.tester.base.dto.exception.BusinessException;
+import com.tester.base.dto.exception.ExceptionCode;
+import com.tester.base.dto.language.LanguageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -59,7 +59,7 @@ public class BusinessExceptionHandler {
     /**
      * 未捕获异常
      * @param exception
-     * @return com.tester.testercommon.controller.RestResult
+     * @return com.tester.base.dto.controller.RestResult
      * @Date 16:44 2021/1/7
      * @Author 温昌营
      **/
@@ -74,7 +74,7 @@ public class BusinessExceptionHandler {
      * 方法参数校验异常
      * <br/>例如@NotNull校验没有通过
      * @param ex
-     * @return com.tester.testercommon.controller.RestResult
+     * @return com.tester.base.dto.controller.RestResult
      * @Date 16:43 2021/1/7
      * @Author 温昌营
      **/
@@ -106,7 +106,7 @@ public class BusinessExceptionHandler {
     /**
      * 请求方法异常
      * @param ex
-     * @return com.tester.testercommon.controller.RestResult
+     * @return com.tester.base.dto.controller.RestResult
      * @Date 16:43 2021/1/7
      * @Author 温昌营
      **/
@@ -124,7 +124,7 @@ public class BusinessExceptionHandler {
     /**
      * 文件上传异常
      * @param ex
-     * @return com.tester.testercommon.controller.RestResult
+     * @return com.tester.base.dto.controller.RestResult
      * @Date 16:42 2021/1/7
      * @Author 温昌营
      **/
@@ -141,7 +141,7 @@ public class BusinessExceptionHandler {
     /**
      * 参数绑定异常
      * @param ex
-     * @return com.tester.testercommon.controller.RestResult
+     * @return com.tester.base.dto.controller.RestResult
      * @Date 16:42 2021/1/7
      * @Author 温昌营
      **/
@@ -170,7 +170,7 @@ public class BusinessExceptionHandler {
     /**
      * 参数异常
      * @param ex
-     * @return com.tester.testercommon.controller.RestResult
+     * @return com.tester.base.dto.controller.RestResult
      * @Date 16:41 2021/1/7
      * @Author 温昌营
      **/
@@ -192,7 +192,7 @@ public class BusinessExceptionHandler {
     /**
      * 业务异常
      * @param ex
-     * @return com.tester.testercommon.controller.RestResult
+     * @return com.tester.base.dto.controller.RestResult
      * @Date 16:41 2021/1/7
      * @Author 温昌营
      **/
@@ -210,7 +210,7 @@ public class BusinessExceptionHandler {
      * 参数校验不通过
      * <br/>注：暂时不知道什么情况下会抛出这个异常
      * @param ex
-     * @return com.tester.testercommon.controller.RestResult
+     * @return com.tester.base.dto.controller.RestResult
      * @Date 16:40 2021/1/7
      * @Author 温昌营
      **/

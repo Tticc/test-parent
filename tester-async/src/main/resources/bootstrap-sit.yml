@@ -25,6 +25,14 @@ spring:
         # 连接池中的最小空闲连接
         min-idle: 0
 
+  cloud:
+    nacos:
+      discovery:
+        server-addr: nacos:8848
+        watchDelay: 10000
+        registerEnabled: true
+        namespace: 9a4fc705-e6df-44f9-b035-9b2e9a434617
+
 rocketmq:
   name-server: localhost:9876
   producer:

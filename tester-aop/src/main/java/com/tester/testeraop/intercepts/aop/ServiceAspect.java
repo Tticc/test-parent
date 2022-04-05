@@ -2,7 +2,7 @@ package com.tester.testeraop.intercepts.aop;
 
 import com.tester.testeraop.annotation.StackTraceAnnotation;
 import com.tester.testeraop.controller.UserOperationDO;
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;

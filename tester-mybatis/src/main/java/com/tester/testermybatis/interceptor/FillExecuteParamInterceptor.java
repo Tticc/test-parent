@@ -1,6 +1,6 @@
 package com.tester.testermybatis.interceptor;
 
-import com.tester.testercommon.dao.BaseDomain;
+import com.tester.base.dto.dao.BaseDomain;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;

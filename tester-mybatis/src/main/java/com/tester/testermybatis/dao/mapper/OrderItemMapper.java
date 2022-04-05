@@ -1,6 +1,6 @@
 package com.tester.testermybatis.dao.mapper;
 
-import com.tester.testercommon.dao.BaseMapper;
+import com.tester.base.dto.dao.BaseMapper;
 import com.tester.testermybatis.dao.domain.OrderItemDomain;
 import org.apache.ibatis.annotations.Param;
 

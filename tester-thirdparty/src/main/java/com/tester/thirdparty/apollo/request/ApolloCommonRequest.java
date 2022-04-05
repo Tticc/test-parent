@@ -1,6 +1,6 @@
 package com.tester.thirdparty.apollo.request;
 
-import com.tester.testercommon.model.BaseDTO;
+import com.tester.base.dto.model.BaseDTO;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

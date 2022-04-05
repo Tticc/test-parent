@@ -3,8 +3,8 @@ package com.tester.testerwebapp.service;
 
 import com.tester.testercommon.annotation.ReentrantCacheLock;
 import com.tester.testercommon.constant.ConstantList;
-import com.tester.testercommon.exception.BusinessException;
-import com.tester.testercommon.model.request.TextRequest;
+import com.tester.base.dto.exception.BusinessException;
+import com.tester.base.dto.model.request.TextRequest;
 import com.tester.testercommon.util.SpringBeanContextUtil;
 import com.tester.testercommon.util.redis.lock.ReentrantRedisLockUtil;
 import org.springframework.beans.factory.annotation.Autowired;

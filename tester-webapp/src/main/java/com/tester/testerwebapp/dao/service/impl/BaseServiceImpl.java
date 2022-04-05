@@ -1,8 +1,8 @@
 package com.tester.testerwebapp.dao.service.impl;
 
-import com.tester.testercommon.dao.BaseDomain;
-import com.tester.testercommon.dao.BaseMapper;
-import com.tester.testercommon.service.BaseService;
+import com.tester.base.dto.dao.BaseDomain;
+import com.tester.base.dto.dao.BaseMapper;
+import com.tester.base.dto.dao.BaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;

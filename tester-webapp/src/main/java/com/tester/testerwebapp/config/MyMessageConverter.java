@@ -1,7 +1,7 @@
 package com.tester.testerwebapp.config;
 
-import com.tester.testercommon.model.request.convert.ConvertRequest;
-import com.tester.testercommon.model.request.convert.TestConvertRequest;
+import com.tester.base.dto.model.request.convert.ConvertRequest;
+import com.tester.base.dto.model.request.convert.TestConvertRequest;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;

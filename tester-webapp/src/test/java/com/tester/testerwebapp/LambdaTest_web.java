@@ -2,7 +2,7 @@ package com.tester.testerwebapp;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import com.tester.testercommon.model.response.KVResponse;
+import com.tester.base.dto.model.response.KVResponse;
 import org.junit.Test;
 
 import java.util.ArrayList;

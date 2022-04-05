@@ -75,7 +75,7 @@
         and deleted = 0
     </select>
 
-    <select id="listByName" resultMap="BaseResultMap" parameterType="com.tester.testercommon.model.request.IdAndNameRequest">
+    <select id="listByName" resultMap="BaseResultMap" parameterType="com.tester.base.dto.model.request.IdAndNameRequest">
         select <include refid="selectSql"></include>
         from <include refid="table_name"></include>  as t_alias
         <where>
@@ -92,7 +92,7 @@
         </where>
     </select>
 
-    <select id="listByName2" resultMap="BaseResultMap" parameterType="com.tester.testercommon.model.request.IdAndNameRequest">
+    <select id="listByName2" resultMap="BaseResultMap" parameterType="com.tester.base.dto.model.request.IdAndNameRequest">
         select <include refid="selectSql"></include>
         from <include refid="table_name"></include>  as t_alias
         where
@@ -110,7 +110,7 @@
          </trim>
     </select>
 
-    <select id="listByIds" resultMap="BaseResultMap" parameterType="com.tester.testercommon.model.request.IdAndNameRequest">
+    <select id="listByIds" resultMap="BaseResultMap" parameterType="com.tester.base.dto.model.request.IdAndNameRequest">
         select <include refid="selectSql"></include>
         from <include refid="table_name"></include>  as t_alias
         <where>

@@ -15,11 +15,11 @@
     </properties>
 
     <dependencies>
-        <!--<dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>5.1.10.RELEASE</version>
-        </dependency>-->
+        <dependency>
+            <groupId>com.tester</groupId>
+            <artifactId>tester-base-dto</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>

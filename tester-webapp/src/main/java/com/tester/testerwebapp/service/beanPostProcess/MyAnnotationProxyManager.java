@@ -1,6 +1,6 @@
 package com.tester.testerwebapp.service.beanPostProcess;
 
-import com.tester.testercommon.model.request.TextRequest;
+import com.tester.base.dto.model.request.TextRequest;
 import com.tester.testerstarter.myBeanPostProcessor.annotation.MyAnnotationProxy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;

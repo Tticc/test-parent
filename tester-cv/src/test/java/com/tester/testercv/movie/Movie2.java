@@ -1,7 +1,7 @@
 package com.tester.testercv.movie;
 
 
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.MyConsumer;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;

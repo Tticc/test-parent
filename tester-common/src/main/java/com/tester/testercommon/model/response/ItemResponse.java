@@ -1,6 +1,6 @@
 package com.tester.testercommon.model.response;
 
-import com.tester.testercommon.model.BaseDTO;
+import com.tester.base.dto.model.BaseDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

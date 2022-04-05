@@ -1,6 +1,6 @@
 package com.tester.testerwebapp.service;
 
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.redis.RedisUtilValue;
 import com.tester.testermybatis.dao.mapper.OrderMemberMapper;
 import com.tester.testermybatis.dao.service.OrderItemManager;

@@ -1,7 +1,7 @@
 package com.tester.testerwebapp.dao.service;
 
-import com.tester.testercommon.model.request.IdAndNameRequest;
-import com.tester.testercommon.service.BaseService;
+import com.tester.base.dto.model.request.IdAndNameRequest;
+import com.tester.base.dto.dao.BaseService;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 
 import java.util.List;

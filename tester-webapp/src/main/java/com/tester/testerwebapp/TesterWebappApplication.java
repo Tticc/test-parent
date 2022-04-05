@@ -7,12 +7,16 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.List;
 import java.util.Set;
 
+
+@EnableFeignClients(basePackages = {"com.tester.feign.client"})
 @ServletComponentScan("com.tester.testerwebapp.myServlet")
 //@MapperScan("com.tester.**.mapper") mapperScan的配置在 mybatis模块的 NormalDataBaseConfiguration 里配置
 @EnableAsync
@@ -32,6 +36,10 @@ public class TesterWebappApplication implements CommandLineRunner, ApplicationRu
         String properties = "spring.aop.proxy-target-class";
         String xxx = applicationContext.getEnvironment().getProperty(properties);
         System.out.println(properties + ": " + xxx);
+
+        String nacosKey = "sharding-my-db.jdbc-url";
+        String nacosValue = applicationContext.getEnvironment().getProperty(nacosKey);
+        System.out.println(nacosKey + ": " + nacosValue);
     }
 
     @Override

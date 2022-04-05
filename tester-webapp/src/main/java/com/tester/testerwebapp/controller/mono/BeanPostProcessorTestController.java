@@ -1,9 +1,9 @@
 package com.tester.testerwebapp.controller.mono;
 
 import com.tester.testercommon.controller.BaseController;
-import com.tester.testercommon.controller.RestResult;
-import com.tester.testercommon.exception.BusinessException;
-import com.tester.testercommon.model.request.TextRequest;
+import com.tester.base.dto.controller.RestResult;
+import com.tester.base.dto.exception.BusinessException;
+import com.tester.base.dto.model.request.TextRequest;
 import com.tester.testerwebapp.service.beanPostProcess.MyAnnotationProxyManager;
 import com.tester.testerwebapp.service.beanPostProcess.MyDirectProxyManager;
 import io.swagger.annotations.Api;

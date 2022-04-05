@@ -1,9 +1,9 @@
 package com.tester.testerwebapp.service;
 
 import com.tester.testercommon.constant.ConstantList;
-import com.tester.testercommon.exception.BusinessException;
-import com.tester.testercommon.model.request.IdAndNameRequest;
-import com.tester.testercommon.model.request.TextRequest;
+import com.tester.base.dto.exception.BusinessException;
+import com.tester.base.dto.model.request.IdAndNameRequest;
+import com.tester.base.dto.model.request.TextRequest;
 import com.tester.testercommon.util.CommonUtil;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.dao.service.UserService;
@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

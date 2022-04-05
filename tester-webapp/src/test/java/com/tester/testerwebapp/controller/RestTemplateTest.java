@@ -1,6 +1,6 @@
 package com.tester.testerwebapp.controller;
 
-import com.tester.testercommon.controller.RestResult;
+import com.tester.base.dto.controller.RestResult;
 import com.tester.testercommon.util.redis.RedisUtilValue;
 import com.tester.testermybatis.dao.mapper.OrderMemberMapper;
 import com.tester.testermybatis.model.response.MemberJoinItemVO;

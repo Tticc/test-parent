@@ -1,6 +1,6 @@
 package com.tester.testermybatis.dao.domain;
 
-import com.tester.testercommon.dao.BaseDomain;
+import com.tester.base.dto.dao.BaseDomain;
 import com.tester.testermybatis.annotation.DecryptDomain;
 import com.tester.testermybatis.annotation.DecryptField;
 import lombok.Data;
@@ -8,7 +8,6 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @Author 温昌营

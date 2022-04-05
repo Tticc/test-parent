@@ -2,8 +2,8 @@ package com.tester.testerwebapp.controller.mono;
 
 
 import com.tester.testercommon.controller.BaseController;
-import com.tester.testercommon.controller.RestResult;
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.controller.RestResult;
+import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.model.request.MemberRequest;
 import com.tester.testermybatis.dao.domain.OrderItemDomain;
 import com.tester.testermybatis.dao.domain.OrderMemberDomain;

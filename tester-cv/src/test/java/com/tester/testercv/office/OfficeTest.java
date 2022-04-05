@@ -1,6 +1,6 @@
 package com.tester.testercv.office;
 
-import com.tester.testercommon.dao.BaseDomain;
+import com.tester.base.dto.dao.BaseDomain;
 import com.tester.testercommon.util.SpringBeanContextUtil;
 import com.tester.testercommon.util.file.MyFileReaderWriter;
 import com.tester.testermybatis.dao.domain.DemoDomain;

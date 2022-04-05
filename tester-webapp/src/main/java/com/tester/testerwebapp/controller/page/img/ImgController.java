@@ -1,7 +1,7 @@
 package com.tester.testerwebapp.controller.page.img;
 
 import com.alibaba.fastjson.JSONObject;
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

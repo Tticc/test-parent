@@ -1,7 +1,7 @@
 package com.tester.testerstarter.interceptor;
 
 import com.tester.testercommon.constant.ConstantList;
-import com.tester.testerstarter.language.LanguageUtil;
+import com.tester.base.dto.language.LanguageUtil;
 import org.slf4j.MDC;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;

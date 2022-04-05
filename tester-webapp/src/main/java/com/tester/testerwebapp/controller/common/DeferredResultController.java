@@ -1,7 +1,7 @@
 package com.tester.testerwebapp.controller.common;
 
 import com.tester.testercommon.controller.BaseController;
-import com.tester.testercommon.controller.RestResult;
+import com.tester.base.dto.controller.RestResult;
 import com.tester.testercommon.model.response.ItemResponse;
 import com.tester.testercommon.util.DateUtil;
 import io.swagger.annotations.Api;

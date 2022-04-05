@@ -1,7 +1,7 @@
 package com.tester.testercommon.util.redis.lock;
 
 import com.tester.testercommon.constant.ConstantList;
-import com.tester.testercommon.exception.BusinessException;
+import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.MySupplier;
 
 /**

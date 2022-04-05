@@ -1,6 +1,6 @@
 package com.tester.testerwebapp.suitecase.controller;
 
-import com.tester.testercommon.controller.RestResult;
+import com.tester.base.dto.controller.RestResult;
 import com.tester.testerwebapp.TesterWebappApplication;
 import com.tester.testerwebapp.controller.mono.UserController;
 import com.tester.testerwebapp.dao.domain.UserDomain;
