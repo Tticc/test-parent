@@ -35,7 +35,18 @@ spring:
         watchDelay: 10000
         registerEnabled: true
         namespace: 9a4fc705-e6df-44f9-b035-9b2e9a434617
+    sentinel:
+      transport:
+        dashboard: sentinel:8080
+        port: 8719
 
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
 
 
 

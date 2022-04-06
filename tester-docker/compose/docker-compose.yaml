@@ -8,6 +8,15 @@ services:
     depends_on:
       - redis
     restart: always
+
+  tester-async1:
+    image: tticc/tester:tester-async
+    container_name: tester-async1
+    env_file:
+      - ../env/tester-cluster.env
+    depends_on:
+      - redis
+    restart: always
   tester-webapp:
     image: tticc/tester:tester-webapp
     container_name: tester-webapp
@@ -34,3 +43,9 @@ services:
       - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
     ports:
       - "8848:8848"
+
+  sentinel:
+    container_name: sentinel
+    image: tticc/third:sentinel.8.3
+    ports:
+      - "8080:8080"
