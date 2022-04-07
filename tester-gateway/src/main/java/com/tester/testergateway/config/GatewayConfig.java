@@ -88,7 +88,7 @@ public class GatewayConfig {
             }
             String contentType = request.getHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
 
-            String newPath = path.replace("/api","").replace("tester-","");
+            String newPath = path.replace("/api","");
             ServerHttpRequest newRequest = request.mutate().path(newPath).build();
 
             return chain.filter(exchange.mutate().request(newRequest).build());

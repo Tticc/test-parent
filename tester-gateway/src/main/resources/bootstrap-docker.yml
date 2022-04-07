@@ -1,0 +1,31 @@
+spring:
+  profiles: docker
+  datasource:
+    dbcp2:
+      num-tests-per-eviction-run:
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: nacos:8848
+        watchDelay: 10000
+        registerEnabled: true
+        namespace: 9a4fc705-e6df-44f9-b035-9b2e9a434617
+
+
+
+
+tester:
+  gateway:
+    whitelist:
+      enable: 1
+      global: office-cloud,auth-middle,new-opendor,tester-gw
+    visit:
+      auth:
+        enable: 1
+        map:
+          dev-office.aeonbuy.com: office-cloud,auth-middle,new-opendor,tester-gw
+          sit-office.aeonbuy.com: office-cloud,auth-middle,new-opendor,tester-gw
+          office.aeonbuy.com: office-cloud,auth-middle,new-opendor,tester-gw
+          localhost: all
+

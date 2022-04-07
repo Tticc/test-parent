@@ -1,0 +1,24 @@
+server:
+  port: 8002
+spring:
+  profiles:
+    active: dev
+  application:
+    name: tester-gateway
+  main:
+    allow-bean-definition-overriding: true
+
+    gateway:
+      routes:
+        - id: route_webapp
+          uri: lb://tester-webapp
+          predicates:
+            - Path=/tester-webapp/**
+          filters:
+            - RewritePath=/tester-webapp/(?<remaining>.*),/${remaining}
+        - id: route_async
+          uri: lb://tester-async
+          predicates:
+            - Path=/tester-async/**
+          filters:
+            - RewritePath=/tester-async/(?<remaining>.*),/${remaining}
