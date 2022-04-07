@@ -27,6 +27,15 @@ services:
     depends_on:
       - redis
     restart: always
+
+  tester-webapp1:
+    image: tticc/tester:tester-webapp
+    container_name: tester-webapp1
+    env_file:
+      - ../env/tester-cluster.env
+    depends_on:
+      - redis
+    restart: always
   redis:
     container_name: redis
     image: redis:6.0
@@ -49,3 +58,11 @@ services:
     image: tticc/third:sentinel.8.3
     ports:
       - "8080:8080"
+
+  nginx:
+    container_name: nginx
+    image: nginx:1.21.6-alpine
+    volumes:
+      - C:/Users/Admin/Desktop/conf:/etc/nginx/conf.d
+    ports:
+      - "80:80"
