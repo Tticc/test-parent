@@ -14,18 +14,3 @@ spring:
 
 
 
-
-tester:
-  gateway:
-    whitelist:
-      enable: 1
-      global: office-cloud,auth-middle,new-opendor,tester-gw,tester-webapp
-    visit:
-      auth:
-        enable: 1
-        map:
-          dev-office.aeonbuy.com: office-cloud,auth-middle,new-opendor,tester-gw
-          sit-office.aeonbuy.com: office-cloud,auth-middle,new-opendor,tester-gw
-          office.aeonbuy.com: office-cloud,auth-middle,new-opendor,tester-gw
-          localhost: all
-
