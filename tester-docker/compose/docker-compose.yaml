@@ -45,15 +45,51 @@ services:
       - "6379:6379"
 
   nacos:
+    #指定容器中的主机名
+    hostname: nacos
     container_name: nacos
     image: nacos/nacos-server:2.0.3
     env_file:
       - ../env/nacos-mysql.env
     volumes:
-      - ./standalone-logs/:/home/nacos/logs
+      - ./cluster-logs/nacos:/home/nacos/logs
       - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
     ports:
       - "8848:8848"
+      - "9848:9848"
+      - "9555:9555"
+    restart: always
+
+  nacos1:
+    #指定容器中的主机名
+    hostname: nacos1
+    container_name: nacos1
+    image: nacos/nacos-server:2.0.3
+    env_file:
+      - ../env/nacos-mysql.env
+    volumes:
+      - ./cluster-logs/nacos1:/home/nacos/logs
+      - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
+    ports:
+      - "8849:8848"
+      - "9849:9848"
+    restart: always
+
+  nacos2:
+    #指定容器中的主机名
+    hostname: nacos2
+    container_name: nacos2
+    image: nacos/nacos-server:2.0.3
+    env_file:
+      - ../env/nacos-mysql.env
+    volumes:
+      - ./cluster-logs/nacos2:/home/nacos/logs
+      - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
+    ports:
+      - "8850:8848"
+      - "9850:9848"
+    restart: always
+
 
   sentinel:
     container_name: sentinel
@@ -65,6 +101,6 @@ services:
     container_name: nginx
     image: nginx:1.21.6-alpine
     volumes:
-      - C:/Users/Admin/Desktop/conf:/etc/nginx/conf.d
+      - C:/Users/Admin/Desktop/projects/nginx/conf:/etc/nginx/conf.d
     ports:
       - "80:80"
