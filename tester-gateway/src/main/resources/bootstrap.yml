@@ -7,8 +7,11 @@ spring:
     name: tester-gateway
   main:
     allow-bean-definition-overriding: true
-
+  cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
       routes:
         - id: route_webapp
           uri: lb://tester-webapp
@@ -22,3 +25,19 @@ spring:
             - Path=/tester-async/**
           filters:
             - RewritePath=/tester-async/(?<remaining>.*),/${remaining}
+
+
+
+tester:
+  gateway:
+    whitelist:
+      enable: 1
+      global: office-cloud,auth-middle,new-opendor,tester-gw,tester-webapp,tester-async
+    visit:
+      auth:
+        enable: 1
+        map:
+          dev-office.aeonbuy.com: office-cloud,auth-middle,new-opendor,tester-gw
+          sit-office.aeonbuy.com: office-cloud,auth-middle,new-opendor,tester-gw
+          office.aeonbuy.com: office-cloud,auth-middle,new-opendor,tester-gw
+          localhost: all
