@@ -49,7 +49,10 @@ services:
 #    restart: always
   redis:
     container_name: redis
-    image: redis:6.0
+    image: tticc/third:redis6.0.16
+#    image: redis:6.0
+    volumes:
+      - C:/Users/Admin/Desktop/redis/config:/usr/local/redis-6.0.16/config
     ports:
       - "6379:6379"
 
@@ -79,9 +82,9 @@ services:
     volumes:
       - ./cluster-logs/nacos1:/home/nacos/logs
       - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
-    ports:
-      - "8849:8848"
-      - "9849:9848"
+#    ports:
+#      - "8849:8848"
+#      - "9849:9848"
     restart: always
 
   nacos2:
@@ -94,9 +97,9 @@ services:
     volumes:
       - ./cluster-logs/nacos2:/home/nacos/logs
       - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
-    ports:
-      - "8850:8848"
-      - "9850:9848"
+#    ports:
+#      - "8850:8848"
+#      - "9850:9848"
     restart: always
 
 
