@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+  redis:
+    container_name: redis
+    image: tticc/third:redis6.0.16
+#    image: redis:6.0
+    volumes:
+      - C:/Users/18883/Desktop/docker_config/redis/config:/usr/local/redis-6.0.16/config
+    ports:
+      - "6379:6379"
+
+  redis_slave:
+    image: tticc/third:redis6.0.16
+    #    image: redis:6.0
+    volumes:
+      - C:/Users/18883/Desktop/docker_config/redis/slave_config2:/usr/local/redis-6.0.16/config
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 2
