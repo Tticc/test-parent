@@ -1,0 +1,1 @@
+redis-server /usr/local/redis-6.0.16/config/redis.conf --port ${REDIS_PORT} --bind ${BIND} --databases ${DATABASES} --cluster-enabled ${CLUSTER_ENABLED} --replicaof ${MASTERIP} ${MASTERPORT}
