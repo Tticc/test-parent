@@ -8,6 +8,12 @@ MAINTAINER tticc
 #2、在构建镜像时，指定镜像的工作目录，之后的命令都是基于此工作目录，如果不存在，则会创建目录
 WORKDIR /usr/local
 
+ENV CONFIG_PATH="/usr/local/redis-6.0.16/inner_config" \
+    REDIS_PORT=6379 \
+    BIND=0.0.0.0 \
+    DATABASES=1 \
+    DAEMONIZE=no \
+    CLUSTER_ENABLED=no
 
 #3、添加redis安装包
 ADD redis-6.0.16.tar.gz /usr/local
@@ -19,10 +25,10 @@ RUN apk add make gcc g++ linux-headers && \
     cd redis-6.0.16 && \
     make && make install && \
     apk del make gcc g++ linux-headers && \
-    mkdir config && \
-    cp /usr/local/redis-6.0.16/redis.conf /usr/local/redis-6.0.16/config/redis.conf && \
-    cp /usr/local/redis-6.0.16/sentinel.conf /usr/local/redis-6.0.16/config/sentinel.conf && \
-    cp /usr/local/redis-6.0.16/commands.sh /usr/local/redis-6.0.16/config/commands.sh
+    mkdir inner_config && \
+    cp /usr/local/redis-6.0.16/redis.conf /usr/local/redis-6.0.16/inner_config/redis.conf && \
+    cp /usr/local/redis-6.0.16/sentinel.conf /usr/local/redis-6.0.16/inner_config/sentinel.conf && \
+    cp /usr/local/redis-6.0.16/commands.sh /usr/local/redis-6.0.16/inner_config/commands.sh
 
 
 
@@ -30,7 +36,8 @@ RUN apk add make gcc g++ linux-headers && \
 #CMD ["redis-server", "/usr/local/redis-6.0.16/config/redis.conf"]
 #CMD ["redis-server", "/usr/local/redis-6.0.16/config/sentinel.conf","--sentinel"]
 #ENTRYPOINT ["redis-server", "/usr/local/redis-6.0.16/config/redis.conf","--port ${TPORT}"]
-ENTRYPOINT ["sh","-c","/usr/local/redis-6.0.16/config/commands.sh"]
+#ENTRYPOINT ["sh","-c","/usr/local/redis-6.0.16/out_config/commands.sh"]
+ENTRYPOINT ["sh","-c","${CONFIG_PATH}/commands.sh"]
 # Expose ports.
 # EXPOSE 6379
 

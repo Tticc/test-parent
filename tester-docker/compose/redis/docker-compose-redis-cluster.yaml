@@ -1,0 +1,36 @@
+version: "3.7"
+services:
+  redis1:
+    image: tticc/third:redis6.0.16
+    ports:
+      - "8888:6379"
+    environment:
+      - REDIS_PORT=6379
+      - BIND=0.0.0.0
+      - DATABASES=1
+      - CLUSTER_ENABLED=yes
+      - DAEMONIZE=no
+    networks:
+      - "rnet"
+  redis:
+    image: tticc/third:redis6.0.16
+#    volumes:
+#      - C:/Users/18883/IdeaProjects/test-parent/tester-docker/redis/config/master:/usr/local/redis-6.0.16/out_config
+#    ports:
+#      - "8888:6379"
+    environment:
+      - REDIS_PORT=6379
+      - BIND=0.0.0.0
+      - DATABASES=1
+      - CLUSTER_ENABLED=yes
+      - DAEMONIZE=no
+    networks:
+      - "rnet"
+    deploy:
+      mode: replicated
+      replicas: 5
+
+networks:
+  rnet:
+    driver: bridge
+    external: true

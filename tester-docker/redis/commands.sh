@@ -1,1 +1,1 @@
-redis-server /usr/local/redis-6.0.16/config/redis.conf --port ${REDIS_PORT} --bind ${BIND} --databases ${DATABASES}
+redis-server ${CONFIG_PATH}/redis.conf --port ${REDIS_PORT} --bind ${BIND} --databases ${DATABASES} --daemonize ${DAEMONIZE} --cluster-enabled ${CLUSTER_ENABLED}

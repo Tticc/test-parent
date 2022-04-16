@@ -1,0 +1,35 @@
+version: "3.7"
+services:
+  redis:
+    image: tticc/third:redis6.0.16
+#    image: redis:6.0
+    volumes:
+      - C:/Users/18883/IdeaProjects/test-parent/tester-docker/redis/config/master:/usr/local/redis-6.0.16/config
+    ports:
+      - "8888:6379"
+    env_file:
+      - ../../env/redis-evn.env
+
+  redis1:
+    image: tticc/third:redis6.0.16
+    #    image: redis:6.0
+    volumes:
+      - C:/Users/18883/IdeaProjects/test-parent/tester-docker/redis/config/master:/usr/local/redis-6.0.16/config
+    #    ports:
+    #      - "6379:6379"
+    env_file:
+      - ../../env/redis-evn.env
+    deploy:
+      mode: replicated
+      replicas: 2
+#  redis_slave:
+#    image: tticc/third:redis6.0.16
+#    #    image: redis:6.0
+#    volumes:
+#      - C:/Users/Admin/Desktop/projects/docker_config/redis/config_slave:/usr/local/redis-6.0.16/config
+#    restart: always
+#    env_file:
+#      - ../env/redis-evn.env
+#    deploy:
+#      mode: replicated
+#      replicas: 2
