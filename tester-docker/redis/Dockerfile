@@ -17,6 +17,8 @@ ENV CONFIG_PATH="/usr/local/redis-6.0.16/inner_config" \
 
 #3、添加redis安装包
 ADD redis-6.0.16.tar.gz /usr/local
+# ADD 命令会把压缩包解压，所以无需tar命令进行解压
+# tar zxvf redis-6.0.9.tar.gz
 
 COPY commands.sh /usr/local/redis-6.0.16/commands.sh
 

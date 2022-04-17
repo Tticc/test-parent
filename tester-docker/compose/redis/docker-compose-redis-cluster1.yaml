@@ -1,0 +1,85 @@
+version: "3.7"
+services:
+  redis1:
+    image: tticc/third:redis6.0.16
+    ports:
+      - "8881:6379"
+    environment:
+      - REDIS_PORT=6379
+      - BIND=0.0.0.0
+      - DATABASES=1
+      - CLUSTER_ENABLED=yes
+      - DAEMONIZE=no
+  redis2:
+    image: tticc/third:redis6.0.16
+    ports:
+      - "8882:6379"
+    environment:
+      - REDIS_PORT=6379
+      - BIND=0.0.0.0
+      - DATABASES=1
+      - CLUSTER_ENABLED=yes
+      - DAEMONIZE=no
+
+  redis3:
+    image: tticc/third:redis6.0.16
+    ports:
+      - "8883:6379"
+    environment:
+      - REDIS_PORT=6379
+      - BIND=0.0.0.0
+      - DATABASES=1
+      - CLUSTER_ENABLED=yes
+      - DAEMONIZE=no
+  redis4:
+    image: tticc/third:redis6.0.16
+    ports:
+      - "8884:6379"
+    environment:
+      - REDIS_PORT=6379
+      - BIND=0.0.0.0
+      - DATABASES=1
+      - CLUSTER_ENABLED=yes
+      - DAEMONIZE=no
+  redis5:
+    image: tticc/third:redis6.0.16
+    ports:
+      - "8885:6379"
+    environment:
+      - REDIS_PORT=6379
+      - BIND=0.0.0.0
+      - DATABASES=1
+      - CLUSTER_ENABLED=yes
+      - DAEMONIZE=no
+  redis6:
+    image: tticc/third:redis6.0.16
+    ports:
+      - "8886:6379"
+    environment:
+      - REDIS_PORT=6379
+      - BIND=0.0.0.0
+      - DATABASES=1
+      - CLUSTER_ENABLED=yes
+      - DAEMONIZE=no
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
