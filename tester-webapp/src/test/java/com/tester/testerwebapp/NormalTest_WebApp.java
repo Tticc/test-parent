@@ -9,6 +9,7 @@ import com.tester.testercommon.util.file.TxtWrite;
 import com.tester.testercommon.util.jwt.JwtDataModel;
 import com.tester.testercommon.util.jwt.JwtHelper;
 import io.undertow.server.session.SecureRandomSessionIdGenerator;
+import lombok.SneakyThrows;
 import org.junit.Test;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.context.ApplicationContext;
@@ -25,6 +26,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicStampedReference;
 import java.util.regex.Matcher;
@@ -35,16 +38,46 @@ public class NormalTest_WebApp {
 
     Pattern isPic = Pattern.compile(".*?\\.(jpg|gif|jpeg)+$");
 
+    private final ScheduledExecutorService singleScheduledExecutor = Executors.newSingleThreadScheduledExecutor();
+
+
 
     public static void main(String[] args) {
         System.out.println("hello,world");
-        byte[] placeholder = new byte[64 * 1024 * 1024];
-        System.gc();
 
-        String str = "0011";
-        int i = Integer.parseInt(str);
-        System.out.println("i = " + i);
+
+
+        Integer b = null;
+        b.toString();
     }
+
+    @Test
+    public void test_singleThread() throws Exception {
+        for (int i = 0; i < 40; i++) {
+            int tempi = i;
+            Runnable runnable = newRun(i);
+            singleScheduledExecutor.submit(runnable);
+        }
+        TimeUnit.SECONDS.sleep(40);
+    }
+
+    @SneakyThrows
+    public Runnable newRun(int tempi) {
+        Integer k = null;
+        return () -> {
+            try {
+                if (tempi % 4 == 0) {
+//                    throw new BusinessException(500L);
+                    k.toString();
+                }
+                System.out.println("the i is:" + tempi);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+        };
+    }
+
 
     @Test
     public void test_sleep() throws InterruptedException {
