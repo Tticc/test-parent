@@ -18,6 +18,7 @@ ENV JVM_XMS="512m" \
     JVM_XMN="256m" \
     JVM_MS="128m" \
     JVM_MMS="320m" \
+    activeEnv="docker" \
     TIME_ZONE="Asia/Shanghai"
 
 

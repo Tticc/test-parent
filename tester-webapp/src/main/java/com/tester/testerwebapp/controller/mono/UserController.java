@@ -7,6 +7,7 @@ import com.tester.base.dto.controller.RestResult;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.base.dto.model.request.IdAndNameRequest;
 import com.tester.base.dto.model.request.TextRequest;
+import com.tester.testercommon.util.DateUtil;
 import com.tester.testercommon.util.redis.RedisUtilValue;
 import com.tester.testerwebapp.dao.domain.UserDomain;
 import com.tester.testerwebapp.service.MyService;
@@ -21,6 +22,7 @@ import reactor.core.publisher.Mono;
 
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -69,6 +71,11 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/demoStart1", method = RequestMethod.POST)
     public Mono<RestResult<UserDomain>> demoStart1(@Validated @RequestBody IdAndNameRequest model) {
         log.info("controller start here.");
+        try {
+            redisUtilValue.setValue("model1", "model1_test_" + DateUtil.dateFormat(new Date()));
+        }catch (Exception e){
+            log.error("set redis failed.err:",e);
+        }
         Mono<UserDomain> userDomainMono = userManager.selectUserById(model.getId());
         return monoSuccess(userDomainMono);
     }
