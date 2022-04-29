@@ -41,14 +41,20 @@ public class NormalTest_WebApp {
     private final ScheduledExecutorService singleScheduledExecutor = Executors.newSingleThreadScheduledExecutor();
 
 
+    private static Pattern p_tag = Pattern.compile("\\+ export docker_image=(.*?)\r\n");
+
 
     public static void main(String[] args) {
-        System.out.println("hello,world");
 
+        String consoleOutputText = "+ export docker_image=jireowjiof：jfioew\r\n";
+        // tag
+        Matcher matcherTag = p_tag.matcher(consoleOutputText);
+        String tag = null;
+        if (matcherTag.find()) {
+            tag = matcherTag.group(1);
+        }
+        System.out.println("tag = " + tag);
 
-
-        Integer b = null;
-        b.toString();
     }
 
     @Test

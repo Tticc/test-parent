@@ -1,0 +1,66 @@
+version: "3.7"
+services:
+  mysql1:
+    container_name: mysql1
+    image: mysql:5.7.38
+    #    ports:
+    #      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MASTER_SYNC_USER="root"
+      - MASTER_SYNC_PASSWORD="123456"
+      - ALLOW_HOST="%.%.%.%"
+    volumes:
+      - E:/Development/Projects_backup/test-parent/tester-docker/mysql/conf/master_conf.d:/etc/mysql/conf.d
+    #      - C:/Users/Admin/Desktop/mysql_data0:/var/lib/mysql
+    networks:
+      - "rnet"
+    command:
+      -  "--server-id=1"
+      -  "--character-set-server=utf8mb4"
+      -  "--collation-server=utf8mb4_unicode_ci"
+      -  "--log-bin=mysql-bin"
+      -  "--sync_binlog=1"
+
+  mysql2:
+    image: mysql:5.7.38
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - SLAVE_SYNC_USER="root"
+      - SLAVE_SYNC_PASSWORD="123456"
+      - MASTER_HOST="mysql1"
+    volumes:
+      - E:/Development/Projects_backup/test-parent/tester-docker/mysql/conf/slave1_conf.d:/etc/mysql/conf.d
+    #      - C:/Users/Admin/Desktop/mysql_data1:/var/lib/mysql
+    networks:
+      - "rnet"
+    command:
+      -  "--server-id=2"
+      -  "--character-set-server=utf8mb4"
+      -  "--collation-server=utf8mb4_unicode_ci"
+    depends_on:
+      - mysql1
+  mysql3:
+    image: mysql:5.7.38
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - SLAVE_SYNC_USER="root"
+      - SLAVE_SYNC_PASSWORD="123456"
+      - MASTER_HOST="mysql1"
+    volumes:
+      - E:/Development/Projects_backup/test-parent/tester-docker/mysql/conf/slave2_conf.d:/etc/mysql/conf.d
+    #      - C:/Users/Admin/Desktop/mysql_data1:/var/lib/mysql
+    networks:
+      - "rnet"
+    command:
+      -  "--server-id=3"
+      -  "--character-set-server=utf8mb4"
+      -  "--collation-server=utf8mb4_unicode_ci"
+    depends_on:
+      - mysql1
+
+
+networks:
+  rnet:
+    driver: bridge
+    external: true
