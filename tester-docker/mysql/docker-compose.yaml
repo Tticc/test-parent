@@ -12,7 +12,7 @@ services:
       - ALLOW_HOST="%.%.%.%"
     volumes:
       - E:/Development/Projects_backup/test-parent/tester-docker/mysql/conf/master_conf.d:/etc/mysql/conf.d
-    #      - C:/Users/Admin/Desktop/mysql_data0:/var/lib/mysql
+      - C:/Users/Admin/Desktop/mysql_data0:/var/lib/mysql
     networks:
       - "rnet"
     command:
@@ -31,7 +31,7 @@ services:
       - MASTER_HOST="mysql1"
     volumes:
       - E:/Development/Projects_backup/test-parent/tester-docker/mysql/conf/slave1_conf.d:/etc/mysql/conf.d
-    #      - C:/Users/Admin/Desktop/mysql_data1:/var/lib/mysql
+      - C:/Users/Admin/Desktop/mysql_data1:/var/lib/mysql
     networks:
       - "rnet"
     command:
@@ -49,7 +49,7 @@ services:
       - MASTER_HOST="mysql1"
     volumes:
       - E:/Development/Projects_backup/test-parent/tester-docker/mysql/conf/slave2_conf.d:/etc/mysql/conf.d
-    #      - C:/Users/Admin/Desktop/mysql_data1:/var/lib/mysql
+      - C:/Users/Admin/Desktop/mysql_data2:/var/lib/mysql
     networks:
       - "rnet"
     command:
