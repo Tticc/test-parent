@@ -13,7 +13,8 @@ ENV CONFIG_PATH="/usr/local/redis-6.0.16/inner_config" \
     BIND=0.0.0.0 \
     DATABASES=1 \
     DAEMONIZE=no \
-    CLUSTER_ENABLED=no
+    CLUSTER_ENABLED=no \
+    TIME_ZONE="Asia/Shanghai"
 
 #3、添加redis安装包
 ADD redis-6.0.16.tar.gz /usr/local
@@ -21,6 +22,7 @@ ADD redis-6.0.16.tar.gz /usr/local
 # tar zxvf redis-6.0.9.tar.gz
 
 COPY commands.sh /usr/local/redis-6.0.16/commands.sh
+COPY redis.conf /usr/local/redis-6.0.16/redis.conf
 
 #4、下载工具，按照redis，删除工具
 RUN apk add make gcc g++ linux-headers && \
