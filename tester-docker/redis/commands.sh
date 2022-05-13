@@ -1,1 +1,1 @@
-redis-server ${CONFIG_PATH}/redis.conf --port ${REDIS_PORT} --bind ${BIND} --databases ${DATABASES} --daemonize ${DAEMONIZE} --cluster-enabled ${CLUSTER_ENABLED}
+redis-server ${CONFIG_PATH}/redis.conf --port ${REDIS_PORT} --bind ${BIND} --databases ${DATABASES} --daemonize ${DAEMONIZE} --cluster-enabled ${CLUSTER_ENABLED} --cluster-announce-ip ${ANNOUNCE_IP} --cluster-announce-port ${ANNOUNCE_PORT} --cluster-announce-bus-port ${ANNOUNCE_BUS_PORT}

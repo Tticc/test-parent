@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # FROM tticc/alpine:3.15.3
-FROM tticc/alpine-glibc:latest
+FROM tticc/alpine-glibc:3.15.3
 
 #1、指明该镜像的作者
 MAINTAINER tticc
@@ -14,6 +14,9 @@ ENV CONFIG_PATH="/usr/local/redis-6.0.16/inner_config" \
     DATABASES=1 \
     DAEMONIZE=no \
     CLUSTER_ENABLED=no \
+    ANNOUNCE_IP=0.0.0.0 \
+    ANNOUNCE_PORT=6379 \
+    ANNOUNCE_BUS_PORT=16379 \
     TIME_ZONE="Asia/Shanghai"
 
 #3、添加redis安装包

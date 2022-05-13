@@ -1,0 +1,101 @@
+version: "3.7"
+services:
+  redis1:
+    image: tticc/third:redis6.0.16
+    ports:
+      - "8881:8881"
+      - "18881:18881"
+    environment:
+      - REDIS_PORT=8881
+      - ANNOUNCE_PORT=8881
+      - ANNOUNCE_BUS_PORT=18881
+    env_file:
+      - env/redis-cluster.env
+    networks:
+      - "rnet"
+
+
+  redis2:
+    image: tticc/third:redis6.0.16
+    ports:
+      - "8882:8882"
+      - "18882:18882"
+    environment:
+      - REDIS_PORT=8882
+      - ANNOUNCE_PORT=8882
+      - ANNOUNCE_BUS_PORT=18882
+    env_file:
+      - env/redis-cluster.env
+    networks:
+      - "rnet"
+
+
+  redis3:
+    image: tticc/third:redis6.0.16
+    ports:
+      - "8883:8883"
+      - "18883:18883"
+    environment:
+      - REDIS_PORT=8883
+      - ANNOUNCE_PORT=8883
+      - ANNOUNCE_BUS_PORT=18883
+    env_file:
+      - env/redis-cluster.env
+    networks:
+      - "rnet"
+
+
+  redis4:
+    image: tticc/third:redis6.0.16
+    ports:
+      - "8884:8884"
+      - "18884:18884"
+    environment:
+      - REDIS_PORT=8884
+      - ANNOUNCE_PORT=8884
+      - ANNOUNCE_BUS_PORT=18884
+    env_file:
+      - env/redis-cluster.env
+    networks:
+      - "rnet"
+
+
+  redis5:
+    image: tticc/third:redis6.0.16
+    ports:
+      - "8885:8885"
+      - "18885:18885"
+    environment:
+      - REDIS_PORT=8885
+      - ANNOUNCE_PORT=8885
+      - ANNOUNCE_BUS_PORT=18885
+    env_file:
+      - env/redis-cluster.env
+    networks:
+      - "rnet"
+
+
+  redis6:
+    image: tticc/third:redis6.0.16
+    ports:
+      - "8886:8886"
+      - "18886:18886"
+    environment:
+      - REDIS_PORT=8886
+      - ANNOUNCE_PORT=8886
+      - ANNOUNCE_BUS_PORT=18886
+    env_file:
+      - env/redis-cluster.env
+    networks:
+      - "rnet"
+
+
+networks:
+  rnet:
+    driver: bridge
+    external: true
+
+
+
+
+
