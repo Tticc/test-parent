@@ -10,11 +10,17 @@ compose和Dockerfile
 
 
 ### 启动
-`cd E:\Development\Projects_backup\test-parent\tester-docker\sentinel`
+`cd E:\Development\Projects_backup\test-parent\tester-docker\sentinel`  
 docker-compose -p sentinel_compose up -d
 
 
 ### 说明
+
+### 访问
+http://localhost:8081
+
+
+
 
 
 

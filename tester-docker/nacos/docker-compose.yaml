@@ -52,6 +52,19 @@ services:
 #      - "9850:9848"
     restart: always
 
+  nginx:
+    container_name: nacos_ng
+    image: nginx:1.21.6-alpine
+    volumes:
+      - E:/Development/Projects_backup/test-parent/tester-docker/nacos/nginx/conf:/etc/nginx/conf.d
+    networks:
+      - "rnet"
+    ports:
+      - "8849:8849"
+    depends_on:
+      - nacos
+      - nacos1
+      - nacos2
 
 networks:
   rnet:

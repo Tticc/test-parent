@@ -5,6 +5,8 @@ services:
     container_name: tester-gateway
     env_file:
       - env/tester-cluster.env
+    networks:
+      - "rnet"
     ports:
       - "8002:8002"
     restart: always
@@ -14,15 +16,18 @@ services:
     container_name: tester-gateway1
     env_file:
       - env/tester-cluster.env
+    networks:
+      - "rnet"
     restart: always
 
 
   tester-async:
+    container_name: tester-async
     image: tticc/tester:tester-async
     env_file:
       - env/tester-cluster.env
-    depends_on:
-      - redis
+    networks:
+      - "rnet"
     restart: always
     deploy:
       mode: replicated
@@ -33,10 +38,10 @@ services:
     container_name: tester-webapp
     env_file:
       - env/tester-cluster.env
+    networks:
+      - "rnet"
     ports:
       - "8004:8004"
-    depends_on:
-      - redis
     restart: always
 
 #  tester-webapp1:
@@ -108,4 +113,10 @@ services:
 #    image: tticc/third:sentinel.8.3
 #    ports:
 #      - "8080:8080"
-#
+
+
+
+networks:
+  rnet:
+    driver: bridge
+    external: true

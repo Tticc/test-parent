@@ -9,7 +9,7 @@ conf里包含了master和slave的配置
 
 
 ### 启动
-`cd E:\Development\Projects_backup\test-parent\tester-docker\mysql`
+`cd E:\Development\Projects_backup\test-parent\tester-docker\mysql`  
 docker-compose -p mysql_compose up -d
 
 

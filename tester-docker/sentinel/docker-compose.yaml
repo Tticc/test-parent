@@ -4,4 +4,4 @@ services:
     container_name: sentinel
     image: tticc/third:sentinel.8.3
     ports:
-      - "8080:8080"
+      - "8081:8080"

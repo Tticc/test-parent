@@ -32,6 +32,6 @@ RUN wget https://archive.apache.org/dist/rocketmq/${ROCKET_VERSION}/rocketmq-all
 
 
 #5、设置启动命令
-ENTRYPOINT ["sh","-c","export JAVA_OPT=' -Duser.home=${WORKDIR}' && ${WORKDIR}/${ROCKET_FORDER}/bin/mqbroker -n ${NAME_SRV} -c ${WORKDIR}/${BROKER_CONF}"]
+ENTRYPOINT ["sh","-c","export JAVA_OPT=' -Duser.home='${WORKDIR} && ${WORKDIR}/${ROCKET_FORDER}/bin/mqbroker -n ${NAME_SRV} -c ${WORKDIR}/${BROKER_CONF}"]
 
 
