@@ -1,0 +1,111 @@
+version: "3.7"
+services:
+  tester-gateway:
+    image: tticc/tester:tester-gateway
+    container_name: tester-gateway
+    env_file:
+      - env/tester-cluster.env
+    ports:
+      - "8002:8002"
+    restart: always
+
+  tester-gateway1:
+    image: tticc/tester:tester-gateway
+    container_name: tester-gateway1
+    env_file:
+      - env/tester-cluster.env
+    restart: always
+
+
+  tester-async:
+    image: tticc/tester:tester-async
+    env_file:
+      - env/tester-cluster.env
+    depends_on:
+      - redis
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  tester-webapp:
+    image: tticc/tester:tester-webapp
+    container_name: tester-webapp
+    env_file:
+      - env/tester-cluster.env
+    ports:
+      - "8004:8004"
+    depends_on:
+      - redis
+    restart: always
+
+#  tester-webapp1:
+#    image: tticc/tester:tester-webapp
+#    container_name: tester-webapp1
+#    env_file:
+#      - ../env/tester-cluster.env
+#    depends_on:
+#      - redis
+#    restart: always
+#  redis:
+#    container_name: redis
+#    image: tticc/third:redis6.0.16
+##    image: redis:6.0
+#    volumes:
+#      - C:/Users/Admin/Desktop/redis/config:/usr/local/redis-6.0.16/config
+#    ports:
+#      - "6379:6379"
+#
+#  nacos:
+#    #指定容器中的主机名
+#    hostname: nacos
+#    container_name: nacos
+#    image: nacos/nacos-server:2.0.3
+#    env_file:
+#      - ../nacos/env/nacos-mysql.env
+#    volumes:
+#      - ./cluster-logs/nacos:/home/nacos/logs
+#      - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
+#    ports:
+#      - "8848:8848"
+#      - "9848:9848"
+#      - "9555:9555"
+#    restart: always
+#
+#  nacos1:
+#    #指定容器中的主机名
+#    hostname: nacos1
+#    container_name: nacos1
+#    image: nacos/nacos-server:2.0.3
+#    env_file:
+#      - ../nacos/env/nacos-mysql.env
+#    volumes:
+#      - ./cluster-logs/nacos1:/home/nacos/logs
+#      - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
+##    ports:
+##      - "8849:8848"
+##      - "9849:9848"
+#    restart: always
+#
+#  nacos2:
+#    #指定容器中的主机名
+#    hostname: nacos2
+#    container_name: nacos2
+#    image: nacos/nacos-server:2.0.3
+#    env_file:
+#      - ../nacos/env/nacos-mysql.env
+#    volumes:
+#      - ./cluster-logs/nacos2:/home/nacos/logs
+#      - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
+##    ports:
+##      - "8850:8848"
+##      - "9850:9848"
+#    restart: always
+#
+#
+#  sentinel:
+#    container_name: sentinel
+#    image: tticc/third:sentinel.8.3
+#    ports:
+#      - "8080:8080"
+#

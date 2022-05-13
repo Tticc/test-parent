@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:1.21.6-alpine
+    volumes:
+      - E:/Development/Projects_backup/test-parent/tester-docker/nginx/conf:/etc/nginx/conf.d
+    networks:
+      - "rnet"
+    ports:
+      - "80:80"
+
+networks:
+  rnet:
+    driver: bridge
+    external: true

@@ -1,7 +1,7 @@
 version: "3.7"
 services:
-  mysql1:
-    container_name: mysql1
+  mysql_master:
+    container_name: mysql_master
     image: mysql:5.7.38
     #    ports:
     #      - "3306:3306"
@@ -22,14 +22,15 @@ services:
       -  "--log-bin=mysql-bin"
       -  "--sync_binlog=1"
 
-  mysql2:
+  mysql_slave1:
     image: mysql:5.7.38
     environment:
       - MYSQL_ROOT_PASSWORD=123456
       - SLAVE_SYNC_USER="root"
       - SLAVE_SYNC_PASSWORD="123456"
-      - MASTER_HOST="mysql1"
+      - MASTER_HOST="mysql_master"
     volumes:
+# slave1_conf 与 slave1_conf 里面文件的区别只有mysql.cnf里的 server-id 不一样
       - E:/Development/Projects_backup/test-parent/tester-docker/mysql/conf/slave1_conf.d:/etc/mysql/conf.d
       - C:/Users/Admin/Desktop/mysql_data1:/var/lib/mysql
     networks:
@@ -39,14 +40,15 @@ services:
       -  "--character-set-server=utf8mb4"
       -  "--collation-server=utf8mb4_unicode_ci"
     depends_on:
-      - mysql1
-  mysql3:
+      - mysql_master
+
+  mysql_slave2:
     image: mysql:5.7.38
     environment:
       - MYSQL_ROOT_PASSWORD=123456
       - SLAVE_SYNC_USER="root"
       - SLAVE_SYNC_PASSWORD="123456"
-      - MASTER_HOST="mysql1"
+      - MASTER_HOST="mysql_master"
     volumes:
       - E:/Development/Projects_backup/test-parent/tester-docker/mysql/conf/slave2_conf.d:/etc/mysql/conf.d
       - C:/Users/Admin/Desktop/mysql_data2:/var/lib/mysql
@@ -57,7 +59,7 @@ services:
       -  "--character-set-server=utf8mb4"
       -  "--collation-server=utf8mb4_unicode_ci"
     depends_on:
-      - mysql1
+      - mysql_master
 
 
 networks:
