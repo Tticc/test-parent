@@ -19,3 +19,8 @@ docker-compose -p nginx_compose up -d
 
 
 
+### 备注
+compose里指定了挂在文件夹，需要修改后部署
+
+
+

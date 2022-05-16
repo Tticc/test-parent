@@ -21,6 +21,11 @@ nacos给微服务使用，同时被nginx代理。
 http://localhost:8849/nacos
 
 
+### 备注
+compose里指定了挂在文件夹，需要修改后部署
+
+
+
 
 
 

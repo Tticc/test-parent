@@ -18,4 +18,9 @@ docker-compose -f docker-compose-redis-cluster1_1.yaml -p redis_compose up -d
 ### 说明
 
 
+### 备注
+compose里指定了挂在文件夹，需要修改后部署
+
+
+
 

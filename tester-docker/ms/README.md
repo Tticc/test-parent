@@ -26,5 +26,11 @@ http://localhost:80/api/tester-webapp/demo/demoStart1
 http://localhost:8004/demo/demoStart1  
 
 
+### 备注
+compose的env里指定了挂在文件夹，需要修改后部署
+
+
+
+
 
 
