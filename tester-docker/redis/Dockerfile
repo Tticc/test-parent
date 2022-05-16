@@ -19,6 +19,11 @@ ENV CONFIG_PATH="/usr/local/redis-6.0.16/inner_config" \
     ANNOUNCE_BUS_PORT=16379 \
     TIME_ZONE="Asia/Shanghai"
 
+# 4、指定data为匿名卷，避免启动时不挂载导致数据丢失
+# 为避免产生大量的匿名卷，暂时注释掉。在compose已经配置了宿主机挂载
+# VOLUME ${WORKDIR}/data
+
+
 #3、添加redis安装包
 ADD redis-6.0.16.tar.gz /usr/local
 # ADD 命令会把压缩包解压，所以无需tar命令进行解压

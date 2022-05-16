@@ -21,6 +21,9 @@ ENV WORKDIR="/usr/local" \
 #3、在构建镜像时，指定镜像的工作目录，之后的命令都是基于此工作目录，如果不存在，则会创建目录
 WORKDIR ${WORKDIR}
 
+# 4、指定store为匿名卷，避免启动时不挂载导致数据丢失
+# 为避免产生大量的匿名卷，暂时注释掉。在compose已经配置了宿主机挂载
+# VOLUME ${WORKDIR}/store
 
 #4、下载mq，解压、配置
 RUN wget https://archive.apache.org/dist/rocketmq/${ROCKET_VERSION}/rocketmq-all-${ROCKET_VERSION}-bin-release.zip &&\
