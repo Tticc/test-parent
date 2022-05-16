@@ -23,6 +23,7 @@ WORKDIR ${WORKDIR}
 
 # 4、指定store为匿名卷，避免启动时不挂载导致数据丢失
 # 为避免产生大量的匿名卷，暂时注释掉。在compose已经配置了宿主机挂载
+# 匿名卷文件位置：cd \\wsl$\docker-desktop-data\version-pack-data\community\docker\volumes
 # VOLUME ${WORKDIR}/store
 
 #4、下载mq，解压、配置
