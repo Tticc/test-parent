@@ -11,6 +11,8 @@ services:
       - ANNOUNCE_BUS_PORT=18881
     env_file:
       - env/redis-cluster.env
+    volumes:
+      - C:/Users/Admin/Desktop/redis/redis_data1/:/usr/local/data/
     networks:
       - "rnet"
 
@@ -26,6 +28,8 @@ services:
       - ANNOUNCE_BUS_PORT=18882
     env_file:
       - env/redis-cluster.env
+    volumes:
+      - C:/Users/Admin/Desktop/redis/redis_data2/:/usr/local/data/
     networks:
       - "rnet"
 
@@ -39,6 +43,8 @@ services:
       - REDIS_PORT=8883
       - ANNOUNCE_PORT=8883
       - ANNOUNCE_BUS_PORT=18883
+    volumes:
+      - C:/Users/Admin/Desktop/redis/redis_data3/:/usr/local/data/
     env_file:
       - env/redis-cluster.env
     networks:
@@ -54,6 +60,8 @@ services:
       - REDIS_PORT=8884
       - ANNOUNCE_PORT=8884
       - ANNOUNCE_BUS_PORT=18884
+    volumes:
+      - C:/Users/Admin/Desktop/redis/redis_data4/:/usr/local/data/
     env_file:
       - env/redis-cluster.env
     networks:
@@ -69,6 +77,8 @@ services:
       - REDIS_PORT=8885
       - ANNOUNCE_PORT=8885
       - ANNOUNCE_BUS_PORT=18885
+    volumes:
+      - C:/Users/Admin/Desktop/redis/redis_data5/:/usr/local/data/
     env_file:
       - env/redis-cluster.env
     networks:
@@ -84,6 +94,8 @@ services:
       - REDIS_PORT=8886
       - ANNOUNCE_PORT=8886
       - ANNOUNCE_BUS_PORT=18886
+    volumes:
+      - C:/Users/Admin/Desktop/redis/redis_data6/:/usr/local/data/
     env_file:
       - env/redis-cluster.env
     networks:

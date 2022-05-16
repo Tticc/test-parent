@@ -30,6 +30,7 @@ COPY redis.conf /usr/local/redis-6.0.16/redis.conf
 #4、下载工具，按照redis，删除工具
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
     apk add make gcc g++ linux-headers && \
+    mkdir data && \
     cd redis-6.0.16 && \
     make && make install && \
     apk del make gcc g++ linux-headers && \
