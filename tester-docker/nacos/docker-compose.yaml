@@ -16,7 +16,6 @@ services:
       - "8848:8848"
       - "9848:9848"
       - "9555:9555"
-    restart: always
 
   nacos1:
     #指定容器中的主机名
@@ -33,7 +32,6 @@ services:
 #    ports:
 #      - "8849:8848"
 #      - "9849:9848"
-    restart: always
 
   nacos2:
     #指定容器中的主机名
@@ -50,7 +48,6 @@ services:
 #    ports:
 #      - "8850:8848"
 #      - "9850:9848"
-    restart: always
 
   nginx:
     container_name: nacos_ng
