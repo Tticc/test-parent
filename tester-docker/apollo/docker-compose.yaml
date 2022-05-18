@@ -1,0 +1,35 @@
+version: "3.7"
+services:
+  apollo-configservice:
+    image: tticc/third:apollo-configservice
+    container_name: apollo-configservice
+    networks:
+      - "rnet"
+    ports:
+      - "8080:8080"
+
+
+  apollo-adminservice:
+    image: tticc/third:apollo-adminservice
+    container_name: apollo-adminservice
+    networks:
+      - "rnet"
+    ports:
+      - "8070:8070"
+    depends_on:
+      - apollo-configservice
+
+  apollo-portal:
+    container_name: apollo-portal
+    image: tticc/third:apollo-portal
+
+    networks:
+      - "rnet"
+    depends_on:
+      - apollo-adminservice
+
+
+networks:
+  rnet:
+    driver: bridge
+    external: true
