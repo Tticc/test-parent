@@ -5,6 +5,8 @@ services:
     container_name: apollo-configservice
     networks:
       - "rnet"
+    environment:
+      - EUREKA_INSTANCE_HOSTNAME=10.100.69.74
     ports:
       - "8080:8080"
 
@@ -15,14 +17,19 @@ services:
     networks:
       - "rnet"
     ports:
-      - "8070:8070"
+      - "8090:8090"
+    environment:
+      - EUREKA_INSTANCE_HOSTNAME=10.100.69.74
     depends_on:
       - apollo-configservice
 
   apollo-portal:
     container_name: apollo-portal
     image: tticc/third:apollo-portal
-
+    ports:
+    - "8070:8070"
+    environment:
+      - EXT_JAVA_OPT= -Ddev_meta=http://10.100.69.74:8080 -Dfat_meta=http://10.100.69.74:8080 -Duat_meta=http://10.100.69.74:8080 -Dpro_meta=http://10.100.69.74:8080
     networks:
       - "rnet"
     depends_on:

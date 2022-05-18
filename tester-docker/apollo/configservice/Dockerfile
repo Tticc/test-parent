@@ -18,7 +18,7 @@ ENV JVM_XMS="512m" \
     JVM_XMN="256m" \
     JVM_MS="128m" \
     JVM_MMS="320m" \
-    EUREKA_INSTANCE_HOSTNAME="10.100.69.74" \
+    EUREKA_INSTANCE_HOSTNAME="localhost" \
     TIME_ZONE="Asia/Shanghai"
 
 

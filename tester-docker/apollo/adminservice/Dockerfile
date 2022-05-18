@@ -18,8 +18,9 @@ ENV JVM_XMS="512m" \
     JVM_XMN="256m" \
     JVM_MS="128m" \
     JVM_MMS="320m" \
+    EUREKA_INSTANCE_HOSTNAME="localhost" \
     TIME_ZONE="Asia/Shanghai"
 
 
 #ENTRYPOINT exec java -jar app.jar --dev
-ENTRYPOINT ["sh","-c","java -Xms${JVM_XMS} -Xmx${JVM_XMX} -Xmn${JVM_XMN} -XX:MetaspaceSize=${JVM_MS} -XX:MaxMetaspaceSize=${JVM_MMS} -jar app.jar" ]
+ENTRYPOINT ["sh","-c","java -Xms${JVM_XMS} -Xmx${JVM_XMX} -Xmn${JVM_XMN} -XX:MetaspaceSize=${JVM_MS} -XX:MaxMetaspaceSize=${JVM_MMS} -jar app.jar --eureka.instance.hostname=${EUREKA_INSTANCE_HOSTNAME}" ]
