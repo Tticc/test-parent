@@ -35,6 +35,24 @@ services:
     depends_on:
       - apollo-adminservice
 
+  apollo-db:
+    image: mysql:5.7.38
+    container_name: apollo-db
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=123456
+    volumes:
+      - apollo_data:/var/lib/mysql
+    ports:
+      - "13306:3306"
+    networks:
+      - "rnet"
+
+
+
+volumes:
+  apollo_data:
+    driver: local
 
 networks:
   rnet:
