@@ -15,11 +15,12 @@ docker-compose -p apollo_compose up -d
 
 
 ### 说明
-配置有问题，或者说镜像有问题。  
-出现一个eureka的localhost问题  
+> 需要初始化数据库  
+
+
 
 ### 访问
-http://localhost:8080
+http://localhost:8070
 
 
 

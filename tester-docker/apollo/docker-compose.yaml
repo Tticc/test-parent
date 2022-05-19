@@ -1,40 +1,73 @@
 version: "3.7"
 services:
-  apollo-configservice:
+  # dev环境configservice和adminservice容器
+  apollo-configservice-dev:
     image: tticc/third:apollo-configservice
-    container_name: apollo-configservice
+    container_name: apollo-configservice-dev
     networks:
       - "rnet"
     environment:
-      - EUREKA_INSTANCE_HOSTNAME=10.100.69.74
+      - EUREKA_INSTANCE_HOSTNAME=apollo-configservice-dev
+      - EXT_JAVA_OPT= -Dspring_datasource_url=jdbc:mysql://apollo-db:3306/ApolloConfigDBDEV?characterEncoding=utf8 -Dspring_datasource_username=root -Dspring_datasource_password=123456
     ports:
       - "8080:8080"
+    depends_on:
+      - apollo-db
 
-
-  apollo-adminservice:
+  apollo-adminservice-dev:
     image: tticc/third:apollo-adminservice
-    container_name: apollo-adminservice
+    container_name: apollo-adminservice-dev
     networks:
       - "rnet"
     ports:
       - "8090:8090"
     environment:
-      - EUREKA_INSTANCE_HOSTNAME=10.100.69.74
+      - EUREKA_INSTANCE_HOSTNAME=apollo-configservice-dev
+      - EXT_JAVA_OPT= -Dspring_datasource_url=jdbc:mysql://apollo-db:3306/ApolloConfigDBDEV?characterEncoding=utf8 -Dspring_datasource_username=root -Dspring_datasource_password=123456
     depends_on:
-      - apollo-configservice
+      - apollo-configservice-dev
 
+
+  # fat环境configservice和adminservice容器
+  apollo-configservice-fat:
+    image: tticc/third:apollo-configservice
+    container_name: apollo-configservice-fat
+    networks:
+      - "rnet"
+    environment:
+      - EUREKA_INSTANCE_HOSTNAME=apollo-configservice-fat
+      - EXT_JAVA_OPT= -Dspring_datasource_url=jdbc:mysql://apollo-db:3306/ApolloConfigDBFAT?characterEncoding=utf8 -Dspring_datasource_username=root -Dspring_datasource_password=123456
+    depends_on:
+      - apollo-db
+
+
+  apollo-adminservice-fat:
+    image: tticc/third:apollo-adminservice
+    container_name: apollo-adminservice-fat
+    networks:
+      - "rnet"
+    environment:
+      - EUREKA_INSTANCE_HOSTNAME=apollo-configservice-fat
+      - EXT_JAVA_OPT= -Dspring_datasource_url=jdbc:mysql://apollo-db:3306/ApolloConfigDBFAT?characterEncoding=utf8 -Dspring_datasource_username=root -Dspring_datasource_password=123456
+    depends_on:
+      - apollo-configservice-fat
+
+
+  # portal
   apollo-portal:
     container_name: apollo-portal
     image: tticc/third:apollo-portal
     ports:
     - "8070:8070"
     environment:
-      - EXT_JAVA_OPT= -Ddev_meta=http://10.100.69.74:8080 -Dfat_meta=http://10.100.69.74:8080 -Duat_meta=http://10.100.69.74:8080 -Dpro_meta=http://10.100.69.74:8080
+      - EXT_JAVA_OPT= -Ddev_meta=http://apollo-configservice-dev:8080 -Dfat_meta=http://apollo-configservice-fat:8080
     networks:
       - "rnet"
     depends_on:
-      - apollo-adminservice
+      - apollo-adminservice-dev
+      - apollo-adminservice-fat
 
+  # mysql db
   apollo-db:
     image: mysql:5.7.38
     container_name: apollo-db
