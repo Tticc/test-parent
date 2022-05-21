@@ -12,7 +12,7 @@ services:
     env_file:
       - env/redis-cluster.env
     volumes:
-      - C:/Users/Admin/Desktop/redis/redis_data1/:/usr/local/data/
+      - redis_data1/:/usr/local/data/
     networks:
       - "rnet"
 
@@ -29,7 +29,7 @@ services:
     env_file:
       - env/redis-cluster.env
     volumes:
-      - C:/Users/Admin/Desktop/redis/redis_data2/:/usr/local/data/
+      - redis_data2/:/usr/local/data/
     networks:
       - "rnet"
 
@@ -44,7 +44,7 @@ services:
       - ANNOUNCE_PORT=8883
       - ANNOUNCE_BUS_PORT=18883
     volumes:
-      - C:/Users/Admin/Desktop/redis/redis_data3/:/usr/local/data/
+      - redis_data3/:/usr/local/data/
     env_file:
       - env/redis-cluster.env
     networks:
@@ -61,7 +61,7 @@ services:
       - ANNOUNCE_PORT=8884
       - ANNOUNCE_BUS_PORT=18884
     volumes:
-      - C:/Users/Admin/Desktop/redis/redis_data4/:/usr/local/data/
+      - redis_data4/:/usr/local/data/
     env_file:
       - env/redis-cluster.env
     networks:
@@ -78,7 +78,7 @@ services:
       - ANNOUNCE_PORT=8885
       - ANNOUNCE_BUS_PORT=18885
     volumes:
-      - C:/Users/Admin/Desktop/redis/redis_data5/:/usr/local/data/
+      - redis_data5/:/usr/local/data/
     env_file:
       - env/redis-cluster.env
     networks:
@@ -95,12 +95,26 @@ services:
       - ANNOUNCE_PORT=8886
       - ANNOUNCE_BUS_PORT=18886
     volumes:
-      - C:/Users/Admin/Desktop/redis/redis_data6/:/usr/local/data/
+      - redis_data6/:/usr/local/data/
     env_file:
       - env/redis-cluster.env
     networks:
       - "rnet"
 
+
+volumes:
+  redis_data1:
+    driver: local
+  redis_data2:
+    driver: local
+  redis_data3:
+    driver: local
+  redis_data4:
+    driver: local
+  redis_data5:
+    driver: local
+  redis_data6:
+    driver: local
 
 networks:
   rnet:
@@ -108,6 +122,7 @@ networks:
     external: true
 
 
+  redis-cli --cluster create 192.168.31.149:8881 192.168.31.149:8882 192.168.31.149:8883 192.168.31.149:8884 192.168.31.149:8885 192.168.31.149:8886 --cluster-replicas 1
 
 
 

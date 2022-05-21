@@ -11,8 +11,10 @@ compose及env
 ### 启动
 `cd E:\Development\Projects_backup\test-parent\tester-docker\redis\compose`  
 docker-compose -f docker-compose-redis-cluster1_1.yaml -p redis_compose up -d  
-每次部署都需要重新配置集群关系  
+初次部署都需要重新配置集群关系  
 `redis-cli --cluster create 宿主机ip:8881 宿主机ip:8882 宿主机ip:8883 宿主机ip:8884 宿主机ip:8885 宿主机ip:8886 --cluster-replicas 1`  
+
+部署需要修改env文件  
 
 
 ### 说明
