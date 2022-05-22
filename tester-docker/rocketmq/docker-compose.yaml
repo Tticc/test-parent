@@ -37,7 +37,7 @@ services:
     image: tticc/third:rocketmq4.5-broker
     volumes:
       - E:/Development/Projects_backup/test-parent/tester-docker/rocketmq/broker/CVCluster1:/usr/local/mq_out_config
-      - C:/Users/Admin/Desktop/rocketmq/a-master:/usr/local/store
+      - a-master:/usr/local/store
     environment:
       - BROKER_CONF=mq_out_config/broker-a.properties
       - NAME_SRV=nameserver1:9876;nameserver2:9876
@@ -51,7 +51,7 @@ services:
     image: tticc/third:rocketmq4.5-broker
     volumes:
       - E:/Development/Projects_backup/test-parent/tester-docker/rocketmq/broker/CVCluster1:/usr/local/mq_out_config
-      - C:/Users/Admin/Desktop/rocketmq/a-slave:/usr/local/store
+      - a-slave:/usr/local/store
     environment:
       - BROKER_CONF=mq_out_config/broker-a-s.properties
       - NAME_SRV=nameserver1:9876;nameserver2:9876
@@ -66,7 +66,7 @@ services:
     image: tticc/third:rocketmq4.5-broker
     volumes:
       - E:/Development/Projects_backup/test-parent/tester-docker/rocketmq/broker/CVCluster1:/usr/local/mq_out_config
-      - C:/Users/Admin/Desktop/rocketmq/b-master:/usr/local/store
+      - b-master:/usr/local/store
     environment:
       - BROKER_CONF=mq_out_config/broker-b.properties
       - NAME_SRV=nameserver1:9876;nameserver2:9876
@@ -80,7 +80,7 @@ services:
     image: tticc/third:rocketmq4.5-broker
     volumes:
       - E:/Development/Projects_backup/test-parent/tester-docker/rocketmq/broker/CVCluster1:/usr/local/mq_out_config
-      - C:/Users/Admin/Desktop/rocketmq/b-slave:/usr/local/store
+      - b-slave:/usr/local/store
     environment:
       - BROKER_CONF=mq_out_config/broker-b-s.properties
       - NAME_SRV=nameserver1:9876;nameserver2:9876
@@ -90,6 +90,15 @@ services:
       - nameserver1
       - nameserver2
 
+volumes:
+  a-master:
+    driver: local
+  a-slave:
+    driver: local
+  b-master:
+    driver: local
+  b-slave:
+    driver: local
 
 networks:
   rnet:

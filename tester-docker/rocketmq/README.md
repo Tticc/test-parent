@@ -7,7 +7,7 @@
 
 ### 组成
 Dockerfile及打包需要的文件  
-compose及env
+compose  
 
 ### 启动
 `cd E:\Development\Projects_backup\test-parent\tester-docker\rocketmq`  
