@@ -19,8 +19,9 @@ ENV JVM_XMS="512m" \
     JVM_MS="128m" \
     JVM_MMS="320m" \
     EXT_JAVA_OPT="" \
+    EXT_PARAM="" \
     TIME_ZONE="Asia/Shanghai"
 
 
 #ENTRYPOINT exec java -jar app.jar --dev
-ENTRYPOINT ["sh","-c","java -Xms${JVM_XMS} -Xmx${JVM_XMX} -Xmn${JVM_XMN} -XX:MetaspaceSize=${JVM_MS} -XX:MaxMetaspaceSize=${JVM_MMS} ${EXT_JAVA_OPT} -jar app.jar" ]
+ENTRYPOINT ["sh","-c","java -Xms${JVM_XMS} -Xmx${JVM_XMX} -Xmn${JVM_XMN} -XX:MetaspaceSize=${JVM_MS} -XX:MaxMetaspaceSize=${JVM_MMS} ${EXT_JAVA_OPT} -jar app.jar ${EXT_PARAM}" ]
