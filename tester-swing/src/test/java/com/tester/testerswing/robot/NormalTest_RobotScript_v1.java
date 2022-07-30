@@ -1,15 +1,10 @@
-package com.tester.testersearch;
-
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
+package com.tester.testerswing.robot;
 
 import java.awt.*;
 import java.awt.event.InputEvent;
-import java.util.concurrent.TimeUnit;
 
 
-@Slf4j
-public class NormalTest_Robot_v1 {
+public class NormalTest_RobotScript_v1 {
     public static Robot r;
 
     static {
@@ -20,11 +15,15 @@ public class NormalTest_Robot_v1 {
         }
     }
 
-
     public static void main(String[] args) throws Exception {
-        NormalTest_Robot_v1 root = new NormalTest_Robot_v1();
+        NormalTest_RobotScript_v1 root = new NormalTest_RobotScript_v1();
         root.silotCV_engage();
 
+    }
+
+    public void demo(){
+        r.delay(123);
+        move(555, 555, 589);
     }
 
     public void silotCV_engage() throws Exception {
@@ -54,10 +53,8 @@ public class NormalTest_Robot_v1 {
     }
 
 
-
-
     public static void move(int x, int y) {
-        move(x,y,485);
+        move(x, y, 485);
     }
 
     public static void move(int x, int y, int delayTimes) {

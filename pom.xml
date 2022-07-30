@@ -89,6 +89,7 @@
         <module>tester-base-dto</module>
         <module>tester-feign-client</module>
         <module>tester-search</module>
+        <module>tester-swing</module>
     </modules>
 
     <dependencyManagement>

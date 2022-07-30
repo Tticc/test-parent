@@ -1,14 +1,9 @@
-package com.tester.testersearch;
-
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
+package com.tester.testerswing.robot;
 
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
 
-
-@Slf4j
-public class NormalTest_Robot1 {
+public class NormalTest_GetPoint {
 
     public static void main(String[] args) throws Exception {
         TimeUnit.SECONDS.sleep(2);
