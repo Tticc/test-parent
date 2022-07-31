@@ -17,9 +17,9 @@ public class ImageComparator {
 
     static {
         // 可用
-//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         // 测试中
-        LibraryLoader.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+//        LibraryLoader.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         mat = new Mat(618, 2000, CvType.CV_8UC1, new Scalar(0));
     }
 

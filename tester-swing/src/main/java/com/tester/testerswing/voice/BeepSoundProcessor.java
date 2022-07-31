@@ -8,7 +8,7 @@ public class BeepSoundProcessor {
 
     private static boolean started = true;
 
-    private static BlockingQueue<BeepSoundTask> tasks = new LinkedBlockingQueue<>(2);
+    private static BlockingQueue<BeepSoundTask> tasks = new LinkedBlockingQueue<>(1);
 
     private static Thread t = new Thread(() -> {
         try {

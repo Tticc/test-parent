@@ -31,8 +31,8 @@ public class Boot {
     private final List<AccountInfo> accountInfoList = new ArrayList<>();
 
     public Boot() {
-        accountInfoList.add(new AccountInfo().setAccount(silot).setSt(st_silot).setEd(ed_silot));
-        accountInfoList.add(new AccountInfo().setAccount(sailinna).setSt(st_sai).setEd(ed_sai));
+        accountInfoList.add(new AccountInfo().setWarnMsg("左警告").setAccount(silot).setSt(st_silot).setEd(ed_silot));
+        accountInfoList.add(new AccountInfo().setWarnMsg("右警告").setAccount(sailinna).setSt(st_sai).setEd(ed_sai));
     }
 
 
@@ -70,7 +70,7 @@ public class Boot {
         checkerExecutorService.scheduleAtFixedRate(() -> {
                     try {
                         for (AccountInfo accountInfo : accountInfoList) {
-                            Img.checkIfNormal(accountInfo.getSt(), accountInfo.getEd(), accountInfo.getAccount());
+                            Img.checkIfNormal(accountInfo);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

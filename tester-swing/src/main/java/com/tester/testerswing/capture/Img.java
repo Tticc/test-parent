@@ -18,7 +18,6 @@ public class Img {
 
 
     public static final String HIS_IMG_NAME = "hisImg%d.png";
-    public static final AtomicInteger refreshCount = new AtomicInteger(0);
 
     //图片存放目录
     public static final String BUFFER_IMAGE_AREA = "C:\\Users\\18883\\Desktop\\captureImg\\eve\\";
@@ -52,25 +51,26 @@ public class Img {
 
     public static void refreshHisImg(AccountInfo account) throws BusinessException {
         try {
-            refreshCount.incrementAndGet();
-            String imgPath = createScreen(account.getSt(), account.getEd(), account.getAccount(), getHisImgName());
+            int count = account.getRefreshCount().incrementAndGet();
+            String imgPath = createScreen(account.getSt(), account.getEd(), account.getAccount(), getHisImgName(count));
         } catch (Exception e) {
             throw new BusinessException(500, "刷新初始图像失败", e);
         }
     }
 
 
-    public static void checkIfNormal(PointInfo st, PointInfo ed, String folderName) throws Exception {
-        boolean normal = createAndCompareImg(st, ed, folderName, "test_temp.png");
+    public static void checkIfNormal(AccountInfo accountInfo) throws Exception {
+
+        boolean normal = createAndCompareImg(accountInfo, "test_temp.png");
         if (!normal) {
-            BeepSoundTask beepSoundTask = BeepSoundProcessor.generateTask("警告!", 100, 2);
+            BeepSoundTask beepSoundTask = BeepSoundProcessor.generateTask(accountInfo.getWarnMsg(), 100, 2);
             BeepSoundProcessor.putTask(beepSoundTask);
         }
     }
 
-    public static boolean createAndCompareImg(PointInfo st, PointInfo ed, String folderName, String imgName) throws Exception {
-        String newImgPath = createScreen(st, ed, folderName, imgName);
-        String hisImgPath = getHisImgPath(folderName);
+    public static boolean createAndCompareImg(AccountInfo accountInfo, String imgName) throws Exception {
+        String newImgPath = createScreen(accountInfo.getSt(), accountInfo.getEd(), accountInfo.getAccount(), imgName);
+        String hisImgPath = getHisImgPath(accountInfo.getAccount(),accountInfo.getRefreshCount().get());
         return ImageComparator.doCompareIfTheSame(hisImgPath, newImgPath);
     }
 
@@ -126,11 +126,11 @@ public class Img {
         return BUFFER_IMAGE_AREA + folderName + File.separator;
     }
 
-    public static String getHisImgPath(String folderName) {
-        return BUFFER_IMAGE_AREA + folderName + File.separator + getHisImgName();
+    public static String getHisImgPath(String folderName, int count) {
+        return BUFFER_IMAGE_AREA + folderName + File.separator + getHisImgName(count);
     }
 
-    public static String getHisImgName() {
-        return String.format(HIS_IMG_NAME, refreshCount.get());
+    public static String getHisImgName(int count) {
+        return String.format(HIS_IMG_NAME, count);
     }
 }
