@@ -1,4 +1,4 @@
-package com.tester.testerswing;
+package com.tester.testerswing.voice;
 
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
@@ -8,7 +8,7 @@ public class Jacobtest {
 
 
     public static void main(String[] args) {
-        textToSpeech("工作人员请注意，桌号8001顾客正在寻求帮助！！");
+        textToSpeech("工作人员请注意，桌号8001顾客正在寻求帮助！！", 100, 0);
     }
 
     /**
@@ -16,7 +16,7 @@ public class Jacobtest {
      *
      * @param text
      */
-    public static void textToSpeech(String text) {
+    public static void textToSpeech(String text, int volume, int speed) {
         ActiveXComponent ax = null;
         try {
             ax = new ActiveXComponent("Sapi.SpVoice");
@@ -24,9 +24,9 @@ public class Jacobtest {
             // 运行时输出语音内容
             Dispatch spVoice = ax.getObject();
             // 音量 0-100
-            ax.setProperty("Volume", new Variant(100));
+            ax.setProperty("Volume", new Variant(volume));
             // 语音朗读速度 -10 到 +10
-            ax.setProperty("Rate", new Variant(0));
+            ax.setProperty("Rate", new Variant(speed));
             // 执行朗读
             Dispatch.call(spVoice, "Speak", new Variant(text));
 
