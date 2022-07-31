@@ -85,4 +85,8 @@ public class Boot {
     public boolean isStarted() {
         return started;
     }
+
+    public List<AccountInfo> getAccountInfoList(){
+        return accountInfoList;
+    }
 }
