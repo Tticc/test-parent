@@ -11,9 +11,15 @@ import java.awt.event.KeyListener;
 import java.util.List;
 
 public class EasyScript {
+    private static JFrame frame;
+
+    public static JFrame getFrame(){
+        return frame;
+    }
+
     public void start() {
         // 创建 JFrame 实例
-        JFrame frame = new JFrame("Login Example");
+        frame = new JFrame("Login Example");
         // Setting the width and height of frame
         frame.setSize(350, 300);
         frame.setLocation(755, 455);
@@ -126,13 +132,53 @@ public class EasyScript {
         });
         panel.add(userText);
 
-        // 创建刷新按钮
-        JButton cleanButton = new JButton("清理");
-        cleanButton.setBounds(10, 140, 80, 25);
-        cleanButton.addActionListener((e) -> {
-            localInfoLabel.setText("");
+
+        // silot_label
+        JLabel silot_label = new JLabel("true");
+        silot_label.setBounds(250, 140, 165, 25);
+        panel.add(silot_label);
+
+        // 创建 silot pause 按钮
+        JButton silot_pause = new JButton("silot_pause");
+        silot_pause.setBounds(10, 140, 120, 25);
+        silot_pause.addActionListener((e) -> {
+            accountInfoList.get(0).setNeedWarn(false);
+            silot_label.setText("false");
         });
-        panel.add(cleanButton);
+        panel.add(silot_pause);
+
+        // 创建 silot start 按钮
+        JButton silot_start = new JButton("silot_start");
+        silot_start.setBounds(130, 140, 120, 25);
+        silot_start.addActionListener((e) -> {
+            accountInfoList.get(0).setNeedWarn(true);
+            silot_label.setText("true");
+        });
+        panel.add(silot_start);
+
+
+        // sai_label
+        JLabel sai_label = new JLabel("true");
+        sai_label.setBounds(250, 170, 165, 25);
+        panel.add(sai_label);
+
+        // 创建 sai pause按钮
+        JButton sai_pause = new JButton("sai_pause");
+        sai_pause.setBounds(10, 170, 120, 25);
+        sai_pause.addActionListener((e) -> {
+            accountInfoList.get(1).setNeedWarn(false);
+            sai_label.setText("false");
+        });
+        panel.add(sai_pause);
+
+        // 创建 sai start 按钮
+        JButton sai_start = new JButton("sai_start");
+        sai_start.setBounds(130, 170, 120, 25);
+        sai_start.addActionListener((e) -> {
+            accountInfoList.get(1).setNeedWarn(true);
+            sai_label.setText("true");
+        });
+        panel.add(sai_start);
     }
 
 

@@ -2,11 +2,13 @@ package com.tester.testerswing.capture;
 
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testerswing.boot.AccountInfo;
+import com.tester.testerswing.swing.EasyScript;
 import com.tester.testerswing.voice.BeepSoundProcessor;
 import com.tester.testerswing.voice.BeepSoundTask;
 import org.springframework.util.CollectionUtils;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -62,7 +64,9 @@ public class Img {
     public static void checkIfNormal(AccountInfo accountInfo) throws Exception {
 
         boolean normal = createAndCompareImg(accountInfo, "test_temp.png");
-        if (!normal) {
+        if (!normal && accountInfo.isNeedWarn()) {
+            EasyScript.getFrame().setExtendedState(JFrame.NORMAL);
+            EasyScript.getFrame().toFront();
             BeepSoundTask beepSoundTask = BeepSoundProcessor.generateTask(accountInfo.getWarnMsg(), 100, 2);
             BeepSoundProcessor.putTask(beepSoundTask);
         }

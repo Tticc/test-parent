@@ -24,4 +24,7 @@ public class AccountInfo extends BaseDTO {
 
     // 刷新次数
     private AtomicInteger refreshCount = new AtomicInteger(0);
+
+    // 刷新次数
+    private boolean needWarn = true;
 }
