@@ -55,7 +55,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.tester.testerswing.TesterSearchApplication</mainClass>
+                    <mainClass>com.tester.testerswing.TesterSwingApplication</mainClass>
                 </configuration>
             </plugin>
             <plugin>
