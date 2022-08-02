@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class BeepSoundTask extends BaseDTO {
+public class BeepSoundTaskDTO extends BaseDTO {
 
     // 提示音文字
     private String text = "ok";

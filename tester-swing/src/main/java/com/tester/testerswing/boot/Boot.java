@@ -1,8 +1,8 @@
 package com.tester.testerswing.boot;
 
 import com.tester.base.dto.exception.BusinessException;
-import com.tester.testerswing.capture.Img;
-import com.tester.testerswing.capture.PointInfo;
+import com.tester.testerswing.capture.ImgBoot;
+import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.voice.BeepSoundProcessor;
 
 import java.util.ArrayList;
@@ -19,11 +19,11 @@ public class Boot {
     private String silot = "silot";
     private String sailinna = "sailinna";
 
-    private PointInfo st_silot = new PointInfo().setX(56).setY(118);
-    private PointInfo ed_silot = new PointInfo().setX(153).setY(572);
+    private PointInfoDTO st_silot = new PointInfoDTO().setX(56).setY(118);
+    private PointInfoDTO ed_silot = new PointInfoDTO().setX(153).setY(572);
 
-    private PointInfo st_sai = new PointInfo().setX(56).setY(118);
-    private PointInfo ed_sai = new PointInfo().setX(153).setY(572);
+    private PointInfoDTO st_sai = new PointInfoDTO().setX(56).setY(118);
+    private PointInfoDTO ed_sai = new PointInfoDTO().setX(153).setY(572);
 
     private final ScheduledExecutorService checkerExecutorService = Executors.newSingleThreadScheduledExecutor(new SwingThreadFactoryImpl("warn-checker"));
 
@@ -41,7 +41,7 @@ public class Boot {
             return;
         }
         started = true;
-        Img.start(accountInfoList);
+        ImgBoot.start(accountInfoList);
         BeepSoundProcessor.start();
 
         try {
@@ -56,7 +56,7 @@ public class Boot {
     public String refresh() {
         for (AccountInfo accountInfo : accountInfoList) {
             try {
-                Img.refreshHisImg(accountInfo);
+                ImgBoot.refreshHisImg(accountInfo);
             } catch (BusinessException e) {
                 return "刷新失败。account:" + accountInfo.getAccount();
             }
@@ -70,7 +70,7 @@ public class Boot {
         checkerExecutorService.scheduleAtFixedRate(() -> {
                     try {
                         for (AccountInfo accountInfo : accountInfoList) {
-                            Img.checkIfNormal(accountInfo);
+                            ImgBoot.checkIfNormal(accountInfo);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

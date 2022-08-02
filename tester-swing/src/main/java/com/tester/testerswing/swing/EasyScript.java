@@ -2,7 +2,7 @@ package com.tester.testerswing.swing;
 
 import com.tester.testerswing.boot.AccountInfo;
 import com.tester.testerswing.boot.Boot;
-import com.tester.testerswing.capture.PointInfo;
+import com.tester.testerswing.capture.PointInfoDTO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -183,36 +183,36 @@ public class EasyScript {
 
 
     private static String setPoint(char keyChar, List<AccountInfo> accountInfoList){
-        PointInfo pointInfo;
+        PointInfoDTO pointInfoDTO;
         Point point = MouseInfo.getPointerInfo().getLocation();
         if(keyChar == 49){
             String retStr = "st_silot = [%d,%d]";
             AccountInfo accountInfo = accountInfoList.get(0);
-            pointInfo = accountInfo.getSt();
-            pointInfo.setX((int)point.getX());
-            pointInfo.setY((int)point.getY());
-            return String.format(retStr, pointInfo.getX(),pointInfo.getY());
+            pointInfoDTO = accountInfo.getSt();
+            pointInfoDTO.setX((int)point.getX());
+            pointInfoDTO.setY((int)point.getY());
+            return String.format(retStr, pointInfoDTO.getX(), pointInfoDTO.getY());
         }else if(keyChar == 50){
             String retStr = "ed_silot = [%d,%d]";
             AccountInfo accountInfo = accountInfoList.get(0);
-            pointInfo = accountInfo.getEd();
-            pointInfo.setX((int)point.getX());
-            pointInfo.setY((int)point.getY());
-            return String.format(retStr, pointInfo.getX(),pointInfo.getY());
+            pointInfoDTO = accountInfo.getEd();
+            pointInfoDTO.setX((int)point.getX());
+            pointInfoDTO.setY((int)point.getY());
+            return String.format(retStr, pointInfoDTO.getX(), pointInfoDTO.getY());
         }else if(keyChar == 51){
             String retStr = "st_sai = [%d,%d]";
             AccountInfo accountInfo = accountInfoList.get(1);
-            pointInfo = accountInfo.getSt();
-            pointInfo.setX((int)point.getX());
-            pointInfo.setY((int)point.getY());
-            return String.format(retStr, pointInfo.getX(),pointInfo.getY());
+            pointInfoDTO = accountInfo.getSt();
+            pointInfoDTO.setX((int)point.getX());
+            pointInfoDTO.setY((int)point.getY());
+            return String.format(retStr, pointInfoDTO.getX(), pointInfoDTO.getY());
         }else if(keyChar == 52){
             String retStr = "ed_sai = [%d,%d]";
             AccountInfo accountInfo = accountInfoList.get(1);
-            pointInfo = accountInfo.getEd();
-            pointInfo.setX((int)point.getX());
-            pointInfo.setY((int)point.getY());
-            return String.format(retStr, pointInfo.getX(),pointInfo.getY());
+            pointInfoDTO = accountInfo.getEd();
+            pointInfoDTO.setX((int)point.getX());
+            pointInfoDTO.setY((int)point.getY());
+            return String.format(retStr, pointInfoDTO.getX(), pointInfoDTO.getY());
         }
         return "";
     }

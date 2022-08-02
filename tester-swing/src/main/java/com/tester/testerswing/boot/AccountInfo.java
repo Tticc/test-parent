@@ -1,7 +1,7 @@
 package com.tester.testerswing.boot;
 
 import com.tester.base.dto.model.BaseDTO;
-import com.tester.testerswing.capture.PointInfo;
+import com.tester.testerswing.capture.PointInfoDTO;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -17,10 +17,10 @@ public class AccountInfo extends BaseDTO {
     private String warnMsg = "警告";
 
     // 截图起点
-    private PointInfo st;
+    private PointInfoDTO st;
 
     // 截图终点
-    private PointInfo ed;
+    private PointInfoDTO ed;
 
     // 刷新次数
     private AtomicInteger refreshCount = new AtomicInteger(0);

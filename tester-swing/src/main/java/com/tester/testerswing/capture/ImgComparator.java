@@ -1,6 +1,5 @@
 package com.tester.testerswing.capture;
 
-import com.tester.testerswing.loadlibrary.LibraryLoader;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -9,10 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 图片处理比较类
  * @Author 温昌营
  * @Date 2022-7-31 14:17:36
  */
-public class ImageComparator {
+public class ImgComparator {
     private static Mat mat;
 
     static {

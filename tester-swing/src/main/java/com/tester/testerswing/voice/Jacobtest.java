@@ -4,6 +4,12 @@ import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
 
+/**
+ * 提示音封装类
+ *
+ * @Date 9:57 2022/8/2
+ * @Author 温昌营
+ **/
 public class Jacobtest {
 
 
