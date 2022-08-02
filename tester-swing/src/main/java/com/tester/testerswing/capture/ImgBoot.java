@@ -26,7 +26,7 @@ public class ImgBoot {
     public static final String HIS_IMG_NAME = "hisImg%d.png";
 
     //图片存放目录
-    public static final String BUFFER_IMAGE_AREA = "C:\\Users\\18883\\Desktop\\captureImg\\eve\\";
+    public static final String BUFFER_IMAGE_AREA = "C:\\Users\\Admin\\Desktop\\deliv\\";
 
     /**
      * 启动
