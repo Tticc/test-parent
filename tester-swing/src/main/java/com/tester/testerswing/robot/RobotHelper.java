@@ -1,5 +1,7 @@
 package com.tester.testerswing.robot;
 
+import com.tester.testerswing.gaussian.GaussianHelper;
+
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.util.Random;
@@ -31,15 +33,13 @@ public class RobotHelper {
 
     public static void mouseRightPress(){
         r.mousePress(InputEvent.BUTTON3_MASK);
-        // todo 应该要有一个正态分布的随机数
-        r.delay(random.nextInt(40)+35);
+        r.delay(GaussianHelper.getGaussianInt(40)+35);
         r.mouseRelease(InputEvent.BUTTON3_MASK);
     }
 
     public static void mouseLeftPress(){
         r.mousePress(InputEvent.BUTTON1_MASK);
-        // todo 应该要有一个正态分布的随机数
-        r.delay(random.nextInt(40)+35);
+        r.delay(GaussianHelper.getGaussianInt(40)+35);
         r.mouseRelease(InputEvent.BUTTON1_MASK);
     }
 
