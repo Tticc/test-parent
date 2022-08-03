@@ -16,6 +16,17 @@ public class GaussianHelper {
         }
     }
 
+    public static int getGaussianInt(int start, int end) {
+        int tempStart = start;
+        int tempEnd = end;
+        if (end < start) {
+            tempStart = end;
+            tempEnd = start;
+        }
+        int range = tempEnd - tempStart;
+        return tempStart + (int) getGaussianDouble(range);
+    }
+
     public static int getGaussianInt(int range) {
         return (int) getGaussianDouble(range);
     }
