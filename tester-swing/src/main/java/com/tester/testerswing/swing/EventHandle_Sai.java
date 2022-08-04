@@ -18,10 +18,10 @@ public class EventHandle_Sai {
 
     public static String pointStr = "(%d,%d)";
 
-    public static PointInfoDTO sai_open_p1 = new PointInfoDTO();
-    public static PointInfoDTO sai_open_p2 = new PointInfoDTO();
-    public static PointInfoDTO sai_return_p1 = new PointInfoDTO();
-    public static PointInfoDTO sai_return_p2 = new PointInfoDTO();
+    public static PointInfoDTO sai_open_p1 = new PointInfoDTO().setX(1337).setY(1054);
+    public static PointInfoDTO sai_open_p2 = new PointInfoDTO().setX(1473).setY(957);
+    public static PointInfoDTO sai_return_p1 = new PointInfoDTO().setX(1725).setY(875);
+    public static PointInfoDTO sai_return_p2 = new PointInfoDTO().setX(1782).setY(917);
 
 
     public static void handle_sai(EasyScript_UI script) {

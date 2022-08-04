@@ -18,10 +18,10 @@ public class EventHandle_Silot {
 
     public static String pointStr = "(%d,%d)";
 
-    public static PointInfoDTO silot_open_p1 = new PointInfoDTO();
-    public static PointInfoDTO silot_open_p2 = new PointInfoDTO();
-    public static PointInfoDTO silot_return_p1 = new PointInfoDTO();
-    public static PointInfoDTO silot_return_p2 = new PointInfoDTO();
+    public static PointInfoDTO silot_open_p1 = new PointInfoDTO().setX(1333).setY(1055);
+    public static PointInfoDTO silot_open_p2 = new PointInfoDTO().setX(1186).setY(963);
+    public static PointInfoDTO silot_return_p1 = new PointInfoDTO().setX(1732).setY(862);
+    public static PointInfoDTO silot_return_p2 = new PointInfoDTO().setX(1795).setY(916);
 
 
     public static void handle_silot(EasyScript_UI script) {
