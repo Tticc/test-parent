@@ -1,5 +1,6 @@
 package com.tester.testerswing.capture;
 
+import com.tester.testerswing.loadlibrary.LibraryLoader;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -9,6 +10,7 @@ import java.util.List;
 
 /**
  * 图片处理比较类
+ *
  * @Author 温昌营
  * @Date 2022-7-31 14:17:36
  */
@@ -17,9 +19,10 @@ public class ImgComparator {
 
     static {
         // 可用
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        // 测试中
-//        LibraryLoader.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        // 可用
+        LibraryLoader.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+//        LibraryLoader.loadLibraryByAbsolutePath(Core.NATIVE_LIBRARY_NAME);
         mat = new Mat(618, 2000, CvType.CV_8UC1, new Scalar(0));
     }
 

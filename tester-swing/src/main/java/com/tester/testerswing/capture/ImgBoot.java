@@ -2,13 +2,11 @@ package com.tester.testerswing.capture;
 
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testerswing.boot.AccountInfo;
-import com.tester.testerswing.swing.EasyScript;
 import com.tester.testerswing.voice.BeepSoundProcessor;
 import com.tester.testerswing.voice.BeepSoundTaskDTO;
 import org.springframework.util.CollectionUtils;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -17,6 +15,7 @@ import java.util.List;
 
 /**
  * 图片处理启动类
+ *
  * @Date 9:54 2022/8/2
  * @Author 温昌营
  **/
@@ -57,8 +56,6 @@ public class ImgBoot {
     public static void checkIfNormal(AccountInfo accountInfo) throws Exception {
         boolean normal = createAndCompareImg(accountInfo, "test_temp.png");
         if (!normal && accountInfo.isNeedWarn()) {
-            EasyScript.getFrame().setExtendedState(JFrame.NORMAL);
-            EasyScript.getFrame().toFront();
             BeepSoundTaskDTO beepSoundTaskDTO = BeepSoundProcessor.generateTask(accountInfo.getWarnMsg(), 100, 2);
             BeepSoundProcessor.putTask(beepSoundTaskDTO);
         }

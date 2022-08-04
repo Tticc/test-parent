@@ -38,6 +38,14 @@
             <version>450</version>
         </dependency>
 
+        <!-- 可视化UI编辑 -->
+        <!-- https://mvnrepository.com/artifact/com.jgoodies/forms -->
+        <dependency>
+            <groupId>com.jgoodies</groupId>
+            <artifactId>forms</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+
 
     </dependencies>
 

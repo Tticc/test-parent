@@ -5,6 +5,7 @@ import com.tester.testerswing.capture.ImgBoot;
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.voice.BeepSoundProcessor;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -61,6 +62,8 @@ public class Boot {
                 return "刷新失败。account:" + accountInfo.getAccount();
             }
         }
+        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm:ss");
+//        return formatter.format(new Date());
         return new Date().toString();
     }
 
@@ -86,7 +89,7 @@ public class Boot {
         return started;
     }
 
-    public List<AccountInfo> getAccountInfoList(){
+    public List<AccountInfo> getAccountInfoList() {
         return accountInfoList;
     }
 }
