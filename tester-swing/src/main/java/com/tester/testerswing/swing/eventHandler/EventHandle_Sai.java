@@ -44,6 +44,15 @@ public class EventHandle_Sai {
         JTextField sai_return_p2_input = script.getSai_return_p2_input();
         setTextField(sai_return_p2_input, sai_return_p2);
 
+        JTextField sai_align_p1_input = script.getSai_align_p1_input();
+        setTextField(sai_align_p1_input, sai_align_p1);
+
+        JTextField sai_align_p2_input = script.getSai_align_p2_input();
+        setTextField(sai_align_p2_input, sai_align_p2);
+
+        JTextField sai_align_p3_input = script.getSai_align_p3_input();
+        setTextField(sai_align_p3_input, sai_align_p3);
+
     }
 
 

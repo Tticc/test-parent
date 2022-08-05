@@ -44,6 +44,15 @@ public class EventHandle_Silot {
         JTextField silot_return_p2_input = script.getSilot_return_p2_input();
         setTextField(silot_return_p2_input, silot_return_p2);
 
+        JTextField silot_align_p1_input = script.getSilot_align_p1_input();
+        setTextField(silot_align_p1_input, silot_align_p1);
+
+        JTextField silot_align_p2_input = script.getSilot_align_p2_input();
+        setTextField(silot_align_p2_input, silot_align_p2);
+
+        JTextField silot_align_p3_input = script.getSilot_align_p3_input();
+        setTextField(silot_align_p3_input, silot_align_p3);
+
     }
 
 
