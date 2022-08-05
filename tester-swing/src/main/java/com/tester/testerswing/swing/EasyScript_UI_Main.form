@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.tester.testerswing.swing.EasyScript_UI">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.tester.testerswing.swing.EasyScript_UI_Main">
   <grid id="27dc6" binding="main" layout-manager="FormLayout">
     <rowspec value="center:max(d;0px):noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
@@ -20,13 +20,7 @@
     <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:15dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
-    <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:22px:noGrow"/>
-    <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:max(d;4px):noGrow"/>
-    <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:max(d;4px):noGrow"/>
-    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="top:6dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <colspec value="fill:max(d;4px):noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
@@ -213,164 +207,22 @@
           <text value="打开回收"/>
         </properties>
       </component>
-      <component id="e87ef" class="javax.swing.JTextField" binding="silot_open_p1_input">
+      <component id="81b36" class="javax.swing.JButton" binding="open_run_silot">
         <constraints>
-          <grid row="20" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
+          <grid row="20" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
         </constraints>
         <properties>
-          <text value=""/>
+          <text value="跑路"/>
         </properties>
       </component>
-      <component id="9b700" class="javax.swing.JLabel" binding="silot_open_p1_label">
+      <component id="fb3dd" class="javax.swing.JButton" binding="open_run_sai">
         <constraints>
-          <grid row="20" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="10" bottom="0" right="0"/>
+          <grid row="20" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
         </constraints>
         <properties>
-          <text value="打开位标1"/>
-        </properties>
-      </component>
-      <component id="73ff6" class="javax.swing.JLabel" binding="silot_open_p2_label">
-        <constraints>
-          <grid row="22" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="10" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="打开位标2"/>
-        </properties>
-      </component>
-      <component id="f0a8d" class="javax.swing.JLabel" binding="silot_return_p1_label">
-        <constraints>
-          <grid row="24" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="10" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="回收位标1"/>
-        </properties>
-      </component>
-      <component id="3bb5b" class="javax.swing.JLabel" binding="silot_return_p2_label">
-        <constraints>
-          <grid row="26" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="10" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="回收位标2"/>
-        </properties>
-      </component>
-      <component id="2fa64" class="javax.swing.JTextField" binding="silot_open_p2_input">
-        <constraints>
-          <grid row="22" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <text value=""/>
-        </properties>
-      </component>
-      <component id="2eb89" class="javax.swing.JTextField" binding="silot_return_p1_input">
-        <constraints>
-          <grid row="24" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <text value=""/>
-        </properties>
-      </component>
-      <component id="9815d" class="javax.swing.JTextField" binding="silot_return_p2_input">
-        <constraints>
-          <grid row="26" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <text value=""/>
-        </properties>
-      </component>
-      <component id="3229" class="javax.swing.JLabel" binding="sai_open_p1_label">
-        <constraints>
-          <grid row="20" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="10" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="打开位标1"/>
-        </properties>
-      </component>
-      <component id="a44e3" class="javax.swing.JLabel" binding="sai_open_p2_label">
-        <constraints>
-          <grid row="22" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="10" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="打开位标2"/>
-        </properties>
-      </component>
-      <component id="61457" class="javax.swing.JLabel" binding="sai_return_p1_label">
-        <constraints>
-          <grid row="24" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="10" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="回收位标1"/>
-        </properties>
-      </component>
-      <component id="c87d4" class="javax.swing.JLabel" binding="sai_return_p2_label">
-        <constraints>
-          <grid row="26" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="10" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="回收位标2"/>
-        </properties>
-      </component>
-      <component id="da9e7" class="javax.swing.JTextField" binding="sai_open_p1_input">
-        <constraints>
-          <grid row="20" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <text value=""/>
-        </properties>
-      </component>
-      <component id="72b69" class="javax.swing.JTextField" binding="sai_open_p2_input">
-        <constraints>
-          <grid row="22" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <text value=""/>
-        </properties>
-      </component>
-      <component id="1061f" class="javax.swing.JTextField" binding="sai_return_p1_input">
-        <constraints>
-          <grid row="24" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <text value=""/>
-        </properties>
-      </component>
-      <component id="20a0" class="javax.swing.JTextField" binding="sai_return_p2_input">
-        <constraints>
-          <grid row="26" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <text value=""/>
+          <text value="跑路"/>
         </properties>
       </component>
     </children>

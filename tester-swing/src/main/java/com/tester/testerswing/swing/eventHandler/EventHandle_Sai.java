@@ -1,7 +1,8 @@
-package com.tester.testerswing.swing;
+package com.tester.testerswing.swing.eventHandler;
 
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.robot.RobotHelper;
+import com.tester.testerswing.swing.Sai_Input;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,11 +21,16 @@ public class EventHandle_Sai {
 
     public static PointInfoDTO sai_open_p1 = new PointInfoDTO().setX(1337).setY(1054);
     public static PointInfoDTO sai_open_p2 = new PointInfoDTO().setX(1473).setY(957);
+
     public static PointInfoDTO sai_return_p1 = new PointInfoDTO().setX(1725).setY(875);
     public static PointInfoDTO sai_return_p2 = new PointInfoDTO().setX(1782).setY(917);
 
+    public static PointInfoDTO sai_align_p1 = new PointInfoDTO().setX(0).setY(0);
+    public static PointInfoDTO sai_align_p2 = new PointInfoDTO().setX(0).setY(0);
+    public static PointInfoDTO sai_align_p3 = new PointInfoDTO().setX(0).setY(0);
 
-    public static void handle_sai(EasyScript_UI script) {
+
+    public static void handle_sai(Sai_Input script) {
         // 设置输入事件
         JTextField sai_open_p1_input = script.getSai_open_p1_input();
         setTextField(sai_open_p1_input, sai_open_p1);
@@ -38,39 +44,6 @@ public class EventHandle_Sai {
         JTextField sai_return_p2_input = script.getSai_return_p2_input();
         setTextField(sai_return_p2_input, sai_return_p2);
 
-        // 设置按钮事件
-        JButton open_sai = script.getOpen_sai();
-        open_sai.addActionListener((e) -> {
-            try {
-                openOpe(sai_open_p1, sai_open_p2);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-        });
-
-        JButton open_return_sai = script.getOpen_return_sai();
-        open_return_sai.addActionListener((e) -> {
-            try {
-                openOpe(sai_open_p1, sai_open_p2);
-                returnOpe(sai_return_p1, sai_return_p2);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-        });
-    }
-
-    public static void openOpe(PointInfoDTO p1, PointInfoDTO p2) {
-        RobotHelper.move(p1.getX(), p1.getY(), 100);
-        RobotHelper.mouseLeftPress();
-        RobotHelper.move(p2.getX(), p2.getY(), 226);
-        RobotHelper.mouseLeftPress();
-    }
-
-    public static void returnOpe(PointInfoDTO p1, PointInfoDTO p2) {
-        RobotHelper.move(p1.getX(), p1.getY(), 237);
-        RobotHelper.mouseRightPress();
-        RobotHelper.move(p2.getX(), p2.getY(), 113);
-        RobotHelper.mouseLeftPress();
     }
 
 

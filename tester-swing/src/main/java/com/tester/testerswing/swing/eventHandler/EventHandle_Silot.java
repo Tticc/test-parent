@@ -1,7 +1,8 @@
-package com.tester.testerswing.swing;
+package com.tester.testerswing.swing.eventHandler;
 
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.robot.RobotHelper;
+import com.tester.testerswing.swing.Silot_Input;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,11 +21,16 @@ public class EventHandle_Silot {
 
     public static PointInfoDTO silot_open_p1 = new PointInfoDTO().setX(1333).setY(1055);
     public static PointInfoDTO silot_open_p2 = new PointInfoDTO().setX(1186).setY(963);
+
     public static PointInfoDTO silot_return_p1 = new PointInfoDTO().setX(1732).setY(862);
     public static PointInfoDTO silot_return_p2 = new PointInfoDTO().setX(1795).setY(916);
 
+    public static PointInfoDTO silot_align_p1 = new PointInfoDTO().setX(0).setY(0);
+    public static PointInfoDTO silot_align_p2 = new PointInfoDTO().setX(0).setY(0);
+    public static PointInfoDTO silot_align_p3 = new PointInfoDTO().setX(0).setY(0);
 
-    public static void handle_silot(EasyScript_UI script) {
+
+    public static void handle_silot(Silot_Input script) {
         // 设置输入事件
         JTextField silot_open_p1_input = script.getSilot_open_p1_input();
         setTextField(silot_open_p1_input, silot_open_p1);
@@ -38,39 +44,6 @@ public class EventHandle_Silot {
         JTextField silot_return_p2_input = script.getSilot_return_p2_input();
         setTextField(silot_return_p2_input, silot_return_p2);
 
-        // 设置按钮事件
-        JButton open_silot = script.getOpen_silot();
-        open_silot.addActionListener((e) -> {
-            try {
-                openOpe(silot_open_p1, silot_open_p2);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-        });
-
-        JButton open_return_silot = script.getOpen_return_silot();
-        open_return_silot.addActionListener((e) -> {
-            try {
-                openOpe(silot_open_p1, silot_open_p2);
-                returnOpe(silot_return_p1, silot_return_p2);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-        });
-    }
-
-    public static void openOpe(PointInfoDTO p1, PointInfoDTO p2) {
-        RobotHelper.move(p1.getX(), p1.getY(), 100);
-        RobotHelper.mouseLeftPress();
-        RobotHelper.move(p2.getX(), p2.getY(), 226);
-        RobotHelper.mouseLeftPress();
-    }
-
-    public static void returnOpe(PointInfoDTO p1, PointInfoDTO p2) {
-        RobotHelper.move(p1.getX(), p1.getY(), 237);
-        RobotHelper.mouseRightPress();
-        RobotHelper.move(p2.getX(), p2.getY(), 113);
-        RobotHelper.mouseLeftPress();
     }
 
 

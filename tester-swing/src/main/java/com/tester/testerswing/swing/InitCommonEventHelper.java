@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class InitCommonEventHelper {
 
-    public static void initCommonEvent(EasyScript_UI script) {
+    public static void initCommonEvent(EasyScript_UI_Main script) {
         // 触发检测监控
         script.getChecking().addActionListener((e) -> {
             try {
