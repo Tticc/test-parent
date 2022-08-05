@@ -24,14 +24,15 @@ public class EasyScript {
          * 我们可以创建多个面板并在 JFrame 中指定位置
          * 面板中我们可以添加文本字段，按钮及其他组件。
          */
-        EasyScript_UI_Main easyScript_uiMain = new EasyScript_UI_Main().start();
-        JPanel main = easyScript_uiMain.getMain();
 
         Silot_Input silot_input = new Silot_Input();
         JPanel silot_input_panel = silot_input.getSilot_input_panel();
 
         Sai_Input sai_input = new Sai_Input();
         JPanel sai_input_panel = sai_input.getSai_input_panel();
+
+        EasyScript_UI_Main easyScript_uiMain = new EasyScript_UI_Main().start(silot_input, sai_input);
+        JPanel main = easyScript_uiMain.getMain();
 
         JTabbedPane tab = new JTabbedPane();
         tab.addTab("main", main);

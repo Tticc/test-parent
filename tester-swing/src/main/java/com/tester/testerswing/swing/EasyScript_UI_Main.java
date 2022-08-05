@@ -42,21 +42,19 @@ public class EasyScript_UI_Main {
     Boot boot = new Boot();
     List<AccountInfo> accountInfoList = boot.getAccountInfoList();
 
-    public EasyScript_UI_Main start() {
-        afterInit();
+    public EasyScript_UI_Main start(Silot_Input silot_input, Sai_Input sai_input) {
+        afterInit(silot_input, sai_input);
         return this;
     }
 
-    public void afterInit() {
+    public void afterInit(Silot_Input silot_input, Sai_Input sai_input) {
         // 初始化公共监控事件
         InitCommonEventHelper.initCommonEvent(this);
 
         // 初始化 silot 录入事件
-        Silot_Input silot_input = new Silot_Input();
         EventHandle_Silot.handle_silot(silot_input);
 
         // 初始化 sai 录入事件
-        Sai_Input sai_input = new Sai_Input();
         EventHandle_Sai.handle_sai(sai_input);
 
         // 处理所有操作事件
