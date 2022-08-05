@@ -91,23 +91,23 @@ public class EventHandle_Main {
     private static void openOpe(PointInfoDTO p1, PointInfoDTO p2) {
         RobotHelper.move(p1.getX(), p1.getY(), 100);
         RobotHelper.mouseLeftPress();
-        RobotHelper.move(p2.getX(), p2.getY(), 226);
+        RobotHelper.move(p2.getX(), p2.getY(), 186);
         RobotHelper.mouseLeftPress();
     }
 
     private static void returnOpe(PointInfoDTO p1, PointInfoDTO p2) {
         RobotHelper.move(p1.getX(), p1.getY(), 337);
         RobotHelper.mouseRightPress();
-        RobotHelper.move(p2.getX(), p2.getY(), 213);
+        RobotHelper.move(p2.getX(), p2.getY(), 413);
         RobotHelper.mouseLeftPress();
     }
 
     private static void runOpe(PointInfoDTO p1, PointInfoDTO p2, PointInfoDTO p3) {
-        RobotHelper.move(p1.getX(), p1.getY(), 231);
+        RobotHelper.move(p1.getX(), p1.getY(), 331);
         RobotHelper.mouseLeftPress();
-        RobotHelper.move(p2.getX(), p2.getY(), 186);
+        RobotHelper.move(p2.getX(), p2.getY(), 386);
         RobotHelper.mouseLeftPress();
-        RobotHelper.move(p3.getX(), p3.getY(), 217);
+        RobotHelper.move(p3.getX(), p3.getY(), 417);
         RobotHelper.mouseLeftPress();
     }
 

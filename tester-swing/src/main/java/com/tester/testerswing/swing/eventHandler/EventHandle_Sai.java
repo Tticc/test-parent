@@ -19,15 +19,15 @@ public class EventHandle_Sai {
 
     public static String pointStr = "(%d,%d)";
 
-    public static PointInfoDTO sai_open_p1 = new PointInfoDTO().setX(1337).setY(1054);
-    public static PointInfoDTO sai_open_p2 = new PointInfoDTO().setX(1473).setY(957);
+    public static PointInfoDTO sai_open_p1 = new PointInfoDTO().setX(1271).setY(1054);
+    public static PointInfoDTO sai_open_p2 = new PointInfoDTO().setX(1400).setY(949);
 
-    public static PointInfoDTO sai_return_p1 = new PointInfoDTO().setX(1725).setY(875);
-    public static PointInfoDTO sai_return_p2 = new PointInfoDTO().setX(1782).setY(917);
+    public static PointInfoDTO sai_return_p1 = new PointInfoDTO().setX(1725).setY(863);
+    public static PointInfoDTO sai_return_p2 = new PointInfoDTO().setX(1796).setY(922);
 
-    public static PointInfoDTO sai_align_p1 = new PointInfoDTO().setX(0).setY(0);
-    public static PointInfoDTO sai_align_p2 = new PointInfoDTO().setX(0).setY(0);
-    public static PointInfoDTO sai_align_p3 = new PointInfoDTO().setX(0).setY(0);
+    public static PointInfoDTO sai_align_p1 = new PointInfoDTO().setX(1881).setY(220);
+    public static PointInfoDTO sai_align_p2 = new PointInfoDTO().setX(1721).setY(265);
+    public static PointInfoDTO sai_align_p3 = new PointInfoDTO().setX(1620).setY(122);
 
 
     public static void handle_sai(Sai_Input script) {

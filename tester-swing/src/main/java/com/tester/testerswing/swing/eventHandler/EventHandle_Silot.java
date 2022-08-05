@@ -19,15 +19,15 @@ public class EventHandle_Silot {
 
     public static String pointStr = "(%d,%d)";
 
-    public static PointInfoDTO silot_open_p1 = new PointInfoDTO().setX(1333).setY(1055);
-    public static PointInfoDTO silot_open_p2 = new PointInfoDTO().setX(1186).setY(963);
+    public static PointInfoDTO silot_open_p1 = new PointInfoDTO().setX(1275).setY(1056);
+    public static PointInfoDTO silot_open_p2 = new PointInfoDTO().setX(1156).setY(937);
 
-    public static PointInfoDTO silot_return_p1 = new PointInfoDTO().setX(1732).setY(862);
-    public static PointInfoDTO silot_return_p2 = new PointInfoDTO().setX(1795).setY(916);
+    public static PointInfoDTO silot_return_p1 = new PointInfoDTO().setX(1735).setY(856);
+    public static PointInfoDTO silot_return_p2 = new PointInfoDTO().setX(1810).setY(917);
 
-    public static PointInfoDTO silot_align_p1 = new PointInfoDTO().setX(0).setY(0);
-    public static PointInfoDTO silot_align_p2 = new PointInfoDTO().setX(0).setY(0);
-    public static PointInfoDTO silot_align_p3 = new PointInfoDTO().setX(0).setY(0);
+    public static PointInfoDTO silot_align_p1 = new PointInfoDTO().setX(1880).setY(228);
+    public static PointInfoDTO silot_align_p2 = new PointInfoDTO().setX(1734).setY(268);
+    public static PointInfoDTO silot_align_p3 = new PointInfoDTO().setX(1625).setY(122);
 
 
     public static void handle_silot(Silot_Input script) {
