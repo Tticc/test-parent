@@ -25,4 +25,6 @@ public class Silot_Input {
     private JTextField silot_align_p1_input;
     private JTextField silot_align_p2_input;
     private JTextField silot_align_p3_input;
+    private JLabel silot_main_view_label;
+    private JTextField silot_main_view_input;
 }

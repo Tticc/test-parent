@@ -25,4 +25,6 @@ public class Sai_Input {
     private JTextField sai_align_p1_input;
     private JTextField sai_align_p2_input;
     private JTextField sai_align_p3_input;
+    private JLabel sai_main_view_label;
+    private JTextField sai_main_view_input;
 }

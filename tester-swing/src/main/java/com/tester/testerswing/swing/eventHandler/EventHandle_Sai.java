@@ -29,6 +29,8 @@ public class EventHandle_Sai {
     public static PointInfoDTO sai_align_p2 = new PointInfoDTO().setX(1696).setY(254);
     public static PointInfoDTO sai_align_p3 = new PointInfoDTO().setX(1618).setY(117);
 
+    public static PointInfoDTO sai_main_view_p1 = new PointInfoDTO().setX(1667).setY(209);
+
 
     public static void handle_sai(Sai_Input script) {
         // 设置输入事件
@@ -52,6 +54,10 @@ public class EventHandle_Sai {
 
         JTextField sai_align_p3_input = script.getSai_align_p3_input();
         setTextField(sai_align_p3_input, sai_align_p3);
+
+
+        JTextField sai_main_view_input = script.getSai_main_view_input();
+        setTextField(sai_main_view_input, sai_main_view_p1);
 
     }
 
