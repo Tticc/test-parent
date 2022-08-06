@@ -101,8 +101,7 @@ public class EventHandle_Main {
         RobotHelper.mouseRightPress();
         RobotHelper.move(p2.getX(), p2.getY(), 513);
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(500);
-        RobotHelper.move(mvP1.getX(), mvP1.getY(), 117);
+        RobotHelper.move(mvP1.getX(), mvP1.getY(), 517);
         RobotHelper.mouseLeftPress();
     }
 
@@ -111,11 +110,9 @@ public class EventHandle_Main {
         RobotHelper.mouseLeftPress();
         RobotHelper.move(p2.getX(), p2.getY(), 386);
         RobotHelper.mouseLeftPress();
-        RobotHelper.move(p3.getX(), p3.getY(), 417);
+        RobotHelper.move(p3.getX(), p3.getY(), 627);
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(500);
-        RobotHelper.move(mvP1.getX(), mvP1.getY(), 117);
-        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(100);
     }
 
 
