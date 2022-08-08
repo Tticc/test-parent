@@ -48,15 +48,16 @@ public class RobotHelper {
     }
 
     public static void move(int x, int y) {
-        move(x, y, 485);
+        move(x, y, 85);
     }
 
     public static void move(int x, int y, int delayTimes) {
         r.delay(delayTimes);
         for (int i = 0; i < 5; i++) {
             r.mouseMove(x, y);
+            r.delay(20);
         }
-        r.delay(107);
+        r.delay(57);
     }
 
 
