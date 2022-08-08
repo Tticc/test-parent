@@ -392,11 +392,11 @@
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/org.bytedeco/javacv -->
-            <dependency>
-                <groupId>org.bytedeco</groupId>
-                <artifactId>javacv-platform</artifactId>
-                <version>1.5</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.bytedeco</groupId>-->
+<!--                <artifactId>javacv-platform</artifactId>-->
+<!--                <version>1.5</version>-->
+<!--            </dependency>-->
             <!--本地jar包导入，其他地方可能不可用-->
 
             <!-- https://mvnrepository.com/artifact/com.nativelibs4java/bridj -->

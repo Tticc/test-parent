@@ -69,6 +69,13 @@
         <!--file-->
 
 
+        <!--mvn命令打入本地仓库后才能成功引用-->
+        <!--mvn install:install-file -Dfile=C:\Users\18883\Desktop\captureImg\opencv_exe\opencv\build\java\opencv-450.jar -DgroupId=opencv -DartifactId=opencv-jar-wenc -Dversion=450 -Dpackaging=jar -DgeneratePom=true-->
+        <dependency>
+            <groupId>opencv</groupId>
+            <artifactId>opencv-jar-wenc</artifactId>
+            <version>450</version>
+        </dependency>
 
         <!--cv and capture-->
         <!--本地jar包导入，其他地方可能不可用-->
@@ -79,10 +86,10 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.bytedeco/javacv -->
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>javacv-platform</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.bytedeco</groupId>-->
+<!--            <artifactId>javacv-platform</artifactId>-->
+<!--        </dependency>-->
         <!--本地jar包导入，其他地方可能不可用-->
 
         <!-- https://mvnrepository.com/artifact/com.nativelibs4java/bridj -->

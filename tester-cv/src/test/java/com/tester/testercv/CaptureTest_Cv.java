@@ -15,6 +15,11 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * 摄像头测试
+ * @Date 15:11 2022/8/8
+ * @Author 温昌营
+ **/
 public class CaptureTest_Cv {
 
     private AtomicInteger atomicInteger = new AtomicInteger(0);
