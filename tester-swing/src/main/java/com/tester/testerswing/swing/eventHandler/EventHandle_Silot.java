@@ -22,8 +22,9 @@ public class EventHandle_Silot {
     public static PointInfoDTO silot_open_p1 = new PointInfoDTO().setX(1335).setY(1051);
     public static PointInfoDTO silot_open_p2 = new PointInfoDTO().setX(1197).setY(953);
 
-    public static PointInfoDTO silot_return_p1 = new PointInfoDTO().setX(1735).setY(856);
-    public static PointInfoDTO silot_return_p2 = new PointInfoDTO().setX(1810).setY(917);
+    public static PointInfoDTO silot_return_p1 = new PointInfoDTO().setX(0).setY(0);
+    public static PointInfoDTO silot_return_p2 = new PointInfoDTO().setX(1735).setY(856);
+    public static PointInfoDTO silot_return_p3 = new PointInfoDTO().setX(1810).setY(917);
 
     public static PointInfoDTO silot_align_p1 = new PointInfoDTO().setX(1882).setY(213);
     public static PointInfoDTO silot_align_p2 = new PointInfoDTO().setX(1693).setY(260);
@@ -45,6 +46,9 @@ public class EventHandle_Silot {
 
         JTextField silot_return_p2_input = script.getSilot_return_p2_input();
         setTextField(silot_return_p2_input, silot_return_p2);
+
+        JTextField silot_return_p3_input = script.getSilot_return_p3_input();
+        setTextField(silot_return_p3_input, silot_return_p3);
 
         JTextField silot_align_p1_input = script.getSilot_align_p1_input();
         setTextField(silot_align_p1_input, silot_align_p1);

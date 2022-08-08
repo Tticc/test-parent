@@ -27,4 +27,6 @@ public class Silot_Input {
     private JTextField silot_align_p3_input;
     private JLabel silot_main_view_label;
     private JTextField silot_main_view_input;
+    private JLabel silot_return_p3_label;
+    private JTextField silot_return_p3_input;
 }

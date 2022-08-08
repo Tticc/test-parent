@@ -22,8 +22,9 @@ public class EventHandle_Sai {
     public static PointInfoDTO sai_open_p1 = new PointInfoDTO().setX(1338).setY(1048);
     public static PointInfoDTO sai_open_p2 = new PointInfoDTO().setX(1469).setY(939);
 
-    public static PointInfoDTO sai_return_p1 = new PointInfoDTO().setX(1726).setY(867);
-    public static PointInfoDTO sai_return_p2 = new PointInfoDTO().setX(1776).setY(917);
+    public static PointInfoDTO sai_return_p1 = new PointInfoDTO().setX(0).setY(0);
+    public static PointInfoDTO sai_return_p2 = new PointInfoDTO().setX(1726).setY(867);
+    public static PointInfoDTO sai_return_p3 = new PointInfoDTO().setX(1776).setY(917);
 
     public static PointInfoDTO sai_align_p1 = new PointInfoDTO().setX(1881).setY(213);
     public static PointInfoDTO sai_align_p2 = new PointInfoDTO().setX(1696).setY(254);
@@ -45,6 +46,9 @@ public class EventHandle_Sai {
 
         JTextField sai_return_p2_input = script.getSai_return_p2_input();
         setTextField(sai_return_p2_input, sai_return_p2);
+
+        JTextField sai_return_p3_input = script.getSai_return_p3_input();
+        setTextField(sai_return_p3_input, sai_return_p3);
 
         JTextField sai_align_p1_input = script.getSai_align_p1_input();
         setTextField(sai_align_p1_input, sai_align_p1);
