@@ -2,15 +2,19 @@ package com.tester.testerswing.capture;
 
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testerswing.boot.AccountInfo;
+import com.tester.testerswing.robot.RobotHelper;
+import com.tester.testerswing.swing.EasyScript;
 import com.tester.testerswing.voice.BeepSoundProcessor;
 import com.tester.testerswing.voice.BeepSoundTaskDTO;
 import org.springframework.util.CollectionUtils;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,6 +30,9 @@ public class ImgBoot {
 
     //图片存放目录
     public static final String BUFFER_IMAGE_AREA = "C:\\Users\\Admin\\Desktop\\deliv\\";
+
+    public static long lastActiveTime = 0;
+    public static long activeInterval = 30*1000;
 
     /**
      * 启动
@@ -54,8 +61,22 @@ public class ImgBoot {
      * @Author 温昌营
      **/
     public static void checkIfNormal(AccountInfo accountInfo) throws Exception {
+        if(!accountInfo.isNeedWarn()){
+            // 无需告警，直接返回
+            return;
+        }
         boolean normal = createAndCompareImg(accountInfo, "test_temp.png");
-        if (!normal && accountInfo.isNeedWarn()) {
+        if (!normal) {
+            long time = new Date().getTime();
+            if(time > lastActiveTime+activeInterval){
+                lastActiveTime = time;
+                JFrame frame = EasyScript.getFrame();
+                frame.setExtendedState(JFrame.NORMAL);
+                frame.toFront();
+                Point location = frame.getLocation();
+                // 鼠标移动到指定位置
+                RobotHelper.move((int)location.getX()+103, (int)location.getY()+108);
+            }
             BeepSoundTaskDTO beepSoundTaskDTO = BeepSoundProcessor.generateTask(accountInfo.getWarnMsg(), 100, 2);
             BeepSoundProcessor.putTask(beepSoundTaskDTO);
         }

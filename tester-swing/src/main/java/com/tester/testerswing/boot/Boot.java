@@ -68,7 +68,7 @@ public class Boot {
     }
 
     public void startMySelf() {
-        int delay = 5;
+        int delay = 2;
         int period = 1;
         checkerExecutorService.scheduleAtFixedRate(() -> {
                     try {
