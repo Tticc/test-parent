@@ -1,5 +1,6 @@
-package com.tester.testercv;
+package com.tester.testercv.opencvhelper;
 
+import com.tester.testercv.Img_GenerateImageTest;
 import org.junit.Test;
 import org.opencv.core.*;
 import org.opencv.highgui.HighGui;
@@ -18,14 +19,8 @@ public class OpenCVTest {
     private static final int modelWidth = 200;
 
     public static final Scalar DEFAULT_GRAY_POINT = new Scalar(255);
-    private static Mat mat;
+    private static Mat mat = new Mat(618, 2000, CvType.CV_8UC1, new Scalar(0));
 
-
-
-    static{
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        mat = new Mat(618, 2000, CvType.CV_8UC1, new Scalar(0));
-    }
 
     @Test
     public void test_opencv(){
@@ -121,7 +116,7 @@ public class OpenCVTest {
             picName = name[0];
         }
         HighGui.imshow(picName,mat);
-        HighGui.waitKey();
+        HighGui.waitKey(10);
 //        try {
 //            Thread.sleep(defaultShowTime*1000);
 //        } catch (InterruptedException e) {
