@@ -1,6 +1,6 @@
 package com.tester.testercv.routeFinder;
 
-import com.tester.testercv.commonImg.CommonImgHelper;
+import com.tester.testercv.utils.opencv.CommonImgHelper;
 import org.junit.Test;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
