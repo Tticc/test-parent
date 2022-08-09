@@ -22,12 +22,12 @@ public class EventHandle_Silot {
     public static PointInfoDTO silot_open_p1 = new PointInfoDTO().setX(1335).setY(1051);
     public static PointInfoDTO silot_open_p2 = new PointInfoDTO().setX(1197).setY(953);
 
-    public static PointInfoDTO silot_return_p1 = new PointInfoDTO().setX(0).setY(0);
+    public static PointInfoDTO silot_return_p1 = new PointInfoDTO().setX(1717).setY(748);
     public static PointInfoDTO silot_return_p2 = new PointInfoDTO().setX(1735).setY(856);
     public static PointInfoDTO silot_return_p3 = new PointInfoDTO().setX(1810).setY(917);
 
     public static PointInfoDTO silot_align_p1 = new PointInfoDTO().setX(1882).setY(213);
-    public static PointInfoDTO silot_align_p2 = new PointInfoDTO().setX(1693).setY(260);
+    public static PointInfoDTO silot_align_p2 = new PointInfoDTO().setX(1667).setY(261);
     public static PointInfoDTO silot_align_p3 = new PointInfoDTO().setX(1630).setY(114);
 
     public static PointInfoDTO silot_main_view_p1 = new PointInfoDTO().setX(1673).setY(212);

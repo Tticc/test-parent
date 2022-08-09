@@ -17,11 +17,14 @@ public class StartOnTopReplica {
     }
 
     public static void start() {
+        // onTopReplica 窗口选择点
         PointInfoDTO saiListPoint = new PointInfoDTO().setX(304).setY(99);
+        PointInfoDTO silotListPoint = new PointInfoDTO().setX(362).setY(123);
+
+
         startOnToRepli1(saiListPoint);
         move_sai_first();
 
-        PointInfoDTO silotListPoint = new PointInfoDTO().setX(362).setY(123);
         startOnToRepli1(silotListPoint);
         move_silot_first();
         move_sai_last();
@@ -74,20 +77,20 @@ public class StartOnTopReplica {
         // 按下鼠标左键
         RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
         // 移动到区域终止点
-        RobotHelper.move(821, 331);
+        RobotHelper.move(821, 301);
         // 弹起鼠标左键
         RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
         // 区域选择完成
         RobotHelper.move(1252, 278);
         RobotHelper.mouseLeftPress();
 
-        // 拖动
-        RobotHelper.move(140, 1003);
+//        // 拖动放缩分屏窗口
+        RobotHelper.move(164,1004);
         RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
-        RobotHelper.move(101, 735);
-        RobotHelper.delay(500);
-        RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
+        RobotHelper.move(112,708);
         RobotHelper.delay(1500);
+        RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
+        RobotHelper.delay(500);
 
         // 解除锁定
         RobotHelper.move(61, 55);

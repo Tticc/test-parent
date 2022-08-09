@@ -22,13 +22,13 @@ public class EventHandle_Sai {
     public static PointInfoDTO sai_open_p1 = new PointInfoDTO().setX(1338).setY(1048);
     public static PointInfoDTO sai_open_p2 = new PointInfoDTO().setX(1469).setY(939);
 
-    public static PointInfoDTO sai_return_p1 = new PointInfoDTO().setX(0).setY(0);
+    public static PointInfoDTO sai_return_p1 = new PointInfoDTO().setX(1719).setY(769);
     public static PointInfoDTO sai_return_p2 = new PointInfoDTO().setX(1726).setY(867);
     public static PointInfoDTO sai_return_p3 = new PointInfoDTO().setX(1776).setY(917);
 
     public static PointInfoDTO sai_align_p1 = new PointInfoDTO().setX(1881).setY(213);
-    public static PointInfoDTO sai_align_p2 = new PointInfoDTO().setX(1687).setY(265);
-    public static PointInfoDTO sai_align_p3 = new PointInfoDTO().setX(1634).setY(119);
+    public static PointInfoDTO sai_align_p2 = new PointInfoDTO().setX(1673).setY(255);
+    public static PointInfoDTO sai_align_p3 = new PointInfoDTO().setX(1633).setY(111);
 
     public static PointInfoDTO sai_main_view_p1 = new PointInfoDTO().setX(1667).setY(209);
 
