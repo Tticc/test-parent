@@ -3,7 +3,10 @@ package com.tester.testerswing.robot;
 import com.tester.testerswing.gaussian.GaussianHelper;
 
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.util.Random;
 
 
@@ -58,6 +61,21 @@ public class RobotHelper {
             r.delay(20);
         }
         r.delay(57);
+    }
+
+    public static void keyPress(String text){
+        StringSelection stringSelection = new StringSelection(text);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, stringSelection);
+        r.keyPress(KeyEvent.VK_CONTROL);
+        r.keyPress(KeyEvent.VK_V);
+        r.keyRelease(KeyEvent.VK_V);
+        r.keyRelease(KeyEvent.VK_CONTROL);
+    }
+
+    public static void keyPress(int key){
+        r.keyPress(key);
+        r.keyRelease(key);
     }
 
 

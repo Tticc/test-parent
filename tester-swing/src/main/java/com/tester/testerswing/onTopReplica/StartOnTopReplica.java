@@ -1,0 +1,132 @@
+package com.tester.testerswing.onTopReplica;
+
+import com.tester.testerswing.capture.PointInfoDTO;
+import com.tester.testerswing.robot.RobotHelper;
+import com.tester.testerswing.swing.eventHandler.EventHandle_Main;
+import com.tester.testerswing.swing.eventHandler.EventHandle_Sai;
+import com.tester.testerswing.swing.eventHandler.EventHandle_Silot;
+import java.awt.event.InputEvent;
+
+/**
+ * 启动屏幕监控
+ */
+public class StartOnTopReplica {
+
+    public static void main(String[] args) {
+        start();
+    }
+
+    public static void start() {
+        PointInfoDTO saiListPoint = new PointInfoDTO().setX(304).setY(99);
+        startOnToRepli1(saiListPoint);
+        move_sai_first();
+
+        PointInfoDTO silotListPoint = new PointInfoDTO().setX(362).setY(123);
+        startOnToRepli1(silotListPoint);
+        move_silot_first();
+        move_sai_last();
+        RobotHelper.delay(200);
+        RobotHelper.move(555, 555);
+    }
+
+    private static void startOnToRepli1(PointInfoDTO account) {
+        EventHandle_Main.openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
+        RobotHelper.delay(200);
+        EventHandle_Main.openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
+
+        RobotHelper.move(89, 1056);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.move(126, 1003);
+        RobotHelper.keyPress("OnTopReplica");
+        RobotHelper.move(198, 372);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.move(244, 198);
+        RobotHelper.mouseRightPress();
+        RobotHelper.move(326, 367);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.move(475, 395);
+        RobotHelper.mouseLeftPress();
+        // 移动到起始位置
+        RobotHelper.move(61, 55);
+        RobotHelper.mouseRightPress();
+        RobotHelper.move(136, 72);
+        RobotHelper.mouseLeftPress();
+        // 选择 a
+        RobotHelper.move(account.getX(), account.getY());
+        RobotHelper.mouseLeftPress();
+        // 移动到起始位置
+        RobotHelper.move(61, 55);
+        RobotHelper.mouseRightPress();
+        RobotHelper.move(162, 202);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.move(322, 254);
+        RobotHelper.mouseLeftPress();
+
+
+        // 移动到起始位置
+        RobotHelper.move(61, 55);
+        RobotHelper.mouseRightPress();
+        RobotHelper.move(132, 123);
+        RobotHelper.mouseLeftPress();
+
+        // 移动到区域起始点
+        RobotHelper.move(785, 68);
+        // 按下鼠标左键
+        RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
+        // 移动到区域终止点
+        RobotHelper.move(821, 331);
+        // 弹起鼠标左键
+        RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
+        // 区域选择完成
+        RobotHelper.move(1252, 278);
+        RobotHelper.mouseLeftPress();
+
+        // 拖动
+        RobotHelper.move(140, 1003);
+        RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
+        RobotHelper.move(101, 735);
+        RobotHelper.delay(500);
+        RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
+        RobotHelper.delay(1500);
+
+        // 解除锁定
+        RobotHelper.move(61, 55);
+        RobotHelper.mouseRightPress();
+        RobotHelper.move(127, 224);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.move(291, 229);
+        RobotHelper.mouseLeftPress();
+
+    }
+
+    public static void move_sai_first() {
+        // 拖动1
+        RobotHelper.move(61, 55);
+        RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
+        RobotHelper.move(1670, 201);
+        RobotHelper.delay(100);
+        RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
+        RobotHelper.delay(100);
+    }
+
+    public static void move_silot_first() {
+        // 拖动1
+        RobotHelper.move(61, 55);
+        RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
+        RobotHelper.move(99, 57);
+        RobotHelper.delay(500);
+        RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
+        RobotHelper.delay(500);
+    }
+
+    public static void move_sai_last() {
+        // 拖动1
+        RobotHelper.move(1670, 201);
+        RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
+        RobotHelper.move(200, 63);
+        RobotHelper.delay(500);
+        RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
+        RobotHelper.delay(500);
+    }
+
+}

@@ -89,7 +89,7 @@ public class EventHandle_Main {
         });
     }
 
-    private static void openOpe(PointInfoDTO p1, PointInfoDTO p2) {
+    public static void openOpe(PointInfoDTO p1, PointInfoDTO p2) {
         RobotHelper.move(p1.getX(), p1.getY(), 100);
         RobotHelper.mouseLeftPress();
         RobotHelper.move(p2.getX(), p2.getY(), 186);
