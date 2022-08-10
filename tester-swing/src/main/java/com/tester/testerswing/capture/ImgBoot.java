@@ -1,21 +1,27 @@
 package com.tester.testerswing.capture;
 
 import com.tester.base.dto.exception.BusinessException;
+import com.tester.testercv.utils.detectColor.ColorDetectDemo;
 import com.tester.testerswing.boot.AccountInfo;
 import com.tester.testerswing.robot.RobotHelper;
 import com.tester.testerswing.swing.EasyScript;
 import com.tester.testerswing.voice.BeepSoundProcessor;
 import com.tester.testerswing.voice.BeepSoundTaskDTO;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
 import org.springframework.util.CollectionUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 /**
  * 图片处理启动类
@@ -61,13 +67,32 @@ public class ImgBoot {
      * @Date 9:49 2022/8/2
      * @Author 温昌营
      **/
-    public static void checkIfNormal(AccountInfo accountInfo) throws Exception {
+    public static void checkNumber(AccountInfo accountInfo) throws Exception {
         if(!accountInfo.isNeedWarn()){
             // 无需告警，直接返回
             return;
         }
         boolean normal = createAndCompareImg(accountInfo, "test_temp.png");
-        if (!normal) {
+        if(!normal){
+            sendVoice(accountInfo.getInfoMsg());
+        }
+
+
+    }
+
+    public static void checkIfNeedWarning(AccountInfo accountInfo) throws Exception {
+        if(!accountInfo.isNeedWarn()){
+            // 无需告警，直接返回
+            return;
+        }
+        boolean warning = doCheckIfNeedWarning(accountInfo);
+        if(warning){
+            sendVoice(accountInfo.getWarnMsg());
+        }
+
+    }
+
+    public static void sendVoice(String msg){
             long time = new Date().getTime();
             if(time > lastActiveTime+activeInterval){
                 lastActiveTime = time;
@@ -78,9 +103,8 @@ public class ImgBoot {
                 // 鼠标移动到指定位置
                 RobotHelper.move((int)location.getX()+103, (int)location.getY()+108);
             }
-            BeepSoundTaskDTO beepSoundTaskDTO = BeepSoundProcessor.generateTask(accountInfo.getWarnMsg(), 100, 2);
+            BeepSoundTaskDTO beepSoundTaskDTO = BeepSoundProcessor.generateTask(msg, 100, 2);
             BeepSoundProcessor.putTask(beepSoundTaskDTO);
-        }
     }
 
 
@@ -93,7 +117,7 @@ public class ImgBoot {
     public static void refreshHisImg(AccountInfo account) throws BusinessException {
         try {
             int count = account.getRefreshCount().incrementAndGet();
-            String imgPath = createScreen(account.getSt(), account.getEd(), account.getAccount(), getHisImgName(count));
+            String imgPath = createScreenAndSave(account.getSt(), account.getEd(), account.getAccount(), getHisImgName(count));
         } catch (Exception e) {
             throw new BusinessException(500, "刷新初始图像失败", e);
         }
@@ -113,53 +137,55 @@ public class ImgBoot {
         return dir.delete();
     }
 
+    private static boolean doCheckIfNeedWarning(AccountInfo accountInfo) throws Exception {
+        AtomicReference<Mat> atomicReference = new AtomicReference<>();
+        doCreateScreen(accountInfo.getSt(), accountInfo.getEd(), (bufferedImage) -> {
+            atomicReference.set(bufferedImageToMat(bufferedImage));
+            });
+        Mat src = atomicReference.get();
+        ColorDetectDemo.detectGray(src);
+        if(src == null){
+            System.out.println("异常，无法获取警告mat");
+            return true;
+        }
+        return false;
+    }
+
     private static boolean createAndCompareImg(AccountInfo accountInfo, String imgName) throws Exception {
-        String newImgPath = createScreen(accountInfo.getSt(), accountInfo.getEd(), accountInfo.getAccount(), imgName);
+        String newImgPath = createScreenAndSave(accountInfo.getSt(), accountInfo.getEd(), accountInfo.getAccount(), imgName);
         String hisImgPath = getHisImgPath(accountInfo.getAccount(), accountInfo.getRefreshCount().get());
         return ImgComparator.doCompareIfTheSame(hisImgPath, newImgPath);
     }
 
-    private static String createScreen(PointInfoDTO st, PointInfoDTO ed, String folderName, String imgName) throws AWTException, IOException {
-        //{左上角的横坐标(x),左上角的纵坐标(y),右下角的横坐标(x),右下角的纵坐标(y)}
-        int[] area = {st.getX(), st.getY(), ed.getX(), ed.getY()};
-        String imgPath = doCreateScreen(area, getBasePath(folderName), imgName);
-        return imgPath;
+    private static String createScreenAndSave(PointInfoDTO st, PointInfoDTO ed, String folderName, String imgName) throws AWTException {
+        String basePath = getBasePath(folderName);
+        doCreateScreen(st,ed,(bufferedImage) -> {
+            //将缓存里面的屏幕信息以图片的格式存在制定的磁盘位置
+            File dir = new File(basePath);
+            if (!dir.exists()) {
+                if (dir.mkdirs()) {
+                    System.out.println("dir create success. --" + basePath);
+                } else {
+                    System.out.println("dir create failed! --" + basePath);
+                }
+            }
+            try {
+                ImageIO.write(bufferedImage, getFileSuffix(imgName), new File(basePath, imgName));
+            } catch (IOException e) {
+                System.out.println("异常，保存图片失败" + basePath);
+            }
+        });
+        return basePath + imgName;
     }
 
     /**
-     * @param area      截图区域，即给定的截图范围：{左上角的横坐标,左上角的纵坐标,右下角的横坐标,右下角的纵坐标}
-     * @param imageName 给截取的图片命名
-     * @return
-     * @throws AWTException
-     * @throws IOException
-     */
-    private static String doCreateScreen(int[] area, String basePath, String imageName) throws AWTException, IOException {
-        Dimension screen = null;    //电脑屏幕大小
-        Rectangle screenRect = null;//截图的宽高
-        BufferedImage image = null; //暂存图片的缓存
-        Robot robot = null;         //负责截屏的操作者
-        screen = Toolkit.getDefaultToolkit().getScreenSize();
-        //截图尺寸
-        screen.height = area[3] - area[1];
-        screen.width = area[2] - area[0];
-        screenRect = new Rectangle(screen);
-        //左上角得坐标
-        screenRect.x = area[0];
-        screenRect.y = area[1];
-        robot = new Robot();
-        //将得到的屏幕信息存放在缓存里面
-        image = robot.createScreenCapture(screenRect);
-        //将缓存里面的屏幕信息以图片的格式存在制定的磁盘位置
-        File dir = new File(basePath);
-        if (!dir.exists()) {
-            if (dir.mkdirs()) {
-                System.out.println("dir create success. --" + basePath);
-            } else {
-                System.out.println("dir create failed! --" + basePath);
-            }
-        }
-        ImageIO.write(image, getFileSuffix(imageName), new File(basePath, imageName));
-        return basePath + imageName;
+     * 截图，并处理
+     * @Date 16:01 2022/8/10
+     * @Author 温昌营
+     **/
+    private static void doCreateScreen(PointInfoDTO st, PointInfoDTO ed, Consumer<BufferedImage> consumer) throws AWTException {
+        BufferedImage image = RobotHelper.createScreenCapture(st, ed);
+        consumer.accept(image);
     }
 
     private static String getFileSuffix(String path) {
@@ -177,5 +203,17 @@ public class ImgBoot {
 
     private static String getHisImgName(int count) {
         return String.format(HIS_IMG_NAME, count);
+    }
+
+    /**
+     * 将 BufferedImage 转换为 Mat
+     * @Date 16:26 2022/8/10
+     * @Author 温昌营
+     **/
+    public static Mat bufferedImageToMat(BufferedImage bi) {
+        Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
+        byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
+        mat.put(0, 0, data);
+        return mat;
     }
 }

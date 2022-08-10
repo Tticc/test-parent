@@ -1,4 +1,4 @@
-package com.tester.testercv.opencvhelper;
+package com.tester.testercv.utils.detectColor;
 
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.MyConsumer;
@@ -19,16 +19,15 @@ public class ColorDetectDemo {
 
     public static void main(String[] args) throws Exception {
         String picPath = "E:\\Development\\Projects_backup\\test-parent\\tester-swing\\src\\main\\resources\\normal2.PNG";
+        Mat src = OpenCVHelper.readImgToMat(picPath);
 
-        boolean b = detectWhite(picPath, (mat) -> {
+        boolean b = detectGray(src, (mat) -> {
 //            new Thread(() -> {OpenCVHelper.showImg(mat, "name", 50000);}).start();
             new Thread(() -> {OpenCVHelper.showImg(OpenCVHelper.readImgToMat(picPath), "name", 500000000);}).start();
         });
         if(b){
             System.out.println("warning... ");
         }
-//        detectRed("C:\\Users\\Admin\\Desktop\\captureImg\\color\\warning2.PNG");
-//        detectYellow("C:\\Users\\Admin\\Desktop\\captureImg\\color\\normal_1.PNG");
     }
 
     /**
@@ -41,9 +40,7 @@ public class ColorDetectDemo {
      * @Date 10:30 2022/8/9
      * @Author 温昌营
      **/
-    public static boolean detectWhite(String currentImgPath, MyConsumer<Mat> consumer) throws BusinessException {
-//        Mat src = OpenCVHelper.readImgToMat("C:\\Users\\Admin\\Desktop\\captureImg\\color\\normal.PNG");
-        Mat src = OpenCVHelper.readImgToMat(currentImgPath);
+    public static boolean detectGray(Mat src, MyConsumer<Mat> consumer) throws BusinessException {
         int minH = 0;
         int maxH = 180;
         int minS = 0;
@@ -56,8 +53,8 @@ public class ColorDetectDemo {
         Mat resultMat = detect(src, minValues, maxValues);
         return doCheckIfNeedWarning(resultMat, consumer);
     }
-    public static boolean detectRed(String currentImgPath, MyConsumer<Mat> consumer) throws BusinessException {
-        Mat src = OpenCVHelper.readImgToMat(currentImgPath);
+
+    public static boolean detectRed(Mat src, MyConsumer<Mat> consumer) throws BusinessException {
         int minH = 0;
         int maxH = 10;
         int minS = 43;
@@ -70,9 +67,8 @@ public class ColorDetectDemo {
         Mat resultMat = detect(src, minValues, maxValues);
         return doCheckIfNeedWarning(resultMat, consumer);
     }
-    public static boolean detectYellow(String currentImgPath, MyConsumer<Mat> consumer) throws BusinessException {
-//        Mat src = OpenCVHelper.readImgToMat("C:\\Users\\Admin\\Desktop\\captureImg\\color\\warning2.PNG");
-        Mat src = OpenCVHelper.readImgToMat(currentImgPath);
+
+    public static boolean detectYellow(Mat src, MyConsumer<Mat> consumer) throws BusinessException {
         int minH = 26;
         int maxH = 34;
         int minS = 43;

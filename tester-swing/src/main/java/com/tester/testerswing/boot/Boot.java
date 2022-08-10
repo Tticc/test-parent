@@ -41,6 +41,7 @@ public class Boot {
     public Boot() {
         accountInfoList.add(new AccountInfo()
                 .setWarnMsg("左警告")
+                .setInfoMsg("左提醒")
                 .setAccount(silot)
                 .setSt(st_silot)
                 .setEd(ed_silot)
@@ -48,6 +49,7 @@ public class Boot {
                 .setRedEd(red_ed_silot));
         accountInfoList.add(new AccountInfo()
                 .setWarnMsg("右警告")
+                .setInfoMsg("左提醒")
                 .setAccount(sailinna)
                 .setSt(st_sai)
                 .setEd(ed_sai)
@@ -92,7 +94,10 @@ public class Boot {
         checkerExecutorService.scheduleAtFixedRate(() -> {
                     try {
                         for (AccountInfo accountInfo : accountInfoList) {
-                            ImgBoot.checkIfNormal(accountInfo);
+                            ImgBoot.checkWarning(accountInfo);
+                        }
+                        for (AccountInfo accountInfo : accountInfoList) {
+                            ImgBoot.checkNumber(accountInfo);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

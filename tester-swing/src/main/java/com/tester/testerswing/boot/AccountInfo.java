@@ -16,6 +16,9 @@ public class AccountInfo extends BaseDTO {
     // 警告信息
     private String warnMsg = "警告";
 
+    // 提醒信息
+    private String infoMsg = "提醒";
+
     // number 截图起点
     private PointInfoDTO st;
 

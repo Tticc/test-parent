@@ -24,6 +24,89 @@
             <artifactId>tester-base-dto</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.tester</groupId>
+            <artifactId>tester-cv</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.tester</groupId>
+                    <artifactId>tester-common</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.tester</groupId>
+                    <artifactId>tester-pool</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.tester</groupId>
+                    <artifactId>tester-mybatis</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcprov-jdk15on</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>de.idyl</groupId>
+                    <artifactId>winzipaes</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.lingala.zip4j</groupId>
+                    <artifactId>zip4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.projectreactor</groupId>
+                    <artifactId>reactor-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-fileupload</groupId>
+                    <artifactId>commons-fileupload</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>opencv</groupId>
+                    <artifactId>opencv-jar-wenc</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.github.sarxos</groupId>
+                    <artifactId>webcam-capture</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.nativelibs4java</groupId>
+                    <artifactId>bridj</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.springfox</groupId>
+                    <artifactId>springfox-swagger2</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.mybatis.spring.boot</groupId>
+                    <artifactId>mybatis-spring-boot-starter</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-test</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.mockito</groupId>
+                    <artifactId>mockito-all</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+
         <dependency>
             <groupId>net.sf.jacob-project</groupId>
             <artifactId>jacob</artifactId>

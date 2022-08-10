@@ -1,9 +1,12 @@
 package com.tester.testercv.utils.opencv;
 
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +31,17 @@ public class OpenCVHelper {
         return Imgcodecs.imread(imgPath);
     }
 
+    /**
+     * 将 BufferedImage 转换为 Mat
+     * @Date 16:26 2022/8/10
+     * @Author 温昌营
+     **/
+    public static Mat bufferedImageToMat(BufferedImage bi) {
+        Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
+        byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
+        mat.put(0, 0, data);
+        return mat;
+    }
     /**
      * mat 保存为图片
      *
