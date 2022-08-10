@@ -1,23 +1,20 @@
 package com.tester.testerswing.capture;
 
 import com.tester.base.dto.exception.BusinessException;
-import com.tester.testercv.utils.detectColor.ColorDetectDemo;
-import com.tester.testercv.utils.opencv.OpenCVHelper;
 import com.tester.testerswing.boot.AccountInfo;
+import com.tester.testerswing.capture.detectColor.ColorDetectDemo;
+import com.tester.testerswing.capture.opencv.OpenCVHelper;
 import com.tester.testerswing.robot.RobotHelper;
 import com.tester.testerswing.swing.EasyScript;
 import com.tester.testerswing.voice.BeepSoundProcessor;
 import com.tester.testerswing.voice.BeepSoundTaskDTO;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.Size;
 import org.springframework.util.CollectionUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +22,6 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 /**
@@ -44,7 +40,7 @@ public class ImgBoot {
 
     public static long lastActiveTime = 0;
     // 至少每隔1分钟弹起窗口
-    public static long activeInterval = 60*1000;
+    public static long activeInterval = 60 * 1000;
 
     /**
      * 启动
@@ -73,12 +69,12 @@ public class ImgBoot {
      * @Author 温昌营
      **/
     public static void checkNumber(AccountInfo accountInfo) throws Exception {
-        if(!accountInfo.isNeedWarn()){
+        if (!accountInfo.isNeedWarn()) {
             // 无需告警，直接返回
             return;
         }
         boolean normal = createAndCompareImg(accountInfo, "test_temp.png");
-        if(!normal){
+        if (!normal) {
             sendVoice(accountInfo.getInfoMsg());
         }
 
@@ -86,30 +82,30 @@ public class ImgBoot {
     }
 
     public static void checkIfNeedWarning(AccountInfo accountInfo) throws Exception {
-        if(!accountInfo.isNeedWarn()){
+        if (!accountInfo.isNeedWarn()) {
             // 无需告警，直接返回
             return;
         }
         boolean warning = doCheckIfNeedWarning(accountInfo);
-        if(warning){
+        if (warning) {
             sendVoice(accountInfo.getWarnMsg());
         }
 
     }
 
-    public static void sendVoice(String msg){
-            long time = new Date().getTime();
-            if(time > lastActiveTime+activeInterval){
-                lastActiveTime = time;
-                JFrame frame = EasyScript.getFrame();
-                frame.setExtendedState(JFrame.NORMAL);
-                frame.toFront();
-                Point location = frame.getLocation();
-                // 鼠标移动到指定位置
-                RobotHelper.move((int)location.getX()+103, (int)location.getY()+108);
-            }
-            BeepSoundTaskDTO beepSoundTaskDTO = BeepSoundProcessor.generateTask(msg, 100, 2);
-            BeepSoundProcessor.putTask(beepSoundTaskDTO);
+    public static void sendVoice(String msg) {
+        long time = new Date().getTime();
+        if (time > lastActiveTime + activeInterval) {
+            lastActiveTime = time;
+            JFrame frame = EasyScript.getFrame();
+            frame.setExtendedState(JFrame.NORMAL);
+            frame.toFront();
+            Point location = frame.getLocation();
+            // 鼠标移动到指定位置
+            RobotHelper.move((int) location.getX() + 103, (int) location.getY() + 108);
+        }
+        BeepSoundTaskDTO beepSoundTaskDTO = BeepSoundProcessor.generateTask(msg, 100, 2);
+        BeepSoundProcessor.putTask(beepSoundTaskDTO);
     }
 
 
@@ -146,14 +142,14 @@ public class ImgBoot {
         String imgName = "warning_tmp.png";
         String warningImgPath = createScreenAndSave(accountInfo.getRedSt(), accountInfo.getRedEd(), accountInfo.getAccount(), imgName);
         Mat src = OpenCVHelper.readImgToMat(warningImgPath);
-        if(src == null){
+        if (src == null) {
             System.out.println("异常，无法获取警告mat");
             return true;
         }
         String basePath = getBasePath(accountInfo.getAccount());
         return ColorDetectDemo.detectGray(src, (targetMat) -> {
             new Thread(() -> {
-                OpenCVHelper.saveImgFromMat(basePath,targetMat,"warning.png");
+                OpenCVHelper.saveImgFromMat(basePath, targetMat, "warning.png");
             }).start();
         });
     }
@@ -166,7 +162,7 @@ public class ImgBoot {
 
     private static String createScreenAndSave(PointInfoDTO st, PointInfoDTO ed, String folderName, String imgName) throws AWTException {
         String basePath = getBasePath(folderName);
-        doCreateScreen(st,ed,(bufferedImage) -> {
+        doCreateScreen(st, ed, (bufferedImage) -> {
             //将缓存里面的屏幕信息以图片的格式存在制定的磁盘位置
             File dir = new File(basePath);
             if (!dir.exists()) {
@@ -187,6 +183,7 @@ public class ImgBoot {
 
     /**
      * 截图，并处理
+     *
      * @Date 16:01 2022/8/10
      * @Author 温昌营
      **/
@@ -214,6 +211,7 @@ public class ImgBoot {
 
     /**
      * 将 BufferedImage 转换为 Mat
+     *
      * @Date 16:26 2022/8/10
      * @Author 温昌营
      **/
