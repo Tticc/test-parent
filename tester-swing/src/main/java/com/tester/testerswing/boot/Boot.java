@@ -26,14 +26,33 @@ public class Boot {
     private PointInfoDTO st_sai = new PointInfoDTO().setX(56).setY(118);
     private PointInfoDTO ed_sai = new PointInfoDTO().setX(153).setY(572);
 
+
+    private PointInfoDTO red_st_silot = new PointInfoDTO().setX(56).setY(118);
+    private PointInfoDTO red_ed_silot = new PointInfoDTO().setX(153).setY(572);
+
+    private PointInfoDTO red_st_sai = new PointInfoDTO().setX(56).setY(118);
+    private PointInfoDTO red_ed_sai = new PointInfoDTO().setX(153).setY(572);
+
     private final ScheduledExecutorService checkerExecutorService = Executors.newSingleThreadScheduledExecutor(new SwingThreadFactoryImpl("warn-checker"));
 
 
     private final List<AccountInfo> accountInfoList = new ArrayList<>();
 
     public Boot() {
-        accountInfoList.add(new AccountInfo().setWarnMsg("左警告").setAccount(silot).setSt(st_silot).setEd(ed_silot));
-        accountInfoList.add(new AccountInfo().setWarnMsg("右警告").setAccount(sailinna).setSt(st_sai).setEd(ed_sai));
+        accountInfoList.add(new AccountInfo()
+                .setWarnMsg("左警告")
+                .setAccount(silot)
+                .setSt(st_silot)
+                .setEd(ed_silot)
+                .setRedSt(red_st_silot)
+                .setRedEd(red_ed_silot));
+        accountInfoList.add(new AccountInfo()
+                .setWarnMsg("右警告")
+                .setAccount(sailinna)
+                .setSt(st_sai)
+                .setEd(ed_sai)
+                .setRedSt(red_st_sai)
+                .setRedEd(red_ed_sai));
     }
 
 

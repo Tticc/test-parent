@@ -32,7 +32,8 @@ public class ImgBoot {
     public static final String BUFFER_IMAGE_AREA = "C:\\Users\\Admin\\Desktop\\deliv\\";
 
     public static long lastActiveTime = 0;
-    public static long activeInterval = 30*1000;
+    // 至少每隔1分钟弹起窗口
+    public static long activeInterval = 60*1000;
 
     /**
      * 启动

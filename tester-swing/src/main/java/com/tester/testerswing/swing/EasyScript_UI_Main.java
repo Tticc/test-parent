@@ -37,6 +37,10 @@ public class EasyScript_UI_Main {
     private JButton open_return_sai;
     private JButton open_run_silot;
     private JButton open_run_sai;
+    private JButton onTopReplica_start;
+    private JLabel red_input_info;
+    private JTextField red_input;
+    private JLabel red_point_print;
 
 
     Boot boot = new Boot();
@@ -57,7 +61,7 @@ public class EasyScript_UI_Main {
         // 初始化 sai 录入事件
         EventHandle_Sai.handle_sai(sai_input);
 
-        // 处理所有操作事件
+        // 处理公共界面的其他事件。如open，return，run
         EventHandle_Main.handle_main(this);
 
     }

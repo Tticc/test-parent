@@ -21,7 +21,8 @@ public class ColorDetectDemo {
         String picPath = "E:\\Development\\Projects_backup\\test-parent\\tester-swing\\src\\main\\resources\\normal2.PNG";
 
         boolean b = detectWhite(picPath, (mat) -> {
-            new Thread(() -> {OpenCVHelper.showImg(mat, "name", 50000);}).start();
+//            new Thread(() -> {OpenCVHelper.showImg(mat, "name", 50000);}).start();
+            new Thread(() -> {OpenCVHelper.showImg(OpenCVHelper.readImgToMat(picPath), "name", 500000000);}).start();
         });
         if(b){
             System.out.println("warning... ");

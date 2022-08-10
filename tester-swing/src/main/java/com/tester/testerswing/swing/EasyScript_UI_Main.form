@@ -113,7 +113,7 @@
           <forms top="0" left="15" bottom="0" right="0"/>
         </constraints>
         <properties>
-          <text value="录入点阵"/>
+          <text value="人数点阵"/>
         </properties>
       </component>
       <component id="2a836" class="javax.swing.JLabel" binding="point_print">
@@ -137,7 +137,7 @@
       </component>
       <component id="2e5dd" class="javax.swing.JLabel" binding="check_status">
         <constraints>
-          <grid row="2" column="4" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -186,7 +186,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="打开回收"/>
+          <text value="回收"/>
         </properties>
       </component>
       <component id="c634b" class="javax.swing.JButton" binding="open_sai">
@@ -204,7 +204,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="打开回收"/>
+          <text value="回收"/>
         </properties>
       </component>
       <component id="81b36" class="javax.swing.JButton" binding="open_run_silot">
@@ -223,6 +223,43 @@
         </constraints>
         <properties>
           <text value="跑路"/>
+        </properties>
+      </component>
+      <component id="4a04" class="javax.swing.JButton" binding="onTopReplica_start">
+        <constraints>
+          <grid row="2" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="投屏"/>
+        </properties>
+      </component>
+      <component id="7fdb7" class="javax.swing.JLabel" binding="red_input_info">
+        <constraints>
+          <grid row="10" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value="Red"/>
+        </properties>
+      </component>
+      <component id="a9d57" class="javax.swing.JTextField" binding="red_input">
+        <constraints>
+          <grid row="10" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="3f3cf" class="javax.swing.JLabel" binding="red_point_print">
+        <constraints>
+          <grid row="8" column="8" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <enabled value="true"/>
+          <text value=" "/>
         </properties>
       </component>
     </children>

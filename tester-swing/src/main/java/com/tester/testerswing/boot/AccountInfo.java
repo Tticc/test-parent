@@ -16,11 +16,17 @@ public class AccountInfo extends BaseDTO {
     // 警告信息
     private String warnMsg = "警告";
 
-    // 截图起点
+    // number 截图起点
     private PointInfoDTO st;
 
-    // 截图终点
+    // number 截图终点
     private PointInfoDTO ed;
+
+    // red 截图起点
+    private PointInfoDTO redSt;
+
+    // red 截图终点
+    private PointInfoDTO redEd;
 
     // 刷新次数
     private AtomicInteger refreshCount = new AtomicInteger(0);

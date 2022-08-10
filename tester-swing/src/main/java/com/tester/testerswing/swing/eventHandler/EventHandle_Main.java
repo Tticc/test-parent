@@ -22,7 +22,19 @@ public class EventHandle_Main {
 
     // silot 操作处理
     private static void handle_silot(EasyScript_UI_Main script) {
-        // 设置按钮事件
+        // 暂停 silot
+        script.getSilot_pause().addActionListener((e) -> {
+            script.getAccountInfoList().get(0).setNeedWarn(false);
+            script.getSilot_status().setText("false");
+        });
+        // 继续 silot
+        script.getSilot_start().addActionListener((e) -> {
+            script.getAccountInfoList().get(0).setNeedWarn(true);
+            script.getSilot_status().setText("true");
+        });
+
+
+        // 设置 open 按钮事件
         JButton open_silot = script.getOpen_silot();
         open_silot.addActionListener((e) -> {
             try {
@@ -31,7 +43,7 @@ public class EventHandle_Main {
                 exception.printStackTrace();
             }
         });
-
+        // 设置 return 按钮事件
         JButton open_return_silot = script.getOpen_return_silot();
         open_return_silot.addActionListener((e) -> {
             try {
@@ -42,6 +54,7 @@ public class EventHandle_Main {
             }
         });
 
+        // 设置 run 按钮事件
         JButton open_run_silot = script.getOpen_run_silot();
         open_run_silot.addActionListener((e) -> {
             try {
@@ -54,9 +67,20 @@ public class EventHandle_Main {
         });
     }
 
-    // silot 操作处理
+    // sai 操作处理
     private static void handle_sai(EasyScript_UI_Main script) {
-        // 设置按钮事件
+        // 暂停 sai
+        script.getSai_pause().addActionListener((e) -> {
+            script.getAccountInfoList().get(1).setNeedWarn(false);
+            script.getSai_status().setText("false");
+        });
+        // 继续 sai
+        script.getSai_start().addActionListener((e) -> {
+            script.getAccountInfoList().get(1).setNeedWarn(true);
+            script.getSai_status().setText("true");
+        });
+
+        // 设置 open 按钮事件
         JButton open_sai = script.getOpen_sai();
         open_sai.addActionListener((e) -> {
             try {
@@ -66,6 +90,7 @@ public class EventHandle_Main {
             }
         });
 
+        // 设置 return 按钮事件
         JButton open_return_sai = script.getOpen_return_sai();
         open_return_sai.addActionListener((e) -> {
             try {
@@ -76,6 +101,7 @@ public class EventHandle_Main {
             }
         });
 
+        // 设置 run 按钮事件
         JButton open_run_sai = script.getOpen_run_sai();
         open_run_sai.addActionListener((e) -> {
             try {
