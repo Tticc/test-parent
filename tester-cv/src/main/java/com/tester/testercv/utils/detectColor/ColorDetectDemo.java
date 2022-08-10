@@ -10,6 +10,8 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.springframework.util.StopWatch;
 
+import java.util.function.Consumer;
+
 /**
  * @Author 温昌营
  * @Date 2022-8-8 15:19:41
@@ -40,7 +42,7 @@ public class ColorDetectDemo {
      * @Date 10:30 2022/8/9
      * @Author 温昌营
      **/
-    public static boolean detectGray(Mat src, MyConsumer<Mat> consumer) throws BusinessException {
+    public static boolean detectGray(Mat src, Consumer<Mat> consumer) throws BusinessException {
         int minH = 0;
         int maxH = 180;
         int minS = 0;
@@ -54,7 +56,7 @@ public class ColorDetectDemo {
         return doCheckIfNeedWarning(resultMat, consumer);
     }
 
-    public static boolean detectRed(Mat src, MyConsumer<Mat> consumer) throws BusinessException {
+    public static boolean detectRed(Mat src, Consumer<Mat> consumer) throws BusinessException {
         int minH = 0;
         int maxH = 10;
         int minS = 43;
@@ -68,7 +70,7 @@ public class ColorDetectDemo {
         return doCheckIfNeedWarning(resultMat, consumer);
     }
 
-    public static boolean detectYellow(Mat src, MyConsumer<Mat> consumer) throws BusinessException {
+    public static boolean detectYellow(Mat src, Consumer<Mat> consumer) throws BusinessException {
         int minH = 26;
         int maxH = 34;
         int minS = 43;
@@ -93,7 +95,7 @@ public class ColorDetectDemo {
         return resultMat;
     }
 
-    private static boolean doCheckIfNeedWarning(Mat src, MyConsumer<Mat> consumer) throws BusinessException {
+    private static boolean doCheckIfNeedWarning(Mat src, Consumer<Mat> consumer) throws BusinessException {
         consumer.accept(src);
         int count = 0;
         int rows = src.rows();

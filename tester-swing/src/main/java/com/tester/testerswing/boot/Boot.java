@@ -49,7 +49,7 @@ public class Boot {
                 .setRedEd(red_ed_silot));
         accountInfoList.add(new AccountInfo()
                 .setWarnMsg("右警告")
-                .setInfoMsg("左提醒")
+                .setInfoMsg("右提醒")
                 .setAccount(sailinna)
                 .setSt(st_sai)
                 .setEd(ed_sai)
@@ -83,8 +83,6 @@ public class Boot {
                 return "刷新失败。account:" + accountInfo.getAccount();
             }
         }
-        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm:ss");
-//        return formatter.format(new Date());
         return new Date().toString();
     }
 
@@ -94,7 +92,7 @@ public class Boot {
         checkerExecutorService.scheduleAtFixedRate(() -> {
                     try {
                         for (AccountInfo accountInfo : accountInfoList) {
-                            ImgBoot.checkWarning(accountInfo);
+                            ImgBoot.checkIfNeedWarning(accountInfo);
                         }
                         for (AccountInfo accountInfo : accountInfoList) {
                             ImgBoot.checkNumber(accountInfo);

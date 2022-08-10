@@ -18,7 +18,7 @@ public class ColorDetectTest {
 
     public static void main(String[] args) throws InterruptedException {
 //        Mat src = OpenCVHelper.readImgToMat("C:\\Users\\Admin\\Desktop\\captureImg\\color\\blue_line.png");
-        Mat src = OpenCVHelper.readImgToMat("C:\\Users\\Admin\\Desktop\\captureImg\\color\\normal.PNG");
+        Mat src = OpenCVHelper.readImgToMat("C:\\Users\\18883\\IdeaProjects\\test-parent\\tester-swing\\src\\main\\resources\\normal.PNG");
 //        Mat src = OpenCVHelper.readImgToMat("C:\\Users\\Admin\\Desktop\\captureImg\\color\\warning.PNG");
 //        Mat src = OpenCVHelper.readImgToMat("C:\\Users\\Admin\\Desktop\\captureImg\\color\\warning2.PNG");
 

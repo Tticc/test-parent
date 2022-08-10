@@ -66,6 +66,16 @@ public class OpenCVHelper {
     }
 
     /**
+     *
+     * @param rows height y轴方位
+     * @param cols width x轴方位
+     * @return
+     */
+    public static Mat newMat(int rows, int cols){
+        return new Mat(rows, cols, CvType.CV_8UC3);
+    }
+
+    /**
      * 展示 mat
      *
      * @Date 15:29 2022/8/8

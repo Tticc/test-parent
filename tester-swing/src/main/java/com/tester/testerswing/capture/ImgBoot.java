@@ -2,6 +2,7 @@ package com.tester.testerswing.capture;
 
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercv.utils.detectColor.ColorDetectDemo;
+import com.tester.testercv.utils.opencv.OpenCVHelper;
 import com.tester.testerswing.boot.AccountInfo;
 import com.tester.testerswing.robot.RobotHelper;
 import com.tester.testerswing.swing.EasyScript;
@@ -9,6 +10,7 @@ import com.tester.testerswing.voice.BeepSoundProcessor;
 import com.tester.testerswing.voice.BeepSoundTaskDTO;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
 import org.springframework.util.CollectionUtils;
 
 import javax.imageio.ImageIO;
@@ -16,8 +18,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -138,17 +143,19 @@ public class ImgBoot {
     }
 
     private static boolean doCheckIfNeedWarning(AccountInfo accountInfo) throws Exception {
-        AtomicReference<Mat> atomicReference = new AtomicReference<>();
-        doCreateScreen(accountInfo.getSt(), accountInfo.getEd(), (bufferedImage) -> {
-            atomicReference.set(bufferedImageToMat(bufferedImage));
-            });
-        Mat src = atomicReference.get();
-        ColorDetectDemo.detectGray(src);
+        String imgName = "warning_tmp.png";
+        String warningImgPath = createScreenAndSave(accountInfo.getRedSt(), accountInfo.getRedEd(), accountInfo.getAccount(), imgName);
+        Mat src = OpenCVHelper.readImgToMat(warningImgPath);
         if(src == null){
             System.out.println("异常，无法获取警告mat");
             return true;
         }
-        return false;
+        String basePath = getBasePath(accountInfo.getAccount());
+        return ColorDetectDemo.detectGray(src, (targetMat) -> {
+            new Thread(() -> {
+                OpenCVHelper.saveImgFromMat(basePath,targetMat,"warning.png");
+            }).start();
+        });
     }
 
     private static boolean createAndCompareImg(AccountInfo accountInfo, String imgName) throws Exception {
@@ -211,9 +218,12 @@ public class ImgBoot {
      * @Author 温昌营
      **/
     public static Mat bufferedImageToMat(BufferedImage bi) {
-        Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
-        byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
-        mat.put(0, 0, data);
+        Mat mat = OpenCVHelper.newMat(bi.getHeight(), bi.getWidth());
+        int[] data = ((DataBufferInt) bi.getRaster().getDataBuffer()).getData();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(data.length * 4);
+        IntBuffer intBuffer = byteBuffer.asIntBuffer();
+        intBuffer.put(data);
+        mat.put(0, 0, byteBuffer.array());
         return mat;
     }
 }
