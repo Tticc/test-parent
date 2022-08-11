@@ -4,6 +4,7 @@ import com.tester.base.dto.model.BaseDTO;
 import com.tester.testerswing.capture.PointInfoDTO;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.opencv.core.Mat;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -34,6 +35,9 @@ public class AccountInfo extends BaseDTO {
     // 刷新次数
     private AtomicInteger refreshCount = new AtomicInteger(0);
 
-    // 刷新次数
+    // 异常时是否需要警告
     private boolean needWarn = true;
+
+    // 刷新次数
+    private Mat hisMat;
 }

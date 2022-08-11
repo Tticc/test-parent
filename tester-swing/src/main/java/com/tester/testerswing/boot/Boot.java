@@ -4,8 +4,8 @@ import com.tester.base.dto.exception.BusinessException;
 import com.tester.testerswing.capture.ImgBoot;
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.voice.BeepSoundProcessor;
+import org.opencv.imgcodecs.Imgcodecs;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -63,15 +63,16 @@ public class Boot {
             return;
         }
         started = true;
+        // 重建目录，初始化图片
         ImgBoot.start(accountInfoList);
+        // 启动警告音监听
         BeepSoundProcessor.start();
-
         try {
             TimeUnit.SECONDS.sleep(2);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        // 最后启动自己
+        // 最后启动监听任务
         startMySelf();
     }
 
@@ -80,22 +81,25 @@ public class Boot {
             try {
                 ImgBoot.refreshHisImg(accountInfo);
             } catch (BusinessException e) {
+                e.printStackTrace();
                 return "刷新失败。account:" + accountInfo.getAccount();
             }
         }
         return new Date().toString();
     }
 
-    public void startMySelf() {
+    private void startMySelf() {
         int delay = 2;
         int period = 1;
         checkerExecutorService.scheduleAtFixedRate(() -> {
                     try {
                         for (AccountInfo accountInfo : accountInfoList) {
-                            ImgBoot.checkIfNeedWarning(accountInfo);
+                            // 监控数量取原图
+                            ImgBoot.checkIfNeedWarning(accountInfo, Imgcodecs.IMREAD_UNCHANGED);
                         }
                         for (AccountInfo accountInfo : accountInfoList) {
-                            ImgBoot.checkNumber(accountInfo);
+                            // 监控数量取灰度图
+                            ImgBoot.checkNumber(accountInfo, Imgcodecs.IMREAD_GRAYSCALE);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

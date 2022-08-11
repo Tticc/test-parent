@@ -8,7 +8,6 @@ import org.opencv.imgcodecs.Imgcodecs;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -31,29 +30,42 @@ public class OpenCVHelper {
      * @Date 15:24 2022/8/8
      * @Author 温昌营
      **/
-    public static Mat readImgToMat(String imgPath) {
+    public static Mat readImg2Mat(String imgPath) {
         return Imgcodecs.imread(imgPath);
     }
 
     /**
-     * 将 BufferedImage 转换为 Mat
+     * 将 BufferedImage 转换为 Mat。 默认 UNCHANGED
+     *
      * @Date 16:26 2022/8/10
      * @Author 温昌营
      **/
     public static Mat BufferedImage2Mat(BufferedImage image) throws IOException {
+        return BufferedImage2Mat(image, Imgcodecs.IMREAD_UNCHANGED);
+    }
+
+    /**
+     * 将 BufferedImage 转换为 Mat。 默认彩色
+     * type： org.opencv.imgcodecs.Imgcodecs
+     *
+     * @Date 16:26 2022/8/10
+     * @Author 温昌营
+     **/
+    public static Mat BufferedImage2Mat(BufferedImage image, int type) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ImageIO.write(image, "png", byteArrayOutputStream);
         byteArrayOutputStream.flush();
-        return Imgcodecs.imdecode(new MatOfByte(byteArrayOutputStream.toByteArray()), Imgcodecs.IMREAD_COLOR);
+        return Imgcodecs.imdecode(new MatOfByte(byteArrayOutputStream.toByteArray()), type);
 
     }
+
     /**
      * mat 保存为图片
      *
      * @Date 15:26 2022/8/9
      * @Author 温昌营
      **/
-    public static void saveImgFromMat(String folderPath, Mat mat, String name) {
+    public static void saveMat2Img(String folderPath, Mat mat, String name) {
         File file1 = new File(folderPath);
         if (!file1.exists())
             file1.mkdirs();
@@ -71,12 +83,11 @@ public class OpenCVHelper {
     }
 
     /**
-     *
      * @param rows height y轴方位
      * @param cols width x轴方位
      * @return
      */
-    public static Mat newMat(int rows, int cols){
+    public static Mat newMat(int rows, int cols) {
         return new Mat(rows, cols, CvType.CV_8UC3);
     }
 

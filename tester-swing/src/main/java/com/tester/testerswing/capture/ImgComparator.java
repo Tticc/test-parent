@@ -1,8 +1,8 @@
 package com.tester.testerswing.capture;
 
+import com.tester.testercv.utils.opencv.OpenCVHelper;
 import com.tester.testerswing.loadlibrary.LibraryLoader;
 import org.opencv.core.*;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
@@ -30,15 +30,13 @@ public class ImgComparator {
     public static void main(String[] args) {
         String srcPath = "C:\\Users\\18883\\Desktop\\jacob\\test.png";
         String destPath = "C:\\Users\\18883\\Desktop\\jacob\\test1.png";
-        boolean b = doCompareIfTheSame(srcPath, destPath);
+        Mat src = OpenCVHelper.readImg2Mat(srcPath);
+        Mat dest = OpenCVHelper.readImg2Mat(destPath);
+        boolean b = doCompareIfTheSame(src, dest);
         System.out.println("比较结果：" + b);
     }
 
-    public static boolean doCompareIfTheSame(String hisImgPath, String targetImgPath) {
-        String srcPath = hisImgPath;
-        String destPath = targetImgPath;
-        Mat src = Imgcodecs.imread(srcPath);
-        Mat dest = Imgcodecs.imread(destPath);
+    public static boolean doCompareIfTheSame(Mat src, Mat dest) {
         Mat srcHist = processImgForCompare(src);
         Mat destHist = processImgForCompare(dest);
         double res = compareImg(srcHist, destHist, Imgproc.HISTCMP_CORREL);

@@ -20,19 +20,19 @@ public class ColorDetectTool {
 
     public static void main(String[] args) throws Exception {
         String picPath = "E:\\Development\\Projects_backup\\test-parent\\tester-swing\\src\\main\\resources\\normal2.PNG";
-        Mat src = OpenCVHelper.readImgToMat(picPath);
+        Mat src = OpenCVHelper.readImg2Mat(picPath);
 
         boolean b = detectGray(src, (mat) -> {
             new Thread(() -> {
-                HighGui.imshow("before", OpenCVHelper.readImgToMat(picPath));
+                HighGui.imshow("before", OpenCVHelper.readImg2Mat(picPath));
                 HighGui.imshow("after", mat);
                 Mat dest = OpenCVHelper.newMat(mat);
-                Core.repeat(mat,1,2,dest);
+                Core.repeat(mat, 1, 2, dest);
                 HighGui.imshow("after11", dest);
                 HighGui.waitKey(60000);
             }).start();
         });
-        if(b){
+        if (b) {
             System.out.println("warning... ");
         }
     }
@@ -42,8 +42,9 @@ public class ColorDetectTool {
      * 我们知道H分量基本能表示一个物体的颜色，但是S和V的取值也要在一定范围内，
      * 因为S代表的是H所表示的那个颜色和白色的混合程度，也就说S越小，颜色越发白，也就是越浅；
      * V代表的是H所表示的那个颜色和黑色的混合程度，也就说V越小，颜色越发黑
-     *
+     * <p>
      * 具体颜色对应的HSV数值看：onenote -> miscellaneous -> 脚本尝试 -> opencv -> HSV颜色空间
+     *
      * @Date 10:30 2022/8/9
      * @Author 温昌营
      **/
@@ -89,7 +90,7 @@ public class ColorDetectTool {
         return doCheckIfNeedWarning(resultMat, consumer);
     }
 
-    private static Mat doDetect(Mat src, Scalar minValues, Scalar maxValues){
+    private static Mat doDetect(Mat src, Scalar minValues, Scalar maxValues) {
         Mat blurredImage = OpenCVHelper.newMat(src);
         // remove some noise
         Imgproc.blur(src, blurredImage, new Size(7, 7));
@@ -101,7 +102,7 @@ public class ColorDetectTool {
     }
 
     private static boolean doCheckIfNeedWarning(Mat src, Consumer<Mat> consumer) throws BusinessException {
-        consumer.accept(src);
+        boolean needWarn = false;
         int count = 0;
         int rows = src.rows();
         int cols = src.cols();
@@ -112,12 +113,15 @@ public class ColorDetectTool {
                 if (aDouble > 0) {
                     ++count;
                 }
-                if(count > 5){
-                    return true;
+                if (count > 5) {
+                    needWarn = true;
                 }
             }
         }
-        return false;
+        if (needWarn) {
+            consumer.accept(src);
+        }
+        return needWarn;
     }
 
 }
