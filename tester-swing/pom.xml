@@ -21,7 +21,7 @@
 
         <dependency>
             <groupId>com.tester</groupId>
-            <artifactId>tester-base-dto</artifactId>
+            <artifactId>tester-cv</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -31,14 +31,6 @@
             <groupId>net.sf.jacob-project</groupId>
             <artifactId>jacob</artifactId>
             <version>1.14.3</version>
-        </dependency>
-
-        <!--mvn命令打入本地仓库后才能成功引用-->
-        <!--mvn install:install-file -Dfile=C:\Users\18883\Desktop\captureImg\opencv_exe\opencv\build\java\opencv-450.jar -DgroupId=opencv -DartifactId=opencv-jar-wenc -Dversion=450 -Dpackaging=jar -DgeneratePom=true-->
-        <dependency>
-            <groupId>opencv</groupId>
-            <artifactId>opencv-jar-wenc</artifactId>
-            <version>450</version>
         </dependency>
 
         <!-- 可视化UI编辑 -->

@@ -1,7 +1,7 @@
 package com.tester.testerswing.capture.detectColor;
 
 import com.tester.base.dto.exception.BusinessException;
-import com.tester.testerswing.capture.opencv.OpenCVHelper;
+import com.tester.testercv.utils.opencv.OpenCVHelper;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;

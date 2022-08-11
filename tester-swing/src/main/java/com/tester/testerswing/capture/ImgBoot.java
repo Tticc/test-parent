@@ -1,9 +1,9 @@
 package com.tester.testerswing.capture;
 
 import com.tester.base.dto.exception.BusinessException;
+import com.tester.testercv.utils.opencv.OpenCVHelper;
 import com.tester.testerswing.boot.AccountInfo;
 import com.tester.testerswing.capture.detectColor.ColorDetectDemo;
-import com.tester.testerswing.capture.opencv.OpenCVHelper;
 import com.tester.testerswing.robot.RobotHelper;
 import com.tester.testerswing.swing.EasyScript;
 import com.tester.testerswing.voice.BeepSoundProcessor;

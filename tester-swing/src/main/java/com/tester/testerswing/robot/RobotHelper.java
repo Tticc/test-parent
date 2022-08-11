@@ -31,19 +31,29 @@ public class RobotHelper {
 
     }
 
+    /**
+     * 创建屏幕截图
+     * @Date 13:56 2022/8/11
+     * @Author 温昌营
+     **/
     public static BufferedImage createScreenCapture(PointInfoDTO st, PointInfoDTO ed){
-        //电脑屏幕大小
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         //截图尺寸
-        screen.height = ed.getY() - st.getY();
-        screen.width = ed.getX() - st.getX();
-        //截图的宽高
-        Rectangle screenRect = new Rectangle(screen);
-        //左上角得坐标
-        screenRect.x = st.getX();
-        screenRect.y = st.getY();
+        int height = ed.getY() - st.getY();
+        int width = ed.getX() - st.getX();
+
+        Rectangle screenRect = new Rectangle(st.getX(), st.getY(), width, height);
         //将得到的屏幕信息存放在缓存里面
         return createScreenCapture(screenRect);
+    }
+
+    /**
+     * 电脑屏幕大小
+     * @Date 13:52 2022/8/11
+     * @Author 温昌营
+     **/
+    public static Dimension getScreenSize(){
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        return screen;
     }
 
     public static BufferedImage createScreenCapture(Rectangle screenRect){
