@@ -82,7 +82,6 @@ public class ImgBoot {
             hisMat = accountInfo.getHisMat();
         } else {
             hisMat = OpenCVHelper.readImg2Mat(getHisImgPath(accountInfo.getAccount(), accountInfo.getRefreshCount().get(), "number"));
-            accountInfo.setHisMat(hisMat);
         }
         boolean normal = ImgComparator.doCompareIfTheSame(hisMat, newMat);
         if (!normal) {
@@ -142,6 +141,7 @@ public class ImgBoot {
         try {
             int count = account.getRefreshCount().incrementAndGet();
             Mat numberCheckImage = createScreenAnd2Mat(account.getSt(), account.getEd(), Imgcodecs.IMREAD_GRAYSCALE, account.getAccount());
+            account.setHisMat(numberCheckImage);
             Mat warnCheckImage = createScreenAnd2Mat(account.getRedSt(), account.getRedEd(), Imgcodecs.IMREAD_UNCHANGED, account.getAccount());
             //将缓存里面的屏幕信息以图片的格式存在制定的磁盘位置
             String basePath = getBasePath(account.getAccount());
