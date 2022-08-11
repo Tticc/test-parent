@@ -40,4 +40,7 @@ public class AccountInfo extends BaseDTO {
 
     // 刷新次数
     private Mat hisMat;
+
+    // 提醒次数
+    private AtomicInteger noticeTime = new AtomicInteger(0);
 }

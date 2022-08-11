@@ -4,6 +4,7 @@ import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercv.utils.detectColor.ColorDetectTool;
 import com.tester.testercv.utils.opencv.OpenCVHelper;
 import com.tester.testerswing.boot.AccountInfo;
+import com.tester.testerswing.boot.Boot;
 import com.tester.testerswing.robot.RobotHelper;
 import com.tester.testerswing.swing.EasyScript;
 import com.tester.testerswing.voice.BeepSoundProcessor;
@@ -22,6 +23,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -86,6 +88,14 @@ public class ImgBoot {
         boolean normal = ImgComparator.doCompareIfTheSame(hisMat, newMat);
         if (!normal) {
             sendVoice(accountInfo.getInfoMsg());
+            // 最多提醒两次
+            AtomicInteger noticeTime = accountInfo.getNoticeTime();
+            int andIncrement = noticeTime.incrementAndGet();
+            if(andIncrement >= 2){
+                noticeTime.getAndSet(0);
+                refreshHisImg(accountInfo);
+                sendVoice("已刷新");
+            }
         }
 
 
