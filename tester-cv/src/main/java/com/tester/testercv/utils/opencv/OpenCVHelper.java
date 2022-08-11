@@ -2,12 +2,16 @@ package com.tester.testercv.utils.opencv;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -36,11 +40,12 @@ public class OpenCVHelper {
      * @Date 16:26 2022/8/10
      * @Author 温昌营
      **/
-    public static Mat bufferedImageToMat(BufferedImage bi) {
-        Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
-        byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
-        mat.put(0, 0, data);
-        return mat;
+    public static Mat BufferedImage2Mat(BufferedImage image) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", byteArrayOutputStream);
+        byteArrayOutputStream.flush();
+        return Imgcodecs.imdecode(new MatOfByte(byteArrayOutputStream.toByteArray()), Imgcodecs.IMREAD_COLOR);
+
     }
     /**
      * mat 保存为图片
@@ -97,10 +102,6 @@ public class OpenCVHelper {
      * @Date 10:20 2022/8/9
      * @Author 温昌营
      **/
-    public static void playImg(List<Mat> matList) {
-        playImg(matList, "default_name");
-    }
-
     public static void playImg(List<Mat> matList, boolean autoExit) {
         playImg(matList, "default_name", 500, autoExit);
     }

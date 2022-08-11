@@ -1,14 +1,13 @@
 package com.tester.testercv.utils.detectColor;
 
 import com.tester.base.dto.exception.BusinessException;
-import com.tester.testercommon.util.MyConsumer;
 import com.tester.testercv.utils.opencv.OpenCVHelper;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.highgui.HighGui;
 import org.opencv.imgproc.Imgproc;
-import org.springframework.util.StopWatch;
 
 import java.util.function.Consumer;
 
@@ -16,7 +15,7 @@ import java.util.function.Consumer;
  * @Author 温昌营
  * @Date 2022-8-8 15:19:41
  */
-public class ColorDetectDemo {
+public class ColorDetectTool {
 
 
     public static void main(String[] args) throws Exception {
@@ -24,8 +23,14 @@ public class ColorDetectDemo {
         Mat src = OpenCVHelper.readImgToMat(picPath);
 
         boolean b = detectGray(src, (mat) -> {
-//            new Thread(() -> {OpenCVHelper.showImg(mat, "name", 50000);}).start();
-            new Thread(() -> {OpenCVHelper.showImg(OpenCVHelper.readImgToMat(picPath), "name", 500000000);}).start();
+            new Thread(() -> {
+                HighGui.imshow("before", OpenCVHelper.readImgToMat(picPath));
+                HighGui.imshow("after", mat);
+                Mat dest = OpenCVHelper.newMat(mat);
+                Core.repeat(mat,1,2,dest);
+                HighGui.imshow("after11", dest);
+                HighGui.waitKey(60000);
+            }).start();
         });
         if(b){
             System.out.println("warning... ");
@@ -52,7 +57,7 @@ public class ColorDetectDemo {
         Scalar minValues = new Scalar(minH, minS, minV);
         Scalar maxValues = new Scalar(maxH, maxS, maxV);
 
-        Mat resultMat = detect(src, minValues, maxValues);
+        Mat resultMat = doDetect(src, minValues, maxValues);
         return doCheckIfNeedWarning(resultMat, consumer);
     }
 
@@ -66,7 +71,7 @@ public class ColorDetectDemo {
         Scalar minValues = new Scalar(minH, minS, minV);
         Scalar maxValues = new Scalar(maxH, maxS, maxV);
 
-        Mat resultMat = detect(src, minValues, maxValues);
+        Mat resultMat = doDetect(src, minValues, maxValues);
         return doCheckIfNeedWarning(resultMat, consumer);
     }
 
@@ -80,11 +85,11 @@ public class ColorDetectDemo {
         Scalar minValues = new Scalar(minH, minS, minV);
         Scalar maxValues = new Scalar(maxH, maxS, maxV);
 
-        Mat resultMat = detect(src, minValues, maxValues);
+        Mat resultMat = doDetect(src, minValues, maxValues);
         return doCheckIfNeedWarning(resultMat, consumer);
     }
 
-    private static Mat detect(Mat src, Scalar minValues, Scalar maxValues){
+    private static Mat doDetect(Mat src, Scalar minValues, Scalar maxValues){
         Mat blurredImage = OpenCVHelper.newMat(src);
         // remove some noise
         Imgproc.blur(src, blurredImage, new Size(7, 7));
