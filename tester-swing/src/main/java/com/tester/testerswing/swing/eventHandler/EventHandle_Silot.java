@@ -1,5 +1,6 @@
 package com.tester.testerswing.swing.eventHandler;
 
+import com.tester.testerswing.capture.GaussianPointInfoDTO;
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.robot.RobotHelper;
 import com.tester.testerswing.swing.Silot_Input;
@@ -19,48 +20,87 @@ public class EventHandle_Silot {
 
     public static String pointStr = "(%d,%d)";
 
-    public static PointInfoDTO silot_open_p1 = new PointInfoDTO().setX(1335).setY(1051);
-    public static PointInfoDTO silot_open_p2 = new PointInfoDTO().setX(1197).setY(953);
+    public static PointInfoDTO silot_open_p1_st = new PointInfoDTO().setX(1335).setY(1051);
+    public static GaussianPointInfoDTO silot_open_p1 = new GaussianPointInfoDTO().setSt(silot_open_p1_st).setEd(silot_open_p1_st);
+    public static PointInfoDTO silot_open_p2_st = new PointInfoDTO().setX(1197).setY(953);
+    public static GaussianPointInfoDTO silot_open_p2 = new GaussianPointInfoDTO().setSt(silot_open_p2_st).setEd(silot_open_p2_st);
 
-    public static PointInfoDTO silot_return_p1 = new PointInfoDTO().setX(1717).setY(748);
-    public static PointInfoDTO silot_return_p2 = new PointInfoDTO().setX(1723).setY(845);
-    public static PointInfoDTO silot_return_p3 = new PointInfoDTO().setX(1787).setY(900);
+    public static PointInfoDTO silot_return_p1_st = new PointInfoDTO().setX(1717).setY(748);
+    public static PointInfoDTO silot_return_p1_ed = new PointInfoDTO().setX(1717).setY(748);
+    public static GaussianPointInfoDTO silot_return_p1 = new GaussianPointInfoDTO().setSt(silot_return_p1_st).setEd(silot_return_p1_ed);
 
-    public static PointInfoDTO silot_align_p1 = new PointInfoDTO().setX(1882).setY(213);
-    public static PointInfoDTO silot_align_p2 = new PointInfoDTO().setX(1667).setY(261);
-    public static PointInfoDTO silot_align_p3 = new PointInfoDTO().setX(1630).setY(114);
+    public static PointInfoDTO silot_return_p2_st = new PointInfoDTO().setX(1723).setY(845);
+    public static PointInfoDTO silot_return_p2_ed = new PointInfoDTO().setX(1723).setY(845);
+    public static GaussianPointInfoDTO silot_return_p2 = new GaussianPointInfoDTO().setSt(silot_return_p2_st).setEd(silot_return_p2_ed);
 
-    public static PointInfoDTO silot_main_view_p1 = new PointInfoDTO().setX(1673).setY(212);
+    public static PointInfoDTO silot_return_p3_st = new PointInfoDTO().setX(1787).setY(900);
+    public static PointInfoDTO silot_return_p3_ed = new PointInfoDTO().setX(1787).setY(900);
+    public static GaussianPointInfoDTO silot_return_p3 = new GaussianPointInfoDTO().setSt(silot_return_p3_st).setEd(silot_return_p3_ed);
+
+    public static PointInfoDTO silot_align_p1_st = new PointInfoDTO().setX(1882).setY(213);
+    public static PointInfoDTO silot_align_p1_ed = new PointInfoDTO().setX(1882).setY(213);
+    public static GaussianPointInfoDTO silot_align_p1 = new GaussianPointInfoDTO().setSt(silot_align_p1_st).setEd(silot_align_p1_ed);
+
+    public static PointInfoDTO silot_align_p2_st = new PointInfoDTO().setX(1667).setY(261);
+    public static PointInfoDTO silot_align_p2_ed = new PointInfoDTO().setX(1667).setY(261);
+    public static GaussianPointInfoDTO silot_align_p2 = new GaussianPointInfoDTO().setSt(silot_align_p2_st).setEd(silot_align_p2_ed);
+
+    public static PointInfoDTO silot_align_p3_st = new PointInfoDTO().setX(1630).setY(114);
+    public static PointInfoDTO silot_align_p3_ed = new PointInfoDTO().setX(1630).setY(114);
+    public static GaussianPointInfoDTO silot_align_p3 = new GaussianPointInfoDTO().setSt(silot_align_p3_st).setEd(silot_align_p3_ed);
+
+
+    public static PointInfoDTO silot_main_view_p1_st = new PointInfoDTO().setX(1673).setY(212);
+    public static PointInfoDTO silot_main_view_p1_ed = new PointInfoDTO().setX(1673).setY(212);
+    public static GaussianPointInfoDTO silot_main_view_p1 = new GaussianPointInfoDTO().setSt(silot_main_view_p1_st).setEd(silot_main_view_p1_ed);
 
 
     public static void handle_silot(Silot_Input script) {
         // 设置输入事件
         JTextField silot_open_p1_input = script.getSilot_open_p1_input();
-        setTextField(silot_open_p1_input, silot_open_p1);
+        setTextField(silot_open_p1_input, silot_open_p1_st);
 
         JTextField silot_open_p2_input = script.getSilot_open_p2_input();
-        setTextField(silot_open_p2_input, silot_open_p2);
+        setTextField(silot_open_p2_input, silot_open_p2_st);
 
+        // 返回6个点
         JTextField silot_return_p1_input = script.getSilot_return_p1_input();
-        setTextField(silot_return_p1_input, silot_return_p1);
+        setTextField(silot_return_p1_input, silot_return_p1_st);
+        JTextField silot_return_p12_input = script.getSilot_return_p12_input();
+        setTextField(silot_return_p12_input, silot_return_p1_ed);
 
         JTextField silot_return_p2_input = script.getSilot_return_p2_input();
-        setTextField(silot_return_p2_input, silot_return_p2);
+        setTextField(silot_return_p2_input, silot_return_p2_st);
+        JTextField silot_return_p22_input = script.getSilot_return_p22_input();
+        setTextField(silot_return_p22_input, silot_return_p2_ed);
 
         JTextField silot_return_p3_input = script.getSilot_return_p3_input();
-        setTextField(silot_return_p3_input, silot_return_p3);
+        setTextField(silot_return_p3_input, silot_return_p3_st);
+        JTextField silot_return_p32_input = script.getSilot_return_p32_input();
+        setTextField(silot_return_p32_input, silot_return_p3_ed);
 
+
+        // 跑路6个点
         JTextField silot_align_p1_input = script.getSilot_align_p1_input();
-        setTextField(silot_align_p1_input, silot_align_p1);
+        setTextField(silot_align_p1_input, silot_align_p1_st);
+        JTextField silot_align_p12_input = script.getSilot_align_p12_input();
+        setTextField(silot_align_p12_input, silot_align_p1_ed);
 
         JTextField silot_align_p2_input = script.getSilot_align_p2_input();
-        setTextField(silot_align_p2_input, silot_align_p2);
+        setTextField(silot_align_p2_input, silot_align_p2_st);
+        JTextField silot_align_p22_input = script.getSilot_align_p22_input();
+        setTextField(silot_align_p22_input, silot_align_p2_ed);
 
         JTextField silot_align_p3_input = script.getSilot_align_p3_input();
-        setTextField(silot_align_p3_input, silot_align_p3);
+        setTextField(silot_align_p3_input, silot_align_p3_st);
+        JTextField silot_align_p32_input = script.getSilot_align_p32_input();
+        setTextField(silot_align_p32_input, silot_align_p3_ed);
 
+        // 主览2个点
         JTextField silot_main_view_input = script.getSilot_main_view_input();
-        setTextField(silot_main_view_input, silot_main_view_p1);
+        setTextField(silot_main_view_input, silot_main_view_p1_st);
+        JTextField silot_main_view2_input = script.getSilot_main_view2_input();
+        setTextField(silot_main_view2_input, silot_main_view_p1_ed);
 
     }
 

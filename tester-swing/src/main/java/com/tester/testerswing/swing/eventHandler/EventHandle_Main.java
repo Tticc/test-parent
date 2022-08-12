@@ -1,6 +1,6 @@
 package com.tester.testerswing.swing.eventHandler;
 
-import com.tester.testerswing.capture.PointInfoDTO;
+import com.tester.testerswing.capture.GaussianPointInfoDTO;
 import com.tester.testerswing.robot.RobotHelper;
 import com.tester.testerswing.swing.EasyScript_UI_Main;
 
@@ -115,14 +115,14 @@ public class EventHandle_Main {
         });
     }
 
-    public static void openOpe(PointInfoDTO p1, PointInfoDTO p2) {
+    public static void openOpe(GaussianPointInfoDTO p1, GaussianPointInfoDTO p2) {
         RobotHelper.move(p1.getX(), p1.getY(), 100);
         RobotHelper.mouseLeftPress();
         RobotHelper.move(p2.getX(), p2.getY(), 186);
         RobotHelper.mouseLeftPress();
     }
 
-    private static void returnOpe(PointInfoDTO p1, PointInfoDTO p2, PointInfoDTO p3, PointInfoDTO mvP1) {
+    private static void returnOpe(GaussianPointInfoDTO p1, GaussianPointInfoDTO p2, GaussianPointInfoDTO p3, GaussianPointInfoDTO mvP1) {
         RobotHelper.move(p1.getX(), p1.getY(), 213);
         RobotHelper.mouseLeftPress();
         RobotHelper.move(p2.getX(), p2.getY(), 237);
@@ -133,7 +133,7 @@ public class EventHandle_Main {
         RobotHelper.mouseLeftPress();
     }
 
-    private static void runOpe(PointInfoDTO p1, PointInfoDTO p2, PointInfoDTO p3, PointInfoDTO mvP1) {
+    private static void runOpe(GaussianPointInfoDTO p1, GaussianPointInfoDTO p2, GaussianPointInfoDTO p3, GaussianPointInfoDTO mvP1) {
         RobotHelper.move(p1.getX(), p1.getY(), 331);
         RobotHelper.mouseLeftPress();
         RobotHelper.move(p2.getX(), p2.getY(), 386);

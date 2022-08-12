@@ -1,5 +1,6 @@
 package com.tester.testerswing.swing.eventHandler;
 
+import com.tester.testerswing.capture.GaussianPointInfoDTO;
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.robot.RobotHelper;
 import com.tester.testerswing.swing.Sai_Input;
@@ -19,49 +20,89 @@ public class EventHandle_Sai {
 
     public static String pointStr = "(%d,%d)";
 
-    public static PointInfoDTO sai_open_p1 = new PointInfoDTO().setX(1338).setY(1048);
-    public static PointInfoDTO sai_open_p2 = new PointInfoDTO().setX(1469).setY(939);
+    public static PointInfoDTO sai_open_p1_st = new PointInfoDTO().setX(1338).setY(1048);
+    public static GaussianPointInfoDTO sai_open_p1 = new GaussianPointInfoDTO().setSt(sai_open_p1_st).setEd(sai_open_p1_st);
+    public static PointInfoDTO sai_open_p2_st = new PointInfoDTO().setX(1469).setY(939);
+    public static GaussianPointInfoDTO sai_open_p2 = new GaussianPointInfoDTO().setSt(sai_open_p2_st).setEd(sai_open_p2_st);
 
-    public static PointInfoDTO sai_return_p1 = new PointInfoDTO().setX(1719).setY(769);
-    public static PointInfoDTO sai_return_p2 = new PointInfoDTO().setX(1724).setY(869);
-    public static PointInfoDTO sai_return_p3 = new PointInfoDTO().setX(1771).setY(915);
 
-    public static PointInfoDTO sai_align_p1 = new PointInfoDTO().setX(1881).setY(213);
-    public static PointInfoDTO sai_align_p2 = new PointInfoDTO().setX(1673).setY(255);
-    public static PointInfoDTO sai_align_p3 = new PointInfoDTO().setX(1633).setY(111);
+    public static PointInfoDTO sai_return_p1_st = new PointInfoDTO().setX(1717).setY(748);
+    public static PointInfoDTO sai_return_p1_ed = new PointInfoDTO().setX(1717).setY(748);
+    public static GaussianPointInfoDTO sai_return_p1 = new GaussianPointInfoDTO().setSt(sai_return_p1_st).setEd(sai_return_p1_ed);
 
-    public static PointInfoDTO sai_main_view_p1 = new PointInfoDTO().setX(1667).setY(209);
+    public static PointInfoDTO sai_return_p2_st = new PointInfoDTO().setX(1723).setY(845);
+    public static PointInfoDTO sai_return_p2_ed = new PointInfoDTO().setX(1723).setY(845);
+    public static GaussianPointInfoDTO sai_return_p2 = new GaussianPointInfoDTO().setSt(sai_return_p2_st).setEd(sai_return_p2_ed);
+
+    public static PointInfoDTO sai_return_p3_st = new PointInfoDTO().setX(1787).setY(900);
+    public static PointInfoDTO sai_return_p3_ed = new PointInfoDTO().setX(1787).setY(900);
+    public static GaussianPointInfoDTO sai_return_p3 = new GaussianPointInfoDTO().setSt(sai_return_p3_st).setEd(sai_return_p3_ed);
+
+    public static PointInfoDTO sai_align_p1_st = new PointInfoDTO().setX(1882).setY(213);
+    public static PointInfoDTO sai_align_p1_ed = new PointInfoDTO().setX(1882).setY(213);
+    public static GaussianPointInfoDTO sai_align_p1 = new GaussianPointInfoDTO().setSt(sai_align_p1_st).setEd(sai_align_p1_ed);
+
+    public static PointInfoDTO sai_align_p2_st = new PointInfoDTO().setX(1667).setY(261);
+    public static PointInfoDTO sai_align_p2_ed = new PointInfoDTO().setX(1667).setY(261);
+    public static GaussianPointInfoDTO sai_align_p2 = new GaussianPointInfoDTO().setSt(sai_align_p2_st).setEd(sai_align_p2_ed);
+
+    public static PointInfoDTO sai_align_p3_st = new PointInfoDTO().setX(1630).setY(114);
+    public static PointInfoDTO sai_align_p3_ed = new PointInfoDTO().setX(1630).setY(114);
+    public static GaussianPointInfoDTO sai_align_p3 = new GaussianPointInfoDTO().setSt(sai_align_p3_st).setEd(sai_align_p3_ed);
+
+
+    public static PointInfoDTO sai_main_view_p1_st = new PointInfoDTO().setX(1673).setY(212);
+    public static PointInfoDTO sai_main_view_p1_ed = new PointInfoDTO().setX(1673).setY(212);
+    public static GaussianPointInfoDTO sai_main_view_p1 = new GaussianPointInfoDTO().setSt(sai_main_view_p1_st).setEd(sai_main_view_p1_ed);
 
 
     public static void handle_sai(Sai_Input script) {
         // 设置输入事件
         JTextField sai_open_p1_input = script.getSai_open_p1_input();
-        setTextField(sai_open_p1_input, sai_open_p1);
+        setTextField(sai_open_p1_input, sai_open_p1_st);
 
         JTextField sai_open_p2_input = script.getSai_open_p2_input();
-        setTextField(sai_open_p2_input, sai_open_p2);
+        setTextField(sai_open_p2_input, sai_open_p2_st);
 
+
+        // 返回6个点
         JTextField sai_return_p1_input = script.getSai_return_p1_input();
-        setTextField(sai_return_p1_input, sai_return_p1);
+        setTextField(sai_return_p1_input, sai_return_p1_st);
+        JTextField sai_return_p12_input = script.getSai_return_p12_input();
+        setTextField(sai_return_p12_input, sai_return_p1_ed);
 
         JTextField sai_return_p2_input = script.getSai_return_p2_input();
-        setTextField(sai_return_p2_input, sai_return_p2);
+        setTextField(sai_return_p2_input, sai_return_p2_st);
+        JTextField sai_return_p22_input = script.getSai_return_p22_input();
+        setTextField(sai_return_p22_input, sai_return_p2_ed);
 
         JTextField sai_return_p3_input = script.getSai_return_p3_input();
-        setTextField(sai_return_p3_input, sai_return_p3);
+        setTextField(sai_return_p3_input, sai_return_p3_st);
+        JTextField sai_return_p32_input = script.getSai_return_p32_input();
+        setTextField(sai_return_p32_input, sai_return_p3_ed);
 
+
+        // 跑路6个点
         JTextField sai_align_p1_input = script.getSai_align_p1_input();
-        setTextField(sai_align_p1_input, sai_align_p1);
+        setTextField(sai_align_p1_input, sai_align_p1_st);
+        JTextField sai_align_p12_input = script.getSai_align_p12_input();
+        setTextField(sai_align_p12_input, sai_align_p1_ed);
 
         JTextField sai_align_p2_input = script.getSai_align_p2_input();
-        setTextField(sai_align_p2_input, sai_align_p2);
+        setTextField(sai_align_p2_input, sai_align_p2_st);
+        JTextField sai_align_p22_input = script.getSai_align_p22_input();
+        setTextField(sai_align_p22_input, sai_align_p2_ed);
 
         JTextField sai_align_p3_input = script.getSai_align_p3_input();
-        setTextField(sai_align_p3_input, sai_align_p3);
+        setTextField(sai_align_p3_input, sai_align_p3_st);
+        JTextField sai_align_p32_input = script.getSai_align_p32_input();
+        setTextField(sai_align_p32_input, sai_align_p3_ed);
 
-
+        // 主览2个点
         JTextField sai_main_view_input = script.getSai_main_view_input();
-        setTextField(sai_main_view_input, sai_main_view_p1);
+        setTextField(sai_main_view_input, sai_main_view_p1_st);
+        JTextField sai_main_view2_input = script.getSai_main_view2_input();
+        setTextField(sai_main_view2_input, sai_main_view_p1_ed);
 
     }
 

@@ -6,11 +6,15 @@
     <rowspec value="top:10dlu:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:d:noGrow"/>
+    <rowspec value="top:17px:noGrow"/>
+    <rowspec value="center:d:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
+    <rowspec value="top:17px:noGrow"/>
+    <rowspec value="center:d:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
-    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="top:17px:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <colspec value="fill:45px:noGrow"/>
     <colspec value="left:0dlu:noGrow"/>
@@ -75,7 +79,7 @@
           <forms top="0" left="10" bottom="0" right="0"/>
         </constraints>
         <properties>
-          <text value="回收1"/>
+          <text value="收1.1"/>
         </properties>
       </component>
       <component id="d253d" class="javax.swing.JTextField" binding="silot_return_p1_input">
@@ -89,78 +93,18 @@
           <text value=""/>
         </properties>
       </component>
-      <component id="96122" class="javax.swing.JLabel" binding="silot_return_p2_label">
-        <constraints>
-          <grid row="6" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="10" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="回收2"/>
-        </properties>
-      </component>
-      <component id="21502" class="javax.swing.JTextField" binding="silot_return_p2_input">
-        <constraints>
-          <grid row="6" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <text value=""/>
-        </properties>
-      </component>
       <component id="93e5d" class="javax.swing.JLabel" binding="silot_align_p1_label">
         <constraints>
-          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <forms top="0" left="10" bottom="0" right="0"/>
         </constraints>
         <properties>
-          <text value="朝向1"/>
-        </properties>
-      </component>
-      <component id="c6caf" class="javax.swing.JLabel" binding="silot_align_p2_label">
-        <constraints>
-          <grid row="8" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="10" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="朝向2"/>
-        </properties>
-      </component>
-      <component id="4b072" class="javax.swing.JLabel" binding="silot_align_p3_label">
-        <constraints>
-          <grid row="8" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="10" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="朝向3"/>
+          <text value="跑1.1"/>
         </properties>
       </component>
       <component id="950d5" class="javax.swing.JTextField" binding="silot_align_p1_input">
         <constraints>
-          <grid row="8" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <text value=""/>
-        </properties>
-      </component>
-      <component id="5acec" class="javax.swing.JTextField" binding="silot_align_p2_input">
-        <constraints>
-          <grid row="8" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <text value=""/>
-        </properties>
-      </component>
-      <component id="23259" class="javax.swing.JTextField" binding="silot_align_p3_input">
-        <constraints>
-          <grid row="8" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="10" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <forms defaultalign-horz="false"/>
@@ -180,16 +124,96 @@
       </component>
       <component id="d457b" class="javax.swing.JLabel" binding="silot_main_view_label">
         <constraints>
-          <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <forms top="0" left="10" bottom="0" right="0"/>
         </constraints>
         <properties>
-          <text value="主览"/>
+          <text value="主览1"/>
         </properties>
       </component>
       <component id="fccd9" class="javax.swing.JTextField" binding="silot_main_view_input">
         <constraints>
-          <grid row="10" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+          <grid row="14" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="26b53" class="javax.swing.JLabel" binding="silot_return_p32_label">
+        <constraints>
+          <grid row="8" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="10" bottom="0" right="0"/>
+        </constraints>
+        <properties>
+          <text value="收3.2"/>
+        </properties>
+      </component>
+      <component id="614cf" class="javax.swing.JTextField" binding="silot_return_p32_input">
+        <constraints>
+          <grid row="8" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="5583f" class="javax.swing.JLabel" binding="silot_align_p32_label">
+        <constraints>
+          <grid row="12" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="10" bottom="0" right="0"/>
+        </constraints>
+        <properties>
+          <text value="跑3.2"/>
+        </properties>
+      </component>
+      <component id="a4ae7" class="javax.swing.JTextField" binding="silot_align_p32_input">
+        <constraints>
+          <grid row="12" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="3b15b" class="javax.swing.JLabel" binding="silot_return_p12_label">
+        <constraints>
+          <grid row="6" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="10" bottom="0" right="0"/>
+        </constraints>
+        <properties>
+          <text value="收1.2"/>
+        </properties>
+      </component>
+      <component id="499af" class="javax.swing.JTextField" binding="silot_return_p12_input">
+        <constraints>
+          <grid row="6" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="be01b" class="javax.swing.JLabel" binding="silot_return_p22_label">
+        <constraints>
+          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="10" bottom="0" right="0"/>
+        </constraints>
+        <properties>
+          <text value="收2.2"/>
+        </properties>
+      </component>
+      <component id="7d3a1" class="javax.swing.JTextField" binding="silot_return_p22_input">
+        <constraints>
+          <grid row="8" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <forms defaultalign-horz="false"/>
@@ -200,16 +224,136 @@
       </component>
       <component id="d9b74" class="javax.swing.JLabel" binding="silot_return_p3_label">
         <constraints>
-          <grid row="6" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="8" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <forms top="0" left="10" bottom="0" right="0"/>
         </constraints>
         <properties>
-          <text value="回收3"/>
+          <text value="收3.1"/>
         </properties>
       </component>
       <component id="100d9" class="javax.swing.JTextField" binding="silot_return_p3_input">
         <constraints>
+          <grid row="8" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="96122" class="javax.swing.JLabel" binding="silot_return_p2_label">
+        <constraints>
+          <grid row="6" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="10" bottom="0" right="0"/>
+        </constraints>
+        <properties>
+          <text value="收2.1"/>
+        </properties>
+      </component>
+      <component id="21502" class="javax.swing.JTextField" binding="silot_return_p2_input">
+        <constraints>
           <grid row="6" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="243db" class="javax.swing.JLabel" binding="silot_align_p12_label">
+        <constraints>
+          <grid row="10" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="10" bottom="0" right="0"/>
+        </constraints>
+        <properties>
+          <text value="跑1.2"/>
+        </properties>
+      </component>
+      <component id="fac35" class="javax.swing.JTextField" binding="silot_align_p12_input">
+        <constraints>
+          <grid row="10" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="3ed9b" class="javax.swing.JLabel" binding="silot_align_p22_label">
+        <constraints>
+          <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="10" bottom="0" right="0"/>
+        </constraints>
+        <properties>
+          <text value="跑2.2"/>
+        </properties>
+      </component>
+      <component id="30cb4" class="javax.swing.JTextField" binding="silot_align_p22_input">
+        <constraints>
+          <grid row="12" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="4b072" class="javax.swing.JLabel" binding="silot_align_p3_label">
+        <constraints>
+          <grid row="12" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="10" bottom="0" right="0"/>
+        </constraints>
+        <properties>
+          <text value="跑3.1"/>
+        </properties>
+      </component>
+      <component id="23259" class="javax.swing.JTextField" binding="silot_align_p3_input">
+        <constraints>
+          <grid row="12" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="c6caf" class="javax.swing.JLabel" binding="silot_align_p2_label">
+        <constraints>
+          <grid row="10" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="10" bottom="0" right="0"/>
+        </constraints>
+        <properties>
+          <text value="跑2.1"/>
+        </properties>
+      </component>
+      <component id="5acec" class="javax.swing.JTextField" binding="silot_align_p2_input">
+        <constraints>
+          <grid row="10" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="e30d3" class="javax.swing.JLabel" binding="silot_main_view2_label">
+        <constraints>
+          <grid row="14" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="10" bottom="0" right="0"/>
+        </constraints>
+        <properties>
+          <text value="主览2"/>
+        </properties>
+      </component>
+      <component id="b8e68" class="javax.swing.JTextField" binding="silot_main_view2_input">
+        <constraints>
+          <grid row="14" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <forms defaultalign-horz="false"/>
