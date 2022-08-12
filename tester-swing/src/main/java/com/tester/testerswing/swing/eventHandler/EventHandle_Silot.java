@@ -25,33 +25,33 @@ public class EventHandle_Silot {
     public static PointInfoDTO silot_open_p2_st = new PointInfoDTO().setX(1197).setY(953);
     public static GaussianPointInfoDTO silot_open_p2 = new GaussianPointInfoDTO().setSt(silot_open_p2_st).setEd(silot_open_p2_st);
 
-    public static PointInfoDTO silot_return_p1_st = new PointInfoDTO().setX(1717).setY(748);
-    public static PointInfoDTO silot_return_p1_ed = new PointInfoDTO().setX(1717).setY(748);
+    public static PointInfoDTO silot_return_p1_st = new PointInfoDTO().setX(1706).setY(744);
+    public static PointInfoDTO silot_return_p1_ed = new PointInfoDTO().setX(1778).setY(752);
     public static GaussianPointInfoDTO silot_return_p1 = new GaussianPointInfoDTO().setSt(silot_return_p1_st).setEd(silot_return_p1_ed);
 
-    public static PointInfoDTO silot_return_p2_st = new PointInfoDTO().setX(1723).setY(845);
-    public static PointInfoDTO silot_return_p2_ed = new PointInfoDTO().setX(1723).setY(845);
+    public static PointInfoDTO silot_return_p2_st = new PointInfoDTO().setX(1725).setY(845);
+    public static PointInfoDTO silot_return_p2_ed = new PointInfoDTO().setX(1725).setY(845);
     public static GaussianPointInfoDTO silot_return_p2 = new GaussianPointInfoDTO().setSt(silot_return_p2_st).setEd(silot_return_p2_ed);
 
-    public static PointInfoDTO silot_return_p3_st = new PointInfoDTO().setX(1787).setY(900);
-    public static PointInfoDTO silot_return_p3_ed = new PointInfoDTO().setX(1787).setY(900);
+    public static PointInfoDTO silot_return_p3_st = new PointInfoDTO().setX(1784).setY(899);
+    public static PointInfoDTO silot_return_p3_ed = new PointInfoDTO().setX(1804).setY(905);
     public static GaussianPointInfoDTO silot_return_p3 = new GaussianPointInfoDTO().setSt(silot_return_p3_st).setEd(silot_return_p3_ed);
 
-    public static PointInfoDTO silot_align_p1_st = new PointInfoDTO().setX(1882).setY(213);
-    public static PointInfoDTO silot_align_p1_ed = new PointInfoDTO().setX(1882).setY(213);
+    public static PointInfoDTO silot_align_p1_st = new PointInfoDTO().setX(1872).setY(207);
+    public static PointInfoDTO silot_align_p1_ed = new PointInfoDTO().setX(1891).setY(220);
     public static GaussianPointInfoDTO silot_align_p1 = new GaussianPointInfoDTO().setSt(silot_align_p1_st).setEd(silot_align_p1_ed);
 
-    public static PointInfoDTO silot_align_p2_st = new PointInfoDTO().setX(1667).setY(261);
-    public static PointInfoDTO silot_align_p2_ed = new PointInfoDTO().setX(1667).setY(261);
+    public static PointInfoDTO silot_align_p2_st = new PointInfoDTO().setX(1647).setY(253);
+    public static PointInfoDTO silot_align_p2_ed = new PointInfoDTO().setX(1672).setY(264);
     public static GaussianPointInfoDTO silot_align_p2 = new GaussianPointInfoDTO().setSt(silot_align_p2_st).setEd(silot_align_p2_ed);
 
-    public static PointInfoDTO silot_align_p3_st = new PointInfoDTO().setX(1630).setY(114);
-    public static PointInfoDTO silot_align_p3_ed = new PointInfoDTO().setX(1630).setY(114);
+    public static PointInfoDTO silot_align_p3_st = new PointInfoDTO().setX(1623).setY(102);
+    public static PointInfoDTO silot_align_p3_ed = new PointInfoDTO().setX(1635).setY(114);
     public static GaussianPointInfoDTO silot_align_p3 = new GaussianPointInfoDTO().setSt(silot_align_p3_st).setEd(silot_align_p3_ed);
 
 
-    public static PointInfoDTO silot_main_view_p1_st = new PointInfoDTO().setX(1673).setY(212);
-    public static PointInfoDTO silot_main_view_p1_ed = new PointInfoDTO().setX(1673).setY(212);
+    public static PointInfoDTO silot_main_view_p1_st = new PointInfoDTO().setX(1660).setY(209);
+    public static PointInfoDTO silot_main_view_p1_ed = new PointInfoDTO().setX(1688).setY(219);
     public static GaussianPointInfoDTO silot_main_view_p1 = new GaussianPointInfoDTO().setSt(silot_main_view_p1_st).setEd(silot_main_view_p1_ed);
 
 
