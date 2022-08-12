@@ -21,7 +21,7 @@ import java.util.function.Supplier;
 public class InitCommonEventHelper {
 
     public static void initCommonEvent(EasyScript_UI_Main script) {
-        // 触发检测监控
+        // 初始化检测监控
         script.getChecking().addActionListener((e) -> {
             try {
                 script.getBoot().start();

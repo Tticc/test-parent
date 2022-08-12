@@ -31,7 +31,9 @@ public class NormalTest {
 //        }
 
 
-        captureImgAnd2Mat();
+//        captureImgAnd2Mat();
+
+        RobotHelper.move(264, 203);
 
 
     }

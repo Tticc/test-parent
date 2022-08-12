@@ -21,21 +21,27 @@ public class StartOnTopReplica {
         PointInfoDTO saiListPoint = new PointInfoDTO().setX(304).setY(99);
         PointInfoDTO silotListPoint = new PointInfoDTO().setX(362).setY(123);
 
+        // 依次打开账号，将两个账号放到onTopReplica的界面选项首位。也就是上面的 saiListPoint 和 silotListPoint 两个点
+        EventHandle_Main.openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
+        RobotHelper.delay(200);
+        EventHandle_Main.openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
 
+        // sai 截屏
         startOnToRepli1(saiListPoint);
+        // 移动 sai 到右侧临时位置
         move_sai_first();
 
+        // silot 截屏
         startOnToRepli1(silotListPoint);
+        // 移动 silot 到最终位置
         move_silot_first();
+        // 移动 sai 到最终位置
         move_sai_last();
         RobotHelper.delay(200);
         RobotHelper.move(555, 555);
     }
 
     private static void startOnToRepli1(PointInfoDTO account) {
-        EventHandle_Main.openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
-        RobotHelper.delay(200);
-        EventHandle_Main.openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
 
         RobotHelper.move(89, 1056);
         RobotHelper.mouseLeftPress();
@@ -43,7 +49,8 @@ public class StartOnTopReplica {
         RobotHelper.keyPress("OnTopReplica");
         RobotHelper.move(198, 372);
         RobotHelper.mouseLeftPress();
-        RobotHelper.move(244, 198);
+        RobotHelper.move(264, 203);
+        RobotHelper.delay(456);
         RobotHelper.mouseRightPress();
         RobotHelper.move(326, 367);
         RobotHelper.mouseLeftPress();

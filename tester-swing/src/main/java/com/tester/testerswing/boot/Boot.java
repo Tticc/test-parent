@@ -13,6 +13,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 启动检测
+ * @Date 11:50 2022/8/12
+ * @Author 温昌营
+ **/
 public class Boot {
 
     private boolean started = false;
