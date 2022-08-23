@@ -1,90 +1,73 @@
 package com.tester.testersearch;
 
-import co.elastic.clients.elasticsearch.ElasticsearchAsyncClient;
-import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch._types.ElasticsearchException;
-import co.elastic.clients.elasticsearch.core.SearchRequest;
-import co.elastic.clients.elasticsearch.core.SearchResponse;
+import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.elasticsearch.core.search.Hit;
-import co.elastic.clients.json.jackson.JacksonJsonpMapper;
-import co.elastic.clients.transport.ElasticsearchTransport;
-import co.elastic.clients.transport.rest_client.RestClientTransport;
-import co.elastic.clients.util.ObjectBuilder;
-import com.tester.testersearch.esUtil.Knowledge;
+import com.tester.testersearch.util.DocumentHelper;
+import com.tester.testersearch.model.Knowledge;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpHost;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestHighLevelClient;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.util.function.Function;
+import java.util.Arrays;
+import java.util.Date;
 
 
 @Slf4j
 public class NormalTest_ES {
-    public static ElasticsearchClient client;
-    public static ElasticsearchAsyncClient asyncClient;
-    public static RestHighLevelClient hlrc;
 
-    static {
-        // Create the low-level client
-        RestClient restClient = RestClient.builder(
-                new HttpHost("10.10.38.4", 9200)).build();
-        // Create the transport with a Jackson mapper
-        ElasticsearchTransport transport = new RestClientTransport(
-                restClient, new JacksonJsonpMapper());
-        // And create the API client
-        client = new ElasticsearchClient(transport);
-        asyncClient = new ElasticsearchAsyncClient(transport);
-//        hlrc = new RestHighLevelClientBuilder(restClient)
-//                .setApiCompatibilityMode(true)
-//                .build();
+    public DocumentHelper documentHelper = new DocumentHelper();
+
+    @Test
+    public void test_create() throws Exception {
+        Date date = new Date();
+        Knowledge knowledge = new Knowledge();
+        knowledge.setType(1)
+                .setCode("00000002")
+                .setBelong("wenc")
+                .setKeyword("镖车")
+                .setTitle("镖车运输时间点")
+                .setDescription("镖车时间点")
+                .setDetail("0-2雪原2-4古树4-6碧波----6-8雪原8-10古树10-12碧波----12-14雪原14-16古树16-18碧波----18-20雪原20-22古树22-24碧波")
+                .setAuthor("wenc")
+                .setPriority(1)
+                .setDeleted(0)
+                .setStartTime(date)
+                .setEndTime(date)
+                .setCreatedBy("wenc")
+                .setCreatedTime(date)
+                .setUpdatedBy("wenc")
+                .setUpdatedTime(date);
+        CreateResponse test_knowledge = documentHelper.myCreate(e -> e.id(knowledge.getCode()).index("test_knowledge").document(knowledge));
+        System.out.println("test_knowledge = " + test_knowledge);
     }
 
+    @Test
+    public void test_update() throws Exception {
+        Knowledge knowledge = new Knowledge();
+        knowledge.setCode("00000002").setTitle("镖车运输时间点_2022-8-23 10:23:36").setUpdatedTime(new Date());
+        documentHelper.myUpdate(e -> e.id("00000002").index("test_knowledge").doc(knowledge), Knowledge.class);
+    }
 
     @Test
     public void test_firstRequest() throws Exception {
-        SearchResponse<Knowledge> search = mySearch(s -> s
+        SearchResponse<Knowledge> search = documentHelper.mySearch(s -> s
                         .index("test_knowledge")
                         .query(q -> q
-                                .bool(q1 -> q1.should(l -> l.match(m -> m.field("desc").query("转眼之间")))
-//                                .term(t -> t
-//                                        .field("desc")
-//                                        .value(v -> v.stringValue("转眼之间"))
-//                                )
+                                .bool(q1 -> q1.should(l -> l.match(e -> e.field("description").query("转眼之间").analyzer("ik_max_word")))
+                                        .should(l -> l.term(e -> e.field("keyword").value("欧莎")))
+                                        .should(l -> l.multiMatch(e -> e.fields(Arrays.asList("description", "keyword")).query("转眼之间")))
                                 )).size(10).from(0),
                 Knowledge.class);
 
         for (Hit<Knowledge> hit : search.hits().hits()) {
-            processProduct(hit.source());
+            processKnowledge(hit.source());
         }
     }
 
-    public void processProduct(Knowledge knowledge) {
+    private void processKnowledge(Knowledge knowledge) {
         System.out.println("knowledge = " + knowledge);
     }
 
 
-    /**
-     * @Date 15:27 2022/7/27
-     * @Author 温昌营
-     * @see ElasticsearchClient#search(java.util.function.Function, java.lang.Class)
-     **/
-    public final <TDocument> SearchResponse<TDocument> mySearch(
-            Function<SearchRequest.Builder, ObjectBuilder<SearchRequest>> fn, Class<TDocument> tDocumentClass)
-            throws IOException, ElasticsearchException {
-        SearchRequest build = fn.apply(new SearchRequest.Builder()).build();
-        log.info("request info:{}", build);
-        return client.search(build, tDocumentClass);
-    }
-//    public final <TDocument> SearchResponse<TDocument> myHlrcSearch(
-//            Function<SearchRequest.Builder, ObjectBuilder<SearchRequest>> fn, Class<TDocument> tDocumentClass)
-//            throws IOException, ElasticsearchException {
-//        SearchRequest build = fn.apply(new SearchRequestBuilder()).build();
-//        log.info("request info:{}", build);
-//        return hlrc.search(build, null);
-//    }
 
 
     @Test
