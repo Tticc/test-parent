@@ -49,12 +49,12 @@ public class StartOnTopReplica {
         RobotHelper.keyPress("OnTopReplica");
         RobotHelper.move(198, 372);
         RobotHelper.mouseLeftPress();
-        RobotHelper.move(264, 203);
+        RobotHelper.move(357,297);
         RobotHelper.delay(456);
         RobotHelper.mouseRightPress();
-        RobotHelper.move(326, 367);
+        RobotHelper.move(440,468);
         RobotHelper.mouseLeftPress();
-        RobotHelper.move(475, 395);
+        RobotHelper.move(589,495);
         RobotHelper.mouseLeftPress();
         // 移动到起始位置
         RobotHelper.move(61, 55);
