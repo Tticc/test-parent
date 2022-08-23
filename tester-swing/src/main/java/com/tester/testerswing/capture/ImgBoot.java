@@ -87,14 +87,14 @@ public class ImgBoot {
         }
         boolean normal = ImgComparator.doCompareIfTheSame(hisMat, newMat);
         if (!normal) {
-            sendVoice(accountInfo.getInfoMsg());
+            sendVoice(accountInfo.getInfoMsg(), false);
             // 最多提醒两次
             AtomicInteger noticeTime = accountInfo.getNoticeTime();
             int andIncrement = noticeTime.incrementAndGet();
             if(andIncrement >= 2){
                 noticeTime.getAndSet(0);
                 refreshHisImg(accountInfo);
-                sendVoice("已刷新");
+                sendVoice("已刷新", false);
             }
         }
 
@@ -113,7 +113,7 @@ public class ImgBoot {
             warning = true;
         }
         if (warning || doCheckIfNeedWarning(src, accountInfo)) {
-            sendVoice(accountInfo.getWarnMsg());
+            sendVoice(accountInfo.getWarnMsg(), true);
         }
 
     }
@@ -125,9 +125,9 @@ public class ImgBoot {
                 || ColorDetectTool.detectYellow(src, (targetMat) -> OpenCVHelper.saveMat2Img(basePath, targetMat, getCountPrefix(accountInfo.getRefreshCount().get()) + "warning_yellow.png"));
     }
 
-    public static void sendVoice(String msg) {
+    public static void sendVoice(String msg, boolean needFront) {
         long time = new Date().getTime();
-        if (time > lastActiveTime + activeInterval) {
+        if (needFront && time > lastActiveTime + activeInterval) {
             lastActiveTime = time;
             JFrame frame = EasyScript.getFrame();
             frame.setExtendedState(JFrame.NORMAL);

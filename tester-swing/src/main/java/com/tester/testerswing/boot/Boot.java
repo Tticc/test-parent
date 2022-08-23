@@ -25,18 +25,18 @@ public class Boot {
     private String silot = "silot";
     private String sailinna = "sailinna";
 
-    private PointInfoDTO st_silot = new PointInfoDTO().setX(56).setY(118);
-    private PointInfoDTO ed_silot = new PointInfoDTO().setX(153).setY(572);
+    private PointInfoDTO st_silot = new PointInfoDTO().setX(52).setY(70);
+    private PointInfoDTO ed_silot = new PointInfoDTO().setX(84).setY(86);
 
-    private PointInfoDTO st_sai = new PointInfoDTO().setX(56).setY(118);
-    private PointInfoDTO ed_sai = new PointInfoDTO().setX(153).setY(572);
+    private PointInfoDTO st_sai = new PointInfoDTO().setX(162).setY(63);
+    private PointInfoDTO ed_sai = new PointInfoDTO().setX(194).setY(81);
 
 
-    private PointInfoDTO red_st_silot = new PointInfoDTO().setX(56).setY(118);
-    private PointInfoDTO red_ed_silot = new PointInfoDTO().setX(153).setY(572);
+    private PointInfoDTO red_st_silot = new PointInfoDTO().setX(70).setY(102);
+    private PointInfoDTO red_ed_silot = new PointInfoDTO().setX(82).setY(573);
 
-    private PointInfoDTO red_st_sai = new PointInfoDTO().setX(56).setY(118);
-    private PointInfoDTO red_ed_sai = new PointInfoDTO().setX(153).setY(572);
+    private PointInfoDTO red_st_sai = new PointInfoDTO().setX(178).setY(105);
+    private PointInfoDTO red_ed_sai = new PointInfoDTO().setX(193).setY(550);
 
     private final ScheduledExecutorService checkerExecutorService = Executors.newSingleThreadScheduledExecutor(new SwingThreadFactoryImpl("warn-checker"));
 
