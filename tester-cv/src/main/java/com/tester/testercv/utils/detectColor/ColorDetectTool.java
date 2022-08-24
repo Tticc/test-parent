@@ -9,6 +9,8 @@ import org.opencv.core.Size;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgproc.Imgproc;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -19,15 +21,16 @@ public class ColorDetectTool {
 
 
     public static void main(String[] args) throws Exception {
-        String picPath = "E:\\Development\\Projects_backup\\test-parent\\tester-swing\\src\\main\\resources\\normal2.PNG";
+        String picPath = "E:\\Development\\Projects_backup\\test-parent\\tester-swing\\src\\main\\resources\\red1.PNG";
         Mat src = OpenCVHelper.readImg2Mat(picPath);
 
-        boolean b = detectGray(src, (mat) -> {
+        boolean b = detectRed(src, (mat) -> {
             new Thread(() -> {
-                HighGui.imshow("before", OpenCVHelper.readImg2Mat(picPath));
-                HighGui.imshow("after", mat);
-                Mat dest = OpenCVHelper.newMat(mat);
-                Core.repeat(mat, 1, 2, dest);
+                // 将单通道转换为三通道
+                Mat mat_tmp = new Mat();
+                Imgproc.cvtColor(mat, mat_tmp, Imgproc.COLOR_GRAY2RGB);
+                // 拼接展示
+                Mat dest = OpenCVHelper.hconcatMat(OpenCVHelper.readImg2Mat(picPath), mat_tmp);
                 HighGui.imshow("after11", dest);
                 HighGui.waitKey(60000);
             }).start();

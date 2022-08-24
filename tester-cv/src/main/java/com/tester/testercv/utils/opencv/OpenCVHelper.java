@@ -1,5 +1,6 @@
 package com.tester.testercv.utils.opencv;
 
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
@@ -11,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,6 +24,33 @@ public class OpenCVHelper {
 
     static {
         OpenCVBaseHelper.init();
+    }
+
+
+    /**
+     * 横向拼接两个Mat
+     *
+     * @Date 10:10 2022/8/24
+     * @Author 温昌营
+     **/
+    public static Mat hconcatMat(Mat mat1, Mat mat2) {
+        Mat dst = new Mat();
+        List<Mat> src = Arrays.asList(mat1, mat2);
+        Core.hconcat(src, dst);
+        return dst;
+    }
+
+    /**
+     * 竖向拼接两个mat
+     *
+     * @Date 10:10 2022/8/24
+     * @Author 温昌营
+     **/
+    public static Mat vconcatMat(Mat mat1, Mat mat2) {
+        Mat dst = new Mat();
+        List<Mat> src = Arrays.asList(mat1, mat2);
+        Core.vconcat(src, dst);
+        return dst;
     }
 
     /**
