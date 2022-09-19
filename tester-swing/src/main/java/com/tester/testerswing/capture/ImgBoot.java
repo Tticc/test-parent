@@ -91,7 +91,7 @@ public class ImgBoot {
             // 最多提醒两次
             AtomicInteger noticeTime = accountInfo.getNoticeTime();
             int andIncrement = noticeTime.incrementAndGet();
-            if(andIncrement >= 2){
+            if(andIncrement >= 1){
                 noticeTime.getAndSet(0);
                 refreshHisImg(accountInfo);
                 sendVoice("已刷新", false);
