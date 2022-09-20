@@ -125,7 +125,7 @@ public class EventHandle_Main {
         });
         // 继续 colos
         script.getColos_start().addActionListener((e) -> {
-            script.getAccountInfoList().get(1).setNeedWarn(true);
+            script.getAccountInfoList().get(2).setNeedWarn(true);
             script.getColos_status().setText("true");
         });
 
