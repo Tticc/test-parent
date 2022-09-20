@@ -41,6 +41,12 @@ public class EasyScript_UI_Main {
     private JLabel red_input_info;
     private JTextField red_input;
     private JLabel red_point_print;
+    private JButton colos_start;
+    private JButton open_colos;
+    private JButton open_return_colos;
+    private JButton open_run_colos;
+    private JButton colos_pause;
+    private JLabel colos_status;
 
 
     Boot boot = new Boot();

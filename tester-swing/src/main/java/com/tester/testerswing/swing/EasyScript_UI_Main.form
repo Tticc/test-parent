@@ -33,8 +33,12 @@
     <colspec value="fill:90px:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:90px:noGrow"/>
+    <colspec value="left:20dlu:noGrow"/>
+    <colspec value="fill:max(d;4px):noGrow"/>
+    <colspec value="left:4dlu:noGrow"/>
+    <colspec value="fill:max(d;4px):noGrow"/>
     <constraints>
-      <xy x="20" y="20" width="661" height="400"/>
+      <xy x="20" y="20" width="645" height="399"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -260,6 +264,60 @@
         <properties>
           <enabled value="true"/>
           <text value=" "/>
+        </properties>
+      </component>
+      <component id="63215" class="javax.swing.JButton" binding="open_colos">
+        <constraints>
+          <grid row="18" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="打开"/>
+        </properties>
+      </component>
+      <component id="16533" class="javax.swing.JButton" binding="colos_start">
+        <constraints>
+          <grid row="14" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="colos开始"/>
+        </properties>
+      </component>
+      <component id="72e9" class="javax.swing.JButton" binding="open_return_colos">
+        <constraints>
+          <grid row="18" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="回收"/>
+        </properties>
+      </component>
+      <component id="7e56b" class="javax.swing.JButton" binding="open_run_colos">
+        <constraints>
+          <grid row="20" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="跑路"/>
+        </properties>
+      </component>
+      <component id="a11c0" class="javax.swing.JButton" binding="colos_pause">
+        <constraints>
+          <grid row="12" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="colos停止"/>
+        </properties>
+      </component>
+      <component id="61411" class="javax.swing.JLabel" binding="colos_status">
+        <constraints>
+          <grid row="16" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="25" bottom="0" right="0"/>
+        </constraints>
+        <properties>
+          <text value="true"/>
         </properties>
       </component>
     </children>

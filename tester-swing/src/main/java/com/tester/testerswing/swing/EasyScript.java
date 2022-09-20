@@ -14,7 +14,7 @@ public class EasyScript {
         // 创建 JFrame 实例
         frame = new JFrame("Script Frame");
         // Setting the width and height of frame
-        frame.setSize(470, 420);
+        frame.setSize(670, 420);
         frame.setLocation(625, 355);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

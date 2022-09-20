@@ -18,6 +18,7 @@ public class EventHandle_Main {
     public static void handle_main(EasyScript_UI_Main script) {
         handle_silot(script);
         handle_sai(script);
+        handle_colos(script);
     }
 
     // silot 操作处理
@@ -109,6 +110,54 @@ public class EventHandle_Main {
                 runOpe(EventHandle_Sai.sai_align_p1, EventHandle_Sai.sai_align_p2, EventHandle_Sai.sai_align_p3, EventHandle_Sai.sai_main_view_p1);
                 RobotHelper.delay(500);
                 returnOpe(EventHandle_Sai.sai_return_p1, EventHandle_Sai.sai_return_p2, EventHandle_Sai.sai_return_p3, EventHandle_Sai.sai_main_view_p1);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+    }
+
+    // colos 操作处理
+    private static void handle_colos(EasyScript_UI_Main script) {
+        // 暂停 colos
+        script.getColos_pause().addActionListener((e) -> {
+            script.getAccountInfoList().get(2).setNeedWarn(false);
+            script.getColos_status().setText("false");
+        });
+        // 继续 colos
+        script.getColos_start().addActionListener((e) -> {
+            script.getAccountInfoList().get(1).setNeedWarn(true);
+            script.getColos_status().setText("true");
+        });
+
+        // 设置 open 按钮事件
+        JButton open_colos = script.getOpen_colos();
+        open_colos.addActionListener((e) -> {
+            try {
+                openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 设置 return 按钮事件
+        JButton open_return_colos = script.getOpen_return_colos();
+        open_return_colos.addActionListener((e) -> {
+            try {
+                openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+                returnOpe(EventHandle_Colos.colos_return_p1, EventHandle_Colos.colos_return_p2, EventHandle_Colos.colos_return_p3, EventHandle_Colos.colos_main_view_p1);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 设置 run 按钮事件
+        JButton open_run_colos = script.getOpen_run_colos();
+        open_run_colos.addActionListener((e) -> {
+            try {
+                openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+                runOpe(EventHandle_Colos.colos_align_p1, EventHandle_Colos.colos_align_p2, EventHandle_Colos.colos_align_p3, EventHandle_Colos.colos_main_view_p1);
+                RobotHelper.delay(500);
+                returnOpe(EventHandle_Colos.colos_return_p1, EventHandle_Colos.colos_return_p2, EventHandle_Colos.colos_return_p3, EventHandle_Colos.colos_main_view_p1);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

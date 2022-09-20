@@ -40,7 +40,7 @@ public class InitCommonEventHelper {
             }
         });
 
-        // 录入人数点阵 事件。 1=silot起点，2=silot终点；3=sai起点，4=sai终点
+        // 录入人数点阵 事件。 1=silot起点，2=silot终点；3=sai起点，4=sai终点；5=colos起点，6=colos终点
         script.getPoint_input().addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -61,6 +61,12 @@ public class InitCommonEventHelper {
                     } else if (keyChar == 52) {
                         AccountInfo accountInfo = accountInfoList.get(1);
                         pointInfoDTO = accountInfo.getEd();
+                    }else if (keyChar == 53) {
+                        AccountInfo accountInfo = accountInfoList.get(2);
+                        pointInfoDTO = accountInfo.getEd();
+                    }else if (keyChar == 54) {
+                        AccountInfo accountInfo = accountInfoList.get(2);
+                        pointInfoDTO = accountInfo.getEd();
                     }
                     return pointInfoDTO;
                 });
@@ -76,7 +82,7 @@ public class InitCommonEventHelper {
             }
         });
 
-        // 录入Red点阵 事件。 1=silot起点，2=silot终点；3=sai起点，4=sai终点
+        // 录入Red点阵 事件。 1=silot起点，2=silot终点；3=sai起点，4=sai终点；5=colos起点，6=colos终点
         script.getRed_input().addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -96,6 +102,12 @@ public class InitCommonEventHelper {
                         pointInfoDTO = accountInfo.getRedSt();
                     } else if (keyChar == 52) {
                         AccountInfo accountInfo = accountInfoList.get(1);
+                        pointInfoDTO = accountInfo.getRedEd();
+                    }else if (keyChar == 53) {
+                        AccountInfo accountInfo = accountInfoList.get(2);
+                        pointInfoDTO = accountInfo.getRedEd();
+                    }else if (keyChar == 54) {
+                        AccountInfo accountInfo = accountInfoList.get(2);
                         pointInfoDTO = accountInfo.getRedEd();
                     }
                     return pointInfoDTO;
@@ -142,6 +154,18 @@ public class InitCommonEventHelper {
             return String.format(retStr, pointInfoDTO.getX(), pointInfoDTO.getY());
         } else if (keyChar == 52) {
             String retStr = "sai=[%d,%d]";
+            pointInfoDTO = supplier.get();
+            pointInfoDTO.setX((int) point.getX());
+            pointInfoDTO.setY((int) point.getY());
+            return String.format(retStr, pointInfoDTO.getX(), pointInfoDTO.getY());
+        }else if (keyChar == 53) {
+            String retStr = "colos=[%d,%d]";
+            pointInfoDTO = supplier.get();
+            pointInfoDTO.setX((int) point.getX());
+            pointInfoDTO.setY((int) point.getY());
+            return String.format(retStr, pointInfoDTO.getX(), pointInfoDTO.getY());
+        }else if (keyChar == 54) {
+            String retStr = "colos=[%d,%d]";
             pointInfoDTO = supplier.get();
             pointInfoDTO.setX((int) point.getX());
             pointInfoDTO.setY((int) point.getY());

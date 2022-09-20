@@ -24,12 +24,17 @@ public class Boot {
 
     private String silot = "silot";
     private String sailinna = "sailinna";
+    private String colos = "colos";
 
+    // todo 所有监控点
     private PointInfoDTO st_silot = new PointInfoDTO().setX(52).setY(70);
     private PointInfoDTO ed_silot = new PointInfoDTO().setX(84).setY(86);
 
     private PointInfoDTO st_sai = new PointInfoDTO().setX(162).setY(63);
     private PointInfoDTO ed_sai = new PointInfoDTO().setX(194).setY(81);
+
+    private PointInfoDTO st_colos = new PointInfoDTO().setX(162).setY(63);
+    private PointInfoDTO ed_colos = new PointInfoDTO().setX(194).setY(81);
 
 
     private PointInfoDTO red_st_silot = new PointInfoDTO().setX(70).setY(102);
@@ -37,6 +42,9 @@ public class Boot {
 
     private PointInfoDTO red_st_sai = new PointInfoDTO().setX(178).setY(105);
     private PointInfoDTO red_ed_sai = new PointInfoDTO().setX(193).setY(550);
+
+    private PointInfoDTO red_st_colos = new PointInfoDTO().setX(178).setY(105);
+    private PointInfoDTO red_ed_colos = new PointInfoDTO().setX(193).setY(550);
 
     private final ScheduledExecutorService checkerExecutorService = Executors.newSingleThreadScheduledExecutor(new SwingThreadFactoryImpl("warn-checker"));
 
@@ -46,20 +54,28 @@ public class Boot {
     public Boot() {
         accountInfoList.add(new AccountInfo()
                 .setWarnMsg("左警告")
-                .setInfoMsg("左提醒")
+                .setInfoMsg("左")
                 .setAccount(silot)
                 .setSt(st_silot)
                 .setEd(ed_silot)
                 .setRedSt(red_st_silot)
                 .setRedEd(red_ed_silot));
         accountInfoList.add(new AccountInfo()
-                .setWarnMsg("右警告")
-                .setInfoMsg("右提醒")
+                .setWarnMsg("中警告")
+                .setInfoMsg("中")
                 .setAccount(sailinna)
                 .setSt(st_sai)
                 .setEd(ed_sai)
                 .setRedSt(red_st_sai)
                 .setRedEd(red_ed_sai));
+        accountInfoList.add(new AccountInfo()
+                .setWarnMsg("右警告")
+                .setInfoMsg("右")
+                .setAccount(colos)
+                .setSt(st_colos)
+                .setEd(ed_colos)
+                .setRedSt(red_st_colos)
+                .setRedEd(red_ed_colos));
     }
 
 
