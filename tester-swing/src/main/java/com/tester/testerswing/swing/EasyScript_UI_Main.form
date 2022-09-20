@@ -320,6 +320,33 @@
           <text value="true"/>
         </properties>
       </component>
+      <component id="92497" class="javax.swing.JButton" binding="onTopReplica_start1">
+        <constraints>
+          <grid row="6" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="投屏左"/>
+        </properties>
+      </component>
+      <component id="f1209" class="javax.swing.JButton" binding="onTopReplica_start2">
+        <constraints>
+          <grid row="6" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="投屏中"/>
+        </properties>
+      </component>
+      <component id="46a93" class="javax.swing.JButton" binding="onTopReplica_start3">
+        <constraints>
+          <grid row="6" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="投屏右"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>

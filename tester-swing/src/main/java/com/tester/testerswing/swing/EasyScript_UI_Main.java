@@ -47,6 +47,9 @@ public class EasyScript_UI_Main {
     private JButton open_run_colos;
     private JButton colos_pause;
     private JLabel colos_status;
+    private JButton onTopReplica_start1;
+    private JButton onTopReplica_start2;
+    private JButton onTopReplica_start3;
 
 
     Boot boot = new Boot();

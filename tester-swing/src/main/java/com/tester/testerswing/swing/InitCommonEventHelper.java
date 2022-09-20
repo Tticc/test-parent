@@ -128,6 +128,18 @@ public class InitCommonEventHelper {
         script.getOnTopReplica_start().addActionListener((e) -> {
             StartOnTopReplica.start();
         });
+        // 自动投屏事件1
+        script.getOnTopReplica_start1().addActionListener((e) -> {
+            StartOnTopReplica.start1();
+        });
+        // 自动投屏事件2
+        script.getOnTopReplica_start2().addActionListener((e) -> {
+            StartOnTopReplica.start2();
+        });
+        // 自动投屏事件3
+        script.getOnTopReplica_start3().addActionListener((e) -> {
+            StartOnTopReplica.start3();
+        });
     }
 
 

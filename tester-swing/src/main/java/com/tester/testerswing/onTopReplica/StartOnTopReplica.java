@@ -48,6 +48,77 @@ public class StartOnTopReplica {
         RobotHelper.move(555, 555);
     }
 
+
+    public static void start1() {
+        // onTopReplica 窗口选择点
+        PointInfoDTO silotListPoint = new PointInfoDTO().setX(304).setY(99);
+        PointInfoDTO saiListPoint = new PointInfoDTO().setX(362).setY(123);
+        PointInfoDTO colosListPoint = new PointInfoDTO().setX(361).setY(152);
+
+        // 依次打开账号，将两个账号放到onTopReplica的界面选项首位。也就是上面的 saiListPoint 和 silotListPoint 两个点
+
+        EventHandle_Main.openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+        RobotHelper.delay(200);
+        EventHandle_Main.openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
+        RobotHelper.delay(200);
+        EventHandle_Main.openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
+
+        // silot 截屏
+        startOnToRepli1(silotListPoint);
+        move_silot_first();
+
+        RobotHelper.delay(200);
+        RobotHelper.move(555, 555);
+    }
+
+    public static void start2() {
+        // onTopReplica 窗口选择点
+        PointInfoDTO silotListPoint = new PointInfoDTO().setX(304).setY(99);
+        PointInfoDTO saiListPoint = new PointInfoDTO().setX(362).setY(123);
+        PointInfoDTO colosListPoint = new PointInfoDTO().setX(361).setY(152);
+
+        // 依次打开账号，将两个账号放到onTopReplica的界面选项首位。也就是上面的 saiListPoint 和 silotListPoint 两个点
+
+        EventHandle_Main.openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+        RobotHelper.delay(200);
+        EventHandle_Main.openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
+        RobotHelper.delay(200);
+        EventHandle_Main.openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
+
+//
+//        // sai 截屏
+        startOnToRepli1(saiListPoint);
+        move_silot_first2();
+
+
+        RobotHelper.delay(200);
+        RobotHelper.move(555, 555);
+    }
+
+    public static void start3() {
+        // onTopReplica 窗口选择点
+        PointInfoDTO silotListPoint = new PointInfoDTO().setX(304).setY(99);
+        PointInfoDTO saiListPoint = new PointInfoDTO().setX(362).setY(123);
+        PointInfoDTO colosListPoint = new PointInfoDTO().setX(361).setY(152);
+
+        // 依次打开账号，将两个账号放到onTopReplica的界面选项首位。也就是上面的 saiListPoint 和 silotListPoint 两个点
+
+        EventHandle_Main.openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+        RobotHelper.delay(200);
+        EventHandle_Main.openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
+        RobotHelper.delay(200);
+        EventHandle_Main.openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
+
+
+//        // colos 截屏
+        startOnToRepli1(colosListPoint);
+        move_silot_first3();
+
+        RobotHelper.delay(200);
+        RobotHelper.move(555, 555);
+    }
+
+
     private static void startOnToRepli1(PointInfoDTO account) {
         select(account);
         // 移动到起始位置
