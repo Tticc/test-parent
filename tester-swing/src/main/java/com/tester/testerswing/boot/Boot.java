@@ -27,24 +27,24 @@ public class Boot {
     private String colos = "colos";
 
     // todo 所有监控点
-    private PointInfoDTO st_silot = new PointInfoDTO().setX(43).setY(71);
-    private PointInfoDTO ed_silot = new PointInfoDTO().setX(67).setY(88);
+    private PointInfoDTO st_silot = new PointInfoDTO().setX(51).setY(70);
+    private PointInfoDTO ed_silot = new PointInfoDTO().setX(74).setY(90);
 
-    private PointInfoDTO st_sai = new PointInfoDTO().setX(119).setY(62);
-    private PointInfoDTO ed_sai = new PointInfoDTO().setX(142).setY(83);
+    private PointInfoDTO st_sai = new PointInfoDTO().setX(127).setY(62);
+    private PointInfoDTO ed_sai = new PointInfoDTO().setX(146).setY(85);
 
-    private PointInfoDTO st_colos = new PointInfoDTO().setX(190).setY(60);
-    private PointInfoDTO ed_colos = new PointInfoDTO().setX(222).setY(81);
+    private PointInfoDTO st_colos = new PointInfoDTO().setX(203).setY(61);
+    private PointInfoDTO ed_colos = new PointInfoDTO().setX(226).setY(81);
 
 
-    private PointInfoDTO red_st_silot = new PointInfoDTO().setX(54).setY(126);
-    private PointInfoDTO red_ed_silot = new PointInfoDTO().setX(67).setY(688);
+    private PointInfoDTO red_st_silot = new PointInfoDTO().setX(55).setY(127);
+    private PointInfoDTO red_ed_silot = new PointInfoDTO().setX(71).setY(697);
 
-    private PointInfoDTO red_st_sai = new PointInfoDTO().setX(126).setY(115);
-    private PointInfoDTO red_ed_sai = new PointInfoDTO().setX(142).setY(680);
+    private PointInfoDTO red_st_sai = new PointInfoDTO().setX(132).setY(118);
+    private PointInfoDTO red_ed_sai = new PointInfoDTO().setX(145).setY(696);
 
-    private PointInfoDTO red_st_colos = new PointInfoDTO().setX(205).setY(112);
-    private PointInfoDTO red_ed_colos = new PointInfoDTO().setX(221).setY(688);
+    private PointInfoDTO red_st_colos = new PointInfoDTO().setX(209).setY(117);
+    private PointInfoDTO red_ed_colos = new PointInfoDTO().setX(225).setY(697);
 
     private final ScheduledExecutorService checkerExecutorService = Executors.newSingleThreadScheduledExecutor(new SwingThreadFactoryImpl("warn-checker"));
 
