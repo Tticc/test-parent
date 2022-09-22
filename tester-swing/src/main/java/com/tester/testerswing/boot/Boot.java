@@ -26,7 +26,7 @@ public class Boot {
     private String sailinna = "sailinna";
     private String colos = "colos";
 
-    // todo 所有监控点
+
     private PointInfoDTO st_silot = new PointInfoDTO().setX(51).setY(70);
     private PointInfoDTO ed_silot = new PointInfoDTO().setX(74).setY(90);
 
@@ -54,7 +54,7 @@ public class Boot {
     public Boot() {
         accountInfoList.add(new AccountInfo()
                 .setWarnMsg("左警告")
-                .setInfoMsg("左")
+                .setInfoMsg("左刷")
                 .setAccount(silot)
                 .setSt(st_silot)
                 .setEd(ed_silot)
@@ -62,7 +62,7 @@ public class Boot {
                 .setRedEd(red_ed_silot));
         accountInfoList.add(new AccountInfo()
                 .setWarnMsg("中警告")
-                .setInfoMsg("中")
+                .setInfoMsg("中刷")
                 .setAccount(sailinna)
                 .setSt(st_sai)
                 .setEd(ed_sai)
@@ -70,7 +70,7 @@ public class Boot {
                 .setRedEd(red_ed_sai));
         accountInfoList.add(new AccountInfo()
                 .setWarnMsg("右警告")
-                .setInfoMsg("右")
+                .setInfoMsg("右刷")
                 .setAccount(colos)
                 .setSt(st_colos)
                 .setEd(ed_colos)

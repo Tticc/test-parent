@@ -87,12 +87,12 @@ public class ImgBoot {
         }
         boolean normal = ImgComparator.doCompareIfTheSame(hisMat, newMat);
         if (!normal) {
-            // 不提示通知
+            // 提示通知
 //            sendVoice(accountInfo.getInfoMsg(), false);
-            // 最多提醒两次
+            // 最多提醒1次
             AtomicInteger noticeTime = accountInfo.getNoticeTime();
             int andIncrement = noticeTime.incrementAndGet();
-            if(andIncrement >= 2){
+            if(andIncrement >= 1){
                 noticeTime.getAndSet(0);
                 refreshHisImg(accountInfo);
 //                sendVoice("已刷新", false);

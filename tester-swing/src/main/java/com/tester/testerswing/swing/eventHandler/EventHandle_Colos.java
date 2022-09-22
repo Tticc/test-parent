@@ -24,12 +24,12 @@ public class EventHandle_Colos {
     public static PointInfoDTO colos_return_p1_ed = new PointInfoDTO().setX(1746).setY(767);
     public static GaussianPointInfoDTO colos_return_p1 = new GaussianPointInfoDTO().setSt(colos_return_p1_st).setEd(colos_return_p1_ed);
 
-    public static PointInfoDTO colos_return_p2_st = new PointInfoDTO().setX(1724).setY(862);
-    public static PointInfoDTO colos_return_p2_ed = new PointInfoDTO().setX(1724).setY(862);
+    public static PointInfoDTO colos_return_p2_st = new PointInfoDTO().setX(1724).setY(860);
+    public static PointInfoDTO colos_return_p2_ed = new PointInfoDTO().setX(1724).setY(860);
     public static GaussianPointInfoDTO colos_return_p2 = new GaussianPointInfoDTO().setSt(colos_return_p2_st).setEd(colos_return_p2_ed);
 
-    public static PointInfoDTO colos_return_p3_st = new PointInfoDTO().setX(1775).setY(894);
-    public static PointInfoDTO colos_return_p3_ed = new PointInfoDTO().setX(1823).setY(903);
+    public static PointInfoDTO colos_return_p3_st = new PointInfoDTO().setX(1782).setY(914);
+    public static PointInfoDTO colos_return_p3_ed = new PointInfoDTO().setX(1807).setY(921);
     public static GaussianPointInfoDTO colos_return_p3 = new GaussianPointInfoDTO().setSt(colos_return_p3_st).setEd(colos_return_p3_ed);
 
     public static PointInfoDTO colos_align_p1_st = new PointInfoDTO().setX(1863).setY(202);
