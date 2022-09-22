@@ -91,10 +91,10 @@ public class ImgBoot {
             // 最多提醒两次
             AtomicInteger noticeTime = accountInfo.getNoticeTime();
             int andIncrement = noticeTime.incrementAndGet();
-            if(andIncrement >= 1){
+            if(andIncrement >= 2){
                 noticeTime.getAndSet(0);
                 refreshHisImg(accountInfo);
-                sendVoice("已刷新", false);
+//                sendVoice("已刷新", false);
             }
         }
 
