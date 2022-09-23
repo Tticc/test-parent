@@ -88,7 +88,7 @@ public class ImgBoot {
         boolean normal = ImgComparator.doCompareIfTheSame(hisMat, newMat);
         if (!normal) {
             // 提示通知
-//            sendVoice(accountInfo.getInfoMsg(), false);
+            sendVoice(accountInfo.getInfoMsg(), false);
             // 最多提醒1次
             AtomicInteger noticeTime = accountInfo.getNoticeTime();
             int andIncrement = noticeTime.incrementAndGet();
