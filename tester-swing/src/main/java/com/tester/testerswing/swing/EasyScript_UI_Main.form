@@ -36,9 +36,9 @@
     <colspec value="left:20dlu:noGrow"/>
     <colspec value="fill:max(d;4px):noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
-    <colspec value="fill:max(d;4px):noGrow"/>
+    <colspec value="fill:90px:noGrow"/>
     <constraints>
-      <xy x="20" y="20" width="645" height="399"/>
+      <xy x="20" y="20" width="651" height="399"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -345,6 +345,90 @@
         </constraints>
         <properties>
           <text value="投屏右"/>
+        </properties>
+      </component>
+      <component id="8c324" class="javax.swing.JButton" binding="silot_info_pause">
+        <constraints>
+          <grid row="12" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="info停止"/>
+        </properties>
+      </component>
+      <component id="cf0bd" class="javax.swing.JButton" binding="silot_info_start">
+        <constraints>
+          <grid row="14" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="info开始"/>
+          <verticalAlignment value="0"/>
+        </properties>
+      </component>
+      <component id="d2794" class="javax.swing.JButton" binding="sai_info_pause">
+        <constraints>
+          <grid row="12" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="info停止"/>
+        </properties>
+      </component>
+      <component id="8dfbc" class="javax.swing.JButton" binding="sai_info_start">
+        <constraints>
+          <grid row="14" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="info开始"/>
+          <verticalAlignment value="0"/>
+        </properties>
+      </component>
+      <component id="6595" class="javax.swing.JButton" binding="colos_info_pause">
+        <constraints>
+          <grid row="12" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="info停止"/>
+        </properties>
+      </component>
+      <component id="f36a2" class="javax.swing.JButton" binding="colos_info_start">
+        <constraints>
+          <grid row="14" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="info开始"/>
+          <verticalAlignment value="0"/>
+        </properties>
+      </component>
+      <component id="6b059" class="javax.swing.JLabel" binding="silot_info_status">
+        <constraints>
+          <grid row="16" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="25" bottom="0" right="0"/>
+        </constraints>
+        <properties>
+          <text value="true"/>
+        </properties>
+      </component>
+      <component id="823c6" class="javax.swing.JLabel" binding="sai_info_status">
+        <constraints>
+          <grid row="16" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="25" bottom="0" right="0"/>
+        </constraints>
+        <properties>
+          <text value="true"/>
+        </properties>
+      </component>
+      <component id="ca147" class="javax.swing.JLabel" binding="colos_info_status">
+        <constraints>
+          <grid row="16" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="25" bottom="0" right="0"/>
+        </constraints>
+        <properties>
+          <text value="true"/>
         </properties>
       </component>
     </children>

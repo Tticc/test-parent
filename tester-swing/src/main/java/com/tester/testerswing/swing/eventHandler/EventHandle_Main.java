@@ -34,6 +34,17 @@ public class EventHandle_Main {
             script.getSilot_status().setText("true");
         });
 
+        // 暂停 silot info
+        script.getSilot_info_pause().addActionListener((e) -> {
+            script.getAccountInfoList().get(0).setNeedInfo(false);
+            script.getSilot_info_status().setText("false");
+        });
+        // 继续 silot info
+        script.getSilot_info_start().addActionListener((e) -> {
+            script.getAccountInfoList().get(0).setNeedInfo(true);
+            script.getSilot_info_status().setText("true");
+        });
+
 
         // 设置 open 按钮事件
         JButton open_silot = script.getOpen_silot();
@@ -79,6 +90,17 @@ public class EventHandle_Main {
         script.getSai_start().addActionListener((e) -> {
             script.getAccountInfoList().get(1).setNeedWarn(true);
             script.getSai_status().setText("true");
+        });
+
+        // 暂停 sai info
+        script.getSai_info_pause().addActionListener((e) -> {
+            script.getAccountInfoList().get(1).setNeedInfo(false);
+            script.getSai_info_status().setText("false");
+        });
+        // 继续 sai info
+        script.getSai_info_start().addActionListener((e) -> {
+            script.getAccountInfoList().get(1).setNeedInfo(true);
+            script.getSai_info_status().setText("true");
         });
 
         // 设置 open 按钮事件
@@ -127,6 +149,17 @@ public class EventHandle_Main {
         script.getColos_start().addActionListener((e) -> {
             script.getAccountInfoList().get(2).setNeedWarn(true);
             script.getColos_status().setText("true");
+        });
+
+        // 暂停 colos info
+        script.getColos_info_pause().addActionListener((e) -> {
+            script.getAccountInfoList().get(2).setNeedInfo(false);
+            script.getColos_info_status().setText("false");
+        });
+        // 继续 colos info
+        script.getColos_info_start().addActionListener((e) -> {
+            script.getAccountInfoList().get(2).setNeedInfo(true);
+            script.getColos_info_status().setText("true");
         });
 
         // 设置 open 按钮事件

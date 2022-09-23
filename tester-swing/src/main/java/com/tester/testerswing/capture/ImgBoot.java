@@ -74,8 +74,8 @@ public class ImgBoot {
      * @Author 温昌营
      **/
     public static void checkNumber(AccountInfo accountInfo, int imgType) throws Exception {
-        if (!accountInfo.isNeedWarn()) {
-            // 无需告警，直接返回
+        if (!accountInfo.isNeedInfo()) {
+            // 无需通知，直接返回
             return;
         }
         Mat newMat = createScreenAnd2Mat(accountInfo.getSt(), accountInfo.getEd(), imgType, accountInfo.getAccount());

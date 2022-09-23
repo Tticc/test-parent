@@ -50,6 +50,15 @@ public class EasyScript_UI_Main {
     private JButton onTopReplica_start1;
     private JButton onTopReplica_start2;
     private JButton onTopReplica_start3;
+    private JButton silot_info_pause;
+    private JButton silot_info_start;
+    private JButton sai_info_pause;
+    private JButton sai_info_start;
+    private JButton colos_info_pause;
+    private JButton colos_info_start;
+    private JLabel silot_info_status;
+    private JLabel sai_info_status;
+    private JLabel colos_info_status;
 
 
     Boot boot = new Boot();
