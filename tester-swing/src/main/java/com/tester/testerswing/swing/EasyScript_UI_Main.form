@@ -410,7 +410,7 @@
           <forms top="0" left="25" bottom="0" right="0"/>
         </constraints>
         <properties>
-          <text value="true"/>
+          <text value="false"/>
         </properties>
       </component>
       <component id="823c6" class="javax.swing.JLabel" binding="sai_info_status">
@@ -419,7 +419,7 @@
           <forms top="0" left="25" bottom="0" right="0"/>
         </constraints>
         <properties>
-          <text value="true"/>
+          <text value="false"/>
         </properties>
       </component>
       <component id="ca147" class="javax.swing.JLabel" binding="colos_info_status">
@@ -428,7 +428,7 @@
           <forms top="0" left="25" bottom="0" right="0"/>
         </constraints>
         <properties>
-          <text value="true"/>
+          <text value="false"/>
         </properties>
       </component>
     </children>

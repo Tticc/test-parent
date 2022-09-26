@@ -133,9 +133,9 @@ public class ImgBoot {
             JFrame frame = EasyScript.getFrame();
             frame.setExtendedState(JFrame.NORMAL);
             frame.toFront();
-            Point location = frame.getLocation();
             // 鼠标移动到指定位置
-            RobotHelper.move((int) location.getX() + 103, (int) location.getY() + 108);
+//            Point location = frame.getLocation();
+//            RobotHelper.move((int) location.getX() + 103, (int) location.getY() + 108);
         }
         BeepSoundTaskDTO beepSoundTaskDTO = BeepSoundProcessor.generateTask(msg, 100, 2);
         BeepSoundProcessor.putTask(beepSoundTaskDTO);

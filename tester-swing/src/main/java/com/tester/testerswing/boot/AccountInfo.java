@@ -39,7 +39,7 @@ public class AccountInfo extends BaseDTO {
     private boolean needWarn = true;
 
     // 异常时是否需要提醒
-    private boolean needInfo = true;
+    private boolean needInfo = false;
 
     // 刷新次数
     private Mat hisMat;

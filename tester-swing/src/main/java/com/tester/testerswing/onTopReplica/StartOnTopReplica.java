@@ -137,11 +137,11 @@ public class StartOnTopReplica {
         RobotHelper.mouseLeftPress();
 
         // 移动到区域起始点
-        RobotHelper.move(790, 68);
+        RobotHelper.move(767, 68);
         // 按下鼠标左键
         RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
         // 移动到区域终止点
-        RobotHelper.move(815, 301);
+        RobotHelper.move(799,346);
         // 弹起鼠标左键
         RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
         // 区域选择完成
@@ -149,14 +149,14 @@ public class StartOnTopReplica {
         RobotHelper.mouseLeftPress();
 
 //        // 拖动放缩分屏窗口
-        RobotHelper.move(113, 1004);
+        RobotHelper.move(122,1005);
         RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
-        RobotHelper.move(78, 777);
+        RobotHelper.move(83,693);
         RobotHelper.delay(1500);
         RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
         RobotHelper.delay(500);
-
-        // 解除锁定
+//
+//        // 解除锁定
         RobotHelper.move(61, 55);
         RobotHelper.mouseRightPress();
         RobotHelper.move(127, 224);
