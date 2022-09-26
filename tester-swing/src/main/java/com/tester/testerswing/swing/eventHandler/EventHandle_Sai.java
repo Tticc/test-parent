@@ -26,33 +26,33 @@ public class EventHandle_Sai {
     public static GaussianPointInfoDTO sai_open_p2 = new GaussianPointInfoDTO().setSt(sai_open_p2_st).setEd(sai_open_p2_st);
 
 
-    public static PointInfoDTO sai_return_p1_st = new PointInfoDTO().setX(1718).setY(764);
-    public static PointInfoDTO sai_return_p1_ed = new PointInfoDTO().setX(1746).setY(773);
+    public static PointInfoDTO sai_return_p1_st = new PointInfoDTO().setX(1677).setY(733);
+    public static PointInfoDTO sai_return_p1_ed = new PointInfoDTO().setX(1701).setY(745);
     public static GaussianPointInfoDTO sai_return_p1 = new GaussianPointInfoDTO().setSt(sai_return_p1_st).setEd(sai_return_p1_ed);
 
-    public static PointInfoDTO sai_return_p2_st = new PointInfoDTO().setX(1722).setY(864);
-    public static PointInfoDTO sai_return_p2_ed = new PointInfoDTO().setX(1722).setY(864);
+    public static PointInfoDTO sai_return_p2_st = new PointInfoDTO().setX(1629).setY(811);
+    public static PointInfoDTO sai_return_p2_ed = new PointInfoDTO().setX(1629).setY(811);
     public static GaussianPointInfoDTO sai_return_p2 = new GaussianPointInfoDTO().setSt(sai_return_p2_st).setEd(sai_return_p2_ed);
 
-    public static PointInfoDTO sai_return_p3_st = new PointInfoDTO().setX(1770).setY(914);
-    public static PointInfoDTO sai_return_p3_ed = new PointInfoDTO().setX(1792).setY(918);
+    public static PointInfoDTO sai_return_p3_st = new PointInfoDTO().setX(1708).setY(881);
+    public static PointInfoDTO sai_return_p3_ed = new PointInfoDTO().setX(1734).setY(888);
     public static GaussianPointInfoDTO sai_return_p3 = new GaussianPointInfoDTO().setSt(sai_return_p3_st).setEd(sai_return_p3_ed);
 
-    public static PointInfoDTO sai_align_p1_st = new PointInfoDTO().setX(1871).setY(203);
-    public static PointInfoDTO sai_align_p1_ed = new PointInfoDTO().setX(1890).setY(214);
+    public static PointInfoDTO sai_align_p1_st = new PointInfoDTO().setX(1846).setY(230);
+    public static PointInfoDTO sai_align_p1_ed = new PointInfoDTO().setX(1865).setY(239);
     public static GaussianPointInfoDTO sai_align_p1 = new GaussianPointInfoDTO().setSt(sai_align_p1_st).setEd(sai_align_p1_ed);
 
-    public static PointInfoDTO sai_align_p2_st = new PointInfoDTO().setX(1659).setY(251);
-    public static PointInfoDTO sai_align_p2_ed = new PointInfoDTO().setX(1682).setY(258);
+    public static PointInfoDTO sai_align_p2_st = new PointInfoDTO().setX(1625).setY(288);
+    public static PointInfoDTO sai_align_p2_ed = new PointInfoDTO().setX(1644).setY(299);
     public static GaussianPointInfoDTO sai_align_p2 = new GaussianPointInfoDTO().setSt(sai_align_p2_st).setEd(sai_align_p2_ed);
 
-    public static PointInfoDTO sai_align_p3_st = new PointInfoDTO().setX(1624).setY(101);
-    public static PointInfoDTO sai_align_p3_ed = new PointInfoDTO().setX(1640).setY(115);
+    public static PointInfoDTO sai_align_p3_st = new PointInfoDTO().setX(1590).setY(154);
+    public static PointInfoDTO sai_align_p3_ed = new PointInfoDTO().setX(1601).setY(163);
     public static GaussianPointInfoDTO sai_align_p3 = new GaussianPointInfoDTO().setSt(sai_align_p3_st).setEd(sai_align_p3_ed);
 
 
-    public static PointInfoDTO sai_main_view_p1_st = new PointInfoDTO().setX(1667).setY(203);
-    public static PointInfoDTO sai_main_view_p1_ed = new PointInfoDTO().setX(1697).setY(214);
+    public static PointInfoDTO sai_main_view_p1_st = new PointInfoDTO().setX(1630).setY(229);
+    public static PointInfoDTO sai_main_view_p1_ed = new PointInfoDTO().setX(1646).setY(239);
     public static GaussianPointInfoDTO sai_main_view_p1 = new GaussianPointInfoDTO().setSt(sai_main_view_p1_st).setEd(sai_main_view_p1_ed);
 
 

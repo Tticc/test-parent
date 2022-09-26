@@ -20,33 +20,33 @@ public class EventHandle_Colos {
     public static PointInfoDTO colos_open_p2_st = new PointInfoDTO().setX(1567).setY(946);
     public static GaussianPointInfoDTO colos_open_p2 = new GaussianPointInfoDTO().setSt(colos_open_p2_st).setEd(colos_open_p2_st);
 
-    public static PointInfoDTO colos_return_p1_st = new PointInfoDTO().setX(1719).setY(761);
-    public static PointInfoDTO colos_return_p1_ed = new PointInfoDTO().setX(1746).setY(767);
+    public static PointInfoDTO colos_return_p1_st = new PointInfoDTO().setX(1677).setY(735);
+    public static PointInfoDTO colos_return_p1_ed = new PointInfoDTO().setX(1702).setY(745);
     public static GaussianPointInfoDTO colos_return_p1 = new GaussianPointInfoDTO().setSt(colos_return_p1_st).setEd(colos_return_p1_ed);
 
-    public static PointInfoDTO colos_return_p2_st = new PointInfoDTO().setX(1724).setY(860);
-    public static PointInfoDTO colos_return_p2_ed = new PointInfoDTO().setX(1724).setY(860);
+    public static PointInfoDTO colos_return_p2_st = new PointInfoDTO().setX(1649).setY(808);
+    public static PointInfoDTO colos_return_p2_ed = new PointInfoDTO().setX(1649).setY(808);
     public static GaussianPointInfoDTO colos_return_p2 = new GaussianPointInfoDTO().setSt(colos_return_p2_st).setEd(colos_return_p2_ed);
 
-    public static PointInfoDTO colos_return_p3_st = new PointInfoDTO().setX(1782).setY(914);
-    public static PointInfoDTO colos_return_p3_ed = new PointInfoDTO().setX(1807).setY(921);
+    public static PointInfoDTO colos_return_p3_st = new PointInfoDTO().setX(1713).setY(875);
+    public static PointInfoDTO colos_return_p3_ed = new PointInfoDTO().setX(1738).setY(882);
     public static GaussianPointInfoDTO colos_return_p3 = new GaussianPointInfoDTO().setSt(colos_return_p3_st).setEd(colos_return_p3_ed);
 
-    public static PointInfoDTO colos_align_p1_st = new PointInfoDTO().setX(1863).setY(202);
-    public static PointInfoDTO colos_align_p1_ed = new PointInfoDTO().setX(1882).setY(211);
+    public static PointInfoDTO colos_align_p1_st = new PointInfoDTO().setX(1843).setY(227);
+    public static PointInfoDTO colos_align_p1_ed = new PointInfoDTO().setX(1862).setY(238);
     public static GaussianPointInfoDTO colos_align_p1 = new GaussianPointInfoDTO().setSt(colos_align_p1_st).setEd(colos_align_p1_ed);
 
-    public static PointInfoDTO colos_align_p2_st = new PointInfoDTO().setX(1621).setY(253);
-    public static PointInfoDTO colos_align_p2_ed = new PointInfoDTO().setX(1653).setY(260);
+    public static PointInfoDTO colos_align_p2_st = new PointInfoDTO().setX(1616).setY(288);
+    public static PointInfoDTO colos_align_p2_ed = new PointInfoDTO().setX(1634).setY(299);
     public static GaussianPointInfoDTO colos_align_p2 = new GaussianPointInfoDTO().setSt(colos_align_p2_st).setEd(colos_align_p2_ed);
 
-    public static PointInfoDTO colos_align_p3_st = new PointInfoDTO().setX(1619).setY(104);
-    public static PointInfoDTO colos_align_p3_ed = new PointInfoDTO().setX(1630).setY(113);
+    public static PointInfoDTO colos_align_p3_st = new PointInfoDTO().setX(1591).setY(150);
+    public static PointInfoDTO colos_align_p3_ed = new PointInfoDTO().setX(1600).setY(161);
     public static GaussianPointInfoDTO colos_align_p3 = new GaussianPointInfoDTO().setSt(colos_align_p3_st).setEd(colos_align_p3_ed);
 
 
-    public static PointInfoDTO colos_main_view_p1_st = new PointInfoDTO().setX(1662).setY(205);
-    public static PointInfoDTO colos_main_view_p1_ed = new PointInfoDTO().setX(1679).setY(213);
+    public static PointInfoDTO colos_main_view_p1_st = new PointInfoDTO().setX(1632).setY(229);
+    public static PointInfoDTO colos_main_view_p1_ed = new PointInfoDTO().setX(1648).setY(240);
     public static GaussianPointInfoDTO colos_main_view_p1 = new GaussianPointInfoDTO().setSt(colos_main_view_p1_st).setEd(colos_main_view_p1_ed);
 
 //
