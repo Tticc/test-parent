@@ -116,7 +116,9 @@ public class EventHandle_Sai {
             EventHandle_Main.openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
             EventHandle_Main.runOpe(EventHandle_Sai.sai_align_p1, EventHandle_Sai.sai_align_p2, EventHandle_Sai.sai_align_p3_quick, EventHandle_Sai.sai_main_view_p1);
             RobotHelper.delay(500);
-            EventHandle_Main.returnOpe(EventHandle_Sai.sai_return_p1, EventHandle_Sai.sai_return_p2, EventHandle_Sai.sai_return_p3, EventHandle_Sai.sai_main_view_p1);
+
+            // 回收无人机
+//            EventHandle_Main.returnOpe(EventHandle_Sai.sai_return_p1, EventHandle_Sai.sai_return_p2, EventHandle_Sai.sai_return_p3, EventHandle_Sai.sai_main_view_p1);
         } catch (Exception exception) {
             exception.printStackTrace();
         }

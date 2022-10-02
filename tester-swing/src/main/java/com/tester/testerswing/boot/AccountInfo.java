@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.opencv.core.Mat;
 
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Accessors(chain = true)
@@ -44,6 +45,9 @@ public class AccountInfo extends BaseDTO {
 
     // 是否自动化
     private boolean ifAuto = false;
+
+    // 自动化跑路时，上次跑路操作时间
+    private Date lastQuickRunTime;
 
     // 自动化操作
     private MyConsumer consumer;

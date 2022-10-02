@@ -116,7 +116,9 @@ public class EventHandle_Silot {
         try {
             EventHandle_Main.openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
             EventHandle_Main.runOpe(EventHandle_Silot.silot_align_p1, EventHandle_Silot.silot_align_p2, EventHandle_Silot.silot_align_p3_quick, EventHandle_Silot.silot_main_view_p1);
-            EventHandle_Main.returnOpe(EventHandle_Silot.silot_return_p1, EventHandle_Silot.silot_return_p2, EventHandle_Silot.silot_return_p3, EventHandle_Silot.silot_main_view_p1);
+
+            // 回收无人机
+//            EventHandle_Main.returnOpe(EventHandle_Silot.silot_return_p1, EventHandle_Silot.silot_return_p2, EventHandle_Silot.silot_return_p3, EventHandle_Silot.silot_main_view_p1);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
