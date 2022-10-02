@@ -114,7 +114,11 @@ public class ImgBoot {
             warning = true;
         }
         if (warning || doCheckIfNeedWarning(src, accountInfo)) {
-            sendVoice(accountInfo.getWarnMsg(), true);
+            if(accountInfo.isIfAuto()){
+                accountInfo.getConsumer().accept(null);
+            }else {
+                sendVoice(accountInfo.getWarnMsg(), true);
+            }
         }
 
     }

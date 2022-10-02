@@ -2,6 +2,7 @@ package com.tester.testerswing.swing.eventHandler;
 
 import com.tester.testerswing.capture.GaussianPointInfoDTO;
 import com.tester.testerswing.capture.PointInfoDTO;
+import com.tester.testerswing.robot.RobotHelper;
 
 //import com.tester.testerswing.swing.Colos_Input;
 
@@ -44,10 +45,26 @@ public class EventHandle_Colos {
     public static PointInfoDTO colos_align_p3_ed = new PointInfoDTO().setX(1600).setY(161);
     public static GaussianPointInfoDTO colos_align_p3 = new GaussianPointInfoDTO().setSt(colos_align_p3_st).setEd(colos_align_p3_ed);
 
+    public static PointInfoDTO colos_align_p3_quick_st = new PointInfoDTO().setX(1665).setY(151);
+    public static PointInfoDTO colos_align_p3_quick_ed = new PointInfoDTO().setX(1678).setY(163);
+    public static GaussianPointInfoDTO colos_align_p3_quick = new GaussianPointInfoDTO().setSt(colos_align_p3_quick_st).setEd(colos_align_p3_quick_ed);
+
 
     public static PointInfoDTO colos_main_view_p1_st = new PointInfoDTO().setX(1632).setY(229);
     public static PointInfoDTO colos_main_view_p1_ed = new PointInfoDTO().setX(1648).setY(240);
     public static GaussianPointInfoDTO colos_main_view_p1 = new GaussianPointInfoDTO().setSt(colos_main_view_p1_st).setEd(colos_main_view_p1_ed);
+
+    public static void quick_run(){
+        try {
+            EventHandle_Main.openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+            EventHandle_Main.runOpe(EventHandle_Colos.colos_align_p1, EventHandle_Colos.colos_align_p2, EventHandle_Colos.colos_align_p3_quick, EventHandle_Colos.colos_main_view_p1);
+            RobotHelper.delay(500);
+            EventHandle_Main.returnOpe(EventHandle_Colos.colos_return_p1, EventHandle_Colos.colos_return_p2, EventHandle_Colos.colos_return_p3, EventHandle_Colos.colos_main_view_p1);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
 
 //
 //    public static void handle_colos(Colos_Input script) {

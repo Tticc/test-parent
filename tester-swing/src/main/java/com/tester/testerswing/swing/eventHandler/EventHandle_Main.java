@@ -1,6 +1,7 @@
 package com.tester.testerswing.swing.eventHandler;
 
 import com.tester.testerswing.capture.GaussianPointInfoDTO;
+import com.tester.testerswing.gaussian.GaussianHelper;
 import com.tester.testerswing.robot.RobotHelper;
 import com.tester.testerswing.swing.EasyScript_UI_Main;
 
@@ -204,7 +205,7 @@ public class EventHandle_Main {
         RobotHelper.mouseLeftPress();
     }
 
-    private static void returnOpe(GaussianPointInfoDTO p1, GaussianPointInfoDTO p2, GaussianPointInfoDTO p3, GaussianPointInfoDTO mvP1) {
+    public static void returnOpe(GaussianPointInfoDTO p1, GaussianPointInfoDTO p2, GaussianPointInfoDTO p3, GaussianPointInfoDTO mvP1) {
         RobotHelper.move(p1.getX(), p1.getY(), 213);
         RobotHelper.mouseLeftPress();
         RobotHelper.move(p2.getX(), p2.getY(), 237);
@@ -215,14 +216,19 @@ public class EventHandle_Main {
         RobotHelper.mouseLeftPress();
     }
 
-    private static void runOpe(GaussianPointInfoDTO p1, GaussianPointInfoDTO p2, GaussianPointInfoDTO p3, GaussianPointInfoDTO mvP1) {
+    public static void runOpe(GaussianPointInfoDTO p1, GaussianPointInfoDTO p2, GaussianPointInfoDTO p3, GaussianPointInfoDTO mvP1) {
         RobotHelper.move(p1.getX(), p1.getY(), 331);
         RobotHelper.mouseLeftPress();
         RobotHelper.move(p2.getX(), p2.getY(), 386);
         RobotHelper.mouseLeftPress();
+        // 点击三次
         RobotHelper.move(p3.getX(), p3.getY(), 627);
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(100);
+        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(70);
     }
 
 

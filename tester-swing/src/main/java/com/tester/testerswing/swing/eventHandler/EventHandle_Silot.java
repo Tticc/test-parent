@@ -50,6 +50,11 @@ public class EventHandle_Silot {
     public static GaussianPointInfoDTO silot_align_p3 = new GaussianPointInfoDTO().setSt(silot_align_p3_st).setEd(silot_align_p3_ed);
 
 
+    public static PointInfoDTO silot_align_p3_quick_st = new PointInfoDTO().setX(1663).setY(153);
+    public static PointInfoDTO silot_align_p3_quick_ed = new PointInfoDTO().setX(1676).setY(162);
+    public static GaussianPointInfoDTO silot_align_p3_quick = new GaussianPointInfoDTO().setSt(silot_align_p3_quick_st).setEd(silot_align_p3_quick_ed);
+
+
     public static PointInfoDTO silot_main_view_p1_st = new PointInfoDTO().setX(1633).setY(229);
     public static PointInfoDTO silot_main_view_p1_ed = new PointInfoDTO().setX(1651).setY(237);
     public static GaussianPointInfoDTO silot_main_view_p1 = new GaussianPointInfoDTO().setSt(silot_main_view_p1_st).setEd(silot_main_view_p1_ed);
@@ -104,6 +109,18 @@ public class EventHandle_Silot {
 
     }
 
+
+
+
+    public static void quick_run(){
+        try {
+            EventHandle_Main.openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
+            EventHandle_Main.runOpe(EventHandle_Silot.silot_align_p1, EventHandle_Silot.silot_align_p2, EventHandle_Silot.silot_align_p3_quick, EventHandle_Silot.silot_main_view_p1);
+            EventHandle_Main.returnOpe(EventHandle_Silot.silot_return_p1, EventHandle_Silot.silot_return_p2, EventHandle_Silot.silot_return_p3, EventHandle_Silot.silot_main_view_p1);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
 
     private static void setTextField(JTextField field, PointInfoDTO sPoint) {
         field.addKeyListener(new KeyListener() {
