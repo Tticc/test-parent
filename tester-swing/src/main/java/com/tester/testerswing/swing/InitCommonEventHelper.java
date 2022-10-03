@@ -1,5 +1,6 @@
 package com.tester.testerswing.swing;
 
+import com.tester.testercommon.util.DateUtil;
 import com.tester.testerswing.boot.AccountInfo;
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.onTopReplica.StartOnTopReplica;
@@ -144,8 +145,11 @@ public class InitCommonEventHelper {
         script.getAuto_start().addActionListener((e) -> {
             script.getAuto_status().setText("true");
             script.getAccountInfoList().get(0).setIfAuto(true);
+            script.getAccountInfoList().get(0).setLastQuickRunTime(DateUtil.getTodayStart());
             script.getAccountInfoList().get(1).setIfAuto(true);
+            script.getAccountInfoList().get(1).setLastQuickRunTime(DateUtil.getTodayStart());
             script.getAccountInfoList().get(2).setIfAuto(true);
+            script.getAccountInfoList().get(2).setLastQuickRunTime(DateUtil.getTodayStart());
         });
         // auto停止
         script.getAuto_stop().addActionListener((e) -> {
