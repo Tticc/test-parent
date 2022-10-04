@@ -231,5 +231,65 @@ public class EventHandle_Main {
         RobotHelper.delay(70);
     }
 
+    public static void quickRunOpe(GaussianPointInfoDTO p1,
+                                   GaussianPointInfoDTO p2,
+                                   GaussianPointInfoDTO p3,
+                                   GaussianPointInfoDTO p4,
+                                   GaussianPointInfoDTO p5,
+                                   GaussianPointInfoDTO p6,
+                                   GaussianPointInfoDTO p7,
+                                   GaussianPointInfoDTO p8){
+        // p1和p2 选中建筑
+        RobotHelper.move(p1.getX(), p1.getY(), 331);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.move(p2.getX(), p2.getY(), 386);
+        RobotHelper.mouseLeftPress();
+        // p3 朝向建筑
+        RobotHelper.move(p3.getX(), p3.getY(), 327);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+        RobotHelper.mouseLeftPress();
+
+        // p4 停用护盾
+        RobotHelper.move(p4.getX(), p4.getY(), 127);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(50, 200));
+
+        // p5 使用电池
+        RobotHelper.move(p5.getX(), p5.getY(), 127);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(50, 200));
+
+        // p6和p7 上线装备
+        RobotHelper.move(p6.getX(), p6.getY(), 127);
+        RobotHelper.mouseRightPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(250, 350));
+        RobotHelper.move(p7.getX(), p7.getY(), 127);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(850, 950));
+
+
+        // p6 激活装备
+        RobotHelper.move(p6.getX(), p6.getY(), 127);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(50, 200));
+
+        // p8 进入建筑
+        RobotHelper.move(p8.getX(), p8.getY(), 1034);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(1530, 1770));
+        RobotHelper.mouseLeftPress();
+
+        // p4 启用护盾
+        RobotHelper.move(p4.getX(), p4.getY(), 327);
+        RobotHelper.mouseLeftPress();
+    }
+
 
 }

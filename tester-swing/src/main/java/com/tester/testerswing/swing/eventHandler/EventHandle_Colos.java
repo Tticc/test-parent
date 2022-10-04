@@ -57,8 +57,15 @@ public class EventHandle_Colos {
     public static void quick_run(){
         try {
             EventHandle_Main.openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
-            EventHandle_Main.runOpe(EventHandle_Colos.colos_align_p1, EventHandle_Colos.colos_align_p2, EventHandle_Colos.colos_align_p3_quick, EventHandle_Colos.colos_main_view_p1);
-            RobotHelper.delay(500);
+//            EventHandle_Main.runOpe(EventHandle_Colos.colos_align_p1, EventHandle_Colos.colos_align_p2, EventHandle_Colos.colos_align_p3_quick, EventHandle_Colos.colos_main_view_p1);
+            EventHandle_Main.quickRunOpe(EventHandle_Colos.colos_align_p1,
+                    EventHandle_Colos.colos_align_p2,
+                    EventHandle_Colos.colos_align_p3,
+                    EventHandle_Silot.silot_align_p4_stop,
+                    EventHandle_Silot.silot_align_p5_use,
+                    EventHandle_Silot.silot_align_p6_up,
+                    EventHandle_Silot.silot_align_p7_up,
+                    EventHandle_Colos.colos_align_p3_quick);
             // 回收无人机
 //            EventHandle_Main.returnOpe(EventHandle_Colos.colos_return_p1, EventHandle_Colos.colos_return_p2, EventHandle_Colos.colos_return_p3, EventHandle_Colos.colos_main_view_p1);
         } catch (Exception exception) {

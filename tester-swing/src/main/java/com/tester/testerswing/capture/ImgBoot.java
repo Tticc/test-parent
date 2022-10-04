@@ -46,7 +46,7 @@ public class ImgBoot {
     public static long activeInterval = 60 * 1000;
 
     // 有白时，至少每隔1分钟自动跑路一次
-    public static long auto_activeInterval = 1*60 * 1000;
+    public static long auto_activeInterval = 5*60 * 1000;
 
     /**
      * 启动
