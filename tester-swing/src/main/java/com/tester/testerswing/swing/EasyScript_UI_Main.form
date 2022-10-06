@@ -184,15 +184,6 @@
           <text value="打开"/>
         </properties>
       </component>
-      <component id="8e4d3" class="javax.swing.JButton" binding="open_return_silot">
-        <constraints>
-          <grid row="18" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="回收"/>
-        </properties>
-      </component>
       <component id="c634b" class="javax.swing.JButton" binding="open_sai">
         <constraints>
           <grid row="18" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -200,33 +191,6 @@
         </constraints>
         <properties>
           <text value="打开"/>
-        </properties>
-      </component>
-      <component id="8b29a" class="javax.swing.JButton" binding="open_return_sai">
-        <constraints>
-          <grid row="18" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="回收"/>
-        </properties>
-      </component>
-      <component id="81b36" class="javax.swing.JButton" binding="open_run_silot">
-        <constraints>
-          <grid row="20" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="跑路"/>
-        </properties>
-      </component>
-      <component id="fb3dd" class="javax.swing.JButton" binding="open_run_sai">
-        <constraints>
-          <grid row="20" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="跑路"/>
         </properties>
       </component>
       <component id="4a04" class="javax.swing.JButton" binding="onTopReplica_start">
@@ -284,24 +248,6 @@
           <text value="colos开始"/>
         </properties>
       </component>
-      <component id="72e9" class="javax.swing.JButton" binding="open_return_colos">
-        <constraints>
-          <grid row="18" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="回收"/>
-        </properties>
-      </component>
-      <component id="7e56b" class="javax.swing.JButton" binding="open_run_colos">
-        <constraints>
-          <grid row="20" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="跑路"/>
-        </properties>
-      </component>
       <component id="a11c0" class="javax.swing.JButton" binding="colos_pause">
         <constraints>
           <grid row="12" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -338,15 +284,6 @@
           <text value="投屏中"/>
         </properties>
       </component>
-      <component id="46a93" class="javax.swing.JButton" binding="onTopReplica_start3">
-        <constraints>
-          <grid row="6" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="投屏右"/>
-        </properties>
-      </component>
       <component id="8c324" class="javax.swing.JButton" binding="silot_info_pause">
         <constraints>
           <grid row="12" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -354,6 +291,7 @@
         </constraints>
         <properties>
           <text value="info停止"/>
+          <visible value="false"/>
         </properties>
       </component>
       <component id="cf0bd" class="javax.swing.JButton" binding="silot_info_start">
@@ -364,6 +302,7 @@
         <properties>
           <text value="info开始"/>
           <verticalAlignment value="0"/>
+          <visible value="false"/>
         </properties>
       </component>
       <component id="d2794" class="javax.swing.JButton" binding="sai_info_pause">
@@ -373,6 +312,7 @@
         </constraints>
         <properties>
           <text value="info停止"/>
+          <visible value="false"/>
         </properties>
       </component>
       <component id="8dfbc" class="javax.swing.JButton" binding="sai_info_start">
@@ -383,6 +323,7 @@
         <properties>
           <text value="info开始"/>
           <verticalAlignment value="0"/>
+          <visible value="false"/>
         </properties>
       </component>
       <component id="6595" class="javax.swing.JButton" binding="colos_info_pause">
@@ -392,6 +333,7 @@
         </constraints>
         <properties>
           <text value="info停止"/>
+          <visible value="false"/>
         </properties>
       </component>
       <component id="f36a2" class="javax.swing.JButton" binding="colos_info_start">
@@ -402,6 +344,7 @@
         <properties>
           <text value="info开始"/>
           <verticalAlignment value="0"/>
+          <visible value="false"/>
         </properties>
       </component>
       <component id="6b059" class="javax.swing.JLabel" binding="silot_info_status">
@@ -411,6 +354,7 @@
         </constraints>
         <properties>
           <text value="false"/>
+          <visible value="false"/>
         </properties>
       </component>
       <component id="823c6" class="javax.swing.JLabel" binding="sai_info_status">
@@ -420,6 +364,7 @@
         </constraints>
         <properties>
           <text value="false"/>
+          <visible value="false"/>
         </properties>
       </component>
       <component id="ca147" class="javax.swing.JLabel" binding="colos_info_status">
@@ -429,24 +374,7 @@
         </constraints>
         <properties>
           <text value="false"/>
-        </properties>
-      </component>
-      <component id="31144" class="javax.swing.JButton" binding="auto_start">
-        <constraints>
-          <grid row="2" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="auto开始"/>
-        </properties>
-      </component>
-      <component id="6ff23" class="javax.swing.JButton" binding="auto_stop">
-        <constraints>
-          <grid row="6" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="auto停止"/>
+          <visible value="false"/>
         </properties>
       </component>
       <component id="3f35d" class="javax.swing.JLabel" binding="auto_status">
@@ -456,6 +384,90 @@
         </constraints>
         <properties>
           <text value="false"/>
+        </properties>
+      </component>
+      <component id="8e4d3" class="javax.swing.JButton" binding="open_return_silot">
+        <constraints>
+          <grid row="20" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="回收"/>
+          <visible value="false"/>
+        </properties>
+      </component>
+      <component id="81b36" class="javax.swing.JButton" binding="open_run_silot">
+        <constraints>
+          <grid row="18" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="跑路"/>
+        </properties>
+      </component>
+      <component id="8b29a" class="javax.swing.JButton" binding="open_return_sai">
+        <constraints>
+          <grid row="20" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="回收"/>
+          <visible value="false"/>
+        </properties>
+      </component>
+      <component id="fb3dd" class="javax.swing.JButton" binding="open_run_sai">
+        <constraints>
+          <grid row="18" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="跑路"/>
+        </properties>
+      </component>
+      <component id="72e9" class="javax.swing.JButton" binding="open_return_colos">
+        <constraints>
+          <grid row="20" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="回收"/>
+          <visible value="false"/>
+        </properties>
+      </component>
+      <component id="7e56b" class="javax.swing.JButton" binding="open_run_colos">
+        <constraints>
+          <grid row="18" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="跑路"/>
+        </properties>
+      </component>
+      <component id="31144" class="javax.swing.JButton" binding="auto_start">
+        <constraints>
+          <grid row="6" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="auto开始"/>
+        </properties>
+      </component>
+      <component id="6ff23" class="javax.swing.JButton" binding="auto_stop">
+        <constraints>
+          <grid row="2" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="auto停止"/>
+        </properties>
+      </component>
+      <component id="46a93" class="javax.swing.JButton" binding="onTopReplica_start3">
+        <constraints>
+          <grid row="2" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="投屏右"/>
         </properties>
       </component>
     </children>
