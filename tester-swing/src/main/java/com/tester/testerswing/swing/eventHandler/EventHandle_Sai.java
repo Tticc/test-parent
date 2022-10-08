@@ -50,6 +50,10 @@ public class EventHandle_Sai {
     public static PointInfoDTO sai_align_p3_ed = new PointInfoDTO().setX(1601).setY(163);
     public static GaussianPointInfoDTO sai_align_p3 = new GaussianPointInfoDTO().setSt(sai_align_p3_st).setEd(sai_align_p3_ed);
 
+    public static PointInfoDTO sai_align_p3_quick_st = new PointInfoDTO().setX(1664).setY(151);
+    public static PointInfoDTO sai_align_p3_quick_ed = new PointInfoDTO().setX(1678).setY(165);
+    public static GaussianPointInfoDTO sai_align_p3_quick = new GaussianPointInfoDTO().setSt(sai_align_p3_quick_st).setEd(sai_align_p3_quick_ed);
+
 
     public static PointInfoDTO sai_main_view_p1_st = new PointInfoDTO().setX(1630).setY(229);
     public static PointInfoDTO sai_main_view_p1_ed = new PointInfoDTO().setX(1646).setY(239);
@@ -104,6 +108,27 @@ public class EventHandle_Sai {
         JTextField sai_main_view2_input = script.getSai_main_view2_input();
         setTextField(sai_main_view2_input, sai_main_view_p1_ed);
 
+    }
+
+
+    public static void quick_run(){
+        try {
+            EventHandle_Main.openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
+//            EventHandle_Main.runOpe(EventHandle_Sai.sai_align_p1, EventHandle_Sai.sai_align_p2, EventHandle_Sai.sai_align_p3_quick, EventHandle_Sai.sai_main_view_p1);
+            EventHandle_Main.quickRunOpe(EventHandle_Sai.sai_align_p1,
+                    EventHandle_Sai.sai_align_p2,
+                    EventHandle_Sai.sai_align_p3,
+                    EventHandle_Silot.silot_align_p4_stop,
+                    EventHandle_Silot.silot_align_p5_use,
+                    EventHandle_Silot.silot_align_p6_up,
+                    EventHandle_Silot.silot_align_p7_up,
+                    EventHandle_Sai.sai_align_p3_quick);
+
+            // 回收无人机
+//            EventHandle_Main.returnOpe(EventHandle_Sai.sai_return_p1, EventHandle_Sai.sai_return_p2, EventHandle_Sai.sai_return_p3, EventHandle_Sai.sai_main_view_p1);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
 

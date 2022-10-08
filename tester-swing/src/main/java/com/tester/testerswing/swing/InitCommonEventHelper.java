@@ -1,5 +1,6 @@
 package com.tester.testerswing.swing;
 
+import com.tester.testercommon.util.DateUtil;
 import com.tester.testerswing.boot.AccountInfo;
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.onTopReplica.StartOnTopReplica;
@@ -105,7 +106,7 @@ public class InitCommonEventHelper {
                         pointInfoDTO = accountInfo.getRedEd();
                     }else if (keyChar == 53) {
                         AccountInfo accountInfo = accountInfoList.get(2);
-                        pointInfoDTO = accountInfo.getRedEd();
+                        pointInfoDTO = accountInfo.getRedSt();
                     }else if (keyChar == 54) {
                         AccountInfo accountInfo = accountInfoList.get(2);
                         pointInfoDTO = accountInfo.getRedEd();
@@ -139,6 +140,23 @@ public class InitCommonEventHelper {
         // 自动投屏事件3
         script.getOnTopReplica_start3().addActionListener((e) -> {
             StartOnTopReplica.start3();
+        });
+        // auto开始
+        script.getAuto_start().addActionListener((e) -> {
+            script.getAuto_status().setText("true");
+            script.getAccountInfoList().get(0).setIfAuto(true);
+            script.getAccountInfoList().get(0).setLastQuickRunTime(DateUtil.getTodayStart());
+            script.getAccountInfoList().get(1).setIfAuto(true);
+            script.getAccountInfoList().get(1).setLastQuickRunTime(DateUtil.getTodayStart());
+            script.getAccountInfoList().get(2).setIfAuto(true);
+            script.getAccountInfoList().get(2).setLastQuickRunTime(DateUtil.getTodayStart());
+        });
+        // auto停止
+        script.getAuto_stop().addActionListener((e) -> {
+            script.getAuto_status().setText("false");
+            script.getAccountInfoList().get(0).setIfAuto(false);
+            script.getAccountInfoList().get(1).setIfAuto(false);
+            script.getAccountInfoList().get(2).setIfAuto(false);
         });
     }
 

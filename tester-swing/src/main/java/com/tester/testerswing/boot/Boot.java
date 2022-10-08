@@ -1,8 +1,12 @@
 package com.tester.testerswing.boot;
 
 import com.tester.base.dto.exception.BusinessException;
+import com.tester.testercommon.util.DateUtil;
 import com.tester.testerswing.capture.ImgBoot;
 import com.tester.testerswing.capture.PointInfoDTO;
+import com.tester.testerswing.swing.eventHandler.EventHandle_Colos;
+import com.tester.testerswing.swing.eventHandler.EventHandle_Sai;
+import com.tester.testerswing.swing.eventHandler.EventHandle_Silot;
 import com.tester.testerswing.voice.BeepSoundProcessor;
 import org.opencv.imgcodecs.Imgcodecs;
 
@@ -59,7 +63,9 @@ public class Boot {
                 .setSt(st_silot)
                 .setEd(ed_silot)
                 .setRedSt(red_st_silot)
-                .setRedEd(red_ed_silot));
+                .setRedEd(red_ed_silot)
+                .setLastQuickRunTime(DateUtil.getTodayStart())
+                .setConsumer((e) -> EventHandle_Silot.quick_run()));
         accountInfoList.add(new AccountInfo()
                 .setWarnMsg("中警告")
                 .setInfoMsg("中刷")
@@ -67,7 +73,9 @@ public class Boot {
                 .setSt(st_sai)
                 .setEd(ed_sai)
                 .setRedSt(red_st_sai)
-                .setRedEd(red_ed_sai));
+                .setRedEd(red_ed_sai)
+                .setLastQuickRunTime(DateUtil.getTodayStart())
+                .setConsumer((e) -> EventHandle_Sai.quick_run()));
         accountInfoList.add(new AccountInfo()
                 .setWarnMsg("右警告")
                 .setInfoMsg("右刷")
@@ -75,7 +83,9 @@ public class Boot {
                 .setSt(st_colos)
                 .setEd(ed_colos)
                 .setRedSt(red_st_colos)
-                .setRedEd(red_ed_colos));
+                .setRedEd(red_ed_colos)
+                .setLastQuickRunTime(DateUtil.getTodayStart())
+                .setConsumer((e) -> EventHandle_Colos.quick_run()));
     }
 
 

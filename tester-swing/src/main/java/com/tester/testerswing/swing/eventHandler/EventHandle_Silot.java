@@ -50,6 +50,27 @@ public class EventHandle_Silot {
     public static GaussianPointInfoDTO silot_align_p3 = new GaussianPointInfoDTO().setSt(silot_align_p3_st).setEd(silot_align_p3_ed);
 
 
+    public static PointInfoDTO silot_align_p3_dock_st = new PointInfoDTO().setX(1663).setY(153);
+    public static PointInfoDTO silot_align_p3_dock_ed = new PointInfoDTO().setX(1676).setY(162);
+    public static GaussianPointInfoDTO silot_align_p3_dock = new GaussianPointInfoDTO().setSt(silot_align_p3_dock_st).setEd(silot_align_p3_dock_ed);
+
+    public static PointInfoDTO silot_align_p4_stop_st = new PointInfoDTO().setX(1060).setY(880);
+    public static PointInfoDTO silot_align_p4_stop_ed = new PointInfoDTO().setX(1072).setY(890);
+    public static GaussianPointInfoDTO silot_align_p4_stop = new GaussianPointInfoDTO().setSt(silot_align_p4_stop_st).setEd(silot_align_p4_stop_ed);
+
+    public static PointInfoDTO silot_align_p5_use_st = new PointInfoDTO().setX(1108).setY(876);
+    public static PointInfoDTO silot_align_p5_use_ed = new PointInfoDTO().setX(1126).setY(895);
+    public static GaussianPointInfoDTO silot_align_p5_use = new GaussianPointInfoDTO().setSt(silot_align_p5_use_st).setEd(silot_align_p5_use_ed);
+
+    public static PointInfoDTO silot_align_p6_up_st = new PointInfoDTO().setX(1169).setY(884);
+    public static PointInfoDTO silot_align_p6_up_ed = new PointInfoDTO().setX(1169).setY(884);
+    public static GaussianPointInfoDTO silot_align_p6_up = new GaussianPointInfoDTO().setSt(silot_align_p6_up_st).setEd(silot_align_p6_up_ed);
+
+    public static PointInfoDTO silot_align_p7_up_st = new PointInfoDTO().setX(1213).setY(933);
+    public static PointInfoDTO silot_align_p7_up_ed = new PointInfoDTO().setX(1246).setY(941);
+    public static GaussianPointInfoDTO silot_align_p7_up = new GaussianPointInfoDTO().setSt(silot_align_p7_up_st).setEd(silot_align_p7_up_ed);
+
+
     public static PointInfoDTO silot_main_view_p1_st = new PointInfoDTO().setX(1633).setY(229);
     public static PointInfoDTO silot_main_view_p1_ed = new PointInfoDTO().setX(1651).setY(237);
     public static GaussianPointInfoDTO silot_main_view_p1 = new GaussianPointInfoDTO().setSt(silot_main_view_p1_st).setEd(silot_main_view_p1_ed);
@@ -104,6 +125,27 @@ public class EventHandle_Silot {
 
     }
 
+
+
+
+    public static void quick_run(){
+        try {
+            EventHandle_Main.openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
+//            EventHandle_Main.runOpe(EventHandle_Silot.silot_align_p1, EventHandle_Silot.silot_align_p2, EventHandle_Silot.silot_align_p3_dock, EventHandle_Silot.silot_main_view_p1);
+            EventHandle_Main.quickRunOpe(EventHandle_Silot.silot_align_p1,
+                    EventHandle_Silot.silot_align_p2,
+                    EventHandle_Silot.silot_align_p3,
+                    EventHandle_Silot.silot_align_p4_stop,
+                    EventHandle_Silot.silot_align_p5_use,
+                    EventHandle_Silot.silot_align_p6_up,
+                    EventHandle_Silot.silot_align_p7_up,
+                    EventHandle_Silot.silot_align_p3_dock);
+            // 回收无人机
+//            EventHandle_Main.returnOpe(EventHandle_Silot.silot_return_p1, EventHandle_Silot.silot_return_p2, EventHandle_Silot.silot_return_p3, EventHandle_Silot.silot_main_view_p1);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
 
     private static void setTextField(JTextField field, PointInfoDTO sPoint) {
         field.addKeyListener(new KeyListener() {

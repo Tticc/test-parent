@@ -59,6 +59,9 @@ public class EasyScript_UI_Main {
     private JLabel silot_info_status;
     private JLabel sai_info_status;
     private JLabel colos_info_status;
+    private JButton auto_start;
+    private JButton auto_stop;
+    private JLabel auto_status;
 
 
     Boot boot = new Boot();

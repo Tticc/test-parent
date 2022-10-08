@@ -45,6 +45,9 @@ public class ImgBoot {
     // 至少每隔1分钟弹起窗口
     public static long activeInterval = 60 * 1000;
 
+    // 有白时，至少每隔1分钟自动跑路一次
+    public static long auto_activeInterval = 5*60 * 1000;
+
     /**
      * 启动
      * 1. 删除原有目录。
@@ -114,7 +117,15 @@ public class ImgBoot {
             warning = true;
         }
         if (warning || doCheckIfNeedWarning(src, accountInfo)) {
-            sendVoice(accountInfo.getWarnMsg(), true);
+            long time = new Date().getTime();
+            if(accountInfo.isIfAuto()){
+                if(time > accountInfo.getLastQuickRunTime().getTime() + auto_activeInterval) {
+                    accountInfo.setLastQuickRunTime(new Date());
+                    accountInfo.getConsumer().accept(null);
+                }
+            }else {
+                sendVoice(accountInfo.getWarnMsg(), true);
+            }
         }
 
     }
