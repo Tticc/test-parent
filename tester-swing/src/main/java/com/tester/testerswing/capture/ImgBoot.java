@@ -4,11 +4,11 @@ import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercv.utils.detectColor.ColorDetectTool;
 import com.tester.testercv.utils.opencv.OpenCVHelper;
 import com.tester.testerswing.boot.AccountInfo;
-import com.tester.testerswing.boot.Boot;
 import com.tester.testerswing.robot.RobotHelper;
 import com.tester.testerswing.swing.EasyScript;
 import com.tester.testerswing.voice.BeepSoundProcessor;
-import com.tester.testerswing.voice.BeepSoundTaskDTO;
+import com.tester.testerswing.voice.dto.BeepSoundTaskDTO;
+import com.tester.testerswing.voice.dto.QywxMessageTaskDTO;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.springframework.util.CollectionUtils;
@@ -122,6 +122,10 @@ public class ImgBoot {
                 if(time > accountInfo.getLastQuickRunTime().getTime() + auto_activeInterval) {
                     accountInfo.setLastQuickRunTime(new Date());
                     accountInfo.getConsumer().accept(null);
+
+                    // 发消息
+                    QywxMessageTaskDTO qywxMessageTaskDTO = new QywxMessageTaskDTO(new Date().toString());
+                    BeepSoundProcessor.putTask(qywxMessageTaskDTO);
                 }
             }else {
                 sendVoice(accountInfo.getWarnMsg(), true);

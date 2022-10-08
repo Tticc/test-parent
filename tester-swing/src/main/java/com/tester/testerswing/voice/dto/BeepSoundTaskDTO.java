@@ -1,12 +1,11 @@
-package com.tester.testerswing.voice;
+package com.tester.testerswing.voice.dto;
 
-import com.tester.base.dto.model.BaseDTO;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class BeepSoundTaskDTO extends BaseDTO {
+public class BeepSoundTaskDTO extends MessageTaskDTO {
 
     // 提示音文字
     private String text = "ok";
