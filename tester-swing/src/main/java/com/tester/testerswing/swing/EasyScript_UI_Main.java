@@ -62,6 +62,8 @@ public class EasyScript_UI_Main {
     private JButton auto_start;
     private JButton auto_stop;
     private JLabel auto_status;
+    private JButton warn_start;
+    private JLabel warn_status;
 
 
     Boot boot = new Boot();

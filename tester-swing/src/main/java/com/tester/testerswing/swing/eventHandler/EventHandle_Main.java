@@ -28,6 +28,7 @@ public class EventHandle_Main {
         script.getSilot_pause().addActionListener((e) -> {
             script.getAccountInfoList().get(0).setNeedWarn(false);
             script.getSilot_status().setText("false");
+            script.getWarn_status().setText("false");
         });
         // 继续 silot
         script.getSilot_start().addActionListener((e) -> {
@@ -86,6 +87,7 @@ public class EventHandle_Main {
         script.getSai_pause().addActionListener((e) -> {
             script.getAccountInfoList().get(1).setNeedWarn(false);
             script.getSai_status().setText("false");
+            script.getWarn_status().setText("false");
         });
         // 继续 sai
         script.getSai_start().addActionListener((e) -> {
@@ -145,6 +147,7 @@ public class EventHandle_Main {
         script.getColos_pause().addActionListener((e) -> {
             script.getAccountInfoList().get(2).setNeedWarn(false);
             script.getColos_status().setText("false");
+            script.getWarn_status().setText("false");
         });
         // 继续 colos
         script.getColos_start().addActionListener((e) -> {

@@ -38,7 +38,7 @@ public class AccountInfo extends BaseDTO {
     private AtomicInteger refreshCount = new AtomicInteger(0);
 
     // 异常时是否需要警告
-    private boolean needWarn = true;
+    private boolean needWarn = false;
 
     // 异常时是否需要提醒
     private boolean needInfo = false;

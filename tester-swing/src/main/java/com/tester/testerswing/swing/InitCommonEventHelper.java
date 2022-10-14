@@ -158,6 +158,18 @@ public class InitCommonEventHelper {
             script.getAccountInfoList().get(1).setIfAuto(false);
             script.getAccountInfoList().get(2).setIfAuto(false);
         });
+
+        // warn开始
+        script.getWarn_start().addActionListener((e) -> {
+            script.getWarn_status().setText("true");
+
+            script.getAccountInfoList().get(0).setNeedWarn(true);
+            script.getSilot_status().setText("true");
+            script.getAccountInfoList().get(1).setNeedWarn(true);
+            script.getSai_status().setText("true");
+            script.getAccountInfoList().get(2).setNeedWarn(true);
+            script.getColos_status().setText("true");
+        });
     }
 
 
