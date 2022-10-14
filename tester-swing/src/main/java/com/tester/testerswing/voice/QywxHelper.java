@@ -59,6 +59,7 @@ public class QywxHelper {
             JSONObject jsonObject = HttpsClient.commonHttpsGetRequest(format);
             token = (String) jsonObject.get("access_token");
             tokenHolder.setTime(currentTime + 7000 * 1000);
+            tokenHolder.setToken(token);
         } else {
             token = tokenHolder.getToken();
         }

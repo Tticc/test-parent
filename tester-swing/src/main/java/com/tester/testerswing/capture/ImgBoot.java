@@ -1,6 +1,7 @@
 package com.tester.testerswing.capture;
 
 import com.tester.base.dto.exception.BusinessException;
+import com.tester.testercommon.util.DateUtil;
 import com.tester.testercv.utils.detectColor.ColorDetectTool;
 import com.tester.testercv.utils.opencv.OpenCVHelper;
 import com.tester.testerswing.boot.AccountInfo;
@@ -124,7 +125,7 @@ public class ImgBoot {
                     accountInfo.getConsumer().accept(null);
 
                     // 发消息
-                    QywxMessageTaskDTO qywxMessageTaskDTO = new QywxMessageTaskDTO(new Date().toString());
+                    QywxMessageTaskDTO qywxMessageTaskDTO = new QywxMessageTaskDTO(accountInfo.getAccount()+"_"+DateUtil.dateFormat(new Date()));
                     BeepSoundProcessor.putTask(qywxMessageTaskDTO);
                 }
             }else {
