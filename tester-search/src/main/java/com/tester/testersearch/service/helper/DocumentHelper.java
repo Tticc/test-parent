@@ -1,101 +1,109 @@
-package com.tester.testersearch;
+package com.tester.testersearch.service.helper;
 
-import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
-import co.elastic.clients.elasticsearch.core.CreateResponse;
-import co.elastic.clients.elasticsearch.core.SearchResponse;
-import co.elastic.clients.elasticsearch.core.search.Hit;
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.ElasticsearchException;
+import co.elastic.clients.elasticsearch.core.*;
+import co.elastic.clients.util.ObjectBuilder;
+import com.tester.testercommon.util.DateUtil;
 import com.tester.testercommon.util.MyConsumer;
 import com.tester.testersearch.model.Knowledge;
-import com.tester.testersearch.service.helper.DocumentHelper;
-import com.tester.testersearch.util.EsSearchHelper;
+import com.tester.testersearch.util.ESClient;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.springframework.util.StringUtils;
+import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.function.Function;
 
-
+/**
+ * @Author 温昌营
+ * @Date 2022-8-23 10:19:30
+ */
 @Slf4j
-public class NormalTest_ES {
+@Component
+public class DocumentHelper {
 
-    public DocumentHelper documentHelper = new DocumentHelper();
+    public static ElasticsearchClient client = ESClient.client;
 
-    @Test
-    public void test_firstRequest() throws Exception {
-        String key = null;
-        Knowledge kn = new Knowledge();
-        kn.setType(2);
-        kn.setTitle("黑暗");
-//        SearchResponse<Knowledge> search = documentHelper.mySearch(s -> s
-//                        .index("test_knowledge")
-//                        .query(q -> q
-//                                .bool(q1 -> q1.should(l -> l.match(e -> e.field("detail").query("森林").analyzer("ik_smart").minimumShouldMatch("2").boost(1f)))
-//                                        .should(l -> l.term(e -> e.field("keyword").value("欧莎").boost(99f)))
-////                                        .should(l -> l.multiMatch(e -> e.fields(Arrays.asList("description", "keyword")).query("转眼之间")))
-//                                )).size(10).from(0),
-//        Knowledge.class);
-        SearchResponse<Knowledge> search = documentHelper.mySearch(s -> s
-                .index("test_knowledge")
-                .query(q -> q.bool(q1 -> baseProcess(q1, kn))
-//                                        .should(l -> l.multiMatch(e -> e.fields(Arrays.asList("description", "keyword")).query("转眼之间")))
-                ).size(10).from(0), Knowledge.class);
-
-        for (Hit<Knowledge> hit : search.hits().hits()) {
-            processKnowledge(hit.source());
-        }
+    /**
+     * @Date 15:27 2022/7/27
+     * @Author 温昌营
+     * @see ElasticsearchClient#search(java.util.function.Function, java.lang.Class)
+     **/
+    public final <TDocument> SearchResponse<TDocument> mySearch(
+            Function<SearchRequest.Builder, ObjectBuilder<SearchRequest>> fn, Class<TDocument> tDocumentClass)
+            throws IOException, ElasticsearchException {
+        SearchRequest build = fn.apply(new SearchRequest.Builder()).build();
+        log.info("query request info:\n【{}】", build);
+        SearchResponse<TDocument> search = client.search(build, tDocumentClass);
+//        log.info("query response info:\n【{}】", search);
+        return search;
     }
 
-    public BoolQuery.Builder baseProcess(BoolQuery.Builder queryBuilder, Knowledge knowledge) {
-        Field[] fields = knowledge.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            String name = field.getName();
-            field.setAccessible(true);
-            String o = null;
-            try {
-                Object o1 = field.get(knowledge);
-                if (null == o1) {
-                    continue;
-                }
-                o = String.valueOf(field.get(knowledge));
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            processField_ik_smart(queryBuilder, name, o, EsSearchHelper.fieldBoostMap.get(name), EsSearchHelper.fieldAnalyzerMap.get(name));
-        }
-        return queryBuilder;
+    /**
+     * @Date 9:49 2022/8/23
+     * @Author 温昌营
+     * @see ElasticsearchClient#create(java.util.function.Function)
+     **/
+    public final <TDocument> CreateResponse myCreate(
+            Function<CreateRequest.Builder<TDocument>, ObjectBuilder<CreateRequest<TDocument>>> fn)
+            throws IOException, ElasticsearchException {
+        CreateRequest<TDocument> build = fn.apply(new CreateRequest.Builder<TDocument>()).build();
+        log.info("create request info:\n【{}】", build);
+        CreateResponse createResponse = client.create(build);
+        log.info("create response info:\n【{}】", createResponse);
+        return createResponse;
     }
 
-
-    public BoolQuery.Builder processField_ik_smart(BoolQuery.Builder queryBuilder, String fieldName, String fieldValue, Float boost, String analyzer) {
-        if (StringUtils.isEmpty(fieldValue)) {
-            return queryBuilder;
-        }
-        if (null == boost) {
-            boost = 1.0f;
-        }
-        final Float finalBoost = boost;
-
-        queryBuilder.filter(f -> f.term(t -> t.field(fieldName).value(1)));
-
-        return queryBuilder.should(l -> l.match(e -> e.field(fieldName).query(fieldValue).analyzer("ik_smart").minimumShouldMatch("2").boost(finalBoost)));
+    /**
+     * @Date 9:49 2022/8/23
+     * @Author 温昌营
+     * @see ElasticsearchClient#update(java.util.function.Function, java.lang.Class)
+     **/
+    public final <TDocument, TPartialDocument> UpdateResponse<TDocument> myUpdate(
+            Function<UpdateRequest.Builder<TDocument, TPartialDocument>, ObjectBuilder<UpdateRequest<TDocument, TPartialDocument>>> fn,
+            Class<TDocument> tDocumentClass) throws IOException, ElasticsearchException {
+        UpdateRequest<TDocument, TPartialDocument> build = fn.apply(new UpdateRequest.Builder<TDocument, TPartialDocument>()).build();
+        log.info("update request info:\n【{}】", build);
+        UpdateResponse<TDocument> update = client.update(build, tDocumentClass);
+        log.info("update response info:\n【{}】", update);
+        return update;
     }
 
-
-    @Test
-    public void test_update() throws Exception {
-        Knowledge knowledge = new Knowledge();
-        knowledge.setCode("00000002").setTitle("镖车运输时间点_2022-8-23 10:23:36").setUpdatedTime(new Date());
-        documentHelper.myUpdate(e -> e.id("00000002").index("test_knowledge").doc(knowledge), Knowledge.class);
-    }
-
-    private void processKnowledge(Knowledge knowledge) {
-        System.out.println("knowledge = " + knowledge);
+    /**
+     * @Date 14:22 2022/8/23
+     * @Author 温昌营
+     * @see ElasticsearchClient#delete(java.util.function.Function)
+     **/
+    public final DeleteResponse myDelete(Function<DeleteRequest.Builder, ObjectBuilder<DeleteRequest>> fn)
+            throws IOException, ElasticsearchException {
+        DeleteRequest build = fn.apply(new DeleteRequest.Builder()).build();
+        log.info("delete request info:\n【{}】", build);
+        DeleteResponse delete = client.delete(build);
+        log.info("delete response info:\n【{}】", delete);
+        return delete;
     }
 
 
-    @Test
-    public void test_create() throws Exception {
+    public static Date getVeryStartTime() {
+        LocalDateTime localDateTime = DateUtil.getLocalDateTime("19700101000000");
+        return DateUtil.getDateFromLocalDateTime(localDateTime);
+    }
+
+    public static Date getVeryEndTime() {
+        LocalDateTime localDateTime = DateUtil.getLocalDateTime("99990101000000");
+        return DateUtil.getDateFromLocalDateTime(localDateTime);
+    }
+
+
+    /**
+     * 初始化数据。<br/>也作为数据插入案例
+     *
+     * @Date 14:58 2022/10/25
+     * @Author 温昌营
+     **/
+    public void test_data_init() throws Exception {
         commonCreate((e) -> {
             e.setType(2)
                     .setCode("00000001")
@@ -199,7 +207,7 @@ public class NormalTest_ES {
         });
     }
 
-    public CreateResponse commonCreate(MyConsumer<Knowledge> consumer) throws Exception {
+    private CreateResponse commonCreate(MyConsumer<Knowledge> consumer) throws Exception {
         Date date = new Date();
         Knowledge knowledge = new Knowledge();
         knowledge
@@ -220,8 +228,7 @@ public class NormalTest_ES {
                 .setUpdatedBy("wenc")
                 .setUpdatedTime(date);
         consumer.accept(knowledge);
-        return documentHelper.myCreate(e -> e.id(knowledge.getCode()).index("test_knowledge").document(knowledge));
+        return myCreate(e -> e.id(knowledge.getCode()).index("test_knowledge").document(knowledge));
     }
-
 
 }

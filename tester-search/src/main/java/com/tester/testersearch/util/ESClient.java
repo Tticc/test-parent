@@ -7,7 +7,6 @@ import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestHighLevelClient;
 
 /**
  * @Author 温昌营
@@ -17,7 +16,7 @@ public class ESClient {
 
     public static final ElasticsearchClient client;
     public static final ElasticsearchAsyncClient asyncClient;
-    public static RestHighLevelClient hlrc;
+//    public static RestHighLevelClient hlrc;
 
     static {
         // Create the low-level client

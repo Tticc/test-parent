@@ -381,6 +381,12 @@
                 <version>${elastic.version}</version>
             </dependency>
 
+<!--            <dependency>-->
+<!--                <groupId>org.elasticsearch.client</groupId>-->
+<!--                <artifactId>elasticsearch-rest-high-level-client</artifactId>-->
+<!--                <version>7.17.3</version>-->
+<!--            </dependency>-->
+
 
             <!--cv and capture-->
             <!--本地jar包导入，其他地方可能不可用-->

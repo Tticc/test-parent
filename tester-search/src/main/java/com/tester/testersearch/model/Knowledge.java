@@ -20,7 +20,7 @@ public class Knowledge {
     private String code;
 
     /**
-     * 类型
+     * 类型。1=游戏，2=文学，3=科普
      **/
     private Integer type;
 
