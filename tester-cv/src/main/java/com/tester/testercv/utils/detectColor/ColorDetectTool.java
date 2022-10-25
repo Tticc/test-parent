@@ -66,8 +66,8 @@ public class ColorDetectTool {
     }
 
     public static boolean detectRed(Mat src, Consumer<Mat> consumer) throws BusinessException {
-        int minH = 0;
-        int maxH = 10;
+        int minH = 156;
+        int maxH = 180;
         int minS = 43;
         int maxS = 255;
         int minV = 46;
