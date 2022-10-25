@@ -10,6 +10,23 @@ import java.util.function.Function;
 public class NormalTest_Func {
 
     @Test
+    public void test_dump(){
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < Integer.MAX_VALUE; i++) {
+            if(i%1000 == 0){
+                try {
+                    Thread.sleep(10L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(i);
+            }
+            list.add("ajiffffffffffffffffffffffoooooooooojfioeqaiofidosajfoa;jfiosaf");
+        }
+    }
+
+
+    @Test
     public void test_call() throws Exception {
         Mono<List<String>> listMono = Flux.just("something", "chain")
                 .map(secret -> secret.replaceAll(".", "*"))
