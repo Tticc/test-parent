@@ -97,6 +97,30 @@ public class DocumentHelper {
     }
 
 
+    public CreateResponse commonCreate(MyConsumer<Knowledge> consumer) throws Exception {
+        Date date = new Date();
+        Knowledge knowledge = new Knowledge();
+        knowledge
+//                .setType(2)
+//                .setCode("00000001")
+                .setBelong("wenc")
+//                .setKeyword("挪威的森林")
+//                .setTitle("挪威的森林")
+//                .setDescription("挪威的森林")
+//                .setDetail("每个人都有属于自己的一片森林，也许我们 从来不曾去过，但它一直在那里，总会在那里。迷失的人迷失了，相逢的人会再相逢。")
+//                .setAuthor("村上村树")
+                .setPriority(1)
+                .setDeleted(0)
+                .setStartTime(DocumentHelper.getVeryStartTime())
+                .setEndTime(DocumentHelper.getVeryEndTime())
+                .setCreatedBy("wenc")
+                .setCreatedTime(date)
+                .setUpdatedBy("wenc")
+                .setUpdatedTime(date);
+        consumer.accept(knowledge);
+        return myCreate(e -> e.id(knowledge.getCode()).index("test_knowledge").document(knowledge));
+    }
+
     /**
      * 初始化数据。<br/>也作为数据插入案例
      *
@@ -207,28 +231,5 @@ public class DocumentHelper {
         });
     }
 
-    private CreateResponse commonCreate(MyConsumer<Knowledge> consumer) throws Exception {
-        Date date = new Date();
-        Knowledge knowledge = new Knowledge();
-        knowledge
-//                .setType(2)
-//                .setCode("00000001")
-                .setBelong("wenc")
-//                .setKeyword("挪威的森林")
-//                .setTitle("挪威的森林")
-//                .setDescription("挪威的森林")
-//                .setDetail("每个人都有属于自己的一片森林，也许我们 从来不曾去过，但它一直在那里，总会在那里。迷失的人迷失了，相逢的人会再相逢。")
-//                .setAuthor("村上村树")
-                .setPriority(1)
-                .setDeleted(0)
-                .setStartTime(DocumentHelper.getVeryStartTime())
-                .setEndTime(DocumentHelper.getVeryEndTime())
-                .setCreatedBy("wenc")
-                .setCreatedTime(date)
-                .setUpdatedBy("wenc")
-                .setUpdatedTime(date);
-        consumer.accept(knowledge);
-        return myCreate(e -> e.id(knowledge.getCode()).index("test_knowledge").document(knowledge));
-    }
 
 }

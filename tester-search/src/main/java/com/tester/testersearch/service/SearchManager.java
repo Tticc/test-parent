@@ -1,6 +1,7 @@
 package com.tester.testersearch.service;
 
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
+import co.elastic.clients.elasticsearch.core.CreateResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testersearch.model.Knowledge;
@@ -39,7 +40,24 @@ public class SearchManager {
         }
     }
 
-    public BoolQuery.Builder baseProcess(BoolQuery.Builder queryBuilder, Knowledge knowledge) {
+    public String add(Knowledge model) throws BusinessException {
+        try {
+            CreateResponse createResponse = documentHelper.commonCreate((e) -> {
+                e.setType(model.getType())
+                        .setCode(model.getCode())
+                        .setKeyword(model.getKeyword())
+                        .setTitle(model.getTitle())
+                        .setDescription(model.getDescription())
+                        .setDetail(model.getDetail())
+                        .setAuthor(model.getAuthor());
+            });
+            return createResponse.id();
+        } catch (Exception e) {
+            throw new BusinessException(5000, e);
+        }
+    }
+
+    private BoolQuery.Builder baseProcess(BoolQuery.Builder queryBuilder, Knowledge knowledge) {
         Field[] fields = knowledge.getClass().getDeclaredFields();
         for (Field field : fields) {
             String name = field.getName();
@@ -60,7 +78,7 @@ public class SearchManager {
     }
 
 
-    public BoolQuery.Builder processField_ik_smart(BoolQuery.Builder queryBuilder, String fieldName, String fieldValue, Float boost, String analyzer) {
+    private BoolQuery.Builder processField_ik_smart(BoolQuery.Builder queryBuilder, String fieldName, String fieldValue, Float boost, String analyzer) {
         if (StringUtils.isEmpty(fieldValue)) {
             return queryBuilder;
         }
