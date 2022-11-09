@@ -16,7 +16,7 @@ public class FluxCreateManager {
     public static void main(String[] args) throws InterruptedException {
 //        test_fluxCreate_create_already();
 //        test_fluxCreate_create();
-        test();
+        test_flux_chain();
 
     }
 
@@ -97,7 +97,7 @@ public class FluxCreateManager {
     }
 
 
-    public static void test(){
+    public static void test_flux_chain(){
         Mono<Void> jojo = ProcessHandler.start("jojo");
         jojo.subscribe(e -> System.out.println(e));
     }
