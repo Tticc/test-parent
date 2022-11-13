@@ -25,7 +25,7 @@ public class ImgDownload {
 
     private static Thread monitorThread;
 
-    private static Proxy proxy = HttpsClient.getProxy("127.0.0.1", 10809);
+    private static Proxy proxy = HttpsClient.getProxy("127.0.0.1", 7890);
 
     /**
      * main方法启动
