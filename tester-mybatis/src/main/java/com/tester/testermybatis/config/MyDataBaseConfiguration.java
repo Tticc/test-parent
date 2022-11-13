@@ -65,7 +65,7 @@ public class MyDataBaseConfiguration implements InitializingBean {
 
     private final ResourceLoader resourceLoader;
 
-    private static String virtualDbNamePrefix = "sharding_db_";
+    private static String virtualDbNamePrefix = "mydb_";
 
     @Autowired
     private MyDatabaseProperties myDatabaseProperties;

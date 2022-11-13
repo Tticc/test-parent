@@ -2,6 +2,8 @@ package com.tester.testercv.movie;
 
 
 import com.tester.base.dto.exception.BusinessException;
+import com.tester.testercommon.util.MyConsumer;
+import com.tester.testercommon.util.file.TxtWrite;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.util.StringUtils;
@@ -10,155 +12,126 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
-import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.spec.AlgorithmParameterSpec;
-import java.util.*;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
- * movie
+ * movie new one - multiple thread
  */
 @Slf4j
 public class Movie5 {
-
-    //线程数
-    private int threadCount = 12;
-
-    //重试次数
-    private int retryCount = 30;
-
-    //链接连接超时时间（单位：毫秒）
-    private long timeoutMillisecond = 1000L;
-
-    //已完成ts片段个数
-    private int finishedCount = 0;
-
+    private static BlockingQueue<MyConsumer<String>> queue = new LinkedBlockingQueue();
     //解密算法名称
-    private String method;
-
+    private String method = "AES";
     //密钥
     private String key = "";
-
-    //所有ts片段下载链接
-    private Set<String> tsSet = new LinkedHashSet<>();
-
-    //解密后的片段
-    private Set<File> finishedFiles = new ConcurrentSkipListSet<>(Comparator.comparingInt(o -> Integer.parseInt(o.getName().replace(".xyz", ""))));
-
-    //已经下载的文件大小
-    private BigDecimal downloadBytes = new BigDecimal(0);
-
-
-
-
 
     //合并后的视频文件名称
     private String fileName = "qqq.mp4";
 
-    private String folderPath = "C:\\Users\\wenc\\Desktop\\captureImg\\movie4";
+    private String folderPath = "C:\\Users\\wenc\\Desktop\\captureImg\\download\\movie\\";
 
-    public static final String downloadUrl = "https://xxx/index.m3u8";
+    public static final String allListUrl = "";
     // 网页获取的
-    public static final String hardKeyUrl = "https://xxx/index.m3u8";
-    // 网页获取的key
-    public static final String retryKey = "https://cxx/key.key";
+    public static final String trueListUrl = "";
+    // 网页获取的
+    public static final String filePath = "";
+    // 网页获取的key·
+    public static final String trueKey = "";
 
     @Test
     public void test_movie() throws Exception {
-        List<String> tsSet = new ArrayList<>();
-        String tsUrl = getTsUrl(tsSet);
-        downLoadIndexFile(tsSet);
-    }
-    private String getTsUrl(List<String> tsSet) throws Exception {
-        StringBuilder content = getUrlContent(downloadUrl);
-        //判断是否是m3u8链接
-        if (!content.toString().contains("#EXTM3U")) {
-            throw new BusinessException(2000L, downloadUrl + "不是m3u8链接！");
-        }
-        String[] split = content.toString().split("\\n");
-        String keyUrl = "";
-        boolean isKey = false;
-        for (String s : split) {
-            //如果含有此字段，则说明只有一层m3u8链接
-            if (s.contains("#EXT-X-KEY") || s.contains("#EXTINF")) {
-                isKey = true;
-                keyUrl = downloadUrl;
-                break;
-            }
-            //如果含有此字段，则说明ts片段链接需要从第二个m3u8链接获取
-            if (s.contains(".m3u8")) {
-                String replace = downloadUrl.replace("//", "!!");
-                replace = replace.substring(0, replace.indexOf("/")).replace("!!","//");
-                String relativeUrl = replace;
-                keyUrl = relativeUrl + s;
-                break;
-            }
-        }
-        if (StringUtils.isEmpty(keyUrl)) {
-            keyUrl = hardKeyUrl;
-//            throw new BusinessException(100L,"未发现key链接！");
-        }
-        //获取密钥
+        printAllList(allListUrl);
+        List<String> tsList = getTSListAndMethod(trueListUrl, filePath);
+        setDecryptKey(trueKey);
 
-        String key1 = isKey ? getKey(keyUrl, content,tsSet) : getKey(keyUrl, null,tsSet);
-        if (!StringUtils.isEmpty(key1)) {
-            key = key1;
-        }else {
-            key = null;
-        }
-        return key;
+        startTask(8);
+
+        Map<Integer, String> map = downLoadIndexFile(tsList, trueListUrl, filePath);
+
+        // 看需求是否需要
+//        composeFile(map);
     }
 
-    private String getKey(String url, StringBuilder content,List<String> tsSet) throws BusinessException {
-        StringBuilder urlContent;
-        if (content == null || StringUtils.isEmpty(content.toString()))
-            urlContent = getUrlContent(url);
-        else urlContent = content;
-        if (!urlContent.toString().contains("#EXTM3U"))
-            throw new BusinessException(201L,downloadUrl + "不是m3u8链接！");
+    private void printAllList(String allListUrl) throws BusinessException {
+        if (StringUtils.isEmpty(allListUrl)) {
+            return;
+        }
+        StringBuilder allList = getUrlContent(allListUrl);
+        System.out.println("allList = \n" + allList);
+    }
+
+    private List<String> getTSListAndMethod(String trueListUrl, String filePath) throws BusinessException {
+        List<String> tsList = new ArrayList<>();
+        StringBuilder urlContent = null;
+        try {
+            if(!StringUtils.isEmpty(filePath)){
+                String s1 = TxtWrite.file2String(filePath);
+                urlContent = new StringBuilder(s1);
+            }else{
+                urlContent = getUrlContent(trueListUrl);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         String[] split = urlContent.toString().split("\\n");
-        for (String s : split) {
-            //如果含有此字段，则获取加密算法以及获取密钥的链接
-            if (s.contains("EXT-X-KEY")) {
-                String[] split1 = s.split(",", 2);
-                if (split1[0].contains("METHOD"))
-                    method = split1[0].split("=", 2)[1];
-                if (split1[1].contains("URI"))
-                    key = split1[1].split("=", 2)[1];
-            }
-        }
-        String relativeUrl = url.substring(0, url.lastIndexOf("/") + 1);
-        //将ts片段链接加入set集合
         for (int i = 0; i < split.length; i++) {
             String s = split[i];
             if (s.contains("#EXTINF")) {
+                boolean hasRelativePath = false;
                 String tempUrl = split[++i];
-//                tsSet.add(relativeUrl + tempUrl);
-                String replace = url.replace("//", "!!");
-                replace = replace.substring(0, replace.indexOf("/")).replace("!!","//");
-                tsSet.add(replace + tempUrl);
+                if(tempUrl.startsWith("http://")||tempUrl.startsWith("https://")){
+                    tsList.add(tempUrl);
+                    continue;
+                }
+                if (tempUrl.contains("/")) {
+                    hasRelativePath = true;
+                }
+                //将 http://重新替换为http:!!
+                String replace = trueListUrl.replace("//", "!!");
+                // 截取
+                if (hasRelativePath) {
+                    replace = replace.substring(0, replace.indexOf("/"));
+                } else {
+                    replace = replace.substring(0, replace.lastIndexOf("/"));
+                    replace = replace + "/";
+                }
+                // 将 http:!!重新替换为http://
+                replace = replace.replace("!!", "//");
+                tsList.add(replace + tempUrl);
+            } else if (s.contains("EXT-X-KEY")) {
+                String[] split1 = s.split(",", 2);
+                if (split1[0].contains("METHOD")) {
+//                    method = split1[0].split("=", 2)[1];
+                }
             }
         }
-        if (!StringUtils.isEmpty(key)) {
-            key = key.replace("\"", "");
-            key = key.substring(key.lastIndexOf("/")+1);
-            try {
-                return getUrlContent(relativeUrl + key).toString().replaceAll("\\s+", "");
-            }catch (BusinessException be){
-                log.error("error",be);
-                log.info("retry key");
-                return getUrlContent(retryKey).toString().replaceAll("\\s+", "");
-            }
-        }
-//        System.out.println("set is:"+tsSet);
-        return null;
+        return tsList;
     }
+
+    private void setDecryptKey(String trueKey) throws BusinessException {
+        if (StringUtils.isEmpty(trueKey)) {
+            return;
+        }
+        StringBuilder urlContent = getUrlContent(trueKey);
+        this.key = urlContent.toString().replace("\n", "");
+    }
+
+
     private StringBuilder getUrlContent(String urls) throws BusinessException {
         int count = 1;
-        System.out.println("url is:"+urls);
+        System.out.println("url is:" + urls);
         HttpURLConnection httpURLConnection = null;
         StringBuilder content = new StringBuilder();
         while (count <= 3) {
@@ -176,12 +149,9 @@ public class Movie5 {
                     content.append(line).append("\n");
                 bufferedReader.close();
                 inputStream.close();
-//                System.out.println(content);
                 break;
             } catch (Exception e) {
-//                    System.out.println("第" + count + "获取链接重试！\t" + urls);
                 count++;
-//                    e.printStackTrace();
             } finally {
                 if (httpURLConnection != null) {
                     httpURLConnection.disconnect();
@@ -191,58 +161,115 @@ public class Movie5 {
         if (count > 3) {
             throw new BusinessException(201L, "连接超时！");
         }
-        System.out.println("content is:"+content);
         return content;
     }
-    public HashMap downLoadIndexFile(List<String> urlList) throws Exception {
-        HashMap<Integer,String> keyFileMap = new HashMap<>();
-        File file1 = new File(folderPath);
-        if (!file1.exists())
-            file1.mkdirs();
-        for(int i =0;i<urlList.size();i++){
-            String subUrlPath = urlList.get(i);
-            String fileOutPath = folderPath + File.separator + i + ".ts";
-            keyFileMap.put(i, fileOutPath);
-            try{
-                String s = downloadNet(subUrlPath, fileOutPath);
-                keyFileMap.put(i, s);
-                System.out.println("成功："+ (i + 1) +"/" + urlList.size());
-            }catch (Exception e){
-                System.err.println("*************失败："+ (i + 1) +"/" + urlList.size()+"************************************************************************");
-            }
-        }
-        composeFile(keyFileMap);
 
-        return  keyFileMap;
+    public Map<Integer, String> downLoadIndexFile(List<String> urlList, String trueListUrl, String filePath) throws Exception {
+        Map<Integer, String> keyFileMap = new ConcurrentHashMap<>();
+        File file1 = new File(folderPath);
+        if (!file1.exists()) {
+            file1.mkdirs();
+        }
+        for (int i = 0; i < urlList.size(); i++) {
+            String fileOutPath = folderPath + File.separator;
+            String subUrlPath = urlList.get(i);
+
+            int oriName = subUrlPath.lastIndexOf("/");
+            String fileOutName = subUrlPath.substring(oriName + 1);
+
+            MyConsumer<String> myConsumer = buildTask(subUrlPath, fileOutPath, fileOutName, keyFileMap, i, urlList.size());
+            queue.offer(myConsumer);
+        }
+        do {
+            try {
+                TimeUnit.SECONDS.sleep(10);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } while (urlList.size() != keyFileMap.size());
+        saveM3U8(trueListUrl, filePath, folderPath);
+        return keyFileMap;
     }
 
-    private String downloadNet(String fullUrlPath, String fileOutPath) throws Exception {
+    private MyConsumer<String> buildTask(String subUrlPath, String fileOutPath, String fileOutName, Map<Integer, String> keyFileMap, Integer i, Integer size) {
+        return (e) -> {
+            try {
+                downloadNet(subUrlPath, fileOutPath, fileOutName);
+                keyFileMap.put(i, fileOutPath + fileOutName);
+                System.out.println("成功：" + (i + 1) + "/" + size);
+            } catch (Exception ex) {
+                System.err.println("*************失败：" + (i + 1) + "/" + size + "****等待下一次重试*********"+subUrlPath+"***********************************************************");
+                MyConsumer<String> myConsumer = buildTask(subUrlPath, fileOutPath, fileOutName, keyFileMap, i, size);
+                queue.offer(myConsumer);
+            }
+        };
+    }
+
+    private void saveM3U8(String trueListUrl, String filePath, String folderPath) throws Exception {
+        StringBuilder urlContent = null;
+        try {
+            if(!StringUtils.isEmpty(filePath)){
+                String s1 = TxtWrite.file2String(filePath);
+                urlContent = new StringBuilder(s1);
+            }else{
+                urlContent = getUrlContent(trueListUrl);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String[] split = urlContent.toString().split("\\n");
+        StringBuilder finalM3U8Str = new StringBuilder();
+        for (String s : split) {
+            //如果含有此字段，则获取加密算法以及获取密钥的链接
+            if (s.contains("EXT-X-KEY")) {
+                continue;
+            }
+            int i = s.lastIndexOf("/");
+            finalM3U8Str.append(s.substring(i + 1)).append("\n");
+        }
+        String path = folderPath + File.separator + "index.m3u8";
+        try (FileOutputStream fs = new FileOutputStream(path)) {
+            fs.write(finalM3U8Str.toString().getBytes());
+        }
+    }
+
+    private void downloadNet(String fullUrlPath, String fileOutPath, String fileOutName) throws Exception {
         int byteread = 0;
+        String tempFile = fileOutPath + "temp_" + fileOutName;
+        String finalPath = fileOutPath + fileOutName;
+
         URL url = new URL(fullUrlPath);
         URLConnection conn = url.openConnection();
-        InputStream inStream = conn.getInputStream();
-        FileOutputStream fs = new FileOutputStream(fileOutPath);
-
-        byte[] buffer = new byte[1204];
-        while ((byteread = inStream.read(buffer)) != -1) {
-            //bytesum += byteread;
-            fs.write(buffer, 0, byteread);
+        conn.setConnectTimeout(20*1000);
+        conn.setReadTimeout(20*1000);
+        try (InputStream inStream = conn.getInputStream();
+             FileOutputStream fs = new FileOutputStream(tempFile)) {
+            byte[] buffer = new byte[1204];
+            while ((byteread = inStream.read(buffer)) != -1) {
+                //bytesum += byteread;
+                fs.write(buffer, 0, byteread);
+            }
         }
-        return decrypt_agent(fileOutPath, key, method);
+        decrypt_agent(tempFile, key, method, finalPath);
+        try {
+            boolean delete = new File(tempFile).delete();
+        } catch (Exception e) {
+            System.out.println("delete temp file error: " + tempFile);
+        }
     }
 
-    public String composeFile(HashMap<Integer,String> keyFileMap) throws Exception{
+    public String composeFile(HashMap<Integer, String> keyFileMap) throws Exception {
 
-        if(keyFileMap.isEmpty()) return null;
+        if (keyFileMap.isEmpty()) return null;
 
         String fileOutPath = folderPath + File.separator + fileName;
         FileOutputStream fileOutputStream = new FileOutputStream(new File(fileOutPath));
         byte[] bytes = new byte[1024];
         int length = 0;
-        for(int i=0; i<keyFileMap.size(); i++){
+        for (int i = 0; i < keyFileMap.size(); i++) {
             String nodePath = keyFileMap.get(i);
             File file = new File(nodePath);
-            if(!file.exists())  continue;
+            if (!file.exists()) continue;
 
             FileInputStream fis = new FileInputStream(file);
             while ((length = fis.read(bytes)) != -1) {
@@ -253,29 +280,26 @@ public class Movie5 {
         return fileName;
     }
 
-    private static String decrypt_agent(String filePath, String sKey, String method){
-        if(StringUtils.isEmpty(sKey)||StringUtils.isEmpty(method)){
-            return filePath;
+    private static void decrypt_agent(String filePath, String sKey, String method, String finalPath) {
+        boolean needDecrypt = true;
+        if (StringUtils.isEmpty(sKey) || StringUtils.isEmpty(method)) {
+            needDecrypt = false;
         }
-        try {
-            FileInputStream inputStream1 = new FileInputStream(filePath);
+        File file = new File(finalPath);
+        try (FileInputStream inputStream1 = new FileInputStream(filePath);
+             FileOutputStream outputStream1 = new FileOutputStream(file)) {
             byte[] bytes1 = new byte[inputStream1.available()];
             inputStream1.read(bytes1);
-            String tempPath = filePath.substring(0, filePath.lastIndexOf(".")) + "000.ts";
-            File file = new File(tempPath);
-            FileOutputStream outputStream1 = new FileOutputStream(file);
-            outputStream1.write(decrypt(bytes1, sKey, method));
-            return tempPath;
-        }catch (Exception e){
-            log.error("some thing went wrong",e);
+            outputStream1.write(needDecrypt ? decrypt(bytes1, sKey, method) : bytes1);
+        } catch (Exception e) {
+            log.error("some thing went wrong", e);
         }
-        return filePath;
     }
 
     private static byte[] decrypt(byte[] sSrc, String sKey, String method) {
         try {
             if (!StringUtils.isEmpty(method) && !method.contains("AES"))
-                throw new BusinessException(201L,"未知的算法！");
+                throw new BusinessException(201L, "未知的算法！");
             // 判断Key是否正确
             if (StringUtils.isEmpty(sKey)) {
                 return sSrc;
@@ -294,6 +318,25 @@ public class Movie5 {
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
+        }
+    }
+
+    private static void startTask(int num) {
+        for (int i = 0; i < num; i++) {
+            new Thread(() -> {
+                while (true) {
+                    try {
+                        MyConsumer<String> poll;
+                        if ((poll = queue.poll(5, TimeUnit.SECONDS)) != null) {
+                            poll.accept("");
+                        } else {
+                            TimeUnit.SECONDS.sleep(5);
+                        }
+                    } catch (Exception e) {
+                        System.out.println("thread error.");
+                    }
+                }
+            }).start();
         }
     }
 

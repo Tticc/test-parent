@@ -29,7 +29,7 @@ public class ImgCommon {
 
     // 配置文件实际位置。可以配置在本地文件，也可以配置到资源文件。
 //    public static final String IMG_ROOT_PATH = "classpath:static" + File.separator + "img";
-    public static final String IMG_ROOT_PATH = "file:C:\\Users\\Admin\\Desktop\\captureImg\\img\\";
+    public static final String IMG_ROOT_PATH = "file:D:\\captureImg\\img\\img\\";
 
     // 配置图片文件请求前缀。所有这个前缀，都会走特定位置。
     // 配置：com.tester.testerwebapp.controller.page.img.ImgWebConfig
