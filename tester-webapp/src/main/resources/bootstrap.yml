@@ -1,17 +1,17 @@
 server:
   port: 8004
-  ssl:
-    key-store: classpath:keystore/server.jks
-#    key-password: a123456
-    key-store-password: a123456
-    key-store-type: JKS
+#  ssl:
+#    key-store: classpath:keystore/server.jks
+##    key-password: a123456
+#    key-store-password: a123456
+#    key-store-type: JKS
 spring:
   application:
     name: tester-webapp
 #  aop:
 #    proxy-target-class: false # false时使用jdk动态代理,默认为true
   profiles:
-    active: sit
+    active: dev
 #    active: ${env}
   servlet:
     multipart:
