@@ -12,6 +12,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +34,8 @@ public class TesterWebappApplication implements CommandLineRunner, ApplicationRu
     @Autowired
     private ApplicationContext applicationContext;
     public void run(String... args) throws Exception {
+        System.out.println("\n\n\n\n\n\n\n\n\n\n");
+        System.out.println("----------------------------------------------------------------");
         String properties = "spring.aop.proxy-target-class";
         String xxx = applicationContext.getEnvironment().getProperty(properties);
         System.out.println(properties + ": " + xxx);
@@ -40,6 +43,12 @@ public class TesterWebappApplication implements CommandLineRunner, ApplicationRu
         String nacosKey = "sharding-my-db.jdbc-url";
         String nacosValue = applicationContext.getEnvironment().getProperty(nacosKey);
         System.out.println(nacosKey + ": " + nacosValue);
+
+        String userTimezone = applicationContext.getEnvironment().getProperty("user.timezone");
+        System.out.println("userTimezone = " + userTimezone);
+        System.out.println(new Date());
+        System.out.println("----------------------------------------------------------------");
+        System.out.println("\n\n\n\n\n\n\n\n\n\n");
     }
 
     @Override
