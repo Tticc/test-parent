@@ -1,6 +1,7 @@
 package org.springframework.boot.autoconfigure.data.redis;
 
 import io.lettuce.core.ClientOptions;
+import io.lettuce.core.ReadFrom;
 import io.lettuce.core.TimeoutOptions;
 import io.lettuce.core.cluster.ClusterClientOptions;
 import io.lettuce.core.cluster.ClusterTopologyRefreshOptions;
@@ -68,6 +69,17 @@ public class MyLettuceConnectionConfiguration extends LettuceConnectionConfigura
         lettuceConnectionFactory.setValidateConnection(true);
         lettuceConnectionFactory.setShareNativeConnection(false);
         return lettuceConnectionFactory;
+    }
+
+    /**
+     * lettuce读写分离配置<br/>
+     * 当前为优先读取slave，slave不可用则读取master
+     *
+     * @return
+     */
+    @Bean
+    public LettuceClientConfigurationBuilderCustomizer configurationBuilderCustomizer(){
+        return configBuilder -> configBuilder.readFrom(ReadFrom.SLAVE_PREFERRED);
     }
 
     private LettuceConnectionFactory createLettuceConnectionFactory(LettuceClientConfiguration clientConfiguration) {
