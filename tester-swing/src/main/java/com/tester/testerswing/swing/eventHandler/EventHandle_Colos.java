@@ -16,9 +16,9 @@ public class EventHandle_Colos {
 
     public static String pointStr = "(%d,%d)";
 
-    public static PointInfoDTO colos_open_p1_st = new PointInfoDTO().setX(1335).setY(1051);
+    public static PointInfoDTO colos_open_p1_st = new PointInfoDTO().setX(1212).setY(1051);
     public static GaussianPointInfoDTO colos_open_p1 = new GaussianPointInfoDTO().setSt(colos_open_p1_st).setEd(colos_open_p1_st);
-    public static PointInfoDTO colos_open_p2_st = new PointInfoDTO().setX(1567).setY(946);
+    public static PointInfoDTO colos_open_p2_st = new PointInfoDTO().setX(1447).setY(946);
     public static GaussianPointInfoDTO colos_open_p2 = new GaussianPointInfoDTO().setSt(colos_open_p2_st).setEd(colos_open_p2_st);
 
     public static PointInfoDTO colos_return_p1_st = new PointInfoDTO().setX(1677).setY(735);
