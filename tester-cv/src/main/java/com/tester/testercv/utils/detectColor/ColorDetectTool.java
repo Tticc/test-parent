@@ -118,7 +118,12 @@ public class ColorDetectTool {
                 }
                 if (count > 5) {
                     needWarn = true;
+                    break;
                 }
+            }
+            if (count > 5) {
+                needWarn = true;
+                break;
             }
         }
         if (needWarn) {
