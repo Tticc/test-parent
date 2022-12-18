@@ -16,9 +16,9 @@ public class Consumer {
 
     public static void main(String[] args) throws MQClientException {
 
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("transaction_producer");
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("transaction_producer111");
 
-        consumer.setNamesrvAddr("192.168.1.114:9876;192.168.1.115:9876;192.168.1.116:9876;192.168.1.116:9876");
+        consumer.setNamesrvAddr("localhost:9876");
 
         /**
 
@@ -30,7 +30,7 @@ public class Consumer {
 
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
 
-        consumer.subscribe("TopicTransaction", "*");
+        consumer.subscribe("someT", "*");
 
         consumer.registerMessageListener(new MessageListenerOrderly() {
 
@@ -55,13 +55,10 @@ public class Consumer {
                     //模拟业务处理
 
                     TimeUnit.SECONDS.sleep(random.nextInt(5));
+//                    double a = 1/0;
 
                 }catch (Exception e){
-
-                    e.printStackTrace();
-
-                    return  ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
-
+                    throw new RuntimeException(e);
                 }
 
                 return ConsumeOrderlyStatus.SUCCESS;
