@@ -46,6 +46,7 @@
         <xxl-job.version>2.1.1</xxl-job.version>
         <cglib.version>3.3.0</cglib.version>
         <elastic.version>8.2.3</elastic.version>
+        <com.google.zxing.version>3.3.0</com.google.zxing.version>
 
         <!-- rocketmq -->
         <rocketmq.vresion>4.5.1</rocketmq.vresion>
@@ -431,6 +432,12 @@
 
 
 
+            <!-- 二维码支持包 -->
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>core</artifactId>
+                <version>${com.google.zxing.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>io.springfox</groupId>

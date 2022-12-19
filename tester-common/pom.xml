@@ -41,6 +41,11 @@
             <artifactId>commons-pool2</artifactId>
         </dependency>
         <!-- web -->
+        <!-- 二维码支持包 -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
 
 
         <!-- poi -->
