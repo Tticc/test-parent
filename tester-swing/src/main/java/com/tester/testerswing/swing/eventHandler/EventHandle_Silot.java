@@ -20,9 +20,9 @@ public class EventHandle_Silot {
 
     public static String pointStr = "(%d,%d)";
 
-    public static PointInfoDTO silot_open_p1_st = new PointInfoDTO().setX(1335).setY(1051);
+    public static PointInfoDTO silot_open_p1_st = new PointInfoDTO().setX(1212).setY(1051);
     public static GaussianPointInfoDTO silot_open_p1 = new GaussianPointInfoDTO().setSt(silot_open_p1_st).setEd(silot_open_p1_st);
-    public static PointInfoDTO silot_open_p2_st = new PointInfoDTO().setX(1057).setY(948);
+    public static PointInfoDTO silot_open_p2_st = new PointInfoDTO().setX(937).setY(948);
     public static GaussianPointInfoDTO silot_open_p2 = new GaussianPointInfoDTO().setSt(silot_open_p2_st).setEd(silot_open_p2_st);
 
     public static PointInfoDTO silot_return_p1_st = new PointInfoDTO().setX(1675).setY(732);

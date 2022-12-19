@@ -15,10 +15,10 @@ public class DefaultProducer {
         String group_name = "transaction_producer";
         final DefaultMQProducer producer = new DefaultMQProducer(group_name);
         //namesev服务
-        producer.setNamesrvAddr("10.100.69.74:9876");
+        producer.setNamesrvAddr("127.0.0.1:9876");
         producer.start();
         for (int i = 0; i < 1; i++) {
-            Message msg = new Message("test_one", ("Hello RocketMq" + i).getBytes());
+            Message msg = new Message("test_1", ("Hello RocketMq" + i).getBytes());
             SendResult sendResult = producer.send(msg);
             System.out.println(sendResult);
             TimeUnit.MICROSECONDS.sleep(1000);

@@ -11,6 +11,7 @@ import com.tester.testerswing.voice.BeepSoundProcessor;
 import com.tester.testerswing.voice.dto.BeepSoundTaskDTO;
 import com.tester.testerswing.voice.dto.QywxMessageTaskDTO;
 import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.springframework.util.CollectionUtils;
 
@@ -135,11 +136,15 @@ public class ImgBoot {
 
     }
 
-    private static boolean doCheckIfNeedWarning(Mat src, AccountInfo accountInfo) throws BusinessException {
+    private static boolean doCheckIfNeedWarning_ori(Mat src, AccountInfo accountInfo) throws BusinessException {
         String basePath = getBasePath(accountInfo.getAccount());
         return ColorDetectTool.detectGray(src, (targetMat) -> OpenCVHelper.saveMat2Img(basePath, targetMat, getCountPrefix(accountInfo.getRefreshCount().get()) + "_warning_gray.png"))
                 || ColorDetectTool.detectRed(src, (targetMat) -> OpenCVHelper.saveMat2Img(basePath, targetMat, getCountPrefix(accountInfo.getRefreshCount().get()) + "warning_red.png"))
                 || ColorDetectTool.detectYellow(src, (targetMat) -> OpenCVHelper.saveMat2Img(basePath, targetMat, getCountPrefix(accountInfo.getRefreshCount().get()) + "warning_yellow.png"));
+    }
+    private static boolean doCheckIfNeedWarning(Mat src, AccountInfo accountInfo) throws BusinessException {
+        String basePath = getBasePath(accountInfo.getAccount());
+        return ColorDetectTool.doDetect(src,ColorDetectTool.defaultMinValues,ColorDetectTool.defaultMaxValues,(targetMat) -> OpenCVHelper.saveMat2Img(basePath, targetMat, getCountPrefix(accountInfo.getRefreshCount().get()) + "_warning.png"));
     }
 
     public static void sendVoice(String msg, boolean needFront) {

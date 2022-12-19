@@ -133,7 +133,7 @@ public class OpenCVHelper {
     public static void showImg(Mat mat, String name, int delay) {
         HighGui.imshow(name, mat);
         HighGui.waitKey(delay);
-        System.exit(0);
+//        System.exit(0);
     }
 
     /**

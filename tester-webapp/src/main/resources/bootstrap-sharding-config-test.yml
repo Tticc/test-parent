@@ -1,0 +1,125 @@
+spring:
+  profiles: sharding
+  shardingsphere:
+    props:
+      sql:
+        show: true
+    datasource:
+      names: ds1,ds2,ds3
+      ds1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost1:3306/test_parent?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8
+        username: root
+        password: 123456
+        hikari:
+          maximum-pool-size: 20
+          minimum-idle: 8
+          connection-timeout: 30000
+          connection-test-query: select 1
+      ds2:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost2:3306/test_parent?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8
+        username: root
+        password: 123456
+        hikari:
+          maximum-pool-size: 20
+          minimum-idle: 8
+          connection-timeout: 30000
+          connection-test-query: select 1
+      ds3:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost3:3306/test_parent?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8
+        username: root
+        password: 123456
+        hikari:
+          maximum-pool-size: 20
+          minimum-idle: 8
+          connection-timeout: 30000
+          connection-test-query: select 1
+
+    sharding:
+      # 默认数据源，主要用于写。注意一定要加这个配置
+      # 如果不配置，那么三个节点都当做是slave。修改会报错
+      default-data-source-name: ds1
+    # 配置数据源读写分离，master写，slave读。前提是数据库做了主从复制
+    masterslave:
+      # 配置主从名字，任意取
+      name: ms
+      # 配置主库master，用来写入数
+      master-data-source-name: ds1
+      # 配置从库slave节点
+      slave-data-source-name: ds2,ds3
+      # 配置slave节点负载均衡策略。轮询
+      load-balance-algorithm-type: round-robin
+
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        watchDelay: 10000
+        registerEnabled: true
+        namespace: 9a4fc705-e6df-44f9-b035-9b2e9a434617
+
+# REDIS (RedisProperties)
+# Redis数据库索引（默认为0）
+  redis:
+    # Redis数据库索引（默认为0）
+    database: 0
+    cluster:
+      nodes: 10.10.34.7:7001,10.10.34.7:7002,10.10.34.8:7003,10.10.34.8:7004,10.10.34.9:7005,10.10.34.9:7006,10.10.34.7:7005,10.10.34.7:7006,10.10.34.8:7001,10.10.34.8:7002,10.10.34.9:7003,10.10.34.9:7004
+      max-redirects: 3
+    # Redis服务器连接密码（默认为空）
+#    password: 123456
+    # 连接超时时间（毫秒）
+    timeout: 20000
+
+    lettuce:
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制）
+        max-active: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池中的最小空闲连接
+        min-idle: 0
+##mybatis
+#mybatis:
+#  mapper-locations: classpath*:mapper/**/*Mapper.xml
+#  configuration:
+#    # 自动匹配字段驼峰规则
+#    map-underscore-to-camel-case: true
+
+sharding-my-db:
+  jdbc-url: jdbc:mysql://localhost:3306/
+normal-datasource:
+  jdbc-url: jdbc:mysql://localhost:3306/test_parent?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8
+  username: root
+  password: 123456
+  driver-class-name: com.mysql.cj.jdbc.Driver
+
+logging:
+  level:
+    #        com:
+    #          aeon:
+    #            dmc:
+    #              cloud:
+    #                office:
+    #                  flow:
+    #                    dao:
+    #                    mapper: debug
+    com:
+      tester:
+        testermybatis:
+          dao:
+            mapper : debug
+        testerwebapp:
+          dao:
+            mapper: debug
+
+
+

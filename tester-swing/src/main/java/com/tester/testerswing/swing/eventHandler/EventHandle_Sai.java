@@ -20,9 +20,9 @@ public class EventHandle_Sai {
 
     public static String pointStr = "(%d,%d)";
 
-    public static PointInfoDTO sai_open_p1_st = new PointInfoDTO().setX(1338).setY(1048);
+    public static PointInfoDTO sai_open_p1_st = new PointInfoDTO().setX(1212).setY(1048);
     public static GaussianPointInfoDTO sai_open_p1 = new GaussianPointInfoDTO().setSt(sai_open_p1_st).setEd(sai_open_p1_st);
-    public static PointInfoDTO sai_open_p2_st = new PointInfoDTO().setX(1353).setY(961);
+    public static PointInfoDTO sai_open_p2_st = new PointInfoDTO().setX(1233).setY(961);
     public static GaussianPointInfoDTO sai_open_p2 = new GaussianPointInfoDTO().setSt(sai_open_p2_st).setEd(sai_open_p2_st);
 
 
