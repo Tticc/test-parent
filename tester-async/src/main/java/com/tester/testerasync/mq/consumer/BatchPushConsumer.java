@@ -1,7 +1,6 @@
 package com.tester.testerasync.mq.consumer;
 
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.client.consumer.MessageSelector;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
@@ -14,7 +13,7 @@ import java.util.List;
 /**
  * push类型、集群模式
  */
-public class PushConsumer {
+public class BatchPushConsumer {
     public static void main(String[] args) throws Exception {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("my_cg");
 
@@ -24,9 +23,12 @@ public class PushConsumer {
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
         // 指定topic与tag
         consumer.subscribe("Tr_someT", "*");
-        consumer.subscribe("Tr_someT", MessageSelector.bySql("age between 0 and 6"));
         // 设置消费模式，默认为 集群模式
         consumer.setMessageModel(MessageModel.CLUSTERING);
+        // 指定每次可以消费10条消息，默认为1
+        consumer.setConsumeMessageBatchMaxSize(10);
+        // 指定每次可以从broker拉取40条消息，默认为32
+        consumer.setPullBatchSize(40);
 
         consumer.registerMessageListener(new MessageListenerConcurrently() {
             @Override

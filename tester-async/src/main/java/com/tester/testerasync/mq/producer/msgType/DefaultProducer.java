@@ -1,4 +1,4 @@
-package com.tester.testerasync.mq.producer;
+package com.tester.testerasync.mq.producer.msgType;
 
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
@@ -9,6 +9,9 @@ import org.apache.rocketmq.remoting.exception.RemotingException;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 普通消息
+ */
 public class DefaultProducer {
 
     public static void main(String[] args) throws MQClientException, InterruptedException, RemotingException, MQBrokerException {

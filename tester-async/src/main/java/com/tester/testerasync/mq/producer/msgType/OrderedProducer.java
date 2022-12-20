@@ -1,4 +1,4 @@
-package com.tester.testerasync.mq.producer;
+package com.tester.testerasync.mq.producer.msgType;
 
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.MessageQueueSelector;
@@ -8,7 +8,9 @@ import org.apache.rocketmq.common.message.MessageQueue;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
+/**
+ * 顺序消息
+ */
 public class OrderedProducer {
     public static void main(String[] args) throws Exception {
         DefaultMQProducer producer = new DefaultMQProducer("sp");
