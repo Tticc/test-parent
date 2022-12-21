@@ -22,7 +22,7 @@ public class BatchPushConsumer {
         // 指定从第一条消息开始消费
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
         // 指定topic与tag
-        consumer.subscribe("Tr_someT", "*");
+        consumer.subscribe("batch_someT", "*");
         // 设置消费模式，默认为 集群模式
         consumer.setMessageModel(MessageModel.CLUSTERING);
         // 指定每次可以消费10条消息，默认为1
@@ -33,8 +33,9 @@ public class BatchPushConsumer {
         consumer.registerMessageListener(new MessageListenerConcurrently() {
             @Override
             public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
+                String name = Thread.currentThread().getName();
                 for (MessageExt msg : msgs) {
-                    System.out.println(msg + " , content : " + new String(msg.getBody()));
+                    System.out.println("threadName:"+name+", msg:"+msg + " , content : " + new String(msg.getBody()));
                 }
                 // 消费成功的返回
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
