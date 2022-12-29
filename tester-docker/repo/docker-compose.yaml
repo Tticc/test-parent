@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+  registry:
+    image: registry
+    ports:
+      - 5000:5000
+    volumes:
+      - my_docker_repo:/var/lib/registry
+  ui:
+    image: joxit/docker-registry-ui:1.5-static
+    ports:
+      - 8080:80
+    environment:
+      - REGISTRY_TITLE=cvwen
+      - REGISTRY_URL=http://registry:5000
+    depends_on:
+      - registry
+volumes:
+  my_docker_repo:
+    driver: local
