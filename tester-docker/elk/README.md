@@ -12,6 +12,7 @@ compose和env
 `cd E:\Development\Projects_backup\test-parent\tester-docker\elk`  
 docker-compose -p elk_compose up -d
 
+docker-compose -f docker-compose_cluster.yaml -p elk_cluster_compose up -d
 
 ### 说明
 elasticsearch   
