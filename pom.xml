@@ -45,7 +45,7 @@
         <commons-pool2.version>2.7.0</commons-pool2.version>
         <xxl-job.version>2.1.1</xxl-job.version>
         <cglib.version>3.3.0</cglib.version>
-        <elastic.version>8.2.3</elastic.version>
+        <elastic.version>8.2.0</elastic.version>
         <com.google.zxing.version>3.3.0</com.google.zxing.version>
 
         <!-- rocketmq -->
