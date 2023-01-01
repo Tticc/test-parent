@@ -19,7 +19,8 @@ import springfox.documentation.annotations.ApiIgnore;
 @FeignClient(
         name = "tester-async",
         url = "${ms-url.tester-async:}",
-        path = FeignConstant.INNER_SERVICE_URI_PREFIX + "/api/test1"
+        path = FeignConstant.INNER_SERVICE_URI_PREFIX + "/api/test1",
+        fallbackFactory = Test1FeignClientFallbackFactory.class
 )
 public interface Test1FeignClient {
 
