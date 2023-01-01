@@ -37,6 +37,18 @@ public class NormalTest_ES {
     }
 
     @Test
+    public void test_update() throws Exception {
+        Knowledge knowledge = new Knowledge();
+        knowledge.setCode("00000002").setTitle("镖车运输时间点_2022-8-23 10:23:36").setUpdatedTime(new Date());
+        documentHelper.myUpdate(e -> e.id("00000002").index("test_knowledge").doc(knowledge), Knowledge.class);
+    }
+
+    @Test
+    public void test_data_init() throws Exception {
+        documentHelper.test_data_init();
+    }
+
+    @Test
     public void test_firstRequest() throws Exception {
         String key = null;
         Knowledge kn = new Knowledge();
@@ -146,22 +158,11 @@ public class NormalTest_ES {
     }
 
 
-    @Test
-    public void test_update() throws Exception {
-        Knowledge knowledge = new Knowledge();
-        knowledge.setCode("00000002").setTitle("镖车运输时间点_2022-8-23 10:23:36").setUpdatedTime(new Date());
-        documentHelper.myUpdate(e -> e.id("00000002").index("test_knowledge").doc(knowledge), Knowledge.class);
-    }
-
     private void processKnowledge(Knowledge knowledge) {
         System.out.println("knowledge = " + knowledge);
     }
 
 
-    @Test
-    public void test_data_init() throws Exception {
-        documentHelper.test_data_init();
-    }
 
     public CreateResponse commonCreate(MyConsumer<Knowledge> consumer) throws Exception {
         Date date = new Date();
