@@ -9,6 +9,7 @@ import com.tester.testercommon.util.MyConsumer;
 import com.tester.testersearch.model.Knowledge;
 import com.tester.testersearch.util.ESClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -24,7 +25,8 @@ import java.util.function.Function;
 @Component
 public class DocumentHelper {
 
-    public static ElasticsearchClient client = ESClient.client;
+    @Autowired
+    private ESClient esClient;
 
     /**
      * @Date 15:27 2022/7/27
@@ -36,7 +38,7 @@ public class DocumentHelper {
             throws IOException, ElasticsearchException {
         SearchRequest build = fn.apply(new SearchRequest.Builder()).build();
         log.info("query request info:\n【{}】", build);
-        SearchResponse<TDocument> search = client.search(build, tDocumentClass);
+        SearchResponse<TDocument> search = esClient.getClient().search(build, tDocumentClass);
 //        log.info("query response info:\n【{}】", search);
         return search;
     }
@@ -51,7 +53,7 @@ public class DocumentHelper {
             throws IOException, ElasticsearchException {
         CreateRequest<TDocument> build = fn.apply(new CreateRequest.Builder<TDocument>()).build();
         log.info("create request info:\n【{}】", build);
-        CreateResponse createResponse = client.create(build);
+        CreateResponse createResponse = esClient.getClient().create(build);
         log.info("create response info:\n【{}】", createResponse);
         return createResponse;
     }
@@ -66,7 +68,7 @@ public class DocumentHelper {
             Class<TDocument> tDocumentClass) throws IOException, ElasticsearchException {
         UpdateRequest<TDocument, TPartialDocument> build = fn.apply(new UpdateRequest.Builder<TDocument, TPartialDocument>()).build();
         log.info("update request info:\n【{}】", build);
-        UpdateResponse<TDocument> update = client.update(build, tDocumentClass);
+        UpdateResponse<TDocument> update = esClient.getClient().update(build, tDocumentClass);
         log.info("update response info:\n【{}】", update);
         return update;
     }
@@ -80,7 +82,7 @@ public class DocumentHelper {
             throws IOException, ElasticsearchException {
         DeleteRequest build = fn.apply(new DeleteRequest.Builder()).build();
         log.info("delete request info:\n【{}】", build);
-        DeleteResponse delete = client.delete(build);
+        DeleteResponse delete = esClient.getClient().delete(build);
         log.info("delete response info:\n【{}】", delete);
         return delete;
     }
