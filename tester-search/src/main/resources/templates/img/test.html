@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <script th:src="@{/static/js/jquery.min.js}" charset="utf-8"></script>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /*.divp {*/
+        /*    height: 1000px;*/
+        /*    margin: 0 auto;*/
+        /*    overflow: hidden;*/
+        /*}*/
+
+        /*.divl, .divr {*/
+        /*    float: left;*/
+        /*    width: 50%;*/
+        /*    height: 1000px;*/
+        /*    position: relative;*/
+        /*    top: -1000px;*/
+        /*    left:0px;*/
+        /*}*/
+
+        .divp img {
+            float: left;
+            width: 100%;
+        }
+        #divImg {
+            padding-bottom: 1%;
+        }
+
+    </style>
+</head>
+<body>
+<div class="divp" id="divp">
+    <div id="divImg">
+        <img id="timg" src="/static/img/path1/pic4/0068.jpg">
+    </div>
+</div>
+
+<script type="text/javascript">
+    window.onscroll = throttle(Date.now(), function () {
+        var scrollTop = $(this).scrollTop(); //滚动条距离顶部的高度
+        var scrollHeight = $(document).height(); //当前页面的总高度
+        var clientHeight = $(this).height(); //当前可视的页面高度
+        if (scrollTop < 10) {
+            getData(true,scrollHeight);
+        }else if (scrollTop + clientHeight >= scrollHeight - 10) { //距离顶部+当前高度 >=文档总高度 即代表滑动到底部
+            getData(false,scrollHeight);
+        }
+    }, 400);
+    function getData(isUp,scrollHeight) {
+        let divImg = document.getElementById("divImg");
+        let eleArr = divImg.children;
+        let first = eleArr[0];
+        let last = eleArr[eleArr.length-1];
+        let currUrl = isUp ? first.src : last.src;
+        let innerIsUp = isUp;
+        let innerScrollHeight = scrollHeight;
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/img/scrollGet" ,
+            data: {'currUrl':currUrl, 'isUp':innerIsUp},
+            success: function (data) {
+                if(data.newOneSrc == ''){
+                    return;
+                }
+                // 追加子节点
+                let img = document.createElement("img");
+                img.setAttribute('src', data.newOneSrc);
+                if(innerIsUp){
+                    divImg.insertBefore(img,first);
+                }else {
+                    divImg.appendChild(img);
+                }
+                // 重设高度
+                img.onload = function () {
+                    let divp = document.getElementById("divp");
+                    divp.style.height = innerScrollHeight+img.clientHeight+'px';
+                }
+            },
+            error : function(err) {
+                alert(err.responseJSON === undefined ? "unknown error" : err.responseJSON.message);
+            }
+        });
+    };
+    function throttle(startTime, func,delay){     //延缓滚动加载次数  防止抖动
+        var timer = null;
+        return function(){
+            var curTime = Date.now();
+            var remaining = delay - (curTime - startTime);
+            var context = this;
+            var args = arguments;
+            clearTimeout(timer);
+            if(remaining <= 0){
+                func.apply(context,args);
+                startTime = Date.now();
+            }else{
+                timer = setTimeout(func,remaining);
+            }
+        }
+    };
+</script>
+</body>
+</html>

@@ -8,6 +8,29 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+  # thymeleaf
+  thymeleaf:
+    prefix: classpath:/templates/
+    #    check-template-location: true
+    suffix: .html
+    encoding: UTF-8
+    mode: HTML5
+    cache: false
+  #    content-type: text/html
+
+
+
+  # 设置请求路径前缀
+  # http://localhost:8008/static/pic.jpg
+  mvc:
+    static-path-pattern: /static/**
+    # 设置静态资源文件夹位置
+    #  resources:
+    #    static-locations: classpath:/mystatic
+    #    static-locations: file:C://Temp/pic/
+    contentnegotiation:
+      favor-parameter: true
+
 
 # es健康检查地址
   elasticsearch:
@@ -21,3 +44,5 @@ management:
       enabled: false
     redis:
       enabled: false
+
+

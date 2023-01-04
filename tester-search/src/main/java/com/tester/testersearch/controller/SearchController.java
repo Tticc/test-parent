@@ -5,6 +5,7 @@ import com.tester.base.dto.controller.RestResult;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.controller.BaseController;
 import com.tester.testersearch.model.Knowledge;
+import com.tester.testersearch.model.KnowledgeRequest;
 import com.tester.testersearch.service.SearchManager;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +47,7 @@ public class SearchController extends BaseController {
      * @Author 温昌营
      **/
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public RestResult<String> add(@Validated @RequestBody Knowledge model) throws BusinessException {
+    public RestResult<String> add(@Validated @RequestBody KnowledgeRequest model) throws BusinessException {
         return success(searchManager.add(model));
     }
 

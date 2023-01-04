@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <script th:src="@{/static/js/jquery.min.js}" charset="utf-8"></script>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            padding-top: 1%;
+            padding-bottom: 1%;
+        }
+
+        a:-webkit-any-link {
+            color: -webkit-link;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <!--/*@thymesVar id="initContent" type=""*/-->
+    <div id="initContent" style="display:none" th:text="${initContent}"></div>
+    <div id="contentArea">
+    </div>
+</div>
+<div class="content" id="formArea">
+    <div class="layui-form timo-compile hr flex-full">
+        <form id="myform" onsubmit="return false" class="layui-form layui-form-pane" action="#" method="post">
+<!--            <div class="layui-input-block">-->
+<!--                <input type="text" name="pwd" autocomplete="off" class="layui-input">-->
+<!--            </div>-->
+            <div class="input-group">
+                <input type="text" name="pwd" class="form-control">
+            </div>
+                <button type="button" class="btn btn-primary" onclick="login()"><i class="fa fa-check-circle"></i> 提交</button>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function login() {
+        let form = new FormData(document.getElementById("myform"));
+        $.ajax({
+            type: "POST",//方法类型
+            dataType: "json",//预期服务器返回的数据类型
+            url: "/img/credential",//url
+            data: $('#myform').serialize(),
+            success: function (data) {
+                if (data.status == 200) {
+                    if (data.url != undefined) {
+                        location.href = (data.url);
+                    } else {
+                        $('#formArea').hide();
+                        $('#contentArea').append(data.content);
+                    }
+                } else {
+                    alert(data.errmsg);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+                alert(err.responseJSON === undefined ? "unknown error" : err.responseJSON.message);
+            }
+        });
+    }
+
+    function init() {
+        let textContent = $('#initContent');
+        let innerText = textContent.text();
+        if (innerText.length > 0) {
+            $('#formArea').hide();
+            $('#contentArea').append(innerText);
+        }
+    }
+
+    $(function () {
+        init();
+    });
+</script>
+</body>
+</html>

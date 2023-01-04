@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:mo="https://gitee.com/aun/Timo">
+<header th:replace="header::headerFragment('coor')"></header>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1"/>
+<meta name="renderer" content="webkit"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta http-equiv="Cache-Control" content="no-transform"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
+<title>协作写作</title>
+<!-- 富文本编辑器 -->
+<link rel="stylesheet" href="/static/lib/layui-v2.5.5/css/modules/layer/default/layer.css?v=3.1.1" media="all">
+<link rel="stylesheet" href="/static/lib/layui-v2.5.5/css/layui.css" media="all">
+<style>
+    html, body {
+        height: 100%;
+    }
+    .content {
+        padding: 30px;
+        height: calc(100% - 70px);
+
+    }
+</style>
+
+<body>
+<div class="content">
+    <div class="layui-form timo-compile hr flex-full">
+        <form id="searchForm" onsubmit="return false" class="layui-form layui-form-pane" action="#" method="post"
+              >
+            <div class="layui-form-item">
+                <label class="layui-form-label">唯一编码</label>
+                <div class="layui-input-block">
+                    <input type="text" name="code" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型</label>
+                <div class="layui-input-block">
+                    <input type="text" name="type" autocomplete="off" value = "1" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" hidden="hidden">
+                <label class="layui-form-label">归属</label>
+                <div class="layui-input-block">
+                    <input type="text" name="belong" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">关键字</label>
+                <div class="layui-input-block">
+                    <input type="text" name="keyword" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">描述</label>
+                <div class="layui-input-block">
+                    <input type="text" name="description" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">详情</label>
+                <div class="layui-input-block">
+                    <input type="text" name="detail" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">作者</label>
+                <div class="layui-input-block">
+                    <input type="text" name="author" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">优先级</label>
+                <div class="layui-input-block">
+                    <input type="text" name="priority" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+
+            <div class="layui-form-item timo-finally buts">
+                <button type="button" class="layui-btn" onclick="login()"><i class="fa fa-check-circle"></i> 提交</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function login() {
+        // let form = $('#searchForm').serializeObject();
+        var formObject = {};
+        var formArray =$("#searchForm").serializeArray();
+        $.each(formArray,function(i,item){
+            formObject[item.name] = item.value;
+        });
+        $.ajax({
+            //几个参数需要注意一下
+            type: "POST",//方法类型
+            dataType: "json",//预期服务器返回的数据类型
+            url: "/api/search/add" ,//url
+            processData: false,
+            contentType: 'application/json',
+            data: JSON.stringify(formObject),
+            success: function (data) {
+                if(data.code !== 200){
+                    alert(data.message);
+                }else{
+                    console.log("success");
+                    console.log(data); //打印服务端返回的数据(调试用)
+                    cleanForm();
+                }
+            },
+            error : function(err) {
+                console.log("error");
+                console.log(err);
+                alert(err.responseJSON === undefined ? "unknown error" : err.responseJSON.message);
+            }
+        });
+    }
+
+    function cleanForm(){
+        $("input[name='code']").val("");
+        $("input[name='belong']").val("");
+        $("input[name='keyword']").val("");
+        $("input[name='title']").val("");
+        $("input[name='description']").val("");
+        $("input[name='detail']").val("");
+        $("input[name='author']").val("");
+        $("input[name='priority']").val("");
+    }
+
+
+</script>
+</body>
+</html>

@@ -57,6 +57,13 @@
         </dependency>
 
 
+
+        <!--thymeleaf-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <!--thymeleaf-->
         <!-- elastic search client -->
         <dependency>
             <groupId>co.elastic.clients</groupId>

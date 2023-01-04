@@ -5,6 +5,7 @@ import co.elastic.clients.elasticsearch.core.CreateResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testersearch.model.Knowledge;
+import com.tester.testersearch.model.KnowledgeRequest;
 import com.tester.testersearch.service.helper.DocumentHelper;
 import com.tester.testersearch.util.EsSearchHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -40,7 +42,13 @@ public class SearchManager {
         }
     }
 
-    public String add(Knowledge model) throws BusinessException {
+    public String add(KnowledgeRequest model) throws BusinessException {
+        if(StringUtils.isEmpty(model.getCode())){
+            model.setCode(UUID.randomUUID().toString().replace("-",""));
+        }
+        if(StringUtils.isEmpty(model.getAuthor())){
+            model.setAuthor("wenc");
+        }
         try {
             CreateResponse createResponse = documentHelper.commonCreate((e) -> {
                 e.setType(model.getType())
