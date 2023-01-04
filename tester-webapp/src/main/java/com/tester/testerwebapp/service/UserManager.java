@@ -69,7 +69,8 @@ public class UserManager {
             }
         });
 
-        return Mono.justOrEmpty(userService.selectUserId(id));
+        Mono<UserDomain> defer = Mono.defer(() -> Mono.justOrEmpty(userService.selectUserId(id)));
+        return defer;
     }
 
     @Transactional(rollbackFor = Exception.class, transactionManager = ConstantList.NORMAL_MANAGER)
