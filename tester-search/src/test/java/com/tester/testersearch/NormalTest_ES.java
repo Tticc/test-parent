@@ -16,6 +16,10 @@ import com.tester.testersearch.service.helper.IndexHelper;
 import com.tester.testersearch.util.EsSearchHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -25,11 +29,15 @@ import java.util.List;
 import java.util.Map;
 
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = TesterSearchApplication.class)
 @Slf4j
 public class NormalTest_ES {
 
-    public DocumentHelper documentHelper = new DocumentHelper();
-    public IndexHelper indexHelper = new IndexHelper();
+    @Autowired
+    private DocumentHelper documentHelper;
+    @Autowired
+    private IndexHelper indexHelper;
 
     @Test
     public void test_createIndex() throws IOException {

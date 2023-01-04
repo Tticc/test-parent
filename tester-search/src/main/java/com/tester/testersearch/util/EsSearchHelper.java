@@ -25,7 +25,7 @@ public class EsSearchHelper {
         map.put("keyword", 91.0f);
         map.put("title", 81.0f);
         map.put("description", 61.0f);
-        map.put("detail", 21.0f);
+        map.put("detail", 2.0f);
         map.put("author", 1.0f);
         map.put("priority", 1.0f);
     }

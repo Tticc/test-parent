@@ -19,7 +19,7 @@
 <!--        <spring-cloud-alibaba.version>2.2.7.RELEASE</spring-cloud-alibaba.version>-->
         <lombok.version>1.18.10</lombok.version>
         <log.version>1.2</log.version>
-        <junit.version>4.11</junit.version>
+        <junit.version>4.12</junit.version>
         <aspectj.version>1.9.4</aspectj.version>
         <lang3.version>3.7</lang3.version>
         <reactor.version>3.2.12.RELEASE</reactor.version>

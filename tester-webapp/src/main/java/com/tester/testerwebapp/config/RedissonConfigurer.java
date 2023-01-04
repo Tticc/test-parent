@@ -19,20 +19,20 @@ import org.springframework.context.annotation.Configuration;
 //@Configuration
 public class RedissonConfigurer {
 
-    @Bean
-    public RedissonClient redissonClient() {
-        Config config = new Config();
-        ClusterServersConfig clusterServersConfig = config.useClusterServers();
-        clusterServersConfig.addNodeAddress("", "", "");
-        return Redisson.create(config);
-    }
-    @Bean
-    public void redissonClient1() {
-        RedissonClient redissonClient = redissonClient();
-        RLock xx = redissonClient.getLock("xx");
-        boolean b = xx.tryLock();
-        xx.unlock();
-
-    }
+//    @Bean
+//    public RedissonClient redissonClient() {
+//        Config config = new Config();
+//        ClusterServersConfig clusterServersConfig = config.useClusterServers();
+//        clusterServersConfig.addNodeAddress("", "", "");
+//        return Redisson.create(config);
+//    }
+//    @Bean
+//    public void redissonClient1() {
+//        RedissonClient redissonClient = redissonClient();
+//        RLock xx = redissonClient.getLock("xx");
+//        boolean b = xx.tryLock();
+//        xx.unlock();
+//
+//    }
 
 }

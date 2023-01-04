@@ -93,4 +93,10 @@ public class Knowledge {
      * 更新人
      **/
     private String updatedBy;
+
+    // 非索引库字段
+    /**
+     * copy_to，非索库引字段
+     **/
+    private String all;
 }

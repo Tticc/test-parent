@@ -77,6 +77,9 @@ public class UserController extends BaseController {
             log.error("set redis failed.err:",e);
         }
         Mono<UserDomain> userDomainMono = userManager.selectUserById(model.getId());
+        // 注意，此时block已经脱离了userManager.selectUserById的事务范围
+        // 因此，userManager.selectUserById里面的userService.selectUserId方法执行不在事务之内
+        UserDomain block = userDomainMono.block();
         return monoSuccess(userDomainMono);
     }
 

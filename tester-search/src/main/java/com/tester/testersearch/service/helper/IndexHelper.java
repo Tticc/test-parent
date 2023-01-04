@@ -9,6 +9,7 @@ import co.elastic.clients.elasticsearch.indices.DeleteIndexResponse;
 import co.elastic.clients.util.ObjectBuilder;
 import com.tester.testersearch.util.ESClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -22,7 +23,9 @@ import java.util.function.Function;
 @Component
 public class IndexHelper {
 
-    public static ElasticsearchClient client = ESClient.client;
+    @Autowired
+    private ESClient esClient;
+//    public static ElasticsearchClient client = ESClient.client;
 
 //    public static void main(String[] args) throws Exception {
 //        test_create_index("test_knowledge");
@@ -39,7 +42,7 @@ public class IndexHelper {
             throws IOException, ElasticsearchException {
         CreateIndexRequest build = fn.apply(new CreateIndexRequest.Builder()).build();
         log.info("index create request info:\n【{}】", build);
-        CreateIndexResponse createResponse = client.indices().create(build);
+        CreateIndexResponse createResponse = esClient.getClient().indices().create(build);
         log.info("index create response info:\n【{}】", createResponse);
         return createResponse;
     }
@@ -54,7 +57,7 @@ public class IndexHelper {
             throws IOException, ElasticsearchException {
         DeleteIndexRequest build = fn.apply(new DeleteIndexRequest.Builder()).build();
         log.info("index delete request info:\n【{}】", build);
-        DeleteIndexResponse response = client.indices().delete(build);
+        DeleteIndexResponse response = esClient.getClient().indices().delete(build);
         log.info("index delete response info:\n【{}】", response);
         return response;
     }
@@ -73,21 +76,22 @@ public class IndexHelper {
                 .settings(s -> s.index(i -> i.routing(r -> r.allocation(a -> a.include(in -> in.tierPreference("data_content")))).numberOfShards("1").numberOfReplicas("0")))
                 .mappings(m ->
                         m.properties("belong", p -> p.text(t -> t))
-                                .properties("code", p -> p.text(t -> t))
-                                .properties("keyword", p -> p.text(t -> t.analyzer("ik_max_word")))
-                                .properties("title", p -> p.text(t -> t.analyzer("ik_max_word")))
-                                .properties("description", p -> p.text(t -> t.analyzer("ik_max_word")))
-                                .properties("detail", p -> p.text(t -> t.analyzer("ik_smart")))
-                                .properties("author", p -> p.text(t -> t))
-                                .properties("priority", p -> p.long_(l -> l.nullValue(0L)))
-                                .properties("type", p -> p.long_(l -> l.nullValue(0L)))
-                                .properties("createdBy", p -> p.text(t -> t))
-                                .properties("updatedBy", p -> p.text(t -> t))
+                                .properties("code", p -> p.keyword(t -> t))
+                                .properties("keyword", p -> p.text(t -> t.analyzer("ik_max_word").copyTo("all")))
+                                .properties("title", p -> p.text(t -> t.analyzer("ik_max_word").copyTo("all")))
+                                .properties("description", p -> p.text(t -> t.analyzer("ik_max_word").copyTo("all")))
+                                .properties("detail", p -> p.text(t -> t.analyzer("ik_smart").copyTo("all")))
+                                .properties("author", p -> p.text(t -> t.analyzer("ik_max_word").copyTo("all")))
+                                .properties("priority", p -> p.integer(l -> l.nullValue(0)))
+                                .properties("type", p -> p.integer(l -> l.nullValue(0)))
+                                .properties("createdBy", p -> p.keyword(t -> t))
+                                .properties("updatedBy", p -> p.keyword(t -> t))
                                 .properties("createdTime", p -> p.long_(l -> l))
                                 .properties("updatedTime", p -> p.long_(l -> l))
                                 .properties("startTime", p -> p.long_(l -> l))
                                 .properties("endTime", p -> p.long_(l -> l))
-                                .properties("deleted", p -> p.long_(l -> l.nullValue(0L)))
+                                .properties("deleted", p -> p.integer(l -> l.nullValue(0)))
+                                .properties("all", p -> p.text(t -> t.analyzer("ik_max_word")))
                 )
         );
         System.out.println("createIndexResponse = " + createIndexResponse);
