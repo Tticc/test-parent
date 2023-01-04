@@ -26,7 +26,7 @@ public class CooperateController {
 		this.sb.replace(0, this.sb.length(), initContent);
 		req.setAttribute("content", initContent);
 		req.setAttribute("someAttr","here is the someAttr");
-		return "coor/init";
+		return "coor/list";
 	}
 
 	@GetMapping("/ope")
