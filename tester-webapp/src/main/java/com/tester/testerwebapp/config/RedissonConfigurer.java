@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
  * @Date 2022-11-11 16:28:44
  */
 
-@Configuration
+//@Configuration
 public class RedissonConfigurer {
 
 //    @Bean

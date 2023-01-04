@@ -23,6 +23,7 @@ public class ESClient {
         RestClient restClient = RestClient.builder(
 //                new HttpHost("10.10.38.4", 9200)).build();
                 new HttpHost("localhost", 9200)).build();
+//                new HttpHost("192.168.31.149", 9200)).build();
         // Create the transport with a Jackson mapper
         ElasticsearchTransport transport = new RestClientTransport(
                 restClient, new JacksonJsonpMapper());

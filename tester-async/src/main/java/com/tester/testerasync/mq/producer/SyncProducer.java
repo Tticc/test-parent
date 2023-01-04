@@ -10,7 +10,14 @@ public class SyncProducer {
     public static void main(String[] args) throws Exception {
         DefaultMQProducer producer = new DefaultMQProducer("sp");
         producer.setNamesrvAddr("localhost:9876");
-        producer.setDefaultTopicQueueNums(4); // 设置自动创建topic的queue数
+        // 设置自动创建topic的queue数
+        producer.setDefaultTopicQueueNums(4);
+        // 设置同步发送最大重试次数。默认为2
+        producer.setRetryTimesWhenSendFailed(2);
+        // 设置异步发送最大重试次数。默认为2
+        producer.setRetryTimesWhenSendAsyncFailed(2);
+        // 发送超时时间，默认为3000ms
+        producer.setSendMsgTimeout(3000);
         producer.start();
         for (int i = 0; i < 5; i++) {
             Message msg = new Message("someT", ("sync Hello RocketMq" + i).getBytes());
