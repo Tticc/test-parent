@@ -45,7 +45,16 @@
                     let title = "title";
                     let nickname = "nickname";
                     let createDate = "createDate";
-
+                    // $.post('blog/fysj2',{page:page},function(res){
+                    //     layui.each(res.data, function(index, item){
+                    //         //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+                    //         //流加载插入内容部分，根据自己需求更改，这里做的案例，所以就写的比较简单
+                    //         lis.push("<div class='list-group'><a href='#' class='list-group-item' onclick='details("+item.id+")'>"+
+                    //             "<h4 class='list-group-item-heading'>"+item.title+"</h4><p class='list-group-item-text'>"
+                    //             +item.user.nickname+"   |   "+item.createDate+
+                    //             "</p></a>"+
+                    //             "</div>");
+                    //     });
                     for(var i = 0; i < 8; i++){
                         lis.push('<li>'+ ( (page-1)*8 + i + 1 ) +'</li>')
                         // lis.push("<div class='list-group'><a href='#' class='list-group-item' onclick='details("+id+")'>"+
