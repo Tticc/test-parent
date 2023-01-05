@@ -11,7 +11,7 @@ compose和env
 ### 启动
 `cd E:\Development\Projects_backup\test-parent\tester-docker\ms`  
 docker-compose -p ms_compose up -d
-
+docker-compose -f docker-compose-search.yaml -p search_compose up -d
 
 ### 说明
 当前配置了两个网关实例  

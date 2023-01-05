@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+  tester-search:
+    image: tticc/tester:tester-search
+    container_name: tester-search
+    networks:
+      - "rnet"
+    ports:
+      - "8008:8008"
+#    restart: always
+
+
+networks:
+  rnet:
+    driver: bridge
+    external: true

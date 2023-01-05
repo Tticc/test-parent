@@ -1,39 +1,18 @@
 spring:
   profiles: dev
-#  datasource:
-#    #    driver-class-name: com.mysql.jdbc.Driver
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/test_parent?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8
-#    username: root
-#    password: 123456
-#    #Hikari
-#    type: com.zaxxer.hikari.HikariDataSource
-#    hikari:
-#      maximum-pool-size: 20
-#      minimum-idle: 8
-#      connection-timeout: 30000
-#      connection-test-query: select 1
 
-# REDIS (RedisProperties)
-# Redis数据库索引（默认为0）
-  redis:
-    # Redis数据库索引（默认为0）
-    database: 0
-    # Redis服务器地址
-    host: localhost
-    # Redis服务器连接端口
-    port: 6379
-    # Redis服务器连接密码（默认为空）
-    password: 123456
-    # 连接超时时间（毫秒）
-    timeout: 2000
-  cloud:
-    nacos:
-      discovery:
-        server-addr: localhost:8848
-        watchDelay: 10000
-        registerEnabled: true
-        namespace: 9a4fc705-e6df-44f9-b035-9b2e9a434617
+  # es健康检查地址
+  elasticsearch:
+    rest:
+      uris: http://192.168.31.149:9200
+
+# 禁用es，redis健康检查
+management:
+  health:
+    elasticsearch:
+      enabled: false
+    redis:
+      enabled: false
 
 
 

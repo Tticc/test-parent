@@ -9,6 +9,7 @@ import lombok.Data;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,6 +24,10 @@ public class ESClient implements InitializingBean {
     private ElasticsearchAsyncClient asyncClient;
 //    public static RestHighLevelClient hlrc;
 
+    @Value("${my.es.host:}")
+    private String host;
+    @Value("${my.es.port:}")
+    private Integer port;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -30,7 +35,7 @@ public class ESClient implements InitializingBean {
         // Create the low-level client
         RestClient restClient = RestClient.builder(
 //                new HttpHost("10.10.38.4", 9200)).build();
-                new HttpHost("localhost", 9200)).build();
+                new HttpHost(host, port)).build();
 //                new HttpHost("192.168.31.149", 9200)).build();
         // Create the transport with a Jackson mapper
         ElasticsearchTransport transport = new RestClientTransport(

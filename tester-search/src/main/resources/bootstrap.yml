@@ -31,19 +31,10 @@ spring:
     contentnegotiation:
       favor-parameter: true
 
-
-# es健康检查地址
-  elasticsearch:
-    rest:
-      uris: http://192.168.31.149:9200
-
-# 禁用es，redis健康检查
-management:
-  health:
-    elasticsearch:
-      enabled: false
-    redis:
-      enabled: false
+my:
+  es:
+    host: 127.0.0.1
+    port: 9200
 #logging:
 #  level:
 #    org:
