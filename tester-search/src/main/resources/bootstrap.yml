@@ -44,5 +44,16 @@ management:
       enabled: false
     redis:
       enabled: false
-
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        data:
+#          elasticsearch:
+#            core: DEBUG
+logging:
+  level:
+    org:
+      elasticsearch:
+        client: debug
 

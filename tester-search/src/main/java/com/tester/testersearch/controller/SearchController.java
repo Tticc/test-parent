@@ -3,8 +3,10 @@ package com.tester.testersearch.controller;
 
 import com.tester.base.dto.controller.RestResult;
 import com.tester.base.dto.exception.BusinessException;
+import com.tester.base.dto.model.request.PagerInfo;
 import com.tester.testercommon.controller.BaseController;
 import com.tester.testersearch.model.Knowledge;
+import com.tester.testersearch.model.KnowledgePageRequest;
 import com.tester.testersearch.model.KnowledgeRequest;
 import com.tester.testersearch.service.SearchManager;
 import io.swagger.annotations.Api;
@@ -38,8 +40,8 @@ public class SearchController extends BaseController {
      * @Author 温昌营
      **/
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public RestResult<List<Knowledge>> search(@Validated @RequestBody Knowledge model) throws BusinessException {
-        return success(searchManager.search(model));
+    public RestResult<PagerInfo<Knowledge>> search(@Validated @RequestBody KnowledgePageRequest request) throws BusinessException {
+        return success(searchManager.search(request));
     }
 
     /**

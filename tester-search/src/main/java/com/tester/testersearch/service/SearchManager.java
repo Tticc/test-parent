@@ -4,7 +4,9 @@ import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch.core.CreateResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import com.tester.base.dto.exception.BusinessException;
+import com.tester.base.dto.model.request.PagerInfo;
 import com.tester.testersearch.model.Knowledge;
+import com.tester.testersearch.model.KnowledgePageRequest;
 import com.tester.testersearch.model.KnowledgeRequest;
 import com.tester.testersearch.service.helper.DocumentHelper;
 import com.tester.testersearch.util.EsSearchHelper;
@@ -28,15 +30,21 @@ public class SearchManager {
     private DocumentHelper documentHelper;
 
 
-    public List<Knowledge> search(Knowledge model) throws BusinessException {
+    public PagerInfo<Knowledge> search(KnowledgePageRequest request) throws BusinessException {
         try {
             SearchResponse<Knowledge> search = documentHelper.mySearch(s -> s
                     .index("test_knowledge")
-                    .query(q -> q.bool(q1 -> baseProcess(q1, model))
+                    .query(q -> q.bool(q1 -> baseProcess(q1, request))
 //                                        .should(l -> l.multiMatch(e -> e.fields(Arrays.asList("description", "keyword")).query("转眼之间")))
-                    ).size(10).from(0), Knowledge.class);
+                    ).size(request.getPageSize()).from(request.getPageSize()*(request.getPageNum()-1)), Knowledge.class);
             List<Knowledge> collect = search.hits().hits().stream().map(e -> e.source()).collect(Collectors.toList());
-            return collect;
+            PagerInfo pagerInfo = new PagerInfo<Knowledge>();
+            pagerInfo.setTotal(search.hits().total().value());
+            pagerInfo.setPageNum(request.getPageNum());
+            pagerInfo.setPageSize(request.getPageSize());
+            pagerInfo.setHasNextPage(pagerInfo.getTotal() > request.getPageSize()*request.getPageNum());
+            pagerInfo.setList(collect);
+            return pagerInfo;
         } catch (Exception e) {
             throw new BusinessException(5000, e);
         }
@@ -65,7 +73,7 @@ public class SearchManager {
         }
     }
 
-    private BoolQuery.Builder baseProcess(BoolQuery.Builder queryBuilder, Knowledge knowledge) {
+    private BoolQuery.Builder baseProcess(BoolQuery.Builder queryBuilder, KnowledgePageRequest knowledge) {
         Field[] fields = knowledge.getClass().getDeclaredFields();
         for (Field field : fields) {
             String name = field.getName();

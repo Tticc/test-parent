@@ -159,9 +159,6 @@ public class NormalTest_ES {
             boost = 1.0f;
         }
         final Float finalBoost = boost;
-
-        queryBuilder.filter(f -> f.term(t -> t.field(fieldName).value(1)));
-
         return queryBuilder.should(l -> l.match(e -> e.field(fieldName).query(fieldValue).analyzer("ik_smart").minimumShouldMatch("2").boost(finalBoost)));
     }
 
