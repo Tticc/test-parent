@@ -30,10 +30,10 @@
 <!--&lt;!&ndash;    <input type="text" id="searchVal" class="layui-input" />&ndash;&gt;-->
 <!--    <button type="button" class="layui-btn" onclick="login()"><i class="fa fa-check-circle"></i> 提交</button>-->
 <!--</div>-->
-<div class="input-group" style="width:30%; margin-bottom: 10px">
+<div class="input-group" style="width:30%; margin-bottom: 10px;">
     <input type="text" class="form-control" id="searchVal">
 <!--    <span class="input-group-addon">.00</span>-->
-    <button type="button" class="layui-btn" onclick="login()"><i class="fa fa-check-circle"></i> 提交</button>
+    <button type="button" class="layui-btn" onclick="doSearch()"><i class="fa fa-check-circle"></i> 提交</button>
 
 </div>
 <ul class="flow-default" id="LAY_demo1" style="margin-bottom: 5%;"></ul>
@@ -43,7 +43,13 @@
 <!--<script src="/static/lib/layui-v2.7.6/dist/layui.js" charset="utf-8"></script>-->
 <!-- 注意：如果你直接复制所有代码到本地，上述 JS 路径需要改成你本地的 -->
 <script>
-    function login() {
+    $("#searchVal").keydown(function (e) {
+        if (e.keyCode === 13) {
+            // $("#queryCondBtn").trigger("click");
+            doSearch();
+        }
+    });
+    function doSearch() {
         $("#LAY_demo1").html("");
         use();
     }

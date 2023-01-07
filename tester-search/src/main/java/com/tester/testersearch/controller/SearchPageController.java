@@ -15,26 +15,27 @@ import java.util.UUID;
 
 @Controller
 @Slf4j
-@RequestMapping("/coor")
-public class CooperateController {
-	private static final String COOPCONTENT = "coopContent";
-	private StringBuffer sb = new StringBuffer("init");
+@RequestMapping("/page/search")
+public class SearchPageController {
 
-	@GetMapping("/init")
+	@GetMapping("/search")
 	public String getInit(HttpServletRequest req) {
-		String initContent = COOPCONTENT;
-		this.sb.replace(0, this.sb.length(), initContent);
-		req.setAttribute("content", initContent);
+		req.setAttribute("content", "something");
 		req.setAttribute("someAttr","here is the someAttr");
-		return "coor/list";
+		return "search/search";
 	}
 
-	@GetMapping("/ope")
-	public String getOpe(HttpServletRequest req) {
-		return "coor/ope";
+	@GetMapping("/add")
+	public String insert(HttpServletRequest req) {
+		return "search/add";
 	}
 
 
+
+
+
+
+	// ------------------------------------------ test area ------------------------------------------
 	/**
 	 * 文件上传。然后前端建立socket。socket启动类：
 	 * com.tester.testerrpc.server.socket.MyWebSocketServerProvider。
