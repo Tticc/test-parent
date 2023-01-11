@@ -21,6 +21,9 @@
         height: calc(100% - 70px);
 
     }
+    .layui-form-item {
+        width: 50%
+    }
 </style>
 
 <body>
@@ -35,7 +38,7 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">类型</label>
+                <label class="layui-form-label">*类型</label>
                 <div class="layui-input-block">
                     <input type="text" name="type" autocomplete="off" value = "1" class="layui-input">
                 </div>
@@ -47,27 +50,27 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">关键字</label>
+                <label class="layui-form-label">*关键字</label>
                 <div class="layui-input-block">
                     <input type="text" name="keyword" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">标题</label>
+                <label class="layui-form-label">*标题</label>
                 <div class="layui-input-block">
                     <input type="text" name="title" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">描述</label>
+                <label class="layui-form-label">*描述</label>
                 <div class="layui-input-block">
                     <input type="text" name="description" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">详情</label>
+                <label class="layui-form-label" style="height:150px">*详情</label>
                 <div class="layui-input-block">
-                    <input type="text" name="detail" autocomplete="off" class="layui-input">
+                    <textarea type="text/plain" name="detail" autocomplete="off" class="layui-input" style="height:150px"></textarea>
                 </div>
             </div>
             <div class="layui-form-item">
