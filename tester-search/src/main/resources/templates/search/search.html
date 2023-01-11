@@ -77,13 +77,12 @@
                         contentType: 'application/json',
                         data: JSON.stringify(reqData),
                         success: function (res) {
-                            debugger;
                             if(res.code !== 200){
                                 alert(data.message);
                             }else{
                                 layui.each(res.data.list, function (index, item) {
                                     lis.push("<div class='list-group' style='margin-bottom: 10px'><a href='#' class='list-group-item' onclick='details(" + item.code + ")'>" +
-                                        "<h6 class='list-group-item-heading'>标题：" + item.title + "</h6></a>" +
+                                        "<h6 class='list-group-item-heading'>"+item.sort+" 标题：" + item.title + "</h6></a>" +
                                         "<div class='list-group-item'><h6 class='list-group-item-heading'>关键字：" + item.keyword + "</h6>" +
                                         "<h6 class='list-group-item-heading'>描述：" + item.description + "</h6>" +
                                         "<h6>详情：" + item.detail + "</h6></div>" +

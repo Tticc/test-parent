@@ -5,9 +5,9 @@ import com.tester.base.dto.controller.RestResult;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.base.dto.model.request.PagerInfo;
 import com.tester.testercommon.controller.BaseController;
-import com.tester.testersearch.model.Knowledge;
 import com.tester.testersearch.model.KnowledgePageRequest;
 import com.tester.testersearch.model.KnowledgeRequest;
+import com.tester.testersearch.model.KnowledgeResponse;
 import com.tester.testersearch.service.SearchManager;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * 搜索
@@ -40,7 +38,7 @@ public class SearchController extends BaseController {
      * @Author 温昌营
      **/
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public RestResult<PagerInfo<Knowledge>> search(@Validated @RequestBody KnowledgePageRequest request) throws BusinessException {
+    public RestResult<PagerInfo<KnowledgeResponse>> search(@Validated @RequestBody KnowledgePageRequest request) throws BusinessException {
         return success(searchManager.search(request));
     }
 
