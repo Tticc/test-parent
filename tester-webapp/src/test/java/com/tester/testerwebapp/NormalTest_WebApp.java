@@ -1,5 +1,6 @@
 package com.tester.testerwebapp;
 
+import com.alibaba.fastjson.JSON;
 import com.tester.base.dto.model.request.IdAndNameRequest;
 import com.tester.base.dto.model.request.TextRequest;
 import com.tester.testercommon.util.DateUtil;
@@ -9,6 +10,7 @@ import com.tester.testercommon.util.file.TxtWrite;
 import com.tester.testercommon.util.jwt.JwtDataModel;
 import com.tester.testercommon.util.jwt.JwtHelper;
 import io.undertow.server.session.SecureRandomSessionIdGenerator;
+import lombok.Data;
 import lombok.SneakyThrows;
 import org.junit.Test;
 import org.springframework.beans.BeanWrapperImpl;
@@ -46,18 +48,56 @@ public class NormalTest_WebApp {
 
     public static void main(String[] args) {
 
-        String consoleOutputText = "+ export docker_image=jireowjiof：jfioew\r\n";
-        // tag
-        Matcher matcherTag = p_tag.matcher(consoleOutputText);
-        String tag = null;
-        if (matcherTag.find()) {
-            tag = matcherTag.group(1);
-        }
-        System.out.println("tag = " + tag);
+//        String consoleOutputText = "+ export docker_image=jireowjiof：jfioew\r\n";
+//        // tag
+//        Matcher matcherTag = p_tag.matcher(consoleOutputText);
+//        String tag = null;
+//        if (matcherTag.find()) {
+//            tag = matcherTag.group(1);
+//        }
+//        System.out.println("tag = " + tag);
 
         Date date = new Date(1652081100000L);
         System.out.println(date);
 
+    }
+
+
+    @Test
+    public void test_ascii(){
+        String s = "123,34,95,99,108,97,115,115,34,58,34,104,117,100,115,111,110,46,109,111,100,101,108,46,72,117,100,115,111,110,34,44,34,97,115,115,105,103,110,101,100,76,97,98,101,108,115,34,58,91,123,34,110,97,109,101,34,58,34,109,97,115,116,101,114,34,125,93,44,34,109,111,100,101,34,58,34,78,79,82,77,65,76,34,44,34,110,111,100,101,68,101,115,99,114,105,112,116,105,111,110,34,58,34,116,104,101,32,109,97,115,116,101,114,32,74,101,110,107,105,110,115,32,110,111,100,101,34,44,34,110,111,100,101,78,97,109,101,34,58,34,34,44,34,110,117,109,69,120,101,99,117,116,111,114,115,34,58,49,54,44,34,100,101,115,99,114,105,112,116,105,111,110,34,58,110,117,108,108,44,34,106,111,98,115,34,58,91,93,44,34,111,118,101,114,97,108,108,76,111,97,100,34,58,123,125,44,34,112,114,105,109,97,114,121,86,105,101,119,34,58,123,34,95,99,108,97,115,115,34,58,34,104,117,100,115,111,110,46,109,111,100,101,108,46,65,108,108,86,105,101,119,34,44,34,110,97,109,101,34,58,34,97,108,108,34,44,34,117,114,108,34,58,34,104,116,116,112,58,47,47,106,101,110,107,105,110,115,46,97,101,111,110,98,117,121,46,99,111,109,47,34,125,44,34,113,117,105,101,116,68,111,119,110,82,101,97,115,111,110,34,58,110,117,108,108,44,34,113,117,105,101,116,105,110,103,68,111,119,110,34,58,102,97,108,115,101,44,34,115,108,97,118,101,65,103,101,110,116,80,111,114,116,34,58,45,49,44,34,117,110,108,97,98,101,108,101,100,76,111,97,100,34,58,123,34,95,99,108,97,115,115,34,58,34,106,101,110,107,105,110,115,46,109,111,100,101,108,46,85,110,108,97,98,101,108,101,100,76,111,97,100,83,116,97,116,105,115,116,105,99,115,34,125,44,34,117,114,108,34,58,34,104,116,116,112,58,47,47,106,101,110,107,105,110,115,46,97,101,111,110,98,117,121,46,99,111,109,47,34,44,34,117,115,101,67,114,117,109,98,115,34,58,116,114,117,101,44,34,117,115,101,83,101,99,117,114,105,116,121,34,58,116,114,117,101,44,34,118,105,101,119,115,34,58,91,93,125";
+        String[] split = s.split(",");
+        for (int i = 0; i < split.length; i++) {
+            String str = split[i];
+            Integer integer = Integer.valueOf(str);
+            System.out.print((char)integer.intValue());
+        }
+    }
+
+    @Test
+    public void test_regex_merge(){
+        String consoleOutputText = "+ echo 开始合并master分支到hk-feature-20221205分支\n" +
+                "开始合并master分支到hk-feature-20221205分支\n" +
+                "+ git checkout hk-feature-20221205\n" +
+                "Switched to a new branch 'hk-feature-20221205'\n" +
+                "Branch hk-feature-20221205 set up to track remote branch hk-feature-20221205 from origin.\n" +
+                "+ git pull origin hk-feature-20221205 -f\n" +
+                "From http://dev-gitlab.aeonbuy.com/backend/be-middleend/be-center-promotion\n" +
+                " * branch            hk-feature-20221205 -> FETCH_HEAD\n" +
+                "Already up-to-date.\n" +
+                "+ git merge master\n" +
+                "Already up-to-date.\n" +
+                "+ echo 合并master分支到hk-feature-20221205分支成功.\n" +
+                "合并master分支到hk-feature-20221205分支成功.\n" +
+                "+ echo 开始复制分支hk-feature-20221205_20221205172736";
+
+        Pattern p_merge_master = Pattern.compile("(.*)合并(.*?)master分支到(.*?)分支成功(.*)\n");
+        Matcher matcherMergeMaster = p_merge_master.matcher(consoleOutputText);
+        if (matcherMergeMaster.find()) {
+            System.out.println("done");
+            String group = matcherMergeMaster.group(3);
+            System.out.println("group = " + group);
+        }
     }
 
     @Test

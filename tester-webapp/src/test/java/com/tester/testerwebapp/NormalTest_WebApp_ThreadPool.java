@@ -18,6 +18,24 @@ public class NormalTest_WebApp_ThreadPool {
     }
 
     @Test
+    public void test_overPush(){
+        for (int i = 0; i < 200; i++) {
+            final int tempI = i;
+            CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
+                String res = "threadName:" + Thread.currentThread().getName() + ", ele:" + (tempI);
+//                System.out.println("result:"+res);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                return res;
+            }, executor);
+        }
+    }
+
+
+    @Test
     public void test_ascii() throws InterruptedException {
         List<Thread> list = new ArrayList<>();
         List<String> watchPrint = new ArrayList<>();
@@ -106,7 +124,7 @@ public class NormalTest_WebApp_ThreadPool {
          * ThreadPoolExecutor.DiscardOldestPolicy 丢弃队列最前面的任务，然后重新尝试执行任务
          * ThreadPoolExecutor.CallerRunsPolic 由调用线程处理该任务
          */
-        threadPoolTaskExecutor.setRejectedExecutionHandler(new MyCallerRunsPolicy());
+//        threadPoolTaskExecutor.setRejectedExecutionHandler(new MyCallerRunsPolicy());
         threadPoolTaskExecutor.initialize();
         return threadPoolTaskExecutor;
     }
