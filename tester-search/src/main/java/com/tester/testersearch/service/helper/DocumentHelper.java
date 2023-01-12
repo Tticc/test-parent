@@ -28,77 +28,11 @@ public class DocumentHelper {
     @Autowired
     private ESClient esClient;
 
-    /**
-     * @Date 15:27 2022/7/27
-     * @Author 温昌营
-     * @see ElasticsearchClient#search(java.util.function.Function, java.lang.Class)
-     **/
-    public final <TDocument> SearchResponse<TDocument> mySearch(
-            Function<SearchRequest.Builder, ObjectBuilder<SearchRequest>> fn, Class<TDocument> tDocumentClass)
-            throws IOException, ElasticsearchException {
-        SearchRequest build = fn.apply(new SearchRequest.Builder()).build();
-        log.info("query request info:\n【{}】", build);
-        SearchResponse<TDocument> search = esClient.getClient().search(build, tDocumentClass);
-//        log.info("query response info:\n【{}】", search);
-        return search;
-    }
 
     /**
-     * @Date 9:49 2022/8/23
-     * @Author 温昌营
-     * @see ElasticsearchClient#create(java.util.function.Function)
-     **/
-    public final <TDocument> CreateResponse myCreate(
-            Function<CreateRequest.Builder<TDocument>, ObjectBuilder<CreateRequest<TDocument>>> fn)
-            throws IOException, ElasticsearchException {
-        CreateRequest<TDocument> build = fn.apply(new CreateRequest.Builder<TDocument>()).build();
-        log.info("create request info:\n【{}】", build);
-        CreateResponse createResponse = esClient.getClient().create(build);
-        log.info("create response info:\n【{}】", createResponse);
-        return createResponse;
-    }
-
-    /**
-     * @Date 9:49 2022/8/23
-     * @Author 温昌营
-     * @see ElasticsearchClient#update(java.util.function.Function, java.lang.Class)
-     **/
-    public final <TDocument, TPartialDocument> UpdateResponse<TDocument> myUpdate(
-            Function<UpdateRequest.Builder<TDocument, TPartialDocument>, ObjectBuilder<UpdateRequest<TDocument, TPartialDocument>>> fn,
-            Class<TDocument> tDocumentClass) throws IOException, ElasticsearchException {
-        UpdateRequest<TDocument, TPartialDocument> build = fn.apply(new UpdateRequest.Builder<TDocument, TPartialDocument>()).build();
-        log.info("update request info:\n【{}】", build);
-        UpdateResponse<TDocument> update = esClient.getClient().update(build, tDocumentClass);
-        log.info("update response info:\n【{}】", update);
-        return update;
-    }
-
-    /**
-     * @Date 14:22 2022/8/23
-     * @Author 温昌营
-     * @see ElasticsearchClient#delete(java.util.function.Function)
-     **/
-    public final DeleteResponse myDelete(Function<DeleteRequest.Builder, ObjectBuilder<DeleteRequest>> fn)
-            throws IOException, ElasticsearchException {
-        DeleteRequest build = fn.apply(new DeleteRequest.Builder()).build();
-        log.info("delete request info:\n【{}】", build);
-        DeleteResponse delete = esClient.getClient().delete(build);
-        log.info("delete response info:\n【{}】", delete);
-        return delete;
-    }
-
-
-    public static Date getVeryStartTime() {
-        LocalDateTime localDateTime = DateUtil.getLocalDateTime("19700101000000");
-        return DateUtil.getDateFromLocalDateTime(localDateTime);
-    }
-
-    public static Date getVeryEndTime() {
-        LocalDateTime localDateTime = DateUtil.getLocalDateTime("99990101000000");
-        return DateUtil.getDateFromLocalDateTime(localDateTime);
-    }
-
-
+     * 创建文档
+     * @Date 2022-8-23 10:19:30
+     */
     public CreateResponse commonCreate(MyConsumer<Knowledge> consumer) throws Exception {
         Date date = new Date();
         Knowledge knowledge = new Knowledge();
@@ -121,6 +55,141 @@ public class DocumentHelper {
                 .setUpdatedTime(date);
         consumer.accept(knowledge);
         return myCreate(e -> e.id(knowledge.getCode()).index("test_knowledge").document(knowledge));
+    }
+
+    /**
+     * 修改文档
+     * @Date 2023-1-12 15:35:43
+     */
+    public CreateResponse commonUpdate(MyConsumer<Knowledge> consumer) throws Exception {
+        Date date = new Date();
+        Knowledge knowledge = new Knowledge();
+        knowledge
+                .setUpdatedBy("wenc")
+                .setUpdatedTime(date);
+        consumer.accept(knowledge);
+        UpdateResponse<Knowledge> test_knowledge = myUpdate(e -> e.id(knowledge.getCode()).index("test_knowledge").doc(knowledge), Knowledge.class);
+        System.out.println(test_knowledge);
+        return null;
+    }
+
+
+    /**
+     * 默认使用spring注入的client
+     * @Date 2023-1-12 17:46:53
+     * @Author 温昌营
+     * @see ElasticsearchClient#search(java.util.function.Function, java.lang.Class)
+     **/
+    public final <TDocument> SearchResponse<TDocument> mySearch(
+            Function<SearchRequest.Builder, ObjectBuilder<SearchRequest>> fn, Class<TDocument> tDocumentClass)
+            throws IOException, ElasticsearchException {
+        return mySearch(esClient.getClient(),fn,tDocumentClass);
+    }
+
+    /**
+     * @Date 15:27 2022/7/27
+     * @Author 温昌营
+     * @see ElasticsearchClient#search(java.util.function.Function, java.lang.Class)
+     **/
+    public static final <TDocument> SearchResponse<TDocument> mySearch(ElasticsearchClient client,
+            Function<SearchRequest.Builder, ObjectBuilder<SearchRequest>> fn, Class<TDocument> tDocumentClass)
+            throws IOException, ElasticsearchException {
+        SearchRequest build = fn.apply(new SearchRequest.Builder()).build();
+        log.info("query request info:\n【{}】", build);
+        SearchResponse<TDocument> search = client.search(build, tDocumentClass);
+        log.info("query response info:\n【{}】", search);
+        return search;
+    }
+
+    /**
+     * 默认使用spring注入的client
+     * @Date 2023-1-12 17:46:40
+     * @Author 温昌营
+     * @see ElasticsearchClient#create(java.util.function.Function)
+     **/
+    public final <TDocument> CreateResponse myCreate(
+            Function<CreateRequest.Builder<TDocument>, ObjectBuilder<CreateRequest<TDocument>>> fn)
+            throws IOException, ElasticsearchException {
+        return myCreate(esClient.getClient(),fn);
+    }
+
+    /**
+     * @Date 9:49 2022/8/23
+     * @Author 温昌营
+     * @see ElasticsearchClient#create(java.util.function.Function)
+     **/
+    public static final <TDocument> CreateResponse myCreate(ElasticsearchClient client,
+            Function<CreateRequest.Builder<TDocument>, ObjectBuilder<CreateRequest<TDocument>>> fn)
+            throws IOException, ElasticsearchException {
+        CreateRequest<TDocument> build = fn.apply(new CreateRequest.Builder<TDocument>()).build();
+        log.info("create request info:\n【{}】", build);
+        CreateResponse createResponse = client.create(build);
+        log.info("create response info:\n【{}】", createResponse);
+        return createResponse;
+    }
+
+    /**
+     * 默认使用spring注入的client
+     * @Date 2023-1-12 17:48:26
+     * @Author 温昌营
+     * @see ElasticsearchClient#update(java.util.function.Function, java.lang.Class)
+     **/
+    public final <TDocument, TPartialDocument> UpdateResponse<TDocument> myUpdate(
+            Function<UpdateRequest.Builder<TDocument, TPartialDocument>, ObjectBuilder<UpdateRequest<TDocument, TPartialDocument>>> fn,
+            Class<TDocument> tDocumentClass) throws IOException, ElasticsearchException {
+        return myUpdate(esClient.getClient(),fn,tDocumentClass);
+    }
+
+    /**
+     * @Date 9:49 2022/8/23
+     * @Author 温昌营
+     * @see ElasticsearchClient#update(java.util.function.Function, java.lang.Class)
+     **/
+    public static final <TDocument, TPartialDocument> UpdateResponse<TDocument> myUpdate(ElasticsearchClient client,
+            Function<UpdateRequest.Builder<TDocument, TPartialDocument>, ObjectBuilder<UpdateRequest<TDocument, TPartialDocument>>> fn,
+            Class<TDocument> tDocumentClass) throws IOException, ElasticsearchException {
+        UpdateRequest<TDocument, TPartialDocument> build = fn.apply(new UpdateRequest.Builder<TDocument, TPartialDocument>()).build();
+        log.info("update request info:\n【{}】", build);
+        UpdateResponse<TDocument> update = client.update(build, tDocumentClass);
+        log.info("update response info:\n【{}】", update);
+        return update;
+    }
+
+    /**
+     * 默认使用spring注入的client
+     * @Date 2023-1-12 17:49:45
+     * @Author 温昌营
+     * @see ElasticsearchClient#delete(java.util.function.Function)
+     **/
+    public final DeleteResponse myDelete(Function<DeleteRequest.Builder, ObjectBuilder<DeleteRequest>> fn)
+            throws IOException, ElasticsearchException {
+        return myDelete(esClient.getClient(),fn);
+    }
+
+    /**
+     * @Date 14:22 2022/8/23
+     * @Author 温昌营
+     * @see ElasticsearchClient#delete(java.util.function.Function)
+     **/
+    public static final DeleteResponse myDelete(ElasticsearchClient client,
+                                         Function<DeleteRequest.Builder, ObjectBuilder<DeleteRequest>> fn)
+            throws IOException, ElasticsearchException {
+        DeleteRequest build = fn.apply(new DeleteRequest.Builder()).build();
+        log.info("delete request info:\n【{}】", build);
+        DeleteResponse delete = client.delete(build);
+        log.info("delete response info:\n【{}】", delete);
+        return delete;
+    }
+
+
+    public static Date getVeryStartTime() {
+        LocalDateTime localDateTime = DateUtil.getLocalDateTime("19700101000000");
+        return DateUtil.getDateFromLocalDateTime(localDateTime);
+    }
+
+    public static Date getVeryEndTime() {
+        LocalDateTime localDateTime = DateUtil.getLocalDateTime("99990101000000");
+        return DateUtil.getDateFromLocalDateTime(localDateTime);
     }
 
     /**

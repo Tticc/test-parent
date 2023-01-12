@@ -33,13 +33,14 @@ public class ESClient implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
 
         // Create the low-level client
-        RestClient restClient = RestClient.builder(
-//                new HttpHost("10.10.38.4", 9200)).build();
-                new HttpHost(host, port)).build();
+        RestClient restClient = RestClient.builder(new HttpHost(host, port))
+                .setRequestConfigCallback((build) -> build
+                        .setConnectTimeout(20 * 1000)
+                        .setConnectionRequestTimeout(20 * 1000))
+                .build();
 //                new HttpHost("192.168.31.149", 9200)).build();
         // Create the transport with a Jackson mapper
-        ElasticsearchTransport transport = new RestClientTransport(
-                restClient, new JacksonJsonpMapper());
+        ElasticsearchTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
         // And create the API client
         client = new ElasticsearchClient(transport);
         asyncClient = new ElasticsearchAsyncClient(transport);

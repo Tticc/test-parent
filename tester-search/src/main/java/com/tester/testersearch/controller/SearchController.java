@@ -51,5 +51,14 @@ public class SearchController extends BaseController {
         return success(searchManager.add(model));
     }
 
+    /**
+     * @Date 2023-1-12 15:32:08
+     * @Author 温昌营
+     **/
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public RestResult<String> update(@Validated @RequestBody KnowledgeRequest model) throws BusinessException {
+        return success(searchManager.update(model));
+    }
+
 
 }

@@ -1,7 +1,5 @@
 package com.tester.testersearch;
 
-import co.elastic.clients.elasticsearch.ElasticsearchAsyncClient;
-import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.aggregations.*;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch.core.CreateResponse;
@@ -10,9 +8,6 @@ import co.elastic.clients.elasticsearch.core.search.CompletionSuggest;
 import co.elastic.clients.elasticsearch.core.search.CompletionSuggestOption;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.elasticsearch.core.search.Suggestion;
-import co.elastic.clients.json.jackson.JacksonJsonpMapper;
-import co.elastic.clients.transport.ElasticsearchTransport;
-import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.alibaba.fastjson.JSONObject;
 import com.tester.testercommon.util.MyConsumer;
 import com.tester.testersearch.model.Knowledge;
@@ -20,57 +15,46 @@ import com.tester.testersearch.service.helper.DocumentHelper;
 import com.tester.testersearch.service.helper.IndexHelper;
 import com.tester.testersearch.util.EsSearchHelper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpHost;
-import org.elasticsearch.client.RestClient;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = TesterSearchApplication.class)
 @Slf4j
-public class NormalTest_ES {
+public class SearchApplicationTest_ES {
 
+    @Autowired
+    private DocumentHelper documentHelper;
+    @Autowired
+    private IndexHelper indexHelper;
 
-    private static ElasticsearchClient client;
-    private static ElasticsearchAsyncClient asyncClient;
-//    public static RestHighLevelClient hlrc;
-
-    static {
-
-        // Create the low-level client
-        RestClient restClient = RestClient.builder(new HttpHost("10.100.66.135", 9200))
-                .setRequestConfigCallback((build) -> build
-                        .setConnectTimeout(20 * 1000)
-                        .setConnectionRequestTimeout(20 * 1000))
-                .build();
-//                new HttpHost("192.168.31.149", 9200)).build();
-        // Create the transport with a Jackson mapper
-        ElasticsearchTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
-        // And create the API client
-        client = new ElasticsearchClient(transport);
-        asyncClient = new ElasticsearchAsyncClient(transport);
-//        hlrc = new RestHighLevelClientBuilder(restClient)
-//                .setApiCompatibilityMode(true)
-//                .build();
+    @Test
+    public void test_createIndex() throws IOException {
+        indexHelper.test_create_index("test_knowledge");
     }
-
-
-    private DocumentHelper documentHelper = new DocumentHelper();
-
-    private IndexHelper indexHelper = new IndexHelper();
-
 
     @Test
     public void test_update() throws Exception {
         Knowledge knowledge = new Knowledge();
-        knowledge.setTitle("test document;tet doc").setUpdatedTime(new Date());
-        documentHelper.myUpdate(client, e -> e.id("78266cd9834c4b2e96e1f0974afb5fcf").index("test_knowledge").doc(knowledge), Knowledge.class);
+        knowledge.setCode("00000002").setTitle("镖车运输时间点_2022-8-23 10:23:36").setUpdatedTime(new Date());
+        documentHelper.myUpdate(e -> e.id("78266cd9834c4b2e96e1f0974afb5fcf").index("test_knowledge").doc(knowledge), Knowledge.class);
     }
 
+    @Test
+    public void test_data_init() throws Exception {
+        documentHelper.test_data_init();
+    }
 
     @Test
     public void test_firstRequest() throws Exception {
@@ -86,7 +70,7 @@ public class NormalTest_ES {
 ////                                        .should(l -> l.multiMatch(e -> e.fields(Arrays.asList("description", "keyword")).query("转眼之间")))
 //                                )).size(10).from(0),
 //        Knowledge.class);
-        SearchResponse<Knowledge> search = documentHelper.mySearch(client, s -> s
+        SearchResponse<Knowledge> search = documentHelper.mySearch(s -> s
                 .index("test_knowledge")
                 .query(q -> q.bool(q1 -> baseProcess(q1, kn))
 //                                        .should(l -> l.multiMatch(e -> e.fields(Arrays.asList("description", "keyword")).query("转眼之间")))
@@ -102,7 +86,7 @@ public class NormalTest_ES {
         Knowledge kn = new Knowledge();
         kn.setType(2);
         kn.setTitle("黑暗");
-        SearchResponse<Knowledge> search = documentHelper.mySearch(client, s -> s
+        SearchResponse<Knowledge> search = documentHelper.mySearch(s -> s
                         .index("test_knowledge")
                         .size(0)
 //                .suggest((su) -> su.suggesters("name_suggester", (se) -> se.completion(co -> co.skipDuplicates(true).field("name").size(10))).text("j"))
@@ -132,7 +116,7 @@ public class NormalTest_ES {
 
     @Test
     public void test_suggest() throws Exception {
-        SearchResponse<JSONObject> search = documentHelper.mySearch(client, s -> s
+        SearchResponse<JSONObject> search = documentHelper.mySearch(s -> s
                         .index("my_suggester")
                         .suggest((su) -> su.suggesters("name_suggester", (se) -> se.completion(co -> co.skipDuplicates(true).field("name").size(10))).text("j"))
                 , JSONObject.class);
@@ -206,7 +190,7 @@ public class NormalTest_ES {
                 .setUpdatedBy("wenc")
                 .setUpdatedTime(date);
         consumer.accept(knowledge);
-        return documentHelper.myCreate(client, e -> e.id(knowledge.getCode()).index("test_knowledge").document(knowledge));
+        return documentHelper.myCreate(e -> e.id(knowledge.getCode()).index("test_knowledge").document(knowledge));
     }
 
 

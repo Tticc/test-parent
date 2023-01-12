@@ -64,10 +64,8 @@ public class SearchManager {
 
     private String getSortStr(int sort) {
         if (sort < 10) {
-            return "000" + sort;
-        } else if (sort < 100) {
             return "00" + sort;
-        } else if (sort < 1000) {
+        } else if (sort < 100) {
             return "0" + sort;
         } else {
             return "" + sort;
@@ -90,6 +88,19 @@ public class SearchManager {
                         .setDescription(model.getDescription())
                         .setDetail(model.getDetail())
                         .setAuthor(model.getAuthor());
+            });
+            return createResponse.id();
+        } catch (Exception e) {
+            throw new BusinessException(5000, e);
+        }
+    }
+    public String update(KnowledgeRequest model) throws BusinessException {
+        if (StringUtils.isEmpty(model.getCode())) {
+            throw new BusinessException(5000L,"没有编码");
+        }
+        try {
+            CreateResponse createResponse = documentHelper.commonUpdate((e) -> {
+                BeanUtils.copyProperties(model,e);
             });
             return createResponse.id();
         } catch (Exception e) {

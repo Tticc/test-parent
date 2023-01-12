@@ -33,18 +33,44 @@ public class IndexHelper {
 //    }
 
     /**
+     * 默认使用spring注入的client
+     * 创建索引
+     *
+     * @Date 2023-1-12 17:54:14
+     * @Author 温昌营
+     **/
+    public final CreateIndexResponse myCreate(Function<CreateIndexRequest.Builder, ObjectBuilder<CreateIndexRequest>> fn)
+            throws IOException, ElasticsearchException {
+        return myCreate(esClient.getClient(), fn);
+    }
+
+    /**
      * 创建索引
      *
      * @Date 15:01 2022/10/25
      * @Author 温昌营
      **/
-    public final CreateIndexResponse myCreate(Function<CreateIndexRequest.Builder, ObjectBuilder<CreateIndexRequest>> fn)
+    public final CreateIndexResponse myCreate(
+            ElasticsearchClient client,
+            Function<CreateIndexRequest.Builder, ObjectBuilder<CreateIndexRequest>> fn)
             throws IOException, ElasticsearchException {
         CreateIndexRequest build = fn.apply(new CreateIndexRequest.Builder()).build();
         log.info("index create request info:\n【{}】", build);
-        CreateIndexResponse createResponse = esClient.getClient().indices().create(build);
+        CreateIndexResponse createResponse = client.indices().create(build);
         log.info("index create response info:\n【{}】", createResponse);
         return createResponse;
+    }
+
+    /**
+     * 默认使用spring注入的client
+     * 删除索引
+     *
+     * @Date 2023-1-12 17:55:14
+     * @Author 温昌营
+     **/
+    public final DeleteIndexResponse myDelete(Function<DeleteIndexRequest.Builder, ObjectBuilder<DeleteIndexRequest>> fn)
+            throws IOException, ElasticsearchException {
+        return myDelete(esClient.getClient(),fn);
     }
 
     /**
@@ -53,11 +79,13 @@ public class IndexHelper {
      * @Date 15:01 2022/10/25
      * @Author 温昌营
      **/
-    public final DeleteIndexResponse myDelete(Function<DeleteIndexRequest.Builder, ObjectBuilder<DeleteIndexRequest>> fn)
+    public final DeleteIndexResponse myDelete(
+            ElasticsearchClient client,
+            Function<DeleteIndexRequest.Builder, ObjectBuilder<DeleteIndexRequest>> fn)
             throws IOException, ElasticsearchException {
         DeleteIndexRequest build = fn.apply(new DeleteIndexRequest.Builder()).build();
         log.info("index delete request info:\n【{}】", build);
-        DeleteIndexResponse response = esClient.getClient().indices().delete(build);
+        DeleteIndexResponse response = client.indices().delete(build);
         log.info("index delete response info:\n【{}】", response);
         return response;
     }
