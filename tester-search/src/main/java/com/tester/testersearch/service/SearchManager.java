@@ -5,13 +5,13 @@ import co.elastic.clients.elasticsearch.core.CreateResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.base.dto.model.request.PagerInfo;
-import com.tester.testercommon.util.CommonUtil;
 import com.tester.testersearch.model.Knowledge;
 import com.tester.testersearch.model.KnowledgePageRequest;
 import com.tester.testersearch.model.KnowledgeRequest;
 import com.tester.testersearch.model.KnowledgeResponse;
 import com.tester.testersearch.service.helper.DocumentHelper;
 import com.tester.testersearch.util.EsSearchHelper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -45,7 +45,8 @@ public class SearchManager {
             List<KnowledgeResponse> resList = new ArrayList<>(collect.size());
             for (Knowledge knowledge : collect) {
                 KnowledgeResponse knowledgeResponse = new KnowledgeResponse();
-                CommonUtil.copyPropertiesIgnoreNull(knowledge, knowledgeResponse);
+//                CommonUtil.copyPropertiesIgnoreNull(knowledge, knowledgeResponse);
+                BeanUtils.copyProperties(knowledge, knowledgeResponse);
                 knowledgeResponse.setSort(getSortStr(++sort));
                 resList.add(knowledgeResponse);
             }
