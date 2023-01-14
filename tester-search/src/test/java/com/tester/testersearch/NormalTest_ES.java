@@ -4,6 +4,7 @@ import co.elastic.clients.elasticsearch.ElasticsearchAsyncClient;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.aggregations.*;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.TermQuery;
 import co.elastic.clients.elasticsearch.core.CreateResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.CompletionSuggest;
@@ -16,6 +17,7 @@ import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.alibaba.fastjson.JSONObject;
 import com.tester.testercommon.util.MyConsumer;
 import com.tester.testersearch.model.Knowledge;
+import com.tester.testersearch.model.KnowledgePageRequest;
 import com.tester.testersearch.service.helper.DocumentHelper;
 import com.tester.testersearch.service.helper.IndexHelper;
 import com.tester.testersearch.util.EsSearchHelper;
@@ -42,7 +44,7 @@ public class NormalTest_ES {
     static {
 
         // Create the low-level client
-        RestClient restClient = RestClient.builder(new HttpHost("10.100.66.135", 9200))
+        RestClient restClient = RestClient.builder(new HttpHost("127.0.0.1", 9200))
                 .setRequestConfigCallback((build) -> build
                         .setConnectTimeout(20 * 1000)
                         .setConnectionRequestTimeout(20 * 1000))
@@ -75,9 +77,10 @@ public class NormalTest_ES {
     @Test
     public void test_firstRequest() throws Exception {
         String key = null;
-        Knowledge kn = new Knowledge();
+        KnowledgePageRequest kn = new KnowledgePageRequest();
         kn.setType(2);
         kn.setTitle("黑暗");
+        kn.setDescription("bb");
 //        SearchResponse<Knowledge> search = documentHelper.mySearch(s -> s
 //                        .index("test_knowledge")
 //                        .query(q -> q
@@ -88,7 +91,11 @@ public class NormalTest_ES {
 //        Knowledge.class);
         SearchResponse<Knowledge> search = documentHelper.mySearch(client, s -> s
                 .index("test_knowledge")
-                .query(q -> q.bool(q1 -> baseProcess(q1, kn))
+//                .query(q -> q.bool(q1 -> baseProcess(q1, kn))
+                .query(q -> q.bool(f1 -> f1
+                                .filter(q1 -> q1.bool(q2 -> processIkSmart(q2, kn)))
+                                .filter(t -> t.term(t1 -> processTerm(t1, kn)))
+                        )
 //                                        .should(l -> l.multiMatch(e -> e.fields(Arrays.asList("description", "keyword")).query("转眼之间")))
                 ).size(10).from(0), Knowledge.class);
 
@@ -147,7 +154,7 @@ public class NormalTest_ES {
         }
     }
 
-    public BoolQuery.Builder baseProcess(BoolQuery.Builder queryBuilder, Knowledge knowledge) {
+    private BoolQuery.Builder processIkSmart(BoolQuery.Builder queryBuilder, KnowledgePageRequest knowledge) {
         Field[] fields = knowledge.getClass().getDeclaredFields();
         for (Field field : fields) {
             String name = field.getName();
@@ -162,13 +169,16 @@ public class NormalTest_ES {
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
-            processField_ik_smart(queryBuilder, name, o, EsSearchHelper.fieldBoostMap.get(name), EsSearchHelper.fieldAnalyzerMap.get(name));
+
+            if (!EsSearchHelper.termField.contains(name)) {
+                processField_ik_smart(queryBuilder, name, o, EsSearchHelper.fieldBoostMap.get(name), EsSearchHelper.fieldAnalyzerMap.get(name));
+            }
         }
         return queryBuilder;
     }
 
 
-    public BoolQuery.Builder processField_ik_smart(BoolQuery.Builder queryBuilder, String fieldName, String fieldValue, Float boost, String analyzer) {
+    private BoolQuery.Builder processField_ik_smart(BoolQuery.Builder queryBuilder, String fieldName, String fieldValue, Float boost, String analyzer) {
         if (StringUtils.isEmpty(fieldValue)) {
             return queryBuilder;
         }
@@ -176,7 +186,37 @@ public class NormalTest_ES {
             boost = 1.0f;
         }
         final Float finalBoost = boost;
-        return queryBuilder.should(l -> l.match(e -> e.field(fieldName).query(fieldValue).analyzer("ik_smart").minimumShouldMatch("2").boost(finalBoost)));
+        return queryBuilder.should(l -> l.match(e -> e.field(fieldName).query(fieldValue).analyzer(analyzer).minimumShouldMatch("2").boost(finalBoost)));
+    }
+
+
+    private TermQuery.Builder processTerm(TermQuery.Builder queryBuilder, KnowledgePageRequest knowledge) {
+        Field[] fields = knowledge.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            String name = field.getName();
+            field.setAccessible(true);
+            String o = null;
+            try {
+                Object o1 = field.get(knowledge);
+                if (null == o1) {
+                    continue;
+                }
+                o = String.valueOf(field.get(knowledge));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            if (EsSearchHelper.termField.contains(name)) {
+                processField_term(queryBuilder, name, o, EsSearchHelper.fieldBoostMap.get(name), EsSearchHelper.fieldAnalyzerMap.get(name));
+            }
+        }
+        return queryBuilder;
+    }
+
+    private TermQuery.Builder processField_term(TermQuery.Builder queryBuilder, String fieldName, String fieldValue, Float boost, String analyzer) {
+        if (StringUtils.isEmpty(fieldValue)) {
+            return queryBuilder;
+        }
+        return queryBuilder.field(fieldName).value(fieldValue);
     }
 
 
