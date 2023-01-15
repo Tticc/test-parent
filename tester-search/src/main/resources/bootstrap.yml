@@ -47,4 +47,9 @@ logging:
     org:
       elasticsearch:
         client: debug
-
+      apache:
+        http:
+          wire: debug
+# 如果不知道日志是怎么输出的，例如dsl。可以将root:debug开启，然后查看日志打印的包。再把包放进来。
+# 如：org.apache.http.wire
+#    root: debug
