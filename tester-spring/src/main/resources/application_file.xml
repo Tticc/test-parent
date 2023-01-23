@@ -1,0 +1,12 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- 指定bean名字。scope默认是单例 -->
+    <bean id="demo" class="com.tester.testerspring.service.Demo" scope="singleton"/>
+    <!-- 不指定bean名字 -->
+<!--    <bean class="xxx.xx.xx/>-->
+<!-- 外部包bean -->
+<!--<bean class="com.alibaba.druid.pool.DruidDataSource"/>-->
+</beans>

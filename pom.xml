@@ -91,6 +91,7 @@
         <module>tester-feign-client</module>
         <module>tester-search</module>
         <module>tester-swing</module>
+        <module>tester-spring</module>
     </modules>
 
     <dependencyManagement>
