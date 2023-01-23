@@ -35,16 +35,26 @@ my:
   es:
     host: 127.0.0.1
     port: 9200
-#logging:
-#  level:
-#    org:
-#      springframework:
-#        data:
-#          elasticsearch:
-#            core: DEBUG
+
+# logging 配置示例。
+# 1. root。设置所有日志级别
+# 2. package。设置特定包下的日志级别
+# 3. group。将多个包归集为组。对组设置指定日志级别
 logging:
   level:
     org:
       elasticsearch:
         client: debug
+      apache:
+        http:
+          wire: debug
+# 如果不知道日志是怎么输出的，例如dsl。可以将root:debug开启，然后查看日志打印的包。再把包放进来。
+# 如：org.apache.http.wire
+#    root: debug
 
+# 分组示例
+#logging:
+#  group:
+#    myEsLog: org.elasticsearch.client,org.apache.http.wire
+#  level:
+#    myEsLog: debug

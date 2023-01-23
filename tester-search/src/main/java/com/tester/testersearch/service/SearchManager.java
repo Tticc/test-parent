@@ -1,6 +1,7 @@
 package com.tester.testersearch.service;
 
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.TermQuery;
 import co.elastic.clients.elasticsearch.core.CreateResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import com.tester.base.dto.exception.BusinessException;
@@ -37,7 +38,11 @@ public class SearchManager {
         try {
             SearchResponse<Knowledge> search = documentHelper.mySearch(s -> s
                     .index("test_knowledge")
-                    .query(q -> q.bool(q1 -> baseProcess(q1, request))
+//                    .query(q -> q.bool(q1 -> processIkSmart(q1, request))
+                    .query(q -> q.bool(f1 -> f1
+                                    .filter(q1 -> q1.bool(q2 -> processIkSmart(q2, request)))
+                                    .filter(t -> t.term(t1 -> processTerm(t1, request)))
+                            )
 //                                        .should(l -> l.multiMatch(e -> e.fields(Arrays.asList("description", "keyword")).query("转眼之间")))
                     ).size(request.getPageSize()).from(request.getPageSize() * (request.getPageNum() - 1)), Knowledge.class);
             List<Knowledge> collect = search.hits().hits().stream().map(e -> e.source()).collect(Collectors.toList());
@@ -94,13 +99,14 @@ public class SearchManager {
             throw new BusinessException(5000, e);
         }
     }
+
     public String update(KnowledgeRequest model) throws BusinessException {
         if (StringUtils.isEmpty(model.getCode())) {
-            throw new BusinessException(5000L,"没有编码");
+            throw new BusinessException(5000L, "没有编码");
         }
         try {
             CreateResponse createResponse = documentHelper.commonUpdate((e) -> {
-                BeanUtils.copyProperties(model,e);
+                BeanUtils.copyProperties(model, e);
             });
             return createResponse.id();
         } catch (Exception e) {
@@ -108,7 +114,8 @@ public class SearchManager {
         }
     }
 
-    private BoolQuery.Builder baseProcess(BoolQuery.Builder queryBuilder, KnowledgePageRequest knowledge) {
+
+    private BoolQuery.Builder processIkSmart(BoolQuery.Builder queryBuilder, KnowledgePageRequest knowledge) {
         Field[] fields = knowledge.getClass().getDeclaredFields();
         for (Field field : fields) {
             String name = field.getName();
@@ -123,7 +130,10 @@ public class SearchManager {
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
-            processField_ik_smart(queryBuilder, name, o, EsSearchHelper.fieldBoostMap.get(name), EsSearchHelper.fieldAnalyzerMap.get(name));
+
+            if (!EsSearchHelper.termField.contains(name)) {
+                processField_ik_smart(queryBuilder, name, o, EsSearchHelper.fieldBoostMap.get(name), EsSearchHelper.fieldAnalyzerMap.get(name));
+            }
         }
         return queryBuilder;
     }
@@ -137,6 +147,36 @@ public class SearchManager {
             boost = 1.0f;
         }
         final Float finalBoost = boost;
-        return queryBuilder.should(l -> l.match(e -> e.field(fieldName).query(fieldValue).analyzer("ik_smart").minimumShouldMatch("2").boost(finalBoost)));
+        return queryBuilder.should(l -> l.match(e -> e.field(fieldName).query(fieldValue).analyzer(analyzer).minimumShouldMatch("2").boost(finalBoost)));
+    }
+
+
+    private TermQuery.Builder processTerm(TermQuery.Builder queryBuilder, KnowledgePageRequest knowledge) {
+        Field[] fields = knowledge.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            String name = field.getName();
+            field.setAccessible(true);
+            String o = null;
+            try {
+                Object o1 = field.get(knowledge);
+                if (null == o1) {
+                    continue;
+                }
+                o = String.valueOf(field.get(knowledge));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            if (EsSearchHelper.termField.contains(name)) {
+                processField_term(queryBuilder, name, o, EsSearchHelper.fieldBoostMap.get(name), EsSearchHelper.fieldAnalyzerMap.get(name));
+            }
+        }
+        return queryBuilder;
+    }
+
+    private TermQuery.Builder processField_term(TermQuery.Builder queryBuilder, String fieldName, String fieldValue, Float boost, String analyzer) {
+        if (StringUtils.isEmpty(fieldValue)) {
+            return queryBuilder;
+        }
+        return queryBuilder.field(fieldName).value(fieldValue);
     }
 }
