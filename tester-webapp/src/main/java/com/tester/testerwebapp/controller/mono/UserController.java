@@ -16,10 +16,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
@@ -59,6 +61,8 @@ public class UserController extends BaseController {
         return monoSuccess(userDomainMono);
     }
 
+    @Autowired
+    HttpServletRequest request;
     /**
      * 测试 MethodArgumentNotValidException，不符合@NotNull成功抛出此异常
      *
@@ -71,6 +75,8 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/demoStart1", method = RequestMethod.POST)
     public Mono<RestResult<UserDomain>> demoStart1(@Validated @RequestBody IdAndNameRequest model) {
         log.info("controller start here.");
+        String remoteAddr = request.getRemoteAddr();
+
         try {
             redisUtilValue.setValue("model1", "model1_test_" + DateUtil.dateFormat(new Date()));
         }catch (Exception e){
@@ -82,7 +88,6 @@ public class UserController extends BaseController {
         UserDomain block = userDomainMono.block();
         return monoSuccess(userDomainMono);
     }
-
 
     /**
      * 测试 ConstraintViolationException。没结果
