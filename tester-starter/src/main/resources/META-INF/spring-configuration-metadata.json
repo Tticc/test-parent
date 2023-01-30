@@ -1,0 +1,50 @@
+{
+  "groups": [
+    {
+      "name": "management.endpoint.readiness",
+      "type": "com.tester.testerstarter.point.ReadinessPoint",
+      "sourceType": "com.tester.testerstarter.point.ReadinessPoint"
+    },
+    {
+      "name": "my.rest",
+      "type": "com.tester.testerstarter.autoconfigure.RestTemplateAutoConfigure",
+      "sourceType": "com.tester.testerstarter.autoconfigure.RestTemplateAutoConfigure"
+    },
+    {
+      "name": "test.demo.pro",
+      "type": "com.tester.testerstarter.autoconfigure.DemoProperties",
+      "sourceType": "com.tester.testerstarter.autoconfigure.DemoProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "management.endpoint.readiness.cache.time-to-live",
+      "type": "java.time.Duration",
+      "description": "Maximum time that a response can be cached.",
+      "sourceType": "com.tester.testerstarter.point.ReadinessPoint",
+      "defaultValue": "0ms"
+    },
+    {
+      "name": "management.endpoint.readiness.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable the readiness endpoint.",
+      "sourceType": "com.tester.testerstarter.point.ReadinessPoint",
+      "defaultValue": true
+    },
+    {
+      "name": "test.demo.pro.a",
+      "type": "java.lang.String",
+      "description": "测试String",
+      "sourceType": "com.tester.testerstarter.autoconfigure.DemoProperties",
+      "defaultValue": "a"
+    },
+    {
+      "name": "test.demo.pro.k",
+      "type": "java.lang.Integer",
+      "description": "测试int",
+      "sourceType": "com.tester.testerstarter.autoconfigure.DemoProperties",
+      "defaultValue": 5
+    }
+  ],
+  "hints": []
+}
