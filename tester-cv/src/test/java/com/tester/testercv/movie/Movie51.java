@@ -4,6 +4,7 @@ package com.tester.testercv.movie;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.MyConsumer;
 import com.tester.testercommon.util.file.TxtWrite;
+import com.tester.testercommon.util.http.HttpsClient;
 import com.tester.testercommon.util.http.MyX509TrustManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import java.io.*;
+import java.net.Proxy;
 import java.net.URL;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class Movie51 {
+    private static Proxy proxy = HttpsClient.getProxy("127.0.0.1", 7890);
 
     public static SSLSocketFactory ssf;
 
@@ -49,11 +52,11 @@ public class Movie51 {
 
     public static final String allListUrl = "";
     // 网页获取的
-    public static final String trueListUrl = "ndex.m3u8";
+    public static final String trueListUrl = "";
     // 网页获取的
     public static final String filePath = "";
     // 网页获取的key·
-    public static final String trueKey = "key.key";
+    public static final String trueKey = "";
 
     @Test
     public void test_movie() throws Exception {
@@ -143,7 +146,7 @@ public class Movie51 {
         while (count <= 3) {
             try {
                 URL url = new URL(urls);
-                httpURLConnection = (HttpsURLConnection) url.openConnection();
+                httpURLConnection = (HttpsURLConnection) url.openConnection(proxy);
                 httpURLConnection.setConnectTimeout((int) 20000);
                 httpURLConnection.setReadTimeout((int) 20000);
                 httpURLConnection.setUseCaches(false);
@@ -247,8 +250,7 @@ public class Movie51 {
         String finalPath = fileOutPath + fileOutName;
 
         URL url = new URL(fullUrlPath);
-
-        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection(proxy);
         conn.setConnectTimeout(20 * 1000);
         conn.setReadTimeout(20 * 1000);
         conn.setSSLSocketFactory(ssf);
