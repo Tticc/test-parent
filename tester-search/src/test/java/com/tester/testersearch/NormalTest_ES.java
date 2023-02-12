@@ -65,6 +65,16 @@ public class NormalTest_ES {
 
     private IndexHelper indexHelper = new IndexHelper();
 
+    @Test
+    public void test_intern(){
+        String a = "aa";
+        String b = "bb";
+        String c = (a+b).intern();
+        String c1 = "aabb".intern();
+        System.out.println(Integer.toHexString(c.hashCode()));
+        System.out.println(Integer.toHexString(c1.hashCode()));
+        System.out.println(c==c1);
+    }
 
     @Test
     public void test_update() throws Exception {

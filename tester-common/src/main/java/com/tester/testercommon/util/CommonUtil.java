@@ -213,4 +213,26 @@ public class CommonUtil {
 			return "";
 		}
 	}
+
+	/**
+	 * 由于getMethod只能获取本类和父类、接口的public<br/>
+	 * 而getDeclaredMethod只能获取本类的private/default/protected/public方法<br/>
+	 * 因此都不能获取父类的私有方法<br/>
+	 * 因此用这个方法来获取。通过递归getSuperclass的方式获取到最顶层
+	 * @param clazz
+	 * @param method
+	 * @param paramClz
+	 * @return
+	 */
+	public static Method getTargetMethod(Class clazz, String method, Class<?> ...paramClz){
+		Method targetMethod = null;
+		for (; targetMethod == null || clazz != Object.class; clazz = clazz.getSuperclass()) {
+			try {
+				targetMethod = clazz.getDeclaredMethod(method, paramClz);
+				targetMethod.setAccessible(true);
+			} catch (Exception e) {
+			}
+		}
+		return targetMethod;
+	}
 }
