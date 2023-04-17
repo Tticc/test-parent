@@ -92,6 +92,17 @@ public class ImageManager {
                 "        height: 500,\n" +
                 "        width: 780\n" +
                 "    });\n" +
+                "document.onkeydown = function(event) {\n" +
+                "debugger;\n" +
+                "switch (event.keyCode) {\n" +
+                "case 37: // Left arrow\n" +
+                "player.currentTime(player.currentTime() - 10);\n" +
+                "break;\n" +
+                "case 39: // Right arrow\n" +
+                "player.currentTime(player.currentTime() + 10);\n" +
+                "break;\n" +
+                "}\n" +
+                        "};" +
                 "</script>");
         return true;
     }

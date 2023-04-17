@@ -23,7 +23,7 @@ public class MyForwardFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        log.info("MyForwardFilter 工作中");
+//        log.info("MyForwardFilter 工作中");
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String requestURI = httpRequest.getRequestURI();
         if (requestURI.startsWith(READINESS_STR)) {
