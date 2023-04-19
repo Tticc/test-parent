@@ -30,7 +30,7 @@
         <jpa.version>1.0</jpa.version>
         <datasource.version>3.3.1</datasource.version>
         <persistence.version>1.0.2</persistence.version>
-        <fastjson.version>1.2.60</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <tkmybatis.version>2.1.5</tkmybatis.version>
         <mockito.version>1.10.19</mockito.version>
         <netty.version>4.1.39.Final</netty.version>
