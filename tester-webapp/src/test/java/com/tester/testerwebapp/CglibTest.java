@@ -19,7 +19,7 @@ public class CglibTest {
 		enhancer.setCallback(new MethodIntec());
 		return (CglibTest)enhancer.create();
 	}
-	public void pri() {
+	public static void pri() {
 		System.out.println("this is the Test.pri");
 	}
 	public void bePpri() {
@@ -29,12 +29,18 @@ public class CglibTest {
 	}
 }
 class MethodIntec implements MethodInterceptor {
+	CglibTest target = new CglibTest();
 	@Override
 	public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
 		Object result;
 		if(method.getName().indexOf("beP")!=-1) {
 			System.out.println("//you never said this");
 		}
+		// 1. 使用反射 + target
+//		result = method.invoke(target,args);
+		// 2. 使用methodProxy.invoke + target
+//		result = proxy.invoke(target,args);
+		// 3. 使用methodProxy.invokeSuper + target
 		result = proxy.invokeSuper(obj, args);
 		//do something
 		return result;

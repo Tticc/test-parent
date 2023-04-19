@@ -1,0 +1,3 @@
+#org.springframework.context.ApplicationListener=\
+#  com.tester.testerspring.config.listener.MyListener,\
+#  com.tester.testerspring.config.listener.MyListener1

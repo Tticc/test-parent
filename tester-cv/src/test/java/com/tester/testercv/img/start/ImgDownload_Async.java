@@ -29,7 +29,7 @@ public class ImgDownload_Async {
 
     private static Thread monitorThread;
 
-    private static Proxy proxy = HttpsClient.getProxy("127.0.0.1", 10809);
+    private static Proxy proxy = HttpsClient.getProxy("127.0.0.1", 7890);
 
     private static boolean async = false;
 
