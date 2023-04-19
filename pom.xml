@@ -36,7 +36,7 @@
         <netty.version>4.1.39.Final</netty.version>
         <httpclient.version>4.5.8</httpclient.version>
         <swagger.version>2.9.2</swagger.version>
-        <poi.version>4.1.0</poi.version>
+        <poi.version>4.1.1</poi.version>
         <shardingsphere.version>4.0.0-RC2</shardingsphere.version>
         <pagehelper.version>5.1.10</pagehelper.version>
         <fileupload.version>1.4</fileupload.version>
