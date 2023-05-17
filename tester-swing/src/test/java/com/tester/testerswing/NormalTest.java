@@ -38,11 +38,11 @@ public class NormalTest {
 
     }
 
-    public static void captureImgAnd2Mat() throws IOException {
-        PointInfoDTO st = new PointInfoDTO().setX(0).setY(0);
-        PointInfoDTO ed = new PointInfoDTO().setX(410).setY(410);
-        BufferedImage image = RobotHelper.createScreenCapture(st, ed);
-        Mat mat1 = OpenCVHelper.BufferedImage2Mat(image, Imgcodecs.IMREAD_GRAYSCALE);
-        OpenCVHelper.showImg(mat1, "name", 10000);
-    }
+//    public static void captureImgAnd2Mat() throws IOException {
+//        PointInfoDTO st = new PointInfoDTO().setX(0).setY(0);
+//        PointInfoDTO ed = new PointInfoDTO().setX(410).setY(410);
+//        BufferedImage image = RobotHelper.createScreenCapture(st, ed);
+//        Mat mat1 = OpenCVHelper.BufferedImage2Mat(image, Imgcodecs.IMREAD_GRAYSCALE);
+//        OpenCVHelper.showImg(mat1, "name", 10000);
+//    }
 }
