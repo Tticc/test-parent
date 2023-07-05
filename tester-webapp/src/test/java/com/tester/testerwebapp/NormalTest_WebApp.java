@@ -12,6 +12,7 @@ import com.tester.testercommon.util.jwt.JwtHelper;
 import io.undertow.server.session.SecureRandomSessionIdGenerator;
 import lombok.Data;
 import lombok.SneakyThrows;
+import net.openhft.affinity.AffinityLock;
 import org.junit.Test;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.context.ApplicationContext;
@@ -21,6 +22,7 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.SimpleEvaluationContext;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import java.beans.PropertyDescriptor;
 import java.io.File;
@@ -28,6 +30,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +38,7 @@ import java.util.concurrent.atomic.AtomicStampedReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class NormalTest_WebApp {
 
@@ -59,7 +63,112 @@ public class NormalTest_WebApp {
 
         Date date = new Date(1652081100000L);
         System.out.println(date);
+        test_cup100();
 
+    }
+
+
+    @Test
+    public void test_shuffle(){
+        List<String> list = Arrays.asList("1","2","41","11","4","6","21");
+        processPicByType(list);
+        list.stream().forEach(System.out::println);
+    }
+
+    public static void processPicByType(List<String> list){
+        if(CollectionUtils.isEmpty(list) || list.size() < 2){
+            return;
+        }
+                Collections.shuffle(list);
+    }
+
+    @Test
+    public void test_printAnd() throws IOException {
+        String storeAuthStr = TxtWrite.file2String(new File("D:\\desktop\\store_auth.txt"));
+        String storeAllStr = TxtWrite.file2String(new File("D:\\desktop\\store_all.txt"));
+        String[] split = storeAllStr.split("\r\n");
+        Set<String> collect = Stream.of(split).collect(Collectors.toSet());
+
+        String[] auths = storeAuthStr.split("\r\n");
+        Stream.of(auths).filter(e -> collect.contains(e)).forEach(System.out::println);
+
+    }
+    @Test
+    public void test_printStoreCode() throws IOException {
+        String s = TxtWrite.file2String(new File("D:\\desktop\\test.txt"));
+        String[] split = s.split("\r\n");
+        for (String s1 : split) {
+            if(s1.indexOf("code") >= 0  && s1.indexOf("\t\t\t\t\t\t\t") >= 0 ){
+                String trim = s1.split(":")[1].replaceAll("\"", "").replace(",", "").trim();
+                if(trim.length() < 10){
+                    continue;
+                }
+                System.out.println(trim);
+            }
+        }
+    }
+
+    @Test
+    public void test_printStoreCode1() throws IOException {
+        String s = TxtWrite.file2String(new File("D:\\desktop\\test1.txt"));
+        String[] split = s.split("\r\n");
+        for (String s1 : split) {
+            if(s1.indexOf("storeCode") >= 0){
+                String trim = s1.split(":")[1].replaceAll("\"", "").replace(",", "").trim();
+                if(trim.length() < 10){
+                    continue;
+                }
+                System.out.println(trim);
+            }
+        }
+    }
+    @Test
+    public void test_printApollo() throws IOException {
+        String s = TxtWrite.file2String(new File("D:\\desktop\\txt.txt"));
+        String[] split = s.split("\r\n");
+        Set<String> appId = new HashSet<>();
+        Set<String> cluster = new HashSet<>();
+        Set<String> property = new HashSet<>();
+
+        String appIdStart = "";
+        String clusterStart = "";
+        String propertyStart = "";
+        for (String s1 : split) {
+            String[] split1 = s1.split(":::");
+            appIdStart = (split1[0]);
+            clusterStart = (split1[1]);
+            propertyStart = (split1[2]);
+        }
+    }
+
+
+    @Test
+    public void test_es_data(){
+        String str = "<br/>github：https://github.com/trending/java?since=monthly；<br/><br/>\r\nstackoverflow（问题为主）：https://stackoverflow.com/questions/tagged/java<br/><br/>\r\nIBM开发者：https://developer.ibm.com/languages/java/articles/<br/><br/>\r\ninfoworld：https://www.infoworld.com/category/java/<br/><br/>\r\n博客园：https://www.cnblogs.com/cate/java/<br/><br/>\r\n掘金：https://juejin.cn/backend<br/><br/>\r\nCSDN：https://blog.csdn.net/nav/java<br/><br/>\r\ninfoQ：https://www.infoq.cn/topic/programing-languages\r\n\r\n";
+        System.out.println(str);
+    }
+
+    public static void test_cup100(){
+        ScheduledExecutorService e = Executors.newScheduledThreadPool(0);
+        e.schedule(() -> System.out.println(1),40,TimeUnit.SECONDS);
+        e.shutdown();
+    }
+
+    @Test
+    public void test_attach_specific_cpu(){
+        ArrayBlockingQueue<Runnable> workQueue =
+                new ArrayBlockingQueue<>(100);
+        //绑定到 6 号 CPU 上执行
+        try (AffinityLock affinityLock = AffinityLock.acquireLock(6)) {
+            for (; ; ) {
+                try {
+                    Runnable r = workQueue.poll(0, TimeUnit.NANOSECONDS);
+                    if (r != null)
+                        break;
+                } catch (InterruptedException retry) {
+                }
+            }
+        }
     }
 
 
