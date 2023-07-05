@@ -22,7 +22,10 @@ docker-compose -p apollo_compose up -d
 ### 访问
 http://localhost:8070
 
-
+### 多环境配置
+管理员工具 -> 系统参数  
+apollo.portal.envs=dev,fat  
+重启portal服务  
 
 
 
