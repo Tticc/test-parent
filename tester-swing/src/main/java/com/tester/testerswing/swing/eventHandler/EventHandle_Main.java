@@ -1,6 +1,7 @@
 package com.tester.testerswing.swing.eventHandler;
 
 import com.tester.testerswing.capture.GaussianPointInfoDTO;
+import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.gaussian.GaussianHelper;
 import com.tester.testerswing.robot.RobotHelper;
 import com.tester.testerswing.swing.EasyScript_UI_Main;
@@ -14,6 +15,33 @@ import javax.swing.*;
  * @Date 2022-8-4 13:47:36
  */
 public class EventHandle_Main {
+
+
+    public static PointInfoDTO common_release_drond1 = new PointInfoDTO().setX(1892).setY(770);
+    public static PointInfoDTO common_release_drond2 = new PointInfoDTO().setX(1900).setY(780);
+    public static GaussianPointInfoDTO common_release_drond = new GaussianPointInfoDTO().setSt(common_release_drond1).setEd(common_release_drond2);
+
+    public static PointInfoDTO common_building_tab1 = new PointInfoDTO().setX(1706).setY(230);
+    public static PointInfoDTO common_building_tab2 = new PointInfoDTO().setX(1730).setY(233);
+    public static GaussianPointInfoDTO common_building_tab = new GaussianPointInfoDTO().setSt(common_building_tab1).setEd(common_building_tab2);
+
+    public static PointInfoDTO common_fighting_tab1 = new PointInfoDTO().setX(1633).setY(226);
+    public static PointInfoDTO common_fighting_tab2 = new PointInfoDTO().setX(1655).setY(236);
+    public static GaussianPointInfoDTO common_fighting_tab = new GaussianPointInfoDTO().setSt(common_fighting_tab1).setEd(common_fighting_tab2);
+
+    public static PointInfoDTO common_around1 = new PointInfoDTO().setX(1662).setY(159);
+    public static PointInfoDTO common_around2 = new PointInfoDTO().setX(1674).setY(168);
+    public static GaussianPointInfoDTO common_around = new GaussianPointInfoDTO().setSt(common_around1).setEd(common_around2);
+
+    public static PointInfoDTO common_speedUp1 = new PointInfoDTO().setX(1107).setY(878);
+    public static PointInfoDTO common_speedUp2 = new PointInfoDTO().setX(1122).setY(891);
+    public static GaussianPointInfoDTO common_speedUp = new GaussianPointInfoDTO().setSt(common_speedUp1).setEd(common_speedUp2);
+
+    public static PointInfoDTO common_building1 = new PointInfoDTO().setX(1698).setY(573);
+    public static PointInfoDTO common_building2 = new PointInfoDTO().setX(1719).setY(581);
+    public static GaussianPointInfoDTO common_building = new GaussianPointInfoDTO().setSt(common_building1).setEd(common_building2);
+
+
 
 
     public static void handle_main(EasyScript_UI_Main script) {
@@ -72,9 +100,13 @@ public class EventHandle_Main {
         JButton open_run_silot = script.getOpen_run_silot();
         open_run_silot.addActionListener((e) -> {
             try {
+                // 打开
                 openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
-                runOpe(EventHandle_Silot.silot_align_p1, EventHandle_Silot.silot_align_p2, EventHandle_Silot.silot_align_p3, EventHandle_Silot.silot_main_view_p1);
-                returnOpe(EventHandle_Silot.silot_return_p1, EventHandle_Silot.silot_return_p2, EventHandle_Silot.silot_return_p3, EventHandle_Silot.silot_main_view_p1);
+                // 选中环绕
+                toAround(common_building_tab,common_building,common_around,common_fighting_tab);
+                // 加速 释放无人机
+                speedUpAndDrone(common_speedUp,common_release_drond);
+
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -132,9 +164,10 @@ public class EventHandle_Main {
         open_run_sai.addActionListener((e) -> {
             try {
                 openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
-                runOpe(EventHandle_Sai.sai_align_p1, EventHandle_Sai.sai_align_p2, EventHandle_Sai.sai_align_p3, EventHandle_Sai.sai_main_view_p1);
-                RobotHelper.delay(500);
-                returnOpe(EventHandle_Sai.sai_return_p1, EventHandle_Sai.sai_return_p2, EventHandle_Sai.sai_return_p3, EventHandle_Sai.sai_main_view_p1);
+                // 选中环绕
+                toAround(common_building_tab,common_building,common_around,common_fighting_tab);
+                // 加速 释放无人机
+                speedUpAndDrone(common_speedUp,common_release_drond);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -192,9 +225,10 @@ public class EventHandle_Main {
         open_run_colos.addActionListener((e) -> {
             try {
                 openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
-                runOpe(EventHandle_Colos.colos_align_p1, EventHandle_Colos.colos_align_p2, EventHandle_Colos.colos_align_p3, EventHandle_Colos.colos_main_view_p1);
-                RobotHelper.delay(500);
-                returnOpe(EventHandle_Colos.colos_return_p1, EventHandle_Colos.colos_return_p2, EventHandle_Colos.colos_return_p3, EventHandle_Colos.colos_main_view_p1);
+                // 选中环绕
+                toAround(common_building_tab,common_building,common_around,common_fighting_tab);
+                // 加速 释放无人机
+                speedUpAndDrone(common_speedUp,common_release_drond);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -292,6 +326,62 @@ public class EventHandle_Main {
         // p4 启用护盾
         RobotHelper.move(p4.getX(), p4.getY(), 327);
         RobotHelper.mouseLeftPress();
+    }
+
+    /**
+     *
+     * @param tab0 生产tab
+     * @param building 环绕的建筑
+     * @param around 环绕
+     * @param tab1 作战tab
+     */
+    public static void toAround(GaussianPointInfoDTO tab0,
+                         GaussianPointInfoDTO building,
+                         GaussianPointInfoDTO around,
+                         GaussianPointInfoDTO tab1){
+
+
+        // tab0 切换 生产tab
+        RobotHelper.move(tab0.getX(), tab0.getY(), 94);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+
+        // building 选中建筑
+        RobotHelper.move(building.getX(), building.getY(), 88);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+
+        // around 环绕建筑
+        RobotHelper.move(around.getX(), around.getY(), 100);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(50, 200));
+
+        // tab1 切换 作战tab
+        RobotHelper.move(tab1.getX(), tab1.getY(), 100);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+    }
+
+
+    /**
+     *
+     * @param speedUp 加速按钮
+     * @param drone 释放无人机
+     */
+    public static void speedUpAndDrone(GaussianPointInfoDTO speedUp,
+                        GaussianPointInfoDTO drone){
+
+        // speedUp 加速
+        RobotHelper.move(speedUp.getX(), speedUp.getY(), 94);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+
+        // release 释放无人机
+        RobotHelper.move(drone.getX(), drone.getY(), 94);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
     }
 
 

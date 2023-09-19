@@ -4,6 +4,8 @@
 ### 打包方式
 > 1. 运行TesterSwingApplication，生成EasyScript_UI_Main的辅助代码
 > 2. maven -> package
+>> 2.1 先执行一次test-parent级别的package
+>> 2.2 再执行tester-swing的compile，然后再package
 > 3. 拿到打包好的jar，复制到C:\Users\18883\Desktop\near2\MyDetect下面
 > 4. 启动
 >   1. 启动文件见：resources/bootFile

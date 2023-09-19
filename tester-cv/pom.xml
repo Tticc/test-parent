@@ -15,6 +15,13 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.tester</groupId>
+            <artifactId>tester-base-dto</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.tester</groupId>
             <artifactId>tester-common</artifactId>

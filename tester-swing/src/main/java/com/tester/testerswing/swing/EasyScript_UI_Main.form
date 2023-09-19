@@ -402,7 +402,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="跑路"/>
+          <text value="开绕"/>
         </properties>
       </component>
       <component id="8b29a" class="javax.swing.JButton" binding="open_return_sai">
@@ -421,7 +421,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="跑路"/>
+          <text value="开绕"/>
         </properties>
       </component>
       <component id="72e9" class="javax.swing.JButton" binding="open_return_colos">
@@ -440,7 +440,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="跑路"/>
+          <text value="开绕"/>
         </properties>
       </component>
       <component id="31144" class="javax.swing.JButton" binding="auto_start">
