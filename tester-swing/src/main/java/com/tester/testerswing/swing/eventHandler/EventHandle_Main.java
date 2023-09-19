@@ -344,24 +344,24 @@ public class EventHandle_Main {
         // tab0 切换 生产tab
         RobotHelper.move(tab0.getX(), tab0.getY(), 94);
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(600, 870));
 
         // building 选中建筑
         RobotHelper.move(building.getX(), building.getY(), 88);
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(330, 370));
 
         // around 环绕建筑
         RobotHelper.move(around.getX(), around.getY(), 100);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(50, 200));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(450, 600));
 
         // tab1 切换 作战tab
         RobotHelper.move(tab1.getX(), tab1.getY(), 100);
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(1060, 1100));
     }
 
 
@@ -376,7 +376,7 @@ public class EventHandle_Main {
         // speedUp 加速
         RobotHelper.move(speedUp.getX(), speedUp.getY(), 94);
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(815, 970));
 
         // release 释放无人机
         RobotHelper.move(drone.getX(), drone.getY(), 94);
