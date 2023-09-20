@@ -220,6 +220,52 @@ public class EventHandle_Main {
         });
 
 
+
+
+        // 设置 找回无人机 - silot
+        JButton silot_link = script.getSilot_link();
+        silot_link.addActionListener((e) -> {
+            try {
+                // 打开
+                openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
+                // 联系 & 回收无人机
+                linkDrone();
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 设置 找回无人机 - sai
+        JButton sai_link = script.getSai_link();
+        sai_link.addActionListener((e) -> {
+            try {
+                // 打开
+                openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
+                // 联系 & 回收无人机
+                linkDrone();
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 设置 找回无人机 - colos
+        JButton colos_link = script.getColos_link();
+        colos_link.addActionListener((e) -> {
+            try {
+                // 打开
+                openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+                // 联系 & 回收无人机
+                linkDrone();
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+
+
     }
 
     // sai 操作处理
@@ -441,6 +487,7 @@ public class EventHandle_Main {
      *
      */
     public static void toAround(){
+        RobotHelper.delay(GaussianHelper.getGaussianInt(400, 470));
         // tab0 切换 生产tab
         RobotHelper.move(common_building_tab.getX(), common_building_tab.getY(), 94);
         RobotHelper.mouseLeftPress();
@@ -502,5 +549,20 @@ public class EventHandle_Main {
         RobotHelper.delay(GaussianHelper.getGaussianInt(900, 970));
     }
 
+
+    /**
+     * 回收无人机
+     */
+    public static void linkDrone(){
+
+        RobotHelper.delay(GaussianHelper.getGaussianInt(400, 470));
+        // 联系无人机
+        RobotHelper.keyPress(KeyEvent.VK_N);
+        RobotHelper.delay(GaussianHelper.getGaussianInt(500, 670));
+
+        // 回收无人机
+        RobotHelper.keyPress(KeyEvent.VK_R);
+        RobotHelper.delay(GaussianHelper.getGaussianInt(800, 870));
+    }
 
 }

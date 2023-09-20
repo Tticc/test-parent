@@ -24,7 +24,7 @@
     <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
-    <rowspec value="top:10dlu:noGrow"/>
+    <rowspec value="top:18dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <colspec value="fill:max(d;4px):noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
@@ -535,6 +535,33 @@
         </constraints>
         <properties>
           <text value="全开绕"/>
+        </properties>
+      </component>
+      <component id="a2195" class="javax.swing.JButton" binding="silot_link">
+        <constraints>
+          <grid row="22" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="联系"/>
+        </properties>
+      </component>
+      <component id="de196" class="javax.swing.JButton" binding="sai_link">
+        <constraints>
+          <grid row="22" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="联系"/>
+        </properties>
+      </component>
+      <component id="715e6" class="javax.swing.JButton" binding="colos_link">
+        <constraints>
+          <grid row="22" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="联系"/>
         </properties>
       </component>
     </children>
