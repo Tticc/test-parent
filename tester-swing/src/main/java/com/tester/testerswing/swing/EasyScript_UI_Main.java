@@ -67,6 +67,8 @@ public class EasyScript_UI_Main {
     private JButton open_end_silot;
     private JButton open_end_sai;
     private JButton open_end_colos;
+    private JButton all_end;
+    private JButton all_start;
 
 
     Boot boot = new Boot();

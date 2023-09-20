@@ -18,9 +18,9 @@ import java.awt.event.KeyEvent;
 public class EventHandle_Main {
 
 
-    public static PointInfoDTO common_release_drond1 = new PointInfoDTO().setX(1892).setY(770);
-    public static PointInfoDTO common_release_drond2 = new PointInfoDTO().setX(1900).setY(780);
-    public static GaussianPointInfoDTO common_release_drond = new GaussianPointInfoDTO().setSt(common_release_drond1).setEd(common_release_drond2);
+    public static PointInfoDTO common_release_drone1 = new PointInfoDTO().setX(1892).setY(770);
+    public static PointInfoDTO common_release_drone2 = new PointInfoDTO().setX(1900).setY(780);
+    public static GaussianPointInfoDTO common_release_drone = new GaussianPointInfoDTO().setSt(common_release_drone1).setEd(common_release_drone2);
 
     public static PointInfoDTO common_building_tab1 = new PointInfoDTO().setX(1706).setY(230);
     public static PointInfoDTO common_building_tab2 = new PointInfoDTO().setX(1730).setY(233);
@@ -107,9 +107,9 @@ public class EventHandle_Main {
                 // 打开
                 openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
                 // 选中环绕
-                toAround(common_building_tab,common_building,common_around,common_fighting_tab);
+                toAround();
                 // 加速 释放无人机
-                speedUpAndDrone(common_speedUp,common_release_drond);
+                speedUpAndDrone();
 
             } catch (Exception exception) {
                 exception.printStackTrace();
@@ -125,7 +125,7 @@ public class EventHandle_Main {
                 // 打开
                 openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
                 // 选中靠近 & 回收无人机
-                toApproach(common_building_tab,common_approach);
+                toApproach();
 
             } catch (Exception exception) {
                 exception.printStackTrace();
@@ -139,7 +139,7 @@ public class EventHandle_Main {
                 // 打开
                 openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
                 // 选中靠近 & 回收无人机
-                toApproach(common_building_tab,common_approach);
+                toApproach();
 
             } catch (Exception exception) {
                 exception.printStackTrace();
@@ -153,7 +153,66 @@ public class EventHandle_Main {
                 // 打开
                 openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
                 // 选中靠近 & 回收无人机
-                toApproach(common_building_tab,common_approach);
+                toApproach();
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+
+
+
+        // 全部结束
+        JButton all_end = script.getAll_end();
+        all_end.addActionListener((e) -> {
+            try {
+                // 打开 silot
+                openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
+                // 选中靠近 & 回收无人机
+                toApproach();
+
+                // 打开 sai
+                openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
+                // 选中靠近 & 回收无人机
+                toApproach();
+
+                // 打开 colos
+                openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+                // 选中靠近 & 回收无人机
+                toApproach();
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+
+
+        // 全部结束
+        JButton all_start = script.getAll_start();
+        all_start.addActionListener((e) -> {
+            try {
+                // 打开 silot
+                openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
+                // 选中环绕
+                toAround();
+                // 加速 释放无人机
+                speedUpAndDrone();
+
+                // 打开 sai
+                openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
+                // 选中环绕
+                toAround();
+                // 加速 释放无人机
+                speedUpAndDrone();
+
+                // 打开 colos
+                openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+                // 选中环绕
+                toAround();
+                // 加速 释放无人机
+                speedUpAndDrone();
 
             } catch (Exception exception) {
                 exception.printStackTrace();
@@ -215,9 +274,9 @@ public class EventHandle_Main {
             try {
                 openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
                 // 选中环绕
-                toAround(common_building_tab,common_building,common_around,common_fighting_tab);
+                toAround();
                 // 加速 释放无人机
-                speedUpAndDrone(common_speedUp,common_release_drond);
+                speedUpAndDrone();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -276,9 +335,9 @@ public class EventHandle_Main {
             try {
                 openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
                 // 选中环绕
-                toAround(common_building_tab,common_building,common_around,common_fighting_tab);
+                toAround();
                 // 加速 释放无人机
-                speedUpAndDrone(common_speedUp,common_release_drond);
+                speedUpAndDrone();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -380,36 +439,27 @@ public class EventHandle_Main {
 
     /**
      *
-     * @param tab0 生产tab
-     * @param building 环绕的建筑
-     * @param around 环绕
-     * @param tab1 作战tab
      */
-    public static void toAround(GaussianPointInfoDTO tab0,
-                         GaussianPointInfoDTO building,
-                         GaussianPointInfoDTO around,
-                         GaussianPointInfoDTO tab1){
-
-
+    public static void toAround(){
         // tab0 切换 生产tab
-        RobotHelper.move(tab0.getX(), tab0.getY(), 94);
+        RobotHelper.move(common_building_tab.getX(), common_building_tab.getY(), 94);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(600, 870));
 
         // building 选中建筑
-        RobotHelper.move(building.getX(), building.getY(), 88);
+        RobotHelper.move(common_building.getX(), common_building.getY(), 88);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(330, 370));
 
         // around 环绕建筑
-        RobotHelper.move(around.getX(), around.getY(), 100);
+        RobotHelper.move(common_around.getX(), common_around.getY(), 100);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(450, 600));
 
         // tab1 切换 作战tab
-        RobotHelper.move(tab1.getX(), tab1.getY(), 100);
+        RobotHelper.move(common_fighting_tab.getX(), common_fighting_tab.getY(), 100);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(1060, 1100));
     }
@@ -417,46 +467,39 @@ public class EventHandle_Main {
 
     /**
      *
-     * @param speedUp 加速按钮
-     * @param drone 释放无人机
      */
-    public static void speedUpAndDrone(GaussianPointInfoDTO speedUp,
-                        GaussianPointInfoDTO drone){
+    public static void speedUpAndDrone(){
 
         // speedUp 加速
-        RobotHelper.move(speedUp.getX(), speedUp.getY(), 94);
+        RobotHelper.move(common_speedUp.getX(), common_speedUp.getY(), 94);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(815, 970));
 
         // release 释放无人机
-        RobotHelper.move(drone.getX(), drone.getY(), 94);
+        RobotHelper.move(common_release_drone.getX(), common_release_drone.getY(), 94);
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(615, 770));
     }
 
 
     /**
      *
-     * @param tab0 生产tab
-     * @param approach 接近
      */
-    public static void toApproach(GaussianPointInfoDTO tab0,
-                                GaussianPointInfoDTO approach){
-
-
+    public static void toApproach(){
 
         // 靠近建筑
-        RobotHelper.move(approach.getX(), approach.getY(), 88);
+        RobotHelper.move(common_approach.getX(), common_approach.getY(), 88);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(330, 370));
 
         // tab0 切换 生产tab
-        RobotHelper.move(tab0.getX(), tab0.getY(), 94);
+        RobotHelper.move(common_building_tab.getX(), common_building_tab.getY(), 94);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(600, 870));
 
         // 回收无人机
         RobotHelper.keyPress(KeyEvent.VK_R);
+        RobotHelper.delay(GaussianHelper.getGaussianInt(900, 970));
     }
 
 
