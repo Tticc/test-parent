@@ -81,6 +81,7 @@ public class RobotHelper {
         r.mouseRelease(InputEvent.BUTTON1_MASK);
     }
 
+
     public static void delay(int ms){
         r.delay(ms);
     }
@@ -110,6 +111,7 @@ public class RobotHelper {
 
     public static void keyPress(int key){
         r.keyPress(key);
+        r.delay(GaussianHelper.getGaussianInt(40)+35);
         r.keyRelease(key);
     }
 

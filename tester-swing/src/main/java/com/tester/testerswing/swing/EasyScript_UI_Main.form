@@ -22,6 +22,8 @@
     <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:6dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
     <colspec value="fill:max(d;4px):noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:90px:noGrow"/>
@@ -486,6 +488,33 @@
         </constraints>
         <properties>
           <text value="false"/>
+        </properties>
+      </component>
+      <component id="f12f5" class="javax.swing.JButton" binding="open_end_silot">
+        <constraints>
+          <grid row="22" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="结束"/>
+        </properties>
+      </component>
+      <component id="76bfe" class="javax.swing.JButton" binding="open_end_sai">
+        <constraints>
+          <grid row="22" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="结束"/>
+        </properties>
+      </component>
+      <component id="5757e" class="javax.swing.JButton" binding="open_end_colos">
+        <constraints>
+          <grid row="22" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="结束"/>
         </properties>
       </component>
     </children>

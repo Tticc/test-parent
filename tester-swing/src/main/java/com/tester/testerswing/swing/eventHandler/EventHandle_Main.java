@@ -7,6 +7,7 @@ import com.tester.testerswing.robot.RobotHelper;
 import com.tester.testerswing.swing.EasyScript_UI_Main;
 
 import javax.swing.*;
+import java.awt.event.KeyEvent;
 
 /**
  * main 初始化
@@ -42,6 +43,9 @@ public class EventHandle_Main {
     public static GaussianPointInfoDTO common_building = new GaussianPointInfoDTO().setSt(common_building1).setEd(common_building2);
 
 
+    public static PointInfoDTO common_approach1 = new PointInfoDTO().setX(1701).setY(161);
+    public static PointInfoDTO common_approach2 = new PointInfoDTO().setX(1709).setY(171);
+    public static GaussianPointInfoDTO common_approach = new GaussianPointInfoDTO().setSt(common_approach1).setEd(common_approach2);
 
 
     public static void handle_main(EasyScript_UI_Main script) {
@@ -111,6 +115,52 @@ public class EventHandle_Main {
                 exception.printStackTrace();
             }
         });
+
+
+
+        // 设置 end 按钮事件 - silot
+        JButton open_end_silot = script.getOpen_end_silot();
+        open_end_silot.addActionListener((e) -> {
+            try {
+                // 打开
+                openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
+                // 选中靠近 & 回收无人机
+                toApproach(common_building_tab,common_approach);
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 设置 end 按钮事件 - sai
+        JButton open_end_sai = script.getOpen_end_sai();
+        open_end_sai.addActionListener((e) -> {
+            try {
+                // 打开
+                openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
+                // 选中靠近 & 回收无人机
+                toApproach(common_building_tab,common_approach);
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 设置 end 按钮事件 - colos
+        JButton open_end_colos = script.getOpen_end_colos();
+        open_end_colos.addActionListener((e) -> {
+            try {
+                // 打开
+                openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+                // 选中靠近 & 回收无人机
+                toApproach(common_building_tab,common_approach);
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+
     }
 
     // sai 操作处理
@@ -382,6 +432,31 @@ public class EventHandle_Main {
         RobotHelper.move(drone.getX(), drone.getY(), 94);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+    }
+
+
+    /**
+     *
+     * @param tab0 生产tab
+     * @param approach 接近
+     */
+    public static void toApproach(GaussianPointInfoDTO tab0,
+                                GaussianPointInfoDTO approach){
+
+
+
+        // 靠近建筑
+        RobotHelper.move(approach.getX(), approach.getY(), 88);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(330, 370));
+
+        // tab0 切换 生产tab
+        RobotHelper.move(tab0.getX(), tab0.getY(), 94);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(600, 870));
+
+        // 回收无人机
+        RobotHelper.keyPress(KeyEvent.VK_R);
     }
 
 
