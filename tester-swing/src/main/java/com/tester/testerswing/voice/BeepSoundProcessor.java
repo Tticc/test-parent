@@ -18,7 +18,7 @@ public class BeepSoundProcessor {
 
     private static boolean started = true;
 
-    private static BlockingQueue<MessageTaskDTO> tasks = new LinkedBlockingQueue<>(2);
+    private static BlockingQueue<MessageTaskDTO> tasks = new LinkedBlockingQueue<>(1);
 
     private static Thread t = new Thread(() -> {
         try {
@@ -46,7 +46,7 @@ public class BeepSoundProcessor {
     public static boolean putTask(MessageTaskDTO task) {
         boolean offer = tasks.offer(task);
         if (!offer) {
-            System.out.println("队列已满");
+//            System.out.println("队列已满");
         }
         return offer;
     }
