@@ -68,18 +68,6 @@ public class EventHandle_Main {
             script.getSilot_status().setText("true");
         });
 
-        // 暂停 silot info
-        script.getSilot_info_pause().addActionListener((e) -> {
-            script.getAccountInfoList().get(0).setNeedInfo(false);
-            script.getSilot_info_status().setText("false");
-        });
-        // 继续 silot info
-        script.getSilot_info_start().addActionListener((e) -> {
-            script.getAccountInfoList().get(0).setNeedInfo(true);
-            script.getSilot_info_status().setText("true");
-        });
-
-
         // 设置 open 按钮事件
         JButton open_silot = script.getOpen_silot();
         open_silot.addActionListener((e) -> {
@@ -89,16 +77,7 @@ public class EventHandle_Main {
                 exception.printStackTrace();
             }
         });
-        // 设置 return 按钮事件
-        JButton open_return_silot = script.getOpen_return_silot();
-        open_return_silot.addActionListener((e) -> {
-            try {
-                openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
-                returnOpe(EventHandle_Silot.silot_return_p1, EventHandle_Silot.silot_return_p2, EventHandle_Silot.silot_return_p3, EventHandle_Silot.silot_main_view_p1);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-        });
+
 
         // 设置 run 按钮事件
         JButton open_run_silot = script.getOpen_run_silot();
@@ -282,16 +261,6 @@ public class EventHandle_Main {
             script.getSai_status().setText("true");
         });
 
-        // 暂停 sai info
-        script.getSai_info_pause().addActionListener((e) -> {
-            script.getAccountInfoList().get(1).setNeedInfo(false);
-            script.getSai_info_status().setText("false");
-        });
-        // 继续 sai info
-        script.getSai_info_start().addActionListener((e) -> {
-            script.getAccountInfoList().get(1).setNeedInfo(true);
-            script.getSai_info_status().setText("true");
-        });
 
         // 设置 open 按钮事件
         JButton open_sai = script.getOpen_sai();
@@ -303,16 +272,6 @@ public class EventHandle_Main {
             }
         });
 
-        // 设置 return 按钮事件
-        JButton open_return_sai = script.getOpen_return_sai();
-        open_return_sai.addActionListener((e) -> {
-            try {
-                openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
-                returnOpe(EventHandle_Sai.sai_return_p1, EventHandle_Sai.sai_return_p2, EventHandle_Sai.sai_return_p3, EventHandle_Sai.sai_main_view_p1);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-        });
 
         // 设置 run 按钮事件
         JButton open_run_sai = script.getOpen_run_sai();
@@ -343,16 +302,6 @@ public class EventHandle_Main {
             script.getColos_status().setText("true");
         });
 
-        // 暂停 colos info
-        script.getColos_info_pause().addActionListener((e) -> {
-            script.getAccountInfoList().get(2).setNeedInfo(false);
-            script.getColos_info_status().setText("false");
-        });
-        // 继续 colos info
-        script.getColos_info_start().addActionListener((e) -> {
-            script.getAccountInfoList().get(2).setNeedInfo(true);
-            script.getColos_info_status().setText("true");
-        });
 
         // 设置 open 按钮事件
         JButton open_colos = script.getOpen_colos();
@@ -364,16 +313,6 @@ public class EventHandle_Main {
             }
         });
 
-        // 设置 return 按钮事件
-        JButton open_return_colos = script.getOpen_return_colos();
-        open_return_colos.addActionListener((e) -> {
-            try {
-                openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
-                returnOpe(EventHandle_Colos.colos_return_p1, EventHandle_Colos.colos_return_p2, EventHandle_Colos.colos_return_p3, EventHandle_Colos.colos_main_view_p1);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-        });
 
         // 设置 run 按钮事件
         JButton open_run_colos = script.getOpen_run_colos();
@@ -397,31 +336,6 @@ public class EventHandle_Main {
         RobotHelper.mouseLeftPress();
     }
 
-    public static void returnOpe(GaussianPointInfoDTO p1, GaussianPointInfoDTO p2, GaussianPointInfoDTO p3, GaussianPointInfoDTO mvP1) {
-        RobotHelper.move(p1.getX(), p1.getY(), 213);
-        RobotHelper.mouseLeftPress();
-        RobotHelper.move(p2.getX(), p2.getY(), 237);
-        RobotHelper.mouseRightPress();
-        RobotHelper.move(p3.getX(), p3.getY(), 513);
-        RobotHelper.mouseLeftPress();
-        RobotHelper.move(mvP1.getX(), mvP1.getY(), 517);
-        RobotHelper.mouseLeftPress();
-    }
-
-    public static void runOpe(GaussianPointInfoDTO p1, GaussianPointInfoDTO p2, GaussianPointInfoDTO p3, GaussianPointInfoDTO mvP1) {
-        RobotHelper.move(p1.getX(), p1.getY(), 331);
-        RobotHelper.mouseLeftPress();
-        RobotHelper.move(p2.getX(), p2.getY(), 386);
-        RobotHelper.mouseLeftPress();
-        // 点击三次
-        RobotHelper.move(p3.getX(), p3.getY(), 627);
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(70);
-    }
 
     public static void quickRunOpe(GaussianPointInfoDTO p1,
                                    GaussianPointInfoDTO p2,

@@ -28,37 +28,22 @@ public class EasyScript_UI_Main {
     private JButton sai_start;
     private JLabel sai_status;
     private JLabel silot_status;
-    private JLabel point_input_info;
     private JLabel point_print;
     private JLabel check_status;
     private JButton open_silot;
-    private JButton open_return_silot;
     private JButton open_sai;
-    private JButton open_return_sai;
     private JButton open_run_silot;
     private JButton open_run_sai;
     private JButton onTopReplica_start;
-    private JLabel red_input_info;
-    private JTextField red_input;
     private JLabel red_point_print;
     private JButton colos_start;
     private JButton open_colos;
-    private JButton open_return_colos;
     private JButton open_run_colos;
     private JButton colos_pause;
     private JLabel colos_status;
     private JButton onTopReplica_start1;
     private JButton onTopReplica_start2;
     private JButton onTopReplica_start3;
-    private JButton silot_info_pause;
-    private JButton silot_info_start;
-    private JButton sai_info_pause;
-    private JButton sai_info_start;
-    private JButton colos_info_pause;
-    private JButton colos_info_start;
-    private JLabel silot_info_status;
-    private JLabel sai_info_status;
-    private JLabel colos_info_status;
     private JButton auto_start;
     private JButton auto_stop;
     private JLabel auto_status;
@@ -83,12 +68,14 @@ public class EasyScript_UI_Main {
     }
 
     public void afterInit(Silot_Input silot_input, Sai_Input sai_input) {
-        // 初始化公共监控事件
+        // 初始化公共监控事件。 启动、刷新、投屏、批量true等按钮初始化
         InitCommonEventHelper.initCommonEvent(this);
 
+        // 用于录入点阵用，后面点阵固定，已废弃 - 2023-9-21 15:19:08
         // 初始化 silot 录入事件
         EventHandle_Silot.handle_silot(silot_input);
 
+        // 废弃 - 2023-9-21 15:19:08
         // 初始化 sai 录入事件
         EventHandle_Sai.handle_sai(sai_input);
 

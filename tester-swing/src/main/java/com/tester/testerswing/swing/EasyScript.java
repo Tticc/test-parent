@@ -31,6 +31,13 @@ public class EasyScript {
         Sai_Input sai_input = new Sai_Input();
         JPanel sai_input_panel = sai_input.getSai_input_panel();
 
+        /**
+         * ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+         * ！！！！！！！！！！！！             ！！！！！！！！！！！！
+         * ！！！！！！！！！！！！   启动脚本   ！！！！！！！！！！！！
+         * ！！！！！！！！！！！！             ！！！！！！！！！！！！
+         * ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+         */
         EasyScript_UI_Main easyScript_uiMain = new EasyScript_UI_Main().start(silot_input, sai_input);
         JPanel main = easyScript_uiMain.getMain();
 

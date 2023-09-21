@@ -73,11 +73,12 @@ public class ImgBoot {
     }
 
     /**
-     * 比较图片并通知后续处理
-     *
+     * 通过图片比较本地数量变化，并通知后续处理
+     * <br/>已废弃
      * @Date 9:49 2022/8/2
      * @Author 温昌营
      **/
+    @Deprecated
     public static void checkNumber(AccountInfo accountInfo, int imgType) throws Exception {
         if (!accountInfo.isNeedInfo()) {
             // 无需通知，直接返回
@@ -106,7 +107,11 @@ public class ImgBoot {
 
 
     }
-
+    /**
+     * 通过图片检查本地进红状态。后续通知或直接跑路处理
+     * @Date 9:49 2022/8/11
+     * @Author 温昌营
+     **/
     public static void checkIfNeedWarning(AccountInfo accountInfo, int imgType) throws Exception {
         if (!accountInfo.isNeedWarn()) {
             // 无需告警，直接返回
@@ -125,9 +130,9 @@ public class ImgBoot {
                     accountInfo.setLastQuickRunTime(new Date());
                     accountInfo.getConsumer().accept(null);
 
-                    // 发消息
-                    QywxMessageTaskDTO qywxMessageTaskDTO = new QywxMessageTaskDTO(accountInfo.getAccount()+"_"+DateUtil.dateFormat(new Date()));
-                    BeepSoundProcessor.putTask(qywxMessageTaskDTO);
+                    // 发消息 - 企业微信消息不可靠，取消 2023-9-21 14:58:58
+//                    QywxMessageTaskDTO qywxMessageTaskDTO = new QywxMessageTaskDTO(accountInfo.getAccount()+"_"+DateUtil.dateFormat(new Date()));
+//                    BeepSoundProcessor.putTask(qywxMessageTaskDTO);
                 }
             }else {
                 sendVoice(accountInfo.getWarnMsg(), true);
@@ -142,6 +147,14 @@ public class ImgBoot {
                 || ColorDetectTool.detectRed(src, (targetMat) -> OpenCVHelper.saveMat2Img(basePath, targetMat, getCountPrefix(accountInfo.getRefreshCount().get()) + "warning_red.png"))
                 || ColorDetectTool.detectYellow(src, (targetMat) -> OpenCVHelper.saveMat2Img(basePath, targetMat, getCountPrefix(accountInfo.getRefreshCount().get()) + "warning_yellow.png"));
     }
+
+    /**
+     * 判断是否本地进红
+     * @param src
+     * @param accountInfo
+     * @return
+     * @throws BusinessException
+     */
     private static boolean doCheckIfNeedWarning(Mat src, AccountInfo accountInfo) throws BusinessException {
         String basePath = getBasePath(accountInfo.getAccount());
         return ColorDetectTool.doDetect(src,ColorDetectTool.defaultMinValues,ColorDetectTool.defaultMaxValues,(targetMat) -> OpenCVHelper.saveMat2Img(basePath, targetMat, getCountPrefix(accountInfo.getRefreshCount().get()) + "_warning.png"));

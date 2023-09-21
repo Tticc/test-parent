@@ -120,18 +120,18 @@ public class Boot {
     }
 
     private void startMySelf() {
-        int delay = 2;
-        int period = 1;
+        int delay = 2000;
+        int period = 500;
         checkerExecutorService.scheduleAtFixedRate(() -> {
                     try {
                         for (AccountInfo accountInfo : accountInfoList) {
                             // 监控数量取原图
                             ImgBoot.checkIfNeedWarning(accountInfo, Imgcodecs.IMREAD_UNCHANGED);
                         }
-                        for (AccountInfo accountInfo : accountInfoList) {
-                            // 监控数量取灰度图
-                            ImgBoot.checkNumber(accountInfo, Imgcodecs.IMREAD_GRAYSCALE);
-                        }
+//                        for (AccountInfo accountInfo : accountInfoList) {
+//                            // 监控数量取灰度图，比较本地数量变化 - 已废弃
+//                            ImgBoot.checkNumber(accountInfo, Imgcodecs.IMREAD_GRAYSCALE);
+//                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -139,7 +139,7 @@ public class Boot {
                 }
                 , delay
                 , period
-                , TimeUnit.SECONDS);
+                , TimeUnit.MICROSECONDS);
     }
 
     public boolean isStarted() {

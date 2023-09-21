@@ -22,7 +22,16 @@ import java.util.function.Supplier;
 public class InitCommonEventHelper {
 
     public static void initCommonEvent(EasyScript_UI_Main script) {
-        // 初始化检测监控
+
+        // 1 直接自动启动监控
+        try {
+            script.getBoot().start();
+            script.getCheck_status().setText("检测中");
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        // 1.1 同时支持手动启动
         script.getChecking().addActionListener((e) -> {
             try {
                 script.getBoot().start();
@@ -31,7 +40,7 @@ public class InitCommonEventHelper {
                 exception.printStackTrace();
             }
         });
-        // 刷新事件
+        // 2 刷新事件
         script.getRefresh().addActionListener((e) -> {
             try {
                 String refresh = script.getBoot().refresh();
@@ -41,6 +50,7 @@ public class InitCommonEventHelper {
             }
         });
 
+        // 已废弃 2023-9-21 15:16:06
         // 录入人数点阵 事件。 1=silot起点，2=silot终点；3=sai起点，4=sai终点；5=colos起点，6=colos终点
         script.getPoint_input().addKeyListener(new KeyListener() {
             @Override
@@ -72,48 +82,6 @@ public class InitCommonEventHelper {
                     return pointInfoDTO;
                 });
                 script.getPoint_print().setText(s);
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
-        });
-
-        // 录入Red点阵 事件。 1=silot起点，2=silot终点；3=sai起点，4=sai终点；5=colos起点，6=colos终点
-        script.getRed_input().addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                // keyChar： 0=48, 1=49, 2=50
-                char keyChar = e.getKeyChar();
-                List<AccountInfo> accountInfoList = script.getAccountInfoList();
-                String s = setPoint(keyChar, () -> {
-                    PointInfoDTO pointInfoDTO = null;
-                    if (keyChar == 49) {
-                        AccountInfo accountInfo = accountInfoList.get(0);
-                        pointInfoDTO = accountInfo.getRedSt();
-                    } else if (keyChar == 50) {
-                        AccountInfo accountInfo = accountInfoList.get(0);
-                        pointInfoDTO = accountInfo.getRedEd();
-                    } else if (keyChar == 51) {
-                        AccountInfo accountInfo = accountInfoList.get(1);
-                        pointInfoDTO = accountInfo.getRedSt();
-                    } else if (keyChar == 52) {
-                        AccountInfo accountInfo = accountInfoList.get(1);
-                        pointInfoDTO = accountInfo.getRedEd();
-                    }else if (keyChar == 53) {
-                        AccountInfo accountInfo = accountInfoList.get(2);
-                        pointInfoDTO = accountInfo.getRedSt();
-                    }else if (keyChar == 54) {
-                        AccountInfo accountInfo = accountInfoList.get(2);
-                        pointInfoDTO = accountInfo.getRedEd();
-                    }
-                    return pointInfoDTO;
-                });
-                script.getRed_point_print().setText(s);
             }
 
             @Override

@@ -22,8 +22,6 @@
     <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:6dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
-    <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:18dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <colspec value="fill:max(d;4px):noGrow"/>
@@ -84,6 +82,8 @@
           <forms defaultalign-horz="false"/>
         </constraints>
         <properties>
+          <editable value="false"/>
+          <enabled value="false"/>
           <text value=""/>
         </properties>
       </component>
@@ -113,15 +113,6 @@
         </constraints>
         <properties>
           <text value="false"/>
-        </properties>
-      </component>
-      <component id="28543" class="javax.swing.JLabel" binding="point_input_info">
-        <constraints>
-          <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="15" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="人数点阵"/>
         </properties>
       </component>
       <component id="2a836" class="javax.swing.JLabel" binding="point_print">
@@ -206,24 +197,6 @@
           <text value="投屏"/>
         </properties>
       </component>
-      <component id="7fdb7" class="javax.swing.JLabel" binding="red_input_info">
-        <constraints>
-          <grid row="10" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <text value="Red"/>
-        </properties>
-      </component>
-      <component id="a9d57" class="javax.swing.JTextField" binding="red_input">
-        <constraints>
-          <grid row="10" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties/>
-      </component>
       <component id="3f3cf" class="javax.swing.JLabel" binding="red_point_print">
         <constraints>
           <grid row="8" column="8" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -288,99 +261,6 @@
           <text value="投屏中"/>
         </properties>
       </component>
-      <component id="8c324" class="javax.swing.JButton" binding="silot_info_pause">
-        <constraints>
-          <grid row="12" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="info停止"/>
-          <visible value="false"/>
-        </properties>
-      </component>
-      <component id="cf0bd" class="javax.swing.JButton" binding="silot_info_start">
-        <constraints>
-          <grid row="14" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="info开始"/>
-          <verticalAlignment value="0"/>
-          <visible value="false"/>
-        </properties>
-      </component>
-      <component id="d2794" class="javax.swing.JButton" binding="sai_info_pause">
-        <constraints>
-          <grid row="12" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="info停止"/>
-          <visible value="false"/>
-        </properties>
-      </component>
-      <component id="8dfbc" class="javax.swing.JButton" binding="sai_info_start">
-        <constraints>
-          <grid row="14" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="info开始"/>
-          <verticalAlignment value="0"/>
-          <visible value="false"/>
-        </properties>
-      </component>
-      <component id="6595" class="javax.swing.JButton" binding="colos_info_pause">
-        <constraints>
-          <grid row="12" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="info停止"/>
-          <visible value="false"/>
-        </properties>
-      </component>
-      <component id="f36a2" class="javax.swing.JButton" binding="colos_info_start">
-        <constraints>
-          <grid row="14" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="info开始"/>
-          <verticalAlignment value="0"/>
-          <visible value="false"/>
-        </properties>
-      </component>
-      <component id="6b059" class="javax.swing.JLabel" binding="silot_info_status">
-        <constraints>
-          <grid row="16" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="25" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="false"/>
-          <visible value="false"/>
-        </properties>
-      </component>
-      <component id="823c6" class="javax.swing.JLabel" binding="sai_info_status">
-        <constraints>
-          <grid row="16" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="25" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="false"/>
-          <visible value="false"/>
-        </properties>
-      </component>
-      <component id="ca147" class="javax.swing.JLabel" binding="colos_info_status">
-        <constraints>
-          <grid row="16" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="25" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="false"/>
-          <visible value="false"/>
-        </properties>
-      </component>
       <component id="3f35d" class="javax.swing.JLabel" binding="auto_status">
         <constraints>
           <grid row="8" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -388,16 +268,6 @@
         </constraints>
         <properties>
           <text value="false"/>
-        </properties>
-      </component>
-      <component id="8e4d3" class="javax.swing.JButton" binding="open_return_silot">
-        <constraints>
-          <grid row="20" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="回收"/>
-          <visible value="false"/>
         </properties>
       </component>
       <component id="81b36" class="javax.swing.JButton" binding="open_run_silot">
@@ -409,16 +279,6 @@
           <text value="开绕"/>
         </properties>
       </component>
-      <component id="8b29a" class="javax.swing.JButton" binding="open_return_sai">
-        <constraints>
-          <grid row="20" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="回收"/>
-          <visible value="false"/>
-        </properties>
-      </component>
       <component id="fb3dd" class="javax.swing.JButton" binding="open_run_sai">
         <constraints>
           <grid row="18" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -426,16 +286,6 @@
         </constraints>
         <properties>
           <text value="开绕"/>
-        </properties>
-      </component>
-      <component id="72e9" class="javax.swing.JButton" binding="open_return_colos">
-        <constraints>
-          <grid row="20" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="回收"/>
-          <visible value="false"/>
         </properties>
       </component>
       <component id="7e56b" class="javax.swing.JButton" binding="open_run_colos">
@@ -494,7 +344,7 @@
       </component>
       <component id="f12f5" class="javax.swing.JButton" binding="open_end_silot">
         <constraints>
-          <grid row="22" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="20" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -503,7 +353,7 @@
       </component>
       <component id="76bfe" class="javax.swing.JButton" binding="open_end_sai">
         <constraints>
-          <grid row="22" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="20" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -512,7 +362,7 @@
       </component>
       <component id="5757e" class="javax.swing.JButton" binding="open_end_colos">
         <constraints>
-          <grid row="22" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="20" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -521,7 +371,7 @@
       </component>
       <component id="5d65b" class="javax.swing.JButton" binding="all_end">
         <constraints>
-          <grid row="24" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="22" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -530,7 +380,7 @@
       </component>
       <component id="f4c42" class="javax.swing.JButton" binding="all_start">
         <constraints>
-          <grid row="24" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="22" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -539,7 +389,7 @@
       </component>
       <component id="a2195" class="javax.swing.JButton" binding="silot_link">
         <constraints>
-          <grid row="22" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="20" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -548,7 +398,7 @@
       </component>
       <component id="de196" class="javax.swing.JButton" binding="sai_link">
         <constraints>
-          <grid row="22" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="20" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -557,7 +407,7 @@
       </component>
       <component id="715e6" class="javax.swing.JButton" binding="colos_link">
         <constraints>
-          <grid row="22" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="20" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
