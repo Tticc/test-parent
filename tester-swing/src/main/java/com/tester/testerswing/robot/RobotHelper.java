@@ -92,7 +92,8 @@ public class RobotHelper {
 
     public static void move(int x, int y, int delayTimes) {
         r.delay(delayTimes);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 7; i++) {
+            // 单次移动可能会错位，设置多次，提高精确度
             r.mouseMove(x, y);
             r.delay(20);
         }

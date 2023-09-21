@@ -356,35 +356,39 @@ public class EventHandle_Main {
         RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
         RobotHelper.mouseLeftPress();
 
-        // p4 停用护盾
-        RobotHelper.move(p4.getX(), p4.getY(), 127);
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(50, 200));
+        // 废弃 2023-9-21 15:28:41
+//        // p4 停用护盾
+//        RobotHelper.move(p4.getX(), p4.getY(), 127);
+//        RobotHelper.mouseLeftPress();
+//        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+//        RobotHelper.mouseLeftPress();
+//        RobotHelper.delay(GaussianHelper.getGaussianInt(50, 200));
 
-        // p5 使用电池
-        RobotHelper.move(p5.getX(), p5.getY(), 127);
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(50, 200));
+        // 废弃 2023-9-21 15:28:41
+//        // p5 使用电池
+//        RobotHelper.move(p5.getX(), p5.getY(), 127);
+//        RobotHelper.mouseLeftPress();
+//        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+//        RobotHelper.mouseLeftPress();
+//        RobotHelper.delay(GaussianHelper.getGaussianInt(50, 200));
 
-        // p6和p7 上线装备
-        RobotHelper.move(p6.getX(), p6.getY(), 127);
-        RobotHelper.mouseRightPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(250, 350));
-        RobotHelper.move(p7.getX(), p7.getY(), 127);
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(850, 950));
+        // 废弃 2023-9-21 15:28:41
+//        // p6和p7 上线装备
+//        RobotHelper.move(p6.getX(), p6.getY(), 127);
+//        RobotHelper.mouseRightPress();
+//        RobotHelper.delay(GaussianHelper.getGaussianInt(250, 350));
+//        RobotHelper.move(p7.getX(), p7.getY(), 127);
+//        RobotHelper.mouseLeftPress();
+//        RobotHelper.delay(GaussianHelper.getGaussianInt(850, 950));
 
 
+        // 废弃 2023-9-21 15:28:41
         // p6 激活装备
-        RobotHelper.move(p6.getX(), p6.getY(), 127);
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(50, 200));
+//        RobotHelper.move(p6.getX(), p6.getY(), 127);
+//        RobotHelper.mouseLeftPress();
+//        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+//        RobotHelper.mouseLeftPress();
+//        RobotHelper.delay(GaussianHelper.getGaussianInt(50, 200));
 
         // p8 进入建筑
         RobotHelper.move(p8.getX(), p8.getY(), 1034);
@@ -392,9 +396,10 @@ public class EventHandle_Main {
         RobotHelper.delay(GaussianHelper.getGaussianInt(1530, 1770));
         RobotHelper.mouseLeftPress();
 
-        // p4 启用护盾
-        RobotHelper.move(p4.getX(), p4.getY(), 327);
-        RobotHelper.mouseLeftPress();
+        // 废弃 2023-9-21 15:28:41
+//        // p4 启用护盾
+//        RobotHelper.move(p4.getX(), p4.getY(), 327);
+//        RobotHelper.mouseLeftPress();
     }
 
     /**
@@ -472,7 +477,7 @@ public class EventHandle_Main {
         RobotHelper.delay(GaussianHelper.getGaussianInt(400, 470));
         // 联系无人机
         RobotHelper.keyPress(KeyEvent.VK_N);
-        RobotHelper.delay(GaussianHelper.getGaussianInt(500, 670));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(1800, 2270));
 
         // 回收无人机
         RobotHelper.keyPress(KeyEvent.VK_R);
