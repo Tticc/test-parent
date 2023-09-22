@@ -353,7 +353,7 @@ public class EventHandle_Main {
         // p3 朝向建筑
         RobotHelper.move(p3.getX(), p3.getY(), 327);
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(130, 170));
         RobotHelper.mouseLeftPress();
 
         // 废弃 2023-9-21 15:28:41
@@ -391,15 +391,15 @@ public class EventHandle_Main {
 //        RobotHelper.delay(GaussianHelper.getGaussianInt(50, 200));
 
         // p8 进入建筑
-        RobotHelper.move(p8.getX(), p8.getY(), 1034);
+        RobotHelper.move(p8.getX(), p8.getY(), 1534);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(1530, 1770));
         RobotHelper.mouseLeftPress();
 
         // 废弃 2023-9-21 15:28:41
 //        // p4 启用护盾
-//        RobotHelper.move(p4.getX(), p4.getY(), 327);
-//        RobotHelper.mouseLeftPress();
+        RobotHelper.move(p4.getX(), p4.getY(), 327);
+        RobotHelper.mouseLeftPress();
     }
 
     /**
