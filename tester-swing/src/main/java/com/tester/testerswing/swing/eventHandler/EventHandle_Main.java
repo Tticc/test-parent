@@ -477,7 +477,7 @@ public class EventHandle_Main {
         RobotHelper.delay(GaussianHelper.getGaussianInt(400, 470));
         // 联系无人机
         RobotHelper.keyPress(KeyEvent.VK_N);
-        RobotHelper.delay(GaussianHelper.getGaussianInt(1800, 2270));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(2500, 2770));
 
         // 回收无人机
         RobotHelper.keyPress(KeyEvent.VK_R);

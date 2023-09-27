@@ -138,6 +138,21 @@ public class InitCommonEventHelper {
             script.getAccountInfoList().get(2).setNeedWarn(true);
             script.getColos_status().setText("true");
         });
+
+
+
+        // warn停止
+        script.getWarn_end().addActionListener((e) -> {
+            script.getWarn_status().setText("false");
+
+            script.getAccountInfoList().get(0).setNeedWarn(false);
+            script.getSilot_status().setText("false");
+            script.getAccountInfoList().get(1).setNeedWarn(false);
+            script.getSai_status().setText("false");
+            script.getAccountInfoList().get(2).setNeedWarn(false);
+            script.getColos_status().setText("false");
+        });
+
     }
 
 

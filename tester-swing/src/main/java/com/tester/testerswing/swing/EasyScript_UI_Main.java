@@ -57,6 +57,7 @@ public class EasyScript_UI_Main {
     private JButton silot_link;
     private JButton sai_link;
     private JButton colos_link;
+    private JButton warn_end;
 
 
     Boot boot = new Boot();
