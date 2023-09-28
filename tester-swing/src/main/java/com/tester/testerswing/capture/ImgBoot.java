@@ -135,7 +135,7 @@ public class ImgBoot {
 //                    BeepSoundProcessor.putTask(qywxMessageTaskDTO);
                 }
             }else {
-                sendVoice(accountInfo.getWarnMsg(), true);
+                sendVoice(accountInfo.getWarnMsg(), false);
             }
         }
 
