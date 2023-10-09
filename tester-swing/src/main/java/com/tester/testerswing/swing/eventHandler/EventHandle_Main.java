@@ -47,6 +47,14 @@ public class EventHandle_Main {
     public static PointInfoDTO common_approach2 = new PointInfoDTO().setX(1709).setY(171);
     public static GaussianPointInfoDTO common_approach = new GaussianPointInfoDTO().setSt(common_approach1).setEd(common_approach2);
 
+    public static PointInfoDTO all_start1 = new PointInfoDTO().setX(1235).setY(294);
+    public static PointInfoDTO all_start2 = new PointInfoDTO().setX(1258).setY(301);
+    public static GaussianPointInfoDTO all_start = new GaussianPointInfoDTO().setSt(all_start1).setEd(all_start2);
+
+    public static PointInfoDTO tool_pos1 = new PointInfoDTO().setX(1235).setY(294);
+    public static PointInfoDTO tool_pos2 = new PointInfoDTO().setX(1258).setY(301);
+    public static GaussianPointInfoDTO tool_pos = new GaussianPointInfoDTO().setSt(tool_pos1).setEd(tool_pos2);
+
 
     public static void handle_main(EasyScript_UI_Main script) {
         handle_silot(script);
@@ -89,6 +97,9 @@ public class EventHandle_Main {
                 toAround();
                 // 加速 释放无人机
                 speedUpAndDrone();
+
+                // 启动监控
+                script.getSilot_start().doClick();
 
             } catch (Exception exception) {
                 exception.printStackTrace();
@@ -193,6 +204,9 @@ public class EventHandle_Main {
                 // 加速 释放无人机
                 speedUpAndDrone();
 
+                // 启动监听
+                script.getWarn_start().doClick();
+
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -282,6 +296,8 @@ public class EventHandle_Main {
                 toAround();
                 // 加速 释放无人机
                 speedUpAndDrone();
+                // 启动监控
+                script.getSai_start().doClick();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -323,6 +339,8 @@ public class EventHandle_Main {
                 toAround();
                 // 加速 释放无人机
                 speedUpAndDrone();
+                // 启动监控
+                script.getColos_start().doClick();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -473,6 +491,12 @@ public class EventHandle_Main {
      * 回收无人机
      */
     public static void linkDrone(){
+
+        RobotHelper.delay(GaussianHelper.getGaussianInt(400, 470));
+
+        // tab0 切换 生产tab
+        RobotHelper.move(common_building_tab.getX(), common_building_tab.getY(), 94);
+        RobotHelper.mouseLeftPress();
 
         RobotHelper.delay(GaussianHelper.getGaussianInt(400, 470));
         // 联系无人机
