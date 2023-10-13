@@ -112,6 +112,7 @@ public class EventHandle_Main {
         JButton open_end_silot = script.getOpen_end_silot();
         open_end_silot.addActionListener((e) -> {
             try {
+                script.getSilot_pause().doClick();
                 // 打开
                 openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
                 // 选中靠近 & 回收无人机
@@ -126,6 +127,7 @@ public class EventHandle_Main {
         JButton open_end_sai = script.getOpen_end_sai();
         open_end_sai.addActionListener((e) -> {
             try {
+                script.getSai_pause().doClick();
                 // 打开
                 openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
                 // 选中靠近 & 回收无人机
@@ -140,6 +142,7 @@ public class EventHandle_Main {
         JButton open_end_colos = script.getOpen_end_colos();
         open_end_colos.addActionListener((e) -> {
             try {
+                script.getColos_pause().doClick();
                 // 打开
                 openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
                 // 选中靠近 & 回收无人机
@@ -157,6 +160,7 @@ public class EventHandle_Main {
         JButton all_end = script.getAll_end();
         all_end.addActionListener((e) -> {
             try {
+                script.getWarn_end().doClick();
                 // 打开 silot
                 openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
                 // 选中靠近 & 回收无人机
