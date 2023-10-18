@@ -117,6 +117,17 @@ public class RobotHelper {
     }
 
 
+    public static void keyPress(int key1, int key2){
+        r.keyPress(key1);
+        r.delay(GaussianHelper.getGaussianInt(140)+35);
+        r.keyPress(key2);
+        r.delay(GaussianHelper.getGaussianInt(40)+35);
+        r.keyRelease(key2);
+        r.delay(GaussianHelper.getGaussianInt(40)+35);
+        r.keyRelease(key1);
+    }
+
+
 
 
     private static void demo(){

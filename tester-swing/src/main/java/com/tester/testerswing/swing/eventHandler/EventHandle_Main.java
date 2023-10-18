@@ -96,8 +96,7 @@ public class EventHandle_Main {
                 // 选中环绕
                 toAround();
                 // 加速 释放无人机
-                speedUpAndDrone();
-
+                speedUpAndDroneAndSavePoint();
                 // 启动监控
                 script.getSilot_start().doClick();
 
@@ -192,21 +191,21 @@ public class EventHandle_Main {
                 // 选中环绕
                 toAround();
                 // 加速 释放无人机
-                speedUpAndDrone();
+                speedUpAndDroneAndSavePoint();
 
                 // 打开 sai
                 openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
                 // 选中环绕
                 toAround();
                 // 加速 释放无人机
-                speedUpAndDrone();
+                speedUpAndDroneAndSavePoint();
 
                 // 打开 colos
                 openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
                 // 选中环绕
                 toAround();
                 // 加速 释放无人机
-                speedUpAndDrone();
+                speedUpAndDroneAndSavePoint();
 
                 // 启动监听
                 script.getWarn_start().doClick();
@@ -299,7 +298,7 @@ public class EventHandle_Main {
                 // 选中环绕
                 toAround();
                 // 加速 释放无人机
-                speedUpAndDrone();
+                speedUpAndDroneAndSavePoint();
                 // 启动监控
                 script.getSai_start().doClick();
             } catch (Exception exception) {
@@ -342,7 +341,7 @@ public class EventHandle_Main {
                 // 选中环绕
                 toAround();
                 // 加速 释放无人机
-                speedUpAndDrone();
+                speedUpAndDroneAndSavePoint();
                 // 启动监控
                 script.getColos_start().doClick();
             } catch (Exception exception) {
@@ -456,7 +455,7 @@ public class EventHandle_Main {
     /**
      *
      */
-    public static void speedUpAndDrone(){
+    public static void speedUpAndDroneAndSavePoint(){
 
         // speedUp 加速
         RobotHelper.move(common_speedUp.getX(), common_speedUp.getY(), 94);
@@ -467,6 +466,9 @@ public class EventHandle_Main {
         RobotHelper.move(common_release_drone.getX(), common_release_drone.getY(), 94);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(615, 770));
+
+        // 保存点
+        savePoint();
     }
 
 
@@ -511,5 +513,15 @@ public class EventHandle_Main {
         RobotHelper.keyPress(KeyEvent.VK_R);
         RobotHelper.delay(GaussianHelper.getGaussianInt(800, 870));
     }
+
+    /**
+     * 存点
+     */
+    public static void savePoint(){
+        RobotHelper.keyPress(KeyEvent.VK_CONTROL, KeyEvent.VK_B);
+        RobotHelper.delay(GaussianHelper.getGaussianInt(240, 370));
+        RobotHelper.keyPress(KeyEvent.VK_ENTER);
+    }
+
 
 }
