@@ -22,7 +22,7 @@ import java.util.Set;
 @EnableAsync
 //@SpringBootApplication(scanBasePackages = {"com.tester.*"})
 @SpringBootApplication(scanBasePackages = {"com.tester.testercommon.*","com.tester.testerwebapp.*","com.tester.testermybatis.*"})
-//@SpringBootApplication(scanBasePackages = {"com.aeon.dmc.cloud.office", "com.lingzhi"}, exclude = {DataSourceAutoConfiguration.class})
+//@SpringBootApplication(scanBasePackages = {"com.xxx.xxx.xxx.office", "com.lingzhi"}, exclude = {DataSourceAutoConfiguration.class})
 public class TesterWebappApplication implements CommandLineRunner, ApplicationRunner {
 
     public static void main(String[] args) {
