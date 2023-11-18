@@ -37,7 +37,7 @@ mybatis:
 logging:
   level:
     com.tester.testactiviti.dao.mapper: debug
-#    com.aeon.dmc.cloud.office.core.dao.mapper: debug
+#    com.xxx.xxx.xxx.office.core.dao.mapper: debug
 
 
 

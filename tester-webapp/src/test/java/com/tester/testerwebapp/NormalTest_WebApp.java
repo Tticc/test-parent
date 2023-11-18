@@ -191,7 +191,7 @@ public class NormalTest_WebApp {
                 "Switched to a new branch 'hk-feature-20221205'\n" +
                 "Branch hk-feature-20221205 set up to track remote branch hk-feature-20221205 from origin.\n" +
                 "+ git pull origin hk-feature-20221205 -f\n" +
-                "From http://dev-gitlab.aeonbuy.com/backend/be-middleend/be-center-promotion\n" +
+                "From http://dev-gitlab.xxx.com/backend/be-middleend/be-center-promotion\n" +
                 " * branch            hk-feature-20221205 -> FETCH_HEAD\n" +
                 "Already up-to-date.\n" +
                 "+ git merge master\n" +

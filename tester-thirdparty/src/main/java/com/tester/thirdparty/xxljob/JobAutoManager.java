@@ -62,7 +62,7 @@ public class JobAutoManager implements InitializingBean {
         StringBuilder sb = new StringBuilder();
         sb.append(jobConfigurer.getJobUrl()).append("/jobinfo/add").append("?");
 
-        // 拼接请求地址。http://dev-job.aeonbuy.com/job/jobinfo/add?alarmEmail=xxx%40com.cn&executorParam=xx&cronGen_display=0+0%2F1+*+*+*+%3F&executorBlockStrategy=SERIAL_EXECUTION&executorRouteStrategy=FIRST&author=%E6%B8%A9%E6%98%8C%E8%90%A5&jobCron=0+0%2F1+*+*+*+%3F&jobGroup=33&glueRemark=&jobDesc=desc&glueType=BEAN&executorHandler=jobName001&executorFailRetryCount=0&executorTimeout=0
+        // 拼接请求地址。http://dev-xxx.com/job/jobinfo/add?alarmEmail=xxx%40com.cn&executorParam=xx&cronGen_display=0+0%2F1+*+*+*+%3F&executorBlockStrategy=SERIAL_EXECUTION&executorRouteStrategy=FIRST&author=%E6%B8%A9%E6%98%8C%E8%90%A5&jobCron=0+0%2F1+*+*+*+%3F&jobGroup=33&glueRemark=&jobDesc=desc&glueType=BEAN&executorHandler=jobName001&executorFailRetryCount=0&executorTimeout=0
         Set<Map.Entry<String, String>> entries = reqParam.entrySet();
         for (Map.Entry<String, String> entry : entries) {
             sb.append(entry.getKey()).append("=").append(URLEncoder.encode(entry.getValue(),"UTF-8")).append("&");

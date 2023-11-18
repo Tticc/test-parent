@@ -20,7 +20,7 @@ import java.util.Date;
 public class TaskAssigneeDO extends BaseDomain {
     /**
      * 初始化数据。插入数据的时候调用，查询的时候不需要
-     * @return com.aeon.dmc.cloud.office.core.dao.domain.flow.TaskAssigneeDO
+     * @return com.xxx.xxx.xxx.office.core.dao.domain.flow.TaskAssigneeDO
      * @author 温昌营
      * @date 2019/11/14
      */

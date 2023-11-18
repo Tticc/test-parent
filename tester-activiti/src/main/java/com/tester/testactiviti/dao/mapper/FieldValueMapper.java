@@ -32,7 +32,7 @@ public interface FieldValueMapper extends BaseMapper<FieldValueDO,Long> {
      * @param caseType 查所有类型传null
      * @param startTime startTime和endTime传null查所有
      * @param endTime startTime和endTime传null查所有
-     * @return java.util.List<com.aeon.dmc.cloud.office.common.model.response.flow.TodoGroupVO>
+     * @return java.util.List<com.xxx.xxx.xxx.office.common.model.response.flow.TodoGroupVO>
      * @author 温昌营
      * @date 2019/11/25
      *//*
@@ -49,7 +49,7 @@ public interface FieldValueMapper extends BaseMapper<FieldValueDO,Long> {
      * @param caseType 查所有类型传null
      * @param startTime startTime和endTime传null查所有
      * @param endTime startTime和endTime传null查所有
-     * @return java.util.List<com.aeon.dmc.cloud.office.core.model.bo.flow.TodoCaseBO>
+     * @return java.util.List<com.xxx.xxx.xxx.office.core.model.bo.flow.TodoCaseBO>
      * @throws
      * @author 温昌营
      * @date 2019/11/25
@@ -86,7 +86,7 @@ public interface FieldValueMapper extends BaseMapper<FieldValueDO,Long> {
      * 根据procinstId 和 审批人用户id获取当前进行中任务节点的所有审批数据。
      * @param activitiProcinstId
      * @param approverUserId
-     * @return java.util.List<com.aeon.dmc.cloud.office.core.dao.domain.flow.TaskAssigneeDO>
+     * @return java.util.List<com.xxx.xxx.xxx.office.core.dao.domain.flow.TaskAssigneeDO>
      * @throws
      * @author 温昌营
      * @date 2019/11/28

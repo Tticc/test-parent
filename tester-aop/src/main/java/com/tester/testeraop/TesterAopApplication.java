@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.ApplicationContext;
 
-//@EnableFeignClients(basePackages = {"com.aeon.dmc.cloud.office", "com.lingzhi"})
+//@EnableFeignClients(basePackages = {"com.xxx.xxx.xxx.office", "com.xxx"})
 //@EnableSwagger2
-//@MapperScan("com.aeon.dmc.cloud.office.**.mapper")
+//@MapperScan("com.xxx.xxx.xxx.office.**.mapper")
 //@SpringBootApplication(scanBasePackages = {"com.tester.testeraop", "com.tester"}, exclude = {DataSourceAutoConfiguration.class})
 //@EnableTransactionManagement
 //@EnableDiscoveryClient
