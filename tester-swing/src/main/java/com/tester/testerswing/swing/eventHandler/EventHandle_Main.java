@@ -511,8 +511,14 @@ public class EventHandle_Main {
      *
      */
     public static void speedUpAndDroneAndSavePoint() throws BusinessException {
-        Collections.shuffle(FINAL_ACTION_LIST);
-        for (MyConsumer myConsumer : FINAL_ACTION_LIST) {
+        List<MyConsumer> executeList = FINAL_ACTION_LIST;
+        boolean shuffle = Math.random()*10 < 1;
+        if(shuffle){
+            List<MyConsumer> tempList = new ArrayList<>(FINAL_ACTION_LIST);
+            Collections.shuffle(tempList);
+            executeList = tempList;
+        }
+        for (MyConsumer myConsumer : executeList) {
             myConsumer.accept(null);
         }
         /*// speedUp 加速
