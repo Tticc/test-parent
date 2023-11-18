@@ -276,7 +276,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="开绕"/>
+          <text value="开工"/>
         </properties>
       </component>
       <component id="fb3dd" class="javax.swing.JButton" binding="open_run_sai">
@@ -285,7 +285,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="开绕"/>
+          <text value="开工"/>
         </properties>
       </component>
       <component id="7e56b" class="javax.swing.JButton" binding="open_run_colos">
@@ -294,7 +294,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="开绕"/>
+          <text value="开工"/>
         </properties>
       </component>
       <component id="31144" class="javax.swing.JButton" binding="auto_start">
@@ -348,7 +348,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="收工"/>
+          <text value="回收"/>
         </properties>
       </component>
       <component id="76bfe" class="javax.swing.JButton" binding="open_end_sai">
@@ -357,7 +357,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="收工"/>
+          <text value="回收"/>
         </properties>
       </component>
       <component id="5757e" class="javax.swing.JButton" binding="open_end_colos">
@@ -366,7 +366,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="收工"/>
+          <text value="回收"/>
         </properties>
       </component>
       <component id="5d65b" class="javax.swing.JButton" binding="all_end">
@@ -375,7 +375,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="全收工"/>
+          <text value="全回收"/>
         </properties>
       </component>
       <component id="f4c42" class="javax.swing.JButton" binding="all_start">
@@ -384,7 +384,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="全开绕"/>
+          <text value="全开工"/>
         </properties>
       </component>
       <component id="a2195" class="javax.swing.JButton" binding="silot_link">

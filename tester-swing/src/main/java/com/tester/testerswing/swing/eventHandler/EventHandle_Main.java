@@ -1,13 +1,19 @@
 package com.tester.testerswing.swing.eventHandler;
 
+import com.tester.base.dto.exception.BusinessException;
+import com.tester.testercommon.util.MyConsumer;
 import com.tester.testerswing.capture.GaussianPointInfoDTO;
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.gaussian.GaussianHelper;
 import com.tester.testerswing.robot.RobotHelper;
 import com.tester.testerswing.swing.EasyScript_UI_Main;
+import org.springframework.util.CollectionUtils;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * main 初始化
@@ -55,6 +61,12 @@ public class EventHandle_Main {
     public static PointInfoDTO tool_pos2 = new PointInfoDTO().setX(1258).setY(301);
     public static GaussianPointInfoDTO tool_pos = new GaussianPointInfoDTO().setSt(tool_pos1).setEd(tool_pos2);
 
+
+    // 中间两项操作。切回作战tab、环绕
+    public static List<MyConsumer> MIDDLE_ACTION_LIST = middleActionList();
+
+    // 最后三项操作。加速、环绕、存点
+    public static List<MyConsumer> FINAL_ACTION_LIST = finalActionList();
 
     public static void handle_main(EasyScript_UI_Main script) {
         handle_silot(script);
@@ -426,7 +438,7 @@ public class EventHandle_Main {
     /**
      *
      */
-    public static void toAround(){
+    public static void toAround() throws BusinessException {
         RobotHelper.delay(GaussianHelper.getGaussianInt(400, 470));
         // tab0 切换 生产tab
         RobotHelper.move(common_building_tab.getX(), common_building_tab.getY(), 94);
@@ -438,26 +450,72 @@ public class EventHandle_Main {
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(330, 370));
 
+        Collections.shuffle(MIDDLE_ACTION_LIST);
+        for (MyConsumer myConsumer : MIDDLE_ACTION_LIST) {
+            myConsumer.accept(null);
+        }
+        /*// tab1 切换 作战tab
+        RobotHelper.move(common_fighting_tab.getX(), common_fighting_tab.getY(), 100);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(1060, 1100));
+
         // around 环绕建筑
         RobotHelper.move(common_around.getX(), common_around.getY(), 100);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(450, 600));
-
-        // tab1 切换 作战tab
-        RobotHelper.move(common_fighting_tab.getX(), common_fighting_tab.getY(), 100);
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(1060, 1100));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(450, 600));*/
     }
 
+    private static List<MyConsumer> middleActionList(){
+        List<MyConsumer> list = new ArrayList<>();
+        list.add((e) -> {
+            // tab1 切换 作战tab
+            RobotHelper.move(common_fighting_tab.getX(), common_fighting_tab.getY(), 100);
+            RobotHelper.mouseLeftPress();
+            RobotHelper.delay(GaussianHelper.getGaussianInt(1060, 1100));
+        });
+        list.add((e) -> {
+            // around 环绕建筑
+            RobotHelper.move(common_around.getX(), common_around.getY(), 100);
+            RobotHelper.mouseLeftPress();
+            RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+            RobotHelper.mouseLeftPress();
+            RobotHelper.delay(GaussianHelper.getGaussianInt(450, 600));
+        });
+        return list;
+    }
+
+    private static List<MyConsumer> finalActionList(){
+        List<MyConsumer> list = new ArrayList<>();
+        list.add((e) -> {
+            // speedUp 加速
+            RobotHelper.move(common_speedUp.getX(), common_speedUp.getY(), 94);
+            RobotHelper.mouseLeftPress();
+            RobotHelper.delay(GaussianHelper.getGaussianInt(815, 970));
+        });
+        list.add((e) -> {
+            // release 释放无人机
+            RobotHelper.move(common_release_drone.getX(), common_release_drone.getY(), 94);
+            RobotHelper.mouseLeftPress();
+            RobotHelper.delay(GaussianHelper.getGaussianInt(615, 770));
+        });
+        list.add((e) -> {
+            // 保存点
+            savePoint();
+        });
+        return list;
+    }
 
     /**
      *
      */
-    public static void speedUpAndDroneAndSavePoint(){
-
-        // speedUp 加速
+    public static void speedUpAndDroneAndSavePoint() throws BusinessException {
+        Collections.shuffle(FINAL_ACTION_LIST);
+        for (MyConsumer myConsumer : FINAL_ACTION_LIST) {
+            myConsumer.accept(null);
+        }
+        /*// speedUp 加速
         RobotHelper.move(common_speedUp.getX(), common_speedUp.getY(), 94);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(815, 970));
@@ -468,7 +526,7 @@ public class EventHandle_Main {
         RobotHelper.delay(GaussianHelper.getGaussianInt(615, 770));
 
         // 保存点
-        savePoint();
+        savePoint();*/
     }
 
 
