@@ -521,6 +521,7 @@ public class EventHandle_Main {
         for (MyConsumer myConsumer : executeList) {
             myConsumer.accept(null);
         }
+        RobotHelper.delay(GaussianHelper.getGaussianInt(200, 270));
         /*// speedUp 加速
         RobotHelper.move(common_speedUp.getX(), common_speedUp.getY(), 94);
         RobotHelper.mouseLeftPress();
@@ -575,7 +576,20 @@ public class EventHandle_Main {
 
         // 回收无人机
         RobotHelper.keyPress(KeyEvent.VK_R);
-        RobotHelper.delay(GaussianHelper.getGaussianInt(800, 870));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(200, 270));
+
+
+        // building 选中建筑
+        RobotHelper.move(common_building.getX(), common_building.getY(), 88);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(330, 370));
+
+        // around 环绕建筑
+        RobotHelper.move(common_around.getX(), common_around.getY(), 70);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(150, 200));
     }
 
     /**
