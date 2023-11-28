@@ -561,7 +561,7 @@ public class EventHandle_Main {
     /**
      * 回收无人机
      */
-    public static void linkDrone(){
+    public static void linkDrone() throws BusinessException {
 
         RobotHelper.delay(GaussianHelper.getGaussianInt(400, 470));
 
@@ -584,12 +584,11 @@ public class EventHandle_Main {
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(330, 370));
 
-        // around 环绕建筑
-        RobotHelper.move(common_around.getX(), common_around.getY(), 70);
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(150, 200));
+
+        // 环绕+切回作战tab
+        for (MyConsumer myConsumer : MIDDLE_ACTION_LIST) {
+            myConsumer.accept(null);
+        }
     }
 
     /**
