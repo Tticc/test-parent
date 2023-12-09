@@ -5,6 +5,7 @@ import com.tester.testercommon.util.DateUtil;
 import com.tester.testercv.utils.detectColor.ColorDetectTool;
 import com.tester.testercv.utils.opencv.OpenCVHelper;
 import com.tester.testerswing.boot.AccountInfo;
+import com.tester.testerswing.mail.SendMailText;
 import com.tester.testerswing.robot.RobotHelper;
 import com.tester.testerswing.swing.EasyScript;
 import com.tester.testerswing.voice.BeepSoundProcessor;
@@ -130,6 +131,8 @@ public class ImgBoot {
                     accountInfo.setLastQuickRunTime(new Date());
                     accountInfo.getConsumer().accept(null);
 
+                    // 发送电子邮件
+                    SendMailText.sendMsg(accountInfo.getAccount());
                     // 发消息 - 企业微信消息不可靠，取消 2023-9-21 14:58:58
 //                    QywxMessageTaskDTO qywxMessageTaskDTO = new QywxMessageTaskDTO(accountInfo.getAccount()+"_"+DateUtil.dateFormat(new Date()));
 //                    BeepSoundProcessor.putTask(qywxMessageTaskDTO);
