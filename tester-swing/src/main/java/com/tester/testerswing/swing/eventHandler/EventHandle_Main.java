@@ -431,8 +431,8 @@ public class EventHandle_Main {
 
         // 废弃 2023-9-21 15:28:41
 //        // p4 启用护盾
-        RobotHelper.move(p4.getX(), p4.getY(), 327);
-        RobotHelper.mouseLeftPress();
+//        RobotHelper.move(p4.getX(), p4.getY(), 327);
+//        RobotHelper.mouseLeftPress();
     }
 
     /**

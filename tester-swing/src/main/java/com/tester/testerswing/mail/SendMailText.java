@@ -74,7 +74,7 @@ public class SendMailText {
         //设置邮件主题
         msg.setSubject("Sending for EVE","UTF-8");
         //设置邮件正文
-        msg.setContent("Hi, "+info+". Welcome to another wonderful, fanciful installment of This Month in ...", "text/html;charset=UTF-8");
+        msg.setContent("Hi, "+info+". Welcome to another...", "text/html;charset=UTF-8");
         //设置邮件的发送时间,默认立即发送
         msg.setSentDate(new Date());
 
