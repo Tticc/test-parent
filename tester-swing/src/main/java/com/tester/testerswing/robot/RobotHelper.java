@@ -81,6 +81,16 @@ public class RobotHelper {
         r.mouseRelease(InputEvent.BUTTON1_MASK);
     }
 
+    /**
+     * 正数：往操作者方向滑动（下滑）
+     * 负数：往远离操作者方向滑动（上滑）
+     * @param round 滑动格数
+     */
+    public static void mouseWheel(int round){
+        r.mouseWheel(round);
+        r.delay(GaussianHelper.getGaussianInt(55)+335);
+    }
+
 
     public static void delay(int ms){
         r.delay(ms);
@@ -121,6 +131,20 @@ public class RobotHelper {
         r.keyPress(key1);
         r.delay(GaussianHelper.getGaussianInt(140)+35);
         r.keyPress(key2);
+        r.delay(GaussianHelper.getGaussianInt(40)+35);
+        r.keyRelease(key2);
+        r.delay(GaussianHelper.getGaussianInt(40)+35);
+        r.keyRelease(key1);
+    }
+
+    public static void keyPress(int key1, int key2, int key3){
+        r.keyPress(key1);
+        r.delay(GaussianHelper.getGaussianInt(140)+35);
+        r.keyPress(key2);
+        r.delay(GaussianHelper.getGaussianInt(340)+35);
+        r.keyPress(key3);
+        r.delay(GaussianHelper.getGaussianInt(40)+35);
+        r.keyRelease(key3);
         r.delay(GaussianHelper.getGaussianInt(40)+35);
         r.keyRelease(key2);
         r.delay(GaussianHelper.getGaussianInt(40)+35);

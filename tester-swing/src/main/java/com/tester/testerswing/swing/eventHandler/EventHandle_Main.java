@@ -61,6 +61,20 @@ public class EventHandle_Main {
     public static PointInfoDTO tool_pos2 = new PointInfoDTO().setX(1258).setY(301);
     public static GaussianPointInfoDTO tool_pos = new GaussianPointInfoDTO().setSt(tool_pos1).setEd(tool_pos2);
 
+    // 空太空点
+    public static PointInfoDTO empty_space_point1 = new PointInfoDTO().setX(908).setY(659);
+    public static PointInfoDTO empty_space_point2 = new PointInfoDTO().setX(993).setY(713);
+    public static GaussianPointInfoDTO empty_space_point = new GaussianPointInfoDTO().setSt(empty_space_point1).setEd(empty_space_point2);
+
+    // 星图点
+    public static PointInfoDTO space_map1 = new PointInfoDTO().setX(13).setY(456);
+    public static PointInfoDTO space_map2 = new PointInfoDTO().setX(21).setY(462);
+    public static GaussianPointInfoDTO space_map = new GaussianPointInfoDTO().setSt(space_map1).setEd(space_map2);
+
+    // 维修点
+    public static PointInfoDTO repair_point1 = new PointInfoDTO().setX(1414).setY(971);
+    public static PointInfoDTO repair_point2 = new PointInfoDTO().setX(1429).setY(980);
+    public static GaussianPointInfoDTO repair_point = new GaussianPointInfoDTO().setSt(repair_point1).setEd(repair_point2);
 
     // 中间两项操作。切回作战tab、环绕
     public static List<MyConsumer> MIDDLE_ACTION_LIST = middleActionList();
@@ -194,7 +208,7 @@ public class EventHandle_Main {
 
 
 
-        // 全部结束
+        // 全部开工
         JButton all_start = script.getAll_start();
         all_start.addActionListener((e) -> {
             try {
@@ -221,6 +235,33 @@ public class EventHandle_Main {
 
                 // 启动监听
                 script.getWarn_start().doClick();
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+
+
+        // 全部准备
+        JButton all_prepare = script.getAll_prepare();
+        all_prepare.addActionListener((e) -> {
+            try {
+                // 打开 silot
+                openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
+                // 准备
+                prepare();
+
+
+                // 打开 sai
+                openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
+                // 准备
+                prepare();
+
+                // 打开 colos
+                openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+                // 准备
+                prepare();
 
             } catch (Exception exception) {
                 exception.printStackTrace();
@@ -598,6 +639,43 @@ public class EventHandle_Main {
         RobotHelper.keyPress(KeyEvent.VK_CONTROL, KeyEvent.VK_B);
         RobotHelper.delay(GaussianHelper.getGaussianInt(240, 370));
         RobotHelper.keyPress(KeyEvent.VK_ENTER);
+    }
+
+
+    public static void prepare(){
+        // 单击太空
+        RobotHelper.move(empty_space_point.getX(), empty_space_point.getY(), 94);
+        RobotHelper.mouseLeftPress();
+
+        // 滑动鼠标，拉远舰船
+        RobotHelper.delay(GaussianHelper.getGaussianInt(424, 470));
+        for (int i = 0; i < 5; i++) {
+            RobotHelper.mouseWheel(-4);
+        }
+
+        // ctrl+shift+f9
+        RobotHelper.delay(GaussianHelper.getGaussianInt(524, 670));
+        RobotHelper.keyPress(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_F9);
+
+        // 打开星图
+        RobotHelper.move(space_map.getX(), space_map.getY(), 194);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(3024, 3370));
+
+        // 单击太空
+        RobotHelper.move(empty_space_point.getX(), empty_space_point.getY(), 94);
+        RobotHelper.mouseLeftPress();
+        // 滑动鼠标，拉近星图
+        RobotHelper.delay(GaussianHelper.getGaussianInt(424, 470));
+        RobotHelper.mouseWheel(3);
+        RobotHelper.mouseWheel(2);
+        RobotHelper.delay(GaussianHelper.getGaussianInt(424, 470));
+
+        // 启动维修
+        RobotHelper.move(repair_point.getX(), repair_point.getY(), 94);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(424, 470));
+
     }
 
 
