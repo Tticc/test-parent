@@ -401,6 +401,52 @@ public class EventHandle_Main {
                 exception.printStackTrace();
             }
         });
+
+
+        // 设置silot 放置牵引 按钮事件
+        JButton harvest_silot = script.getHarvest_silot();
+        harvest_silot.addActionListener((e) -> {
+            try {
+                // 1. 放置
+                // 2. 存点
+//                openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+//                // 选中环绕
+//                toAround();
+//                // 加速 释放无人机
+//                speedUpAndDroneAndSavePoint();
+//                // 启动监控
+//                script.getColos_start().doClick();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 设置sai 放置牵引 按钮事件
+        JButton harvest_sai = script.getHarvest_sai();
+        harvest_sai.addActionListener((e) -> {
+            try {
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 设置colos 放置牵引 按钮事件
+        JButton harvest_colos = script.getHarvest_colos();
+        harvest_colos.addActionListener((e) -> {
+            try {
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 设置all 放置牵引 按钮事件
+        JButton all_harvest = script.getAll_harvest();
+        all_harvest.addActionListener((e) -> {
+            try {
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 
     public static void openOpe(GaussianPointInfoDTO p1, GaussianPointInfoDTO p2) {
