@@ -76,6 +76,32 @@ public class EventHandle_Main {
     public static PointInfoDTO repair_point2 = new PointInfoDTO().setX(1429).setY(980);
     public static GaussianPointInfoDTO repair_point = new GaussianPointInfoDTO().setSt(repair_point1).setEd(repair_point2);
 
+    // 牵引箱子点
+    public static PointInfoDTO harvest_point1 = new PointInfoDTO().setX(485).setY(180);
+    public static PointInfoDTO harvest_point2 = new PointInfoDTO().setX(499).setY(180);
+    public static GaussianPointInfoDTO harvest_point = new GaussianPointInfoDTO().setSt(harvest_point1).setEd(harvest_point2);
+
+    // 释放牵引箱子点
+    public static PointInfoDTO rel_harvest_point1 = new PointInfoDTO().setX(570).setY(404);
+    public static PointInfoDTO rel_harvest_point2 = new PointInfoDTO().setX(594).setY(408);
+    public static GaussianPointInfoDTO rel_harvest_point = new GaussianPointInfoDTO().setSt(rel_harvest_point1).setEd(rel_harvest_point2);
+
+    // 选择牵引箱子点
+    public static PointInfoDTO select_harvest_point1 = new PointInfoDTO().setX(1622).setY(292);
+    public static PointInfoDTO select_harvest_point2 = new PointInfoDTO().setX(1638).setY(293);
+    public static GaussianPointInfoDTO select_harvest_point = new GaussianPointInfoDTO().setSt(select_harvest_point1).setEd(select_harvest_point2);
+
+    // 保存牵引箱子点
+    public static PointInfoDTO save_harvest_point1 = new PointInfoDTO().setX(1695).setY(508);
+    public static PointInfoDTO save_harvest_point2 = new PointInfoDTO().setX(1711).setY(507);
+    public static GaussianPointInfoDTO save_harvest_point = new GaussianPointInfoDTO().setSt(save_harvest_point1).setEd(save_harvest_point2);
+
+    // 堆叠所有点
+    public static PointInfoDTO stacking_point1 = new PointInfoDTO().setX(472).setY(120);
+    public static PointInfoDTO stacking_point2 = new PointInfoDTO().setX(472).setY(120);
+    public static GaussianPointInfoDTO stacking_point = new GaussianPointInfoDTO().setSt(stacking_point1).setEd(stacking_point2);
+
+
     // 中间两项操作。切回作战tab、环绕
     public static List<MyConsumer> MIDDLE_ACTION_LIST = middleActionList();
 
@@ -407,15 +433,9 @@ public class EventHandle_Main {
         JButton harvest_silot = script.getHarvest_silot();
         harvest_silot.addActionListener((e) -> {
             try {
-                // 1. 放置
-                // 2. 存点
-//                openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
-//                // 选中环绕
-//                toAround();
-//                // 加速 释放无人机
-//                speedUpAndDroneAndSavePoint();
-//                // 启动监控
-//                script.getColos_start().doClick();
+                // 打开 silot
+                openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
+                doHarvest();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -425,6 +445,9 @@ public class EventHandle_Main {
         JButton harvest_sai = script.getHarvest_sai();
         harvest_sai.addActionListener((e) -> {
             try {
+                // 打开 sai
+                openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
+                doHarvest();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -434,6 +457,9 @@ public class EventHandle_Main {
         JButton harvest_colos = script.getHarvest_colos();
         harvest_colos.addActionListener((e) -> {
             try {
+                // 打开 colos
+                openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+                doHarvest();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -443,6 +469,21 @@ public class EventHandle_Main {
         JButton all_harvest = script.getAll_harvest();
         all_harvest.addActionListener((e) -> {
             try {
+                // 打开 silot
+                openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
+                // 收集
+                doHarvest();
+
+
+                // 打开 sai
+                openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
+                // 收集
+                doHarvest();
+
+                // 打开 colos
+                openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+                // 收集
+                doHarvest();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -722,6 +763,47 @@ public class EventHandle_Main {
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(424, 470));
 
+    }
+
+
+    private static void doHarvest(){
+        // 牵引箱子点
+        RobotHelper.move(harvest_point.getX(), harvest_point.getY(), 100);
+        RobotHelper.mouseRightPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(1060, 1100));
+        // 释放牵引箱子点
+        RobotHelper.move(rel_harvest_point.getX(), rel_harvest_point.getY(), 100);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(510, 600));
+
+        // 堆叠所有
+        RobotHelper.move(stacking_point.getX(), stacking_point.getY(), 100);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(810, 1000));
+
+
+        // tab1 切换 作战tab
+        RobotHelper.move(common_fighting_tab.getX(), common_fighting_tab.getY(), 100);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(1060, 1100));
+
+        // 选中牵引箱子
+        RobotHelper.move(select_harvest_point.getX(), select_harvest_point.getY(), 100);
+        RobotHelper.mouseRightPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(1060, 1100));
+
+        // 保存牵引箱子点
+        RobotHelper.move(save_harvest_point.getX(), save_harvest_point.getY(), 100);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(540, 570));
+        RobotHelper.keyPress(KeyEvent.VK_ENTER);
+
+
+        RobotHelper.delay(GaussianHelper.getGaussianInt(1060, 1100));
+        // tab0 切换 生产tab
+        RobotHelper.move(common_building_tab.getX(), common_building_tab.getY(), 94);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(760, 900));
     }
 
 
