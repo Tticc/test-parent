@@ -5,20 +5,17 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
-import lombok.Data;
+import com.tester.testersearch.service.ESClientInterface;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 /**
  * @Author 温昌营
  * @Date 2022-8-23 10:20:13
  */
-@Component("esClient")
-@Data
-public class ESClient implements InitializingBean {
+public class ESClient implements InitializingBean, ESClientInterface {
 
     private ElasticsearchClient client;
     private ElasticsearchAsyncClient asyncClient;
@@ -28,6 +25,23 @@ public class ESClient implements InitializingBean {
     private String host;
     @Value("${my.es.port:}")
     private Integer port;
+
+
+    @Override
+    public ElasticsearchClient getClient() {
+        return client;
+    }
+
+    @Override
+    public ElasticsearchAsyncClient getAsyncClient() {
+        return asyncClient;
+    }
+
+    @Override
+    public String getSpecificAnalyzer() {
+        return "ik_smart";
+    }
+
 
     @Override
     public void afterPropertiesSet() throws Exception {

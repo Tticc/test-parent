@@ -7,7 +7,7 @@ import co.elastic.clients.util.ObjectBuilder;
 import com.tester.testercommon.util.DateUtil;
 import com.tester.testercommon.util.MyConsumer;
 import com.tester.testersearch.model.Knowledge;
-import com.tester.testersearch.util.ESClient;
+import com.tester.testersearch.service.ESClientInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ import java.util.function.Function;
 public class DocumentHelper {
 
     @Autowired
-    private ESClient esClient;
+    private ESClientInterface esClient;
 
 
     /**

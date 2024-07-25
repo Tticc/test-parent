@@ -33,8 +33,18 @@ spring:
 
 my:
   es:
-    host: 127.0.0.1
-    port: 9200
+#    host: 10.100.68.165
+#    port: 9200
+    host: cv-search-1231722121.ap-southeast-2.bonsaisearch.net
+    port: 443
+    # 指定分词器。bonsai不支持ik_smart
+    specificAnalyser: "standard"
+    # 指定账号密码。bonsai需要账号密码
+    username: 3906g77xl6
+    password: ew6glg92d5
+    # 指定client类型。bonsai/default
+    client:
+      type: bonsai
 
 # logging 配置示例。
 # 1. root。设置所有日志级别

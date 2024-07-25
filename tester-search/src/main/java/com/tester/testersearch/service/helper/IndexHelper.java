@@ -7,7 +7,7 @@ import co.elastic.clients.elasticsearch.indices.CreateIndexResponse;
 import co.elastic.clients.elasticsearch.indices.DeleteIndexRequest;
 import co.elastic.clients.elasticsearch.indices.DeleteIndexResponse;
 import co.elastic.clients.util.ObjectBuilder;
-import com.tester.testersearch.util.ESClient;
+import com.tester.testersearch.service.ESClientInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ import java.util.function.Function;
 public class IndexHelper {
 
     @Autowired
-    private ESClient esClient;
+    private ESClientInterface esClient;
 //    public static ElasticsearchClient client = ESClient.client;
 
 //    public static void main(String[] args) throws Exception {

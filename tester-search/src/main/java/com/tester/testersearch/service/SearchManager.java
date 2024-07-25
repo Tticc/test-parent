@@ -14,6 +14,7 @@ import com.tester.testersearch.service.helper.DocumentHelper;
 import com.tester.testersearch.util.EsSearchHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -32,6 +33,9 @@ public class SearchManager {
 
     @Autowired
     private DocumentHelper documentHelper;
+
+    @Value("${my.es.specificAnalyser:}")
+    private String specificAnalyser;
 
 
     public PagerInfo<KnowledgeResponse> search(KnowledgePageRequest request) throws BusinessException {
@@ -132,7 +136,7 @@ public class SearchManager {
             }
 
             if (!EsSearchHelper.termField.contains(name)) {
-                processField_ik_smart(queryBuilder, name, o, EsSearchHelper.fieldBoostMap.get(name), EsSearchHelper.fieldAnalyzerMap.get(name));
+                processField_ik_smart(queryBuilder, name, o, EsSearchHelper.fieldBoostMap.get(name), StringUtils.isEmpty(specificAnalyser) ? EsSearchHelper.fieldAnalyzerMap.get(name) : specificAnalyser);
             }
         }
         return queryBuilder;
@@ -167,7 +171,7 @@ public class SearchManager {
                 e.printStackTrace();
             }
             if (EsSearchHelper.termField.contains(name)) {
-                processField_term(queryBuilder, name, o, EsSearchHelper.fieldBoostMap.get(name), EsSearchHelper.fieldAnalyzerMap.get(name));
+                processField_term(queryBuilder, name, o, EsSearchHelper.fieldBoostMap.get(name), StringUtils.isEmpty(specificAnalyser) ? EsSearchHelper.fieldAnalyzerMap.get(name) : specificAnalyser);
             }
         }
         return queryBuilder;
