@@ -33,9 +33,25 @@ public class NormalTest {
 
 //        captureImgAnd2Mat();
 
-        RobotHelper.move(264, 203);
+//        RobotHelper.move(264, 203);
+//
+//        int count = 0;
+//        for (int i = 0; i < 50; i++) {
+//            if(Math.random()*10 < 1){
+//                ++count;
+//            }
+//        }
+//        System.out.println(count);
+
+        mouseWheel();
 
 
+    }
+
+    public static void mouseWheel(){
+        for (int i = 0; i < 5; i++) {
+            RobotHelper.mouseWheel(1);
+        }
     }
 
 //    public static void captureImgAnd2Mat() throws IOException {

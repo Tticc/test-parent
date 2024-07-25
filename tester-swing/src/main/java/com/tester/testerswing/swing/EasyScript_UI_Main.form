@@ -21,8 +21,12 @@
     <rowspec value="top:15dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:6dlu:noGrow"/>
-    <rowspec value="center:max(d;4px):noGrow"/>
-    <rowspec value="top:18dlu:noGrow"/>
+    <rowspec value="center:30px:noGrow"/>
+    <rowspec value="center:max(d;0px):noGrow"/>
+    <rowspec value="top:5dlu:noGrow"/>
+    <rowspec value="top:30px:noGrow"/>
+    <rowspec value="top:15dlu:noGrow"/>
+    <rowspec value="center:max(d;0px):noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <colspec value="fill:max(d;4px):noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
@@ -276,7 +280,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="开绕"/>
+          <text value="开工"/>
         </properties>
       </component>
       <component id="fb3dd" class="javax.swing.JButton" binding="open_run_sai">
@@ -285,7 +289,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="开绕"/>
+          <text value="开工"/>
         </properties>
       </component>
       <component id="7e56b" class="javax.swing.JButton" binding="open_run_colos">
@@ -294,7 +298,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="开绕"/>
+          <text value="开工"/>
         </properties>
       </component>
       <component id="31144" class="javax.swing.JButton" binding="auto_start">
@@ -348,7 +352,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="收工"/>
+          <text value="回收"/>
         </properties>
       </component>
       <component id="76bfe" class="javax.swing.JButton" binding="open_end_sai">
@@ -357,7 +361,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="收工"/>
+          <text value="回收"/>
         </properties>
       </component>
       <component id="5757e" class="javax.swing.JButton" binding="open_end_colos">
@@ -366,25 +370,25 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="收工"/>
+          <text value="回收"/>
         </properties>
       </component>
       <component id="5d65b" class="javax.swing.JButton" binding="all_end">
         <constraints>
-          <grid row="22" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="26" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
-          <text value="全收工"/>
+          <text value="全回收"/>
         </properties>
       </component>
       <component id="f4c42" class="javax.swing.JButton" binding="all_start">
         <constraints>
-          <grid row="22" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="26" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
-          <text value="全开绕"/>
+          <text value="全开工"/>
         </properties>
       </component>
       <component id="a2195" class="javax.swing.JButton" binding="silot_link">
@@ -421,6 +425,51 @@
         </constraints>
         <properties>
           <text value="warn停止"/>
+        </properties>
+      </component>
+      <component id="92f0a" class="javax.swing.JButton" binding="all_prepare">
+        <constraints>
+          <grid row="26" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="全准备"/>
+        </properties>
+      </component>
+      <component id="b434c" class="javax.swing.JButton" binding="all_harvest">
+        <constraints>
+          <grid row="26" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="全牵引"/>
+        </properties>
+      </component>
+      <component id="52017" class="javax.swing.JButton" binding="harvest_silot">
+        <constraints>
+          <grid row="23" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="牵引"/>
+        </properties>
+      </component>
+      <component id="e7d45" class="javax.swing.JButton" binding="harvest_sai">
+        <constraints>
+          <grid row="23" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="牵引"/>
+        </properties>
+      </component>
+      <component id="754e6" class="javax.swing.JButton" binding="harvest_colos">
+        <constraints>
+          <grid row="23" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="牵引"/>
         </properties>
       </component>
     </children>

@@ -58,6 +58,11 @@ public class EasyScript_UI_Main {
     private JButton sai_link;
     private JButton colos_link;
     private JButton warn_end;
+    private JButton all_prepare;
+    private JButton all_harvest;
+    private JButton harvest_silot;
+    private JButton harvest_sai;
+    private JButton harvest_colos;
 
 
     Boot boot = new Boot();
