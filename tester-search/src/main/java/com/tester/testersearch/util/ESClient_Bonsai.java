@@ -14,10 +14,16 @@ import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.elasticsearch.client.RestClient;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import javax.net.ssl.SSLContext;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * @Author 温昌营
@@ -58,7 +64,15 @@ public class ESClient_Bonsai implements InitializingBean, ESClientInterface {
         // 创建 CredentialsProvider
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
-
+        // 忽略 SSL 证书验证
+        SSLContext sslContext = null;
+        try {
+            sslContext = SSLContextBuilder.create()
+                    .loadTrustMaterial((chain, authType) -> true).build();
+        }  catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException e) {
+            throw new RuntimeException("Failed to create SSL context", e);
+        }
+        final SSLContext fSslContext = sslContext;
         // Create the low-level client
         RestClient restClient = RestClient.builder(new HttpHost(host, port, "https"))
                 .setRequestConfigCallback((build) -> build
@@ -66,6 +80,7 @@ public class ESClient_Bonsai implements InitializingBean, ESClientInterface {
                         .setConnectionRequestTimeout(20 * 1000))
                 .setHttpClientConfigCallback(httpClientBuilder ->
                         httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider)
+                                .setSSLContext(fSslContext)
                                 .addInterceptorLast((HttpRequestInterceptor)(request, context) -> {
                                     Header[] headers = request.getHeaders("Content-Type");
                                     for (Header header : headers) {

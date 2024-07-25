@@ -30,12 +30,17 @@ import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.elasticsearch.client.RestClient;
 import org.junit.Test;
 import org.springframework.util.StringUtils;
 
+import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -61,10 +66,19 @@ public class NormalTest_Bonsai_ES {
         int bonsaiPort = 443;
         String username = "3906g77xl6";  // 替换为你的 Access Key
         String password = "ew6glg92d5";  // 替换为你的 Access Token
+
         // 创建 CredentialsProvider
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
-
+        // 忽略 SSL 证书验证
+        SSLContext sslContext = null;
+        try {
+            sslContext = SSLContextBuilder.create()
+                    .loadTrustMaterial((chain, authType) -> true).build();
+        }  catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException e) {
+            throw new RuntimeException("Failed to create SSL context", e);
+        }
+        final SSLContext fSslContext = sslContext;
         // Create the low-level client
         RestClient restClient = RestClient.builder(new HttpHost(bonsaiUrl, bonsaiPort, "https"))
                 .setRequestConfigCallback((build) -> build
@@ -72,6 +86,7 @@ public class NormalTest_Bonsai_ES {
                         .setConnectionRequestTimeout(20 * 1000))
                 .setHttpClientConfigCallback(httpClientBuilder ->
                     httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider)
+                            .setSSLContext(fSslContext)
                             .addInterceptorLast((HttpRequestInterceptor)(request, context) -> {
                                 Header[] headers = request.getHeaders("Content-Type");
                                 for (Header header : headers) {

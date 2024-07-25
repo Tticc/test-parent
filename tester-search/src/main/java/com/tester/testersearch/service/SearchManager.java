@@ -12,6 +12,7 @@ import com.tester.testersearch.model.KnowledgeRequest;
 import com.tester.testersearch.model.KnowledgeResponse;
 import com.tester.testersearch.service.helper.DocumentHelper;
 import com.tester.testersearch.util.EsSearchHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
  * @Author 温昌营
  * @Date 2022-10-25 14:18:51
  */
+@Slf4j
 @Service
 public class SearchManager {
 
@@ -67,6 +69,7 @@ public class SearchManager {
             pagerInfo.setList(resList);
             return pagerInfo;
         } catch (Exception e) {
+            log.error("查询异常。err:",e);
             throw new BusinessException(5000, e);
         }
     }
@@ -100,6 +103,7 @@ public class SearchManager {
             });
             return createResponse.id();
         } catch (Exception e) {
+            log.error("新增异常。err:",e);
             throw new BusinessException(5000, e);
         }
     }
@@ -114,6 +118,7 @@ public class SearchManager {
             });
             return createResponse.id();
         } catch (Exception e) {
+            log.error("修改异常。err:",e);
             throw new BusinessException(5000, e);
         }
     }
