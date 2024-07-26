@@ -8,8 +8,10 @@ import co.elastic.clients.elasticsearch.core.search.CompletionSuggest;
 import co.elastic.clients.elasticsearch.core.search.CompletionSuggestOption;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.elasticsearch.core.search.Suggestion;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.tester.testercommon.util.MyConsumer;
+import com.tester.testercommon.util.file.TxtWrite;
 import com.tester.testersearch.model.Knowledge;
 import com.tester.testersearch.service.helper.DocumentHelper;
 import com.tester.testersearch.service.helper.IndexHelper;
@@ -42,6 +44,19 @@ public class SearchApplicationTest_ES {
     @Test
     public void test_createIndex() throws IOException {
         indexHelper.test_create_index("test_knowledge");
+    }
+
+    @Test
+    public void import_from_json() throws IOException {
+        String s = TxtWrite.file2String("D:\\desktop\\test_knowledge_new.json");
+        String[] split = s.split("\n");
+        for (String s1 : split) {
+            if(s1.startsWith("{\"index")){
+                continue;
+            }
+            Knowledge knowledge = JSON.parseObject(s1, Knowledge.class);
+//            documentHelper.myCreate(e -> e.id(knowledge.getCode()).index("test_knowledge").document(knowledge));
+        }
     }
 
     @Test

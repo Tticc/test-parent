@@ -4,6 +4,9 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.ElasticsearchException;
 import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.util.ObjectBuilder;
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.tester.testercommon.util.DateUtil;
 import com.tester.testercommon.util.MyConsumer;
 import com.tester.testersearch.model.Knowledge;
@@ -27,6 +30,9 @@ public class DocumentHelper {
 
     @Autowired
     private ESClientInterface esClient;
+
+
+    private static Gson gson = new Gson();
 
 
     /**
@@ -95,9 +101,9 @@ public class DocumentHelper {
             Function<SearchRequest.Builder, ObjectBuilder<SearchRequest>> fn, Class<TDocument> tDocumentClass)
             throws IOException, ElasticsearchException {
         SearchRequest build = fn.apply(new SearchRequest.Builder()).build();
-        log.info("query request info:\n【{}】", build);
+        log.info("query request info:\n【{}】", gson.toJson(build));
         SearchResponse<TDocument> search = client.search(build, tDocumentClass);
-        log.info("query response info:\n【{}】", search);
+        log.info("query response info:\n【{}】", gson.toJson(search));
         return search;
     }
 
@@ -122,9 +128,9 @@ public class DocumentHelper {
             Function<CreateRequest.Builder<TDocument>, ObjectBuilder<CreateRequest<TDocument>>> fn)
             throws IOException, ElasticsearchException {
         CreateRequest<TDocument> build = fn.apply(new CreateRequest.Builder<TDocument>()).build();
-        log.info("create request info:\n【{}】", build);
+        log.info("create request info:\n【{}】", gson.toJson(build));
         CreateResponse createResponse = client.create(build);
-        log.info("create response info:\n【{}】", createResponse);
+        log.info("create response info:\n【{}】", gson.toJson(createResponse));
         return createResponse;
     }
 
@@ -149,9 +155,9 @@ public class DocumentHelper {
             Function<UpdateRequest.Builder<TDocument, TPartialDocument>, ObjectBuilder<UpdateRequest<TDocument, TPartialDocument>>> fn,
             Class<TDocument> tDocumentClass) throws IOException, ElasticsearchException {
         UpdateRequest<TDocument, TPartialDocument> build = fn.apply(new UpdateRequest.Builder<TDocument, TPartialDocument>()).build();
-        log.info("update request info:\n【{}】", build);
+        log.info("update request info:\n【{}】", gson.toJson(build));
         UpdateResponse<TDocument> update = client.update(build, tDocumentClass);
-        log.info("update response info:\n【{}】", update);
+        log.info("update response info:\n【{}】", gson.toJson(update));
         return update;
     }
 
@@ -175,9 +181,9 @@ public class DocumentHelper {
                                          Function<DeleteRequest.Builder, ObjectBuilder<DeleteRequest>> fn)
             throws IOException, ElasticsearchException {
         DeleteRequest build = fn.apply(new DeleteRequest.Builder()).build();
-        log.info("delete request info:\n【{}】", build);
+        log.info("delete request info:\n【{}】", gson.toJson(build));
         DeleteResponse delete = client.delete(build);
-        log.info("delete response info:\n【{}】", delete);
+        log.info("delete response info:\n【{}】", gson.toJson(delete));
         return delete;
     }
 
