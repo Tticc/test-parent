@@ -7,6 +7,7 @@ import co.elastic.clients.util.ObjectBuilder;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.tester.testercommon.util.DateUtil;
 import com.tester.testercommon.util.MyConsumer;
 import com.tester.testersearch.model.Knowledge;
@@ -32,7 +33,9 @@ public class DocumentHelper {
     private ESClientInterface esClient;
 
 
-    private static Gson gson = new Gson();
+    private static Gson gson = new GsonBuilder()
+            .serializeSpecialFloatingPointValues()
+            .create();
 
 
     /**
