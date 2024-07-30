@@ -8,7 +8,7 @@ import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.UpdateResponse;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.base.dto.model.request.PagerInfo;
-import com.tester.testercommon.util.CommonUtil;
+import com.tester.testercommon.util.BeanCopyUtil;
 import com.tester.testersearch.model.Knowledge;
 import com.tester.testersearch.model.KnowledgePageRequest;
 import com.tester.testersearch.model.KnowledgeRequest;
@@ -118,7 +118,7 @@ public class SearchManager {
         }
         try {
             UpdateResponse createResponse = documentHelper.commonUpdate((e) -> {
-                CommonUtil.copyPropertiesIgnoreNull(model, e);
+                BeanCopyUtil.copyPropertiesIgnoreNull(model, e);
             });
             return createResponse.id();
         } catch (Exception e) {

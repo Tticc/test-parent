@@ -1,8 +1,8 @@
 version: "3.7"
 services:
   tester-search:
-    image: tticc/tester:tester-search
-    container_name: tester-search
+    image: tticc/tester:tester-search-1.1.0
+    container_name: tester-search-1.1.0
     networks:
       - "rnet"
     ports:
