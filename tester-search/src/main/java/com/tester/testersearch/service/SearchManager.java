@@ -1,11 +1,14 @@
 package com.tester.testersearch.service;
 
+import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermQuery;
 import co.elastic.clients.elasticsearch.core.CreateResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
+import co.elastic.clients.elasticsearch.core.UpdateResponse;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.base.dto.model.request.PagerInfo;
+import com.tester.testercommon.util.CommonUtil;
 import com.tester.testersearch.model.Knowledge;
 import com.tester.testersearch.model.KnowledgePageRequest;
 import com.tester.testersearch.model.KnowledgeRequest;
@@ -50,7 +53,8 @@ public class SearchManager {
                                     .filter(t -> t.term(t1 -> processTerm(t1, request)))
                             )
 //                                        .should(l -> l.multiMatch(e -> e.fields(Arrays.asList("description", "keyword")).query("转眼之间")))
-                    ).size(request.getPageSize()).from(request.getPageSize() * (request.getPageNum() - 1)), Knowledge.class);
+                    ).sort(q -> q.field(f -> f.field("createdTime").order(SortOrder.Desc)))
+                    .size(request.getPageSize()).from(request.getPageSize() * (request.getPageNum() - 1)), Knowledge.class);
             List<Knowledge> collect = search.hits().hits().stream().map(e -> e.source()).collect(Collectors.toList());
             int sort = request.getPageSize() * (request.getPageNum() - 1);
             List<KnowledgeResponse> resList = new ArrayList<>(collect.size());
@@ -113,8 +117,8 @@ public class SearchManager {
             throw new BusinessException(5000L, "没有编码");
         }
         try {
-            CreateResponse createResponse = documentHelper.commonUpdate((e) -> {
-                BeanUtils.copyProperties(model, e);
+            UpdateResponse createResponse = documentHelper.commonUpdate((e) -> {
+                CommonUtil.copyPropertiesIgnoreNull(model, e);
             });
             return createResponse.id();
         } catch (Exception e) {

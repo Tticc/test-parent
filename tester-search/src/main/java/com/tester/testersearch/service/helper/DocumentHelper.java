@@ -70,7 +70,7 @@ public class DocumentHelper {
      * 修改文档
      * @Date 2023-1-12 15:35:43
      */
-    public CreateResponse commonUpdate(MyConsumer<Knowledge> consumer) throws Exception {
+    public UpdateResponse commonUpdate(MyConsumer<Knowledge> consumer) throws Exception {
         Date date = new Date();
         Knowledge knowledge = new Knowledge();
         knowledge
@@ -79,7 +79,7 @@ public class DocumentHelper {
         consumer.accept(knowledge);
         UpdateResponse<Knowledge> test_knowledge = myUpdate(e -> e.id(knowledge.getCode()).index("test_knowledge").doc(knowledge), Knowledge.class);
         System.out.println(test_knowledge);
-        return null;
+        return test_knowledge;
     }
 
 
