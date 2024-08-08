@@ -3,6 +3,7 @@ package com.tester.testersearch.service;
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.TextQueryType;
 import co.elastic.clients.elasticsearch.core.CreateResponse;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.UpdateResponse;
@@ -49,11 +50,17 @@ public class SearchManager {
                     .index("test_knowledge")
 //                    .query(q -> q.bool(q1 -> processIkSmart(q1, request))
                     .query(q -> q.bool(f1 -> f1
+                                    // 将boost字段纳入对匹配范围内，作为优先级条件。权重定义在：EsSearchHelper.fieldBoostMap
+                                    .should(l -> l.multiMatch(e -> e.fields(EsSearchHelper.listAllBoostFields()).type(TextQueryType.BestFields).query(request.getAll())))
                                     .filter(q1 -> q1.bool(q2 -> processIkSmart(q2, request)))
                                     .filter(t -> t.term(t1 -> processTerm(t1, request)))
                             )
 //                                        .should(l -> l.multiMatch(e -> e.fields(Arrays.asList("description", "keyword")).query("转眼之间")))
-                    ).sort(q -> q.field(f -> f.field("createdTime").order(SortOrder.Desc)))
+                    )
+                    // 先按权重分数排序，权重高在前面
+                    .sort(q -> q.field(f -> f.field("_score").order(SortOrder.Desc)))
+                    // 先按创建时间逆序
+                    .sort(q -> q.field(f -> f.field("createdTime").order(SortOrder.Desc)))
                     .size(request.getPageSize()).from(request.getPageSize() * (request.getPageNum() - 1)), Knowledge.class);
             List<Knowledge> collect = search.hits().hits().stream().map(e -> e.source()).collect(Collectors.toList());
             int sort = request.getPageSize() * (request.getPageNum() - 1);

@@ -2,10 +2,8 @@ package com.tester.testersearch.util;
 
 import com.tester.testersearch.model.Knowledge;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Author 温昌营
@@ -23,19 +21,23 @@ public class EsSearchHelper {
         initTermField(termField);
     }
 
+    public static List<String> listAllBoostFields(){
+        return fieldBoostMap.entrySet().stream().map(e -> e.getKey()).collect(Collectors.toList());
+    }
+
     private static void initTermField(Set<String> termField) {
         termField.add("type");
     }
 
     private static void initBoost(Map<String, Float> map) {
-        map.put("type", 1.0f);
-        map.put("belong", 1.0f);
+//        map.put("type", 1.0f);
+//        map.put("belong", 1.0f);
         map.put("keyword", 91.0f);
         map.put("title", 81.0f);
         map.put("description", 61.0f);
         map.put("detail", 2.0f);
-        map.put("author", 1.0f);
-        map.put("priority", 1.0f);
+//        map.put("author", 1.0f);
+//        map.put("priority", 1.0f);
     }
 
     private static void initAnalyzer(Map<String, String> map) {
