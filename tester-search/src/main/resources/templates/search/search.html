@@ -214,7 +214,7 @@
                             }else{
                                 layui.each(res.data.list, function (index, item) {
                                     lis.push("<div class='list-group' style='margin-bottom: 10px'>" +
-                                        "<a href='#' class='list-group-item' onclick='openEditModal(this)'>" +
+                                        "<a href='#' class='list-group-item' onclick='openEditModal(event, this)'>" +
                                         "<h6 class='list-group-item-heading'>" + item.sort + " 标题：" + item.title + "</h6>" +
                                         "<div class='hidden-data' style='display:none'>" +
                                         "<span class='code'>" + item.code + "</span>" +
@@ -251,7 +251,8 @@
         });
     }
 
-    function openEditModal(element) {
+    function openEditModal(event, element) {
+        event.preventDefault();
         // 获取隐藏的数据
         var hiddenData = element.querySelector('.hidden-data');
 
