@@ -44,8 +44,8 @@ public class EventHandle_Main {
     public static PointInfoDTO common_speedUp2 = new PointInfoDTO().setX(1122).setY(891);
     public static GaussianPointInfoDTO common_speedUp = new GaussianPointInfoDTO().setSt(common_speedUp1).setEd(common_speedUp2);
 
-    public static PointInfoDTO common_building1 = new PointInfoDTO().setX(1698).setY(573);
-    public static PointInfoDTO common_building2 = new PointInfoDTO().setX(1719).setY(581);
+    public static PointInfoDTO common_building1 = new PointInfoDTO().setX(1686).setY(289);
+    public static PointInfoDTO common_building2 = new PointInfoDTO().setX(1738).setY(298);
     public static GaussianPointInfoDTO common_building = new GaussianPointInfoDTO().setSt(common_building1).setEd(common_building2);
 
 
