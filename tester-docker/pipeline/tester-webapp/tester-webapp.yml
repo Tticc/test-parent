@@ -19,6 +19,6 @@ steps:
   displayName: 'Run a multi-line script'
 
 - script: |
-    echo a new step2
+    echo a new step
     echo from the new branch
-  displayName: 'merge new branch'
+  displayName: 'merge new branch3'
