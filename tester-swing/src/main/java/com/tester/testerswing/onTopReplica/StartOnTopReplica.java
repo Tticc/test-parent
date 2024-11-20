@@ -152,7 +152,7 @@ public class StartOnTopReplica {
         RobotHelper.move(122,1005);
         RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
         RobotHelper.move(83,693);
-        RobotHelper.delay(1500);
+        RobotHelper.delay(400);
         RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
         RobotHelper.delay(500);
 //
@@ -201,10 +201,13 @@ public class StartOnTopReplica {
 
         RobotHelper.move(89, 1056);
         RobotHelper.mouseLeftPress();
+        RobotHelper.delay(456);
         RobotHelper.move(126, 1003);
         RobotHelper.keyPress("OnTopReplica");
+        RobotHelper.delay(456);
         RobotHelper.move(198, 372);
         RobotHelper.mouseLeftPress();
+        RobotHelper.delay(656);
         RobotHelper.move(357, 297);
         RobotHelper.delay(456);
         RobotHelper.mouseRightPress();
