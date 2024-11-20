@@ -23,4 +23,4 @@ steps:
 - script: |
     echo a new step
     echo from the new branch
-  displayName: 'merge new branch 4'
+  displayName: 'merge new branch 5'
