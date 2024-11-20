@@ -1,0 +1,25 @@
+version: "3.7"
+
+services:
+  MyPandora:
+    # 镜像名称
+    image: pengzhile/pandora
+    # 容器名称
+    container_name: MyPandora
+    # 自启动
+    restart: always
+    # 端口设置
+    ports:
+      # 环境变量
+      - 3010:3010
+    environment:
+      PANDORA_CLOUD: cloud
+      PANDORA_SERVER: 0.0.0.0:3010
+    networks:
+      - "rnet"
+networks:
+  rnet:
+    driver: bridge
+    external: true
+
+
