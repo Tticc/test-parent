@@ -16,7 +16,7 @@ docker-compose -p gpt_compose up -d
 
 
 ### 说明
-> 无
+> 暂不可用。因为没有付费账号
 
 
 
