@@ -159,6 +159,19 @@
             <artifactId>mockito-all</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!--powermock 可以对静态方法、final类和方法、私有方法等进行模拟-->
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
