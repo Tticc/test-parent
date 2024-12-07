@@ -25,7 +25,9 @@ public class StartOnTopReplica {
         PointInfoDTO colosListPoint = new PointInfoDTO().setX(361).setY(152);
 
         // 依次打开账号，将两个账号放到onTopReplica的界面选项首位。也就是上面的 saiListPoint 和 silotListPoint 两个点
-
+        EventHandle_Main.openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+        RobotHelper.delay(200);
+        // 再次打开账号1，
         EventHandle_Main.openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
         RobotHelper.delay(200);
         EventHandle_Main.openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
