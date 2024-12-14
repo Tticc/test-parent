@@ -25,7 +25,7 @@ public class StartOnTopReplica {
         PointInfoDTO colosListPoint = new PointInfoDTO().setX(361).setY(152);
 
         // 依次打开账号，将两个账号放到onTopReplica的界面选项首位。也就是上面的 saiListPoint 和 silotListPoint 两个点
-        EventHandle_Main.openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
+        EventHandle_Main.openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
         RobotHelper.delay(200);
         // 再次打开账号1，
         EventHandle_Main.openOpe(EventHandle_Colos.colos_open_p1, EventHandle_Colos.colos_open_p2);
@@ -139,11 +139,11 @@ public class StartOnTopReplica {
         RobotHelper.mouseLeftPress();
 
         // 移动到区域起始点
-        RobotHelper.move(767, 68);
+        RobotHelper.move(770, 68);
         // 按下鼠标左键
         RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
         // 移动到区域终止点
-        RobotHelper.move(799,346);
+        RobotHelper.move(793,346);
         // 弹起鼠标左键
         RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
         // 区域选择完成
@@ -151,15 +151,15 @@ public class StartOnTopReplica {
         RobotHelper.mouseLeftPress();
 
 //        // 拖动放缩分屏窗口
-        RobotHelper.move(122,1005);
+        RobotHelper.move(86,999);
         RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
-        RobotHelper.move(83,693);
+        RobotHelper.move(58,888);
         RobotHelper.delay(400);
         RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
         RobotHelper.delay(500);
 //
 //        // 解除锁定
-        RobotHelper.move(61, 55);
+        RobotHelper.move(51, 55);
         RobotHelper.mouseRightPress();
         RobotHelper.move(127, 224);
         RobotHelper.mouseLeftPress();
@@ -170,9 +170,9 @@ public class StartOnTopReplica {
 
     public static void move_silot_first() {
         // 拖动1
-        RobotHelper.move(61, 55);
+        RobotHelper.move(45, 55);
         RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
-        RobotHelper.move(98, 57);
+        RobotHelper.move(80, 57);
         RobotHelper.delay(500);
         RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
         RobotHelper.delay(500);
@@ -180,9 +180,9 @@ public class StartOnTopReplica {
 
     public static void move_silot_first2() {
         // 拖动1
-        RobotHelper.move(61, 55);
+        RobotHelper.move(45, 55);
         RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
-        RobotHelper.move(175, 58);
+        RobotHelper.move(137, 58);
         RobotHelper.delay(500);
         RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
         RobotHelper.delay(500);
@@ -190,9 +190,9 @@ public class StartOnTopReplica {
 
     public static void move_silot_first3() {
         // 拖动1
-        RobotHelper.move(61, 55);
+        RobotHelper.move(45, 55);
         RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
-        RobotHelper.move(251, 58);
+        RobotHelper.move(194, 58);
         RobotHelper.delay(500);
         RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
         RobotHelper.delay(500);

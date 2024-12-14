@@ -42,7 +42,7 @@ public class ImgBoot {
     public static final String HIS_IMG_NAME = "%s_hisImg_%s.png";
 
     //图片存放目录
-    public static final String BUFFER_IMAGE_AREA = "C:\\Users\\Admin\\Desktop\\deliv\\";
+    public static final String BUFFER_IMAGE_AREA = "C:\\Users\\18883\\Desktop\\captureImg\\eve\\";
 
     public static long lastActiveTime = 0;
     // 至少每隔1分钟弹起窗口

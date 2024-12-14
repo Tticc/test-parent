@@ -41,14 +41,14 @@ public class Boot {
     private PointInfoDTO ed_colos = new PointInfoDTO().setX(226).setY(81);
 
 
-    private PointInfoDTO red_st_silot = new PointInfoDTO().setX(41).setY(140);
-    private PointInfoDTO red_ed_silot = new PointInfoDTO().setX(66).setY(673);
+    private PointInfoDTO red_st_silot = new PointInfoDTO().setX(37).setY(87);
+    private PointInfoDTO red_ed_silot = new PointInfoDTO().setX(58).setY(688);
 
-    private PointInfoDTO red_st_sai = new PointInfoDTO().setX(117).setY(140);
-    private PointInfoDTO red_ed_sai = new PointInfoDTO().setX(141).setY(673);
+    private PointInfoDTO red_st_sai = new PointInfoDTO().setX(94).setY(131);
+    private PointInfoDTO red_ed_sai = new PointInfoDTO().setX(118).setY(688);
 
-    private PointInfoDTO red_st_colos = new PointInfoDTO().setX(196).setY(143);
-    private PointInfoDTO red_ed_colos = new PointInfoDTO().setX(219).setY(673);
+    private PointInfoDTO red_st_colos = new PointInfoDTO().setX(151).setY(131);
+    private PointInfoDTO red_ed_colos = new PointInfoDTO().setX(172).setY(688);
 
     private final ScheduledExecutorService checkerExecutorService = Executors.newSingleThreadScheduledExecutor(new SwingThreadFactoryImpl("warn-checker"));
 
