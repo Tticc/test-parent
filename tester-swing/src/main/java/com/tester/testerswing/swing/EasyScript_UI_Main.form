@@ -43,8 +43,12 @@
     <colspec value="fill:max(d;4px):noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:90px:noGrow"/>
+    <colspec value="left:20dlu:noGrow"/>
+    <colspec value="fill:90px:noGrow"/>
+    <colspec value="left:4dlu:noGrow"/>
+    <colspec value="fill:90px:noGrow"/>
     <constraints>
-      <xy x="20" y="20" width="651" height="399"/>
+      <xy x="20" y="20" width="872" height="399"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -58,13 +62,12 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="6aa1" class="javax.swing.JButton" binding="checking">
+          <component id="4a04" class="javax.swing.JButton" binding="onTopReplica_start">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="检测"/>
-              <verticalAlignment value="0"/>
+              <text value="全投屏"/>
             </properties>
           </component>
         </children>
@@ -138,15 +141,6 @@
           <text value="刷新"/>
         </properties>
       </component>
-      <component id="2e5dd" class="javax.swing.JLabel" binding="check_status">
-        <constraints>
-          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value=" "/>
-        </properties>
-      </component>
       <component id="2ffa6" class="javax.swing.JButton" binding="sai_pause">
         <constraints>
           <grid row="12" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -190,15 +184,6 @@
         </constraints>
         <properties>
           <text value="打开"/>
-        </properties>
-      </component>
-      <component id="4a04" class="javax.swing.JButton" binding="onTopReplica_start">
-        <constraints>
-          <grid row="2" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="投屏"/>
         </properties>
       </component>
       <component id="3f3cf" class="javax.swing.JLabel" binding="red_point_print">
@@ -245,24 +230,6 @@
         </constraints>
         <properties>
           <text value="false"/>
-        </properties>
-      </component>
-      <component id="92497" class="javax.swing.JButton" binding="onTopReplica_start1">
-        <constraints>
-          <grid row="6" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="投屏左"/>
-        </properties>
-      </component>
-      <component id="f1209" class="javax.swing.JButton" binding="onTopReplica_start2">
-        <constraints>
-          <grid row="6" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="投屏中"/>
         </properties>
       </component>
       <component id="3f35d" class="javax.swing.JLabel" binding="auto_status">
@@ -317,15 +284,6 @@
         </constraints>
         <properties>
           <text value="auto停止"/>
-        </properties>
-      </component>
-      <component id="46a93" class="javax.swing.JButton" binding="onTopReplica_start3">
-        <constraints>
-          <grid row="2" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="投屏右"/>
         </properties>
       </component>
       <component id="bdafa" class="javax.swing.JButton" binding="warn_start">
@@ -427,15 +385,6 @@
           <text value="warn停止"/>
         </properties>
       </component>
-      <component id="92f0a" class="javax.swing.JButton" binding="all_prepare">
-        <constraints>
-          <grid row="26" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <text value="全准备"/>
-        </properties>
-      </component>
       <component id="b434c" class="javax.swing.JButton" binding="all_harvest">
         <constraints>
           <grid row="26" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -466,6 +415,123 @@
       <component id="754e6" class="javax.swing.JButton" binding="harvest_colos">
         <constraints>
           <grid row="23" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="牵引"/>
+        </properties>
+      </component>
+      <component id="92f0a" class="javax.swing.JButton" binding="all_prepare">
+        <constraints>
+          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="全准备"/>
+        </properties>
+      </component>
+      <component id="92497" class="javax.swing.JButton" binding="onTopReplica_start1">
+        <constraints>
+          <grid row="2" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="投屏1"/>
+        </properties>
+      </component>
+      <component id="8a468" class="javax.swing.JButton" binding="onTopReplica_start4">
+        <constraints>
+          <grid row="6" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="投屏4"/>
+        </properties>
+      </component>
+      <component id="46a93" class="javax.swing.JButton" binding="onTopReplica_start3">
+        <constraints>
+          <grid row="2" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="投屏3"/>
+        </properties>
+      </component>
+      <component id="f1209" class="javax.swing.JButton" binding="onTopReplica_start2">
+        <constraints>
+          <grid row="6" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="投屏2"/>
+        </properties>
+      </component>
+      <component id="b6a94" class="javax.swing.JButton" binding="four_pause">
+        <constraints>
+          <grid row="12" column="16" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="4停止"/>
+        </properties>
+      </component>
+      <component id="abd4c" class="javax.swing.JButton" binding="four_start">
+        <constraints>
+          <grid row="14" column="16" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="4开始"/>
+        </properties>
+      </component>
+      <component id="84c6f" class="javax.swing.JLabel" binding="four_status">
+        <constraints>
+          <grid row="16" column="16" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="25" bottom="0" right="0"/>
+        </constraints>
+        <properties>
+          <text value="false"/>
+        </properties>
+      </component>
+      <component id="c1831" class="javax.swing.JButton" binding="open_four">
+        <constraints>
+          <grid row="18" column="16" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="打开"/>
+        </properties>
+      </component>
+      <component id="d8f5c" class="javax.swing.JButton" binding="open_run_four">
+        <constraints>
+          <grid row="18" column="18" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="开工"/>
+        </properties>
+      </component>
+      <component id="17bd1" class="javax.swing.JButton" binding="four_link">
+        <constraints>
+          <grid row="20" column="16" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="联系"/>
+        </properties>
+      </component>
+      <component id="7e7d4" class="javax.swing.JButton" binding="open_end_four">
+        <constraints>
+          <grid row="20" column="18" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="回收"/>
+        </properties>
+      </component>
+      <component id="456c7" class="javax.swing.JButton" binding="harvest_four">
+        <constraints>
+          <grid row="23" column="18" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>

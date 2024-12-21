@@ -3,6 +3,7 @@ package com.tester.testerswing.swing.eventHandler;
 import com.tester.testerswing.capture.GaussianPointInfoDTO;
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.robot.RobotHelper;
+import com.tester.testerswing.swing.EasyScript_UI_Main;
 import com.tester.testerswing.swing.Sai_Input;
 
 import javax.swing.*;
@@ -17,6 +18,8 @@ import java.awt.event.KeyListener;
  * @Date 2022-8-4 13:47:36
  */
 public class EventHandle_Sai {
+
+    private static Integer NUM = 2;
 
     public static String pointStr = "(%d,%d)";
 
@@ -110,22 +113,85 @@ public class EventHandle_Sai {
 
     }
 
+    // sai 操作处理
+    public static void handle_sai_main(EasyScript_UI_Main script) {
+        // 自动投屏事件2
+        script.getOnTopReplica_start2().addActionListener((e) -> {
+            PointHelper.onTopReplicaPrepare(PointHelper.getList(),NUM);
+        });
+        // 暂停 sai
+        script.getSai_pause().addActionListener((e) -> {
+            script.getAccountInfoList().get(NUM-1).setNeedWarn(false);
+            script.getSai_status().setText("false");
+            script.getWarn_status().setText("false");
+        });
+        // 继续 sai
+        script.getSai_start().addActionListener((e) -> {
+            script.getAccountInfoList().get(NUM-1).setNeedWarn(true);
+            script.getSai_status().setText("true");
+        });
+
+
+        // 设置 open 按钮事件。打开账号
+        JButton open_sai = script.getOpen_sai();
+        open_sai.addActionListener((e) -> {
+            try {
+                PointHelper.openAll(PointHelper.getList(),NUM);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+
+        // 设置 run 按钮事件。开工
+        JButton open_run_sai = script.getOpen_run_sai();
+        open_run_sai.addActionListener((e) -> {
+            try {
+                PointHelper.eveToWorkAll(PointHelper.getList(),NUM);
+                // 启动监控
+                script.getSai_start().doClick();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 设置 end 按钮事件。收工
+        JButton open_end_sai = script.getOpen_end_sai();
+        open_end_sai.addActionListener((e) -> {
+            try {
+                script.getSai_pause().doClick();
+                PointHelper.eveEndWorkAll(PointHelper.getList(),NUM);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+        // 设置 找回无人机
+        JButton sai_link = script.getSai_link();
+        sai_link.addActionListener((e) -> {
+            try {
+                PointHelper.linkDrone(PointHelper.getList(),NUM);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 设置sai 放置牵引 按钮事件
+        JButton harvest_sai = script.getHarvest_sai();
+        harvest_sai.addActionListener((e) -> {
+            try {
+                PointHelper.doHarvestAll(PointHelper.getList(),NUM);
+                // 启动监控
+                script.getSai_start().doClick();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+    }
+
 
     public static void quick_run(){
         try {
-            EventHandle_Main.openOpe(EventHandle_Sai.sai_open_p1, EventHandle_Sai.sai_open_p2);
-//            EventHandle_Main.runOpe(EventHandle_Sai.sai_align_p1, EventHandle_Sai.sai_align_p2, EventHandle_Sai.sai_align_p3_quick, EventHandle_Sai.sai_main_view_p1);
-            EventHandle_Main.quickRunOpe(EventHandle_Sai.sai_align_p1,
-                    EventHandle_Sai.sai_align_p2,
-                    EventHandle_Sai.sai_align_p3,
-                    EventHandle_Silot.silot_align_p4_stop,
-                    EventHandle_Silot.silot_align_p5_use,
-                    EventHandle_Silot.silot_align_p6_up,
-                    EventHandle_Silot.silot_align_p7_up,
-                    EventHandle_Sai.sai_align_p3_quick);
-
-            // 回收无人机
-//            EventHandle_Main.returnOpe(EventHandle_Sai.sai_return_p1, EventHandle_Sai.sai_return_p2, EventHandle_Sai.sai_return_p3, EventHandle_Sai.sai_main_view_p1);
+            PointHelper.eveEscapeAll(PointHelper.getList(),NUM);
         } catch (Exception exception) {
             exception.printStackTrace();
         }

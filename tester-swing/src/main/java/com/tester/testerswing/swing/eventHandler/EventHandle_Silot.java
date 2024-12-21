@@ -3,6 +3,7 @@ package com.tester.testerswing.swing.eventHandler;
 import com.tester.testerswing.capture.GaussianPointInfoDTO;
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.robot.RobotHelper;
+import com.tester.testerswing.swing.EasyScript_UI_Main;
 import com.tester.testerswing.swing.Silot_Input;
 
 import javax.swing.*;
@@ -17,6 +18,8 @@ import java.awt.event.KeyListener;
  * @Date 2022-8-4 13:47:36
  */
 public class EventHandle_Silot {
+
+    private static Integer NUM = 1;
 
     public static String pointStr = "(%d,%d)";
 
@@ -126,22 +129,86 @@ public class EventHandle_Silot {
     }
 
 
+    // silot 操作处理
+    public static void handle_silot_main(EasyScript_UI_Main script) {
+        // 自动投屏事件1
+        script.getOnTopReplica_start1().addActionListener((e) -> {
+            PointHelper.onTopReplicaPrepare(PointHelper.getList(),NUM);
+        });
+        // 暂停 silot
+        script.getSilot_pause().addActionListener((e) -> {
+            script.getAccountInfoList().get(NUM-1).setNeedWarn(false);
+            script.getSilot_status().setText("false");
+            script.getWarn_status().setText("false");
+        });
+        // 继续 silot
+        script.getSilot_start().addActionListener((e) -> {
+            script.getAccountInfoList().get(NUM-1).setNeedWarn(true);
+            script.getSilot_status().setText("true");
+        });
+
+        // 设置 open 按钮事件。打开账号
+        JButton open_silot = script.getOpen_silot();
+        open_silot.addActionListener((e) -> {
+            try {
+                PointHelper.openAll(PointHelper.getList(),NUM);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+
+        // 设置 run 按钮事件。开工
+        JButton open_run_silot = script.getOpen_run_silot();
+        open_run_silot.addActionListener((e) -> {
+            try {
+                PointHelper.eveToWorkAll(PointHelper.getList(),NUM);
+                // 启动监控
+                script.getSilot_start().doClick();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+
+        // 设置 end 按钮事件。收工
+        JButton open_end_silot = script.getOpen_end_silot();
+        open_end_silot.addActionListener((e) -> {
+            try {
+                script.getSilot_pause().doClick();
+                PointHelper.eveEndWorkAll(PointHelper.getList(),NUM);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 设置 找回无人机
+        JButton silot_link = script.getSilot_link();
+        silot_link.addActionListener((e) -> {
+            try {
+                PointHelper.linkDrone(PointHelper.getList(),NUM);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 设置silot 放置牵引 按钮事件
+        JButton harvest_silot = script.getHarvest_silot();
+        harvest_silot.addActionListener((e) -> {
+            try {
+                PointHelper.doHarvestAll(PointHelper.getList(),NUM);
+                // 启动监控
+                script.getSilot_start().doClick();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+    }
 
 
     public static void quick_run(){
         try {
-            EventHandle_Main.openOpe(EventHandle_Silot.silot_open_p1, EventHandle_Silot.silot_open_p2);
-//            EventHandle_Main.runOpe(EventHandle_Silot.silot_align_p1, EventHandle_Silot.silot_align_p2, EventHandle_Silot.silot_align_p3_dock, EventHandle_Silot.silot_main_view_p1);
-            EventHandle_Main.quickRunOpe(EventHandle_Silot.silot_align_p1,
-                    EventHandle_Silot.silot_align_p2,
-                    EventHandle_Silot.silot_align_p3,
-                    EventHandle_Silot.silot_align_p4_stop,
-                    EventHandle_Silot.silot_align_p5_use,
-                    EventHandle_Silot.silot_align_p6_up,
-                    EventHandle_Silot.silot_align_p7_up,
-                    EventHandle_Silot.silot_align_p3_dock);
-            // 回收无人机
-//            EventHandle_Main.returnOpe(EventHandle_Silot.silot_return_p1, EventHandle_Silot.silot_return_p2, EventHandle_Silot.silot_return_p3, EventHandle_Silot.silot_main_view_p1);
+            PointHelper.eveEscapeAll(PointHelper.getList(),NUM);
         } catch (Exception exception) {
             exception.printStackTrace();
         }

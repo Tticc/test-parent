@@ -7,6 +7,7 @@ import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.swing.eventHandler.EventHandle_Colos;
 import com.tester.testerswing.swing.eventHandler.EventHandle_Sai;
 import com.tester.testerswing.swing.eventHandler.EventHandle_Silot;
+import com.tester.testerswing.swing.eventHandler.PointHelper;
 import com.tester.testerswing.voice.BeepSoundProcessor;
 import org.opencv.imgcodecs.Imgcodecs;
 
@@ -29,16 +30,7 @@ public class Boot {
     private String silot = "silot";
     private String sailinna = "sailinna";
     private String colos = "colos";
-
-
-    private PointInfoDTO st_silot = new PointInfoDTO().setX(51).setY(70);
-    private PointInfoDTO ed_silot = new PointInfoDTO().setX(74).setY(90);
-
-    private PointInfoDTO st_sai = new PointInfoDTO().setX(127).setY(62);
-    private PointInfoDTO ed_sai = new PointInfoDTO().setX(146).setY(85);
-
-    private PointInfoDTO st_colos = new PointInfoDTO().setX(203).setY(61);
-    private PointInfoDTO ed_colos = new PointInfoDTO().setX(226).setY(81);
+    private String four = "four";
 
 
     private PointInfoDTO red_st_silot = new PointInfoDTO().setX(37).setY(87);
@@ -56,36 +48,54 @@ public class Boot {
     private final List<AccountInfo> accountInfoList = new ArrayList<>();
 
     public Boot() {
-        accountInfoList.add(new AccountInfo()
-                .setWarnMsg("左警告")
-                .setInfoMsg("左刷")
-                .setAccount(silot)
-                .setSt(st_silot)
-                .setEd(ed_silot)
-                .setRedSt(red_st_silot)
-                .setRedEd(red_ed_silot)
-                .setLastQuickRunTime(DateUtil.getTodayStart())
-                .setConsumer((e) -> EventHandle_Silot.quick_run()));
-        accountInfoList.add(new AccountInfo()
-                .setWarnMsg("中警告")
-                .setInfoMsg("中刷")
-                .setAccount(sailinna)
-                .setSt(st_sai)
-                .setEd(ed_sai)
-                .setRedSt(red_st_sai)
-                .setRedEd(red_ed_sai)
-                .setLastQuickRunTime(DateUtil.getTodayStart())
-                .setConsumer((e) -> EventHandle_Sai.quick_run()));
-        accountInfoList.add(new AccountInfo()
-                .setWarnMsg("右警告")
-                .setInfoMsg("右刷")
-                .setAccount(colos)
-                .setSt(st_colos)
-                .setEd(ed_colos)
-                .setRedSt(red_st_colos)
-                .setRedEd(red_ed_colos)
-                .setLastQuickRunTime(DateUtil.getTodayStart())
-                .setConsumer((e) -> EventHandle_Colos.quick_run()));
+        List<PointHelper.AccountPoint> list = PointHelper.getList();
+        for (int i = 1; i <= list.size(); i++) {
+            Integer finalI = i;
+            PointHelper.AccountPoint accountPoint = list.get(finalI - 1);
+            accountInfoList.add(new AccountInfo()
+                    .setWarnMsg(accountPoint.getWarnMsg())
+                    .setAccount(accountPoint.getName())
+                    .setRedSt(accountPoint.getRedSt())
+                    .setRedEd(accountPoint.getRedEd())
+                    .setLastQuickRunTime(DateUtil.getYesterdayStart())
+                    .setConsumer((e) -> PointHelper.eveEscapeAll(PointHelper.getList(),finalI)));
+        }
+//        accountInfoList.add(new AccountInfo()
+//                .setWarnMsg("左警告")
+//                .setAccount(silot)
+////                .setSt(st_silot)
+////                .setEd(ed_silot)
+//                .setRedSt(red_st_silot)
+//                .setRedEd(red_ed_silot)
+//                .setLastQuickRunTime(DateUtil.getYesterdayStart())
+//                .setConsumer((e) -> EventHandle_Silot.quick_run()));
+//        accountInfoList.add(new AccountInfo()
+//                .setWarnMsg("中警告")
+//                .setAccount(sailinna)
+////                .setSt(st_sai)
+////                .setEd(ed_sai)
+//                .setRedSt(red_st_sai)
+//                .setRedEd(red_ed_sai)
+//                .setLastQuickRunTime(DateUtil.getYesterdayStart())
+//                .setConsumer((e) -> EventHandle_Sai.quick_run()));
+//        accountInfoList.add(new AccountInfo()
+//                .setWarnMsg("右警告")
+//                .setAccount(colos)
+////                .setSt(st_colos)
+////                .setEd(ed_colos)
+//                .setRedSt(red_st_colos)
+//                .setRedEd(red_ed_colos)
+//                .setLastQuickRunTime(DateUtil.getYesterdayStart())
+//                .setConsumer((e) -> EventHandle_Colos.quick_run()));
+//        accountInfoList.add(new AccountInfo()
+//                .setWarnMsg("4警告")
+//                .setAccount(four)
+////                .setSt(st_colos)
+////                .setEd(ed_colos)
+//                .setRedSt(red_st_colos)
+//                .setRedEd(red_ed_colos)
+//                .setLastQuickRunTime(DateUtil.getYesterdayStart())
+//                .setConsumer((e) -> EventHandle_Colos.quick_run()));
     }
 
 

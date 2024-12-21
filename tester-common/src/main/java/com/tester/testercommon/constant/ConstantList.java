@@ -57,6 +57,10 @@ public class ConstantList {
 
     public static final int ONE = 1;
 
-    public static final String COMMON_SPLIT_STR = ";";
+    // 分号分隔符
+    public static final String SEMICOLON_SPLIT_STR = ";";
+
+    // 逗号分隔符
+    public static final String COMMA_SPLIT_STR = ",";
 
 }

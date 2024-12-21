@@ -1,5 +1,6 @@
 package com.tester.testerswing.robot;
 
+import com.tester.testerswing.capture.GaussianStrPointInfoDTO;
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.gaussian.GaussianHelper;
 
@@ -98,6 +99,12 @@ public class RobotHelper {
 
     public static void move(int x, int y) {
         move(x, y, 85);
+    }
+    public static void move(GaussianStrPointInfoDTO point) {
+        move(point.getX(), point.getY(), GaussianHelper.getGaussianInt(180, 250));
+    }
+    public static void move(GaussianStrPointInfoDTO point, int delayTimes) {
+        move(point.getX(), point.getY(), delayTimes);
     }
 
     public static void move(int x, int y, int delayTimes) {

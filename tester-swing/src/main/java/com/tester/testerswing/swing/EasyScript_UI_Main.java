@@ -18,9 +18,8 @@ import java.util.List;
 public class EasyScript_UI_Main {
 
     private JPanel main;
-    private JButton checking;
     private JButton refresh;
-    private JTextField point_input;
+    private JTextField point_input;//失效
     private JLabel refresh_time;
     private JButton silot_pause;
     private JButton sai_pause;
@@ -29,7 +28,6 @@ public class EasyScript_UI_Main {
     private JLabel sai_status;
     private JLabel silot_status;
     private JLabel point_print;
-    private JLabel check_status;
     private JButton open_silot;
     private JButton open_sai;
     private JButton open_run_silot;
@@ -63,6 +61,15 @@ public class EasyScript_UI_Main {
     private JButton harvest_silot;
     private JButton harvest_sai;
     private JButton harvest_colos;
+    private JButton onTopReplica_start4;
+    private JButton four_pause;
+    private JButton four_start;
+    private JLabel four_status;
+    private JButton open_four;
+    private JButton open_run_four;
+    private JButton four_link;
+    private JButton open_end_four;
+    private JButton harvest_four;
 
 
     Boot boot = new Boot();

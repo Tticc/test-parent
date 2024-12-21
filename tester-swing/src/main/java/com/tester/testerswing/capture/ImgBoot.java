@@ -79,35 +79,34 @@ public class ImgBoot {
      * @Date 9:49 2022/8/2
      * @Author 温昌营
      **/
-    @Deprecated
-    public static void checkNumber(AccountInfo accountInfo, int imgType) throws Exception {
-        if (!accountInfo.isNeedInfo()) {
-            // 无需通知，直接返回
-            return;
-        }
-        Mat newMat = createScreenAnd2Mat(accountInfo.getSt(), accountInfo.getEd(), imgType, accountInfo.getAccount());
-        Mat hisMat = null;
-        if (accountInfo.getHisMat() != null) {
-            hisMat = accountInfo.getHisMat();
-        } else {
-            hisMat = OpenCVHelper.readImg2Mat(getHisImgPath(accountInfo.getAccount(), accountInfo.getRefreshCount().get(), "number"));
-        }
-        boolean normal = ImgComparator.doCompareIfTheSame(hisMat, newMat);
-        if (!normal) {
-            // 提示通知
-            sendVoice(accountInfo.getInfoMsg(), false);
-            // 最多提醒1次
-            AtomicInteger noticeTime = accountInfo.getNoticeTime();
-            int andIncrement = noticeTime.incrementAndGet();
-            if(andIncrement >= 1){
-                noticeTime.getAndSet(0);
-                refreshHisImg(accountInfo);
-//                sendVoice("已刷新", false);
-            }
-        }
-
-
-    }
+//    @Deprecated
+//    public static void checkNumber(AccountInfo accountInfo, int imgType) throws Exception {
+//        if (!accountInfo.isNeedInfo()) {
+//            // 无需通知，直接返回
+//            return;
+//        }
+//        Mat newMat = createScreenAnd2Mat(accountInfo.getSt(), accountInfo.getEd(), imgType, accountInfo.getAccount());
+//        Mat hisMat = null;
+//        if (accountInfo.getHisMat() != null) {
+//            hisMat = accountInfo.getHisMat();
+//        } else {
+//            hisMat = OpenCVHelper.readImg2Mat(getHisImgPath(accountInfo.getAccount(), accountInfo.getRefreshCount().get(), "number"));
+//        }
+//        boolean normal = ImgComparator.doCompareIfTheSame(hisMat, newMat);
+//        if (!normal) {
+//            // 提示通知
+//            sendVoice(accountInfo.getInfoMsg(), false);
+//            // 最多提醒1次
+//            AtomicInteger noticeTime = accountInfo.getNoticeTime();
+//            int andIncrement = noticeTime.incrementAndGet();
+//            if(andIncrement >= 1){
+//                noticeTime.getAndSet(0);
+//                refreshHisImg(accountInfo);
+//            }
+//        }
+//
+//
+//    }
     /**
      * 通过图片检查本地进红状态。后续通知或直接跑路处理
      * @Date 9:49 2022/8/11
@@ -188,8 +187,8 @@ public class ImgBoot {
     public static void refreshHisImg(AccountInfo account) throws BusinessException {
         try {
             int count = account.getRefreshCount().incrementAndGet();
-            Mat numberCheckImage = createScreenAnd2Mat(account.getSt(), account.getEd(), Imgcodecs.IMREAD_GRAYSCALE, account.getAccount());
-            account.setHisMat(numberCheckImage);
+//            Mat numberCheckImage = createScreenAnd2Mat(account.getSt(), account.getEd(), Imgcodecs.IMREAD_GRAYSCALE, account.getAccount());
+//            account.setHisMat(numberCheckImage);
             Mat warnCheckImage = createScreenAnd2Mat(account.getRedSt(), account.getRedEd(), Imgcodecs.IMREAD_UNCHANGED, account.getAccount());
             //将缓存里面的屏幕信息以图片的格式存在制定的磁盘位置
             String basePath = getBasePath(account.getAccount());
@@ -201,7 +200,7 @@ public class ImgBoot {
                     System.out.println("dir create failed! --" + basePath);
                 }
             }
-            OpenCVHelper.saveMat2Img(basePath, numberCheckImage, getHisImgName(count, "number"));
+//            OpenCVHelper.saveMat2Img(basePath, numberCheckImage, getHisImgName(count, "number"));
             OpenCVHelper.saveMat2Img(basePath, warnCheckImage, getHisImgName(count, "warn"));
         } catch (Exception e) {
             throw new BusinessException(500, "刷新初始图像失败", e);

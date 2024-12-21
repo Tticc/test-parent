@@ -19,15 +19,6 @@ public class AccountInfo extends BaseDTO {
     // 警告信息
     private String warnMsg = "警告";
 
-    // 提醒信息
-    private String infoMsg = "提醒";
-
-    // number 截图起点
-    private PointInfoDTO st;
-
-    // number 截图终点
-    private PointInfoDTO ed;
-
     // red 截图起点
     private PointInfoDTO redSt;
 
@@ -53,7 +44,7 @@ public class AccountInfo extends BaseDTO {
     private MyConsumer consumer;
 
     // 刷新次数
-    private Mat hisMat;
+//    private Mat hisMat;
 
     // 提醒次数
     private AtomicInteger noticeTime = new AtomicInteger(0);

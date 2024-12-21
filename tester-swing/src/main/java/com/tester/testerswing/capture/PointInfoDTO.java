@@ -1,7 +1,9 @@
 package com.tester.testerswing.capture;
 
 import com.tester.base.dto.model.BaseDTO;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -12,6 +14,8 @@ import lombok.experimental.Accessors;
  **/
 @Data
 @Accessors(chain = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class PointInfoDTO extends BaseDTO {
 
     // x轴，横轴

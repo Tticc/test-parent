@@ -52,7 +52,7 @@ public class SslConfigurer {
 
         // 增加额外的监听端口
         if (!StringUtils.isEmpty(additionalHttpsPorts.trim())) {
-            String[] split = additionalHttpsPorts.split(ConstantList.COMMON_SPLIT_STR);
+            String[] split = additionalHttpsPorts.split(ConstantList.SEMICOLON_SPLIT_STR);
             List<Integer> ports = new ArrayList<>();
             for (String s : split) {
                 try {
