@@ -70,6 +70,11 @@ public class EasyScript_UI_Main {
     private JButton four_link;
     private JButton open_end_four;
     private JButton harvest_four;
+    private JButton pure_harvest_silot;
+    private JButton pure_harvest_sai;
+    private JButton pure_harvest_colos;
+    private JButton pure_harvest_four;
+    private JButton pure_all_harvest;
 
 
     Boot boot = new Boot();

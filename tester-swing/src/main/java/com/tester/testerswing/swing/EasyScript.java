@@ -1,6 +1,9 @@
 package com.tester.testerswing.swing;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class EasyScript {
     private static JFrame frame;
@@ -40,6 +43,8 @@ public class EasyScript {
          */
         EasyScript_UI_Main easyScript_uiMain = new EasyScript_UI_Main().start(silot_input, sai_input);
         JPanel main = easyScript_uiMain.getMain();
+        // 设置按钮鼠标hover颜色
+        setupAllButtonsHoverEffect(main);
 
         JTabbedPane tab = new JTabbedPane();
         tab.addTab("main", main);
@@ -49,6 +54,27 @@ public class EasyScript {
         frame.add(tab);
         // 设置界面可见
         frame.setVisible(true);
+    }
+
+    private void setupAllButtonsHoverEffect(JPanel panel) {
+        // 遍历面板中的组件
+        for (Component comp : panel.getComponents()) {
+            if (comp instanceof JButton) { // 检查该组件是否为 Jbutton
+                Color originalColor = comp.getBackground(); // 获取原始背景色
+
+                ((JButton) comp).addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        ((JButton) comp).setBackground(Color.ORANGE); // 鼠标进入时改变颜色
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        ((JButton) comp).setBackground(originalColor); // 鼠标离开时恢复颜色
+                    }
+                });
+            }
+        }
     }
 
 }

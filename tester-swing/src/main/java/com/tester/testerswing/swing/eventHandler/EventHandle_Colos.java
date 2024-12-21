@@ -80,13 +80,23 @@ public class EventHandle_Colos {
             }
         });
 
-        // 设置 放置牵引 按钮事件
+        // 设置 放置开工+牵引 按钮事件
         JButton harvest_colos = script.getHarvest_colos();
         harvest_colos.addActionListener((e) -> {
             try {
                 PointHelper.doHarvestAll(PointHelper.getList(),NUM);
                 // 启动监控
                 script.getColos_start().doClick();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 设置 纯放置牵引 按钮事件
+        JButton pure_harvest_colos = script.getPure_harvest_colos();
+        pure_harvest_colos.addActionListener((e) -> {
+            try {
+                PointHelper.doPureHarvestAll(PointHelper.getList(),NUM);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

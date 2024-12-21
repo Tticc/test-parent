@@ -80,13 +80,23 @@ public class EventHandle_Four {
             }
         });
 
-        // 设置 放置牵引 按钮事件
+        // 设置 放置开工+牵引 按钮事件
         JButton harvest_four = script.getHarvest_four();
         harvest_four.addActionListener((e) -> {
             try {
                 PointHelper.doHarvestAll(PointHelper.getList(),NUM);
                 // 启动监控
                 script.getFour_start().doClick();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 设置 纯放置牵引 按钮事件
+        JButton pure_harvest_four = script.getPure_harvest_four();
+        pure_harvest_four.addActionListener((e) -> {
+            try {
+                PointHelper.doPureHarvestAll(PointHelper.getList(),NUM);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

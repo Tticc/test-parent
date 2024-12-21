@@ -238,6 +238,22 @@ public class PointHelper {
         }
     }
 
+    public static void doPureHarvestAll(List<AccountPoint> accountPoints, Integer num) {
+        CommonEvePoint commonEvePoint = new CommonEvePoint();
+        for (int i = 1; i <= accountPoints.size(); i++) {
+            if (num != null && num != i) {
+                continue;
+            }
+            AccountPoint accountPoint = accountPoints.get(i - 1);
+            EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
+            EveToWorkPoint eveToWorkPoint = new EveToWorkPoint();
+            // 释放箱子并存点
+            doHarvest_sub(eveToWorkPoint);
+            // 环绕建筑
+            doHarvest_sub2(eveToWorkPoint);
+        }
+    }
+
     public static void doHarvestAll(List<AccountPoint> accountPoints, Integer num) {
         CommonEvePoint commonEvePoint = new CommonEvePoint();
         for (int i = 1; i <= accountPoints.size(); i++) {
@@ -318,6 +334,8 @@ public class PointHelper {
 
         }
     }
+
+
 
 
     @Data

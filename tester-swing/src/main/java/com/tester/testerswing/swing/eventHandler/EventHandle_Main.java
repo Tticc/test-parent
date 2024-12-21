@@ -124,13 +124,23 @@ public class EventHandle_Main {
             }
         });
 
-        // 全部放牵引
+        // 全部开工+牵引
         JButton all_harvest = script.getAll_harvest();
         all_harvest.addActionListener((e) -> {
             try {
                 PointHelper.doHarvestAll(PointHelper.getList(), null);
                 // 启动监听
                 script.getWarn_start().doClick();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 全部纯牵引
+        JButton pure_all_harvest = script.getPure_all_harvest();
+        pure_all_harvest.addActionListener((e) -> {
+            try {
+                PointHelper.doPureHarvestAll(PointHelper.getList(), null);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

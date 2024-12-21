@@ -175,13 +175,23 @@ public class EventHandle_Sai {
             }
         });
 
-        // 设置sai 放置牵引 按钮事件
+        // 设置sai 放置开工+牵引 按钮事件
         JButton harvest_sai = script.getHarvest_sai();
         harvest_sai.addActionListener((e) -> {
             try {
                 PointHelper.doHarvestAll(PointHelper.getList(),NUM);
                 // 启动监控
                 script.getSai_start().doClick();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        // 设置 纯放置牵引 按钮事件
+        JButton pure_harvest_sai = script.getPure_harvest_sai();
+        pure_harvest_sai.addActionListener((e) -> {
+            try {
+                PointHelper.doPureHarvestAll(PointHelper.getList(),NUM);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
