@@ -61,20 +61,54 @@ public class EasyScript {
         for (Component comp : panel.getComponents()) {
             if (comp instanceof JButton) { // 检查该组件是否为 Jbutton
                 Color originalColor = comp.getBackground(); // 获取原始背景色
+                JButton button = (JButton) comp;
+                button.addMouseListener(new MouseAdapter() {
+                    JDialog dialog;
 
-                ((JButton) comp).addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseEntered(MouseEvent e) {
-                        ((JButton) comp).setBackground(Color.ORANGE); // 鼠标进入时改变颜色
+                        button.setBackground(Color.ORANGE); // 鼠标进入时改变颜色
+                        // 获取或创建弹窗
+                        JDialog dialog = (JDialog) button.getClientProperty("hoverDialog");
+                        if (dialog == null) {
+                            dialog = createHoverDialog(button, panel);
+                            button.putClientProperty("hoverDialog", dialog);
+                        }
+                        // 更新弹窗位置
+                        Point location = button.getLocationOnScreen();
+                        dialog.setLocation(location.x - 20, location.y - 50);
+                        // 显示弹窗
+                        dialog.setVisible(true);
                     }
 
                     @Override
                     public void mouseExited(MouseEvent e) {
-                        ((JButton) comp).setBackground(originalColor); // 鼠标离开时恢复颜色
+                        button.setBackground(originalColor); // 鼠标离开时恢复颜色
+                        // 隐藏弹窗
+                        JDialog dialog = (JDialog) button.getClientProperty("hoverDialog");
+                        if (dialog != null) {
+                            dialog.setVisible(false);
+                        }
                     }
                 });
             }
         }
+    }
+
+    private JDialog createHoverDialog(JButton button, JPanel panel) {
+        JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(panel));
+        dialog.setUndecorated(true); // 无边框
+        dialog.setLayout(new BorderLayout());
+
+        // 放大按钮内容
+        JLabel enlargedLabel = new JLabel(button.getText());
+        enlargedLabel.setFont(button.getFont().deriveFont(button.getFont().getSize() * 3.0f));
+        enlargedLabel.setBackground(button.getBackground());
+        enlargedLabel.setOpaque(true); // 确保背景可见
+        dialog.add(enlargedLabel);
+
+        dialog.pack();
+        return dialog;
     }
 
 }

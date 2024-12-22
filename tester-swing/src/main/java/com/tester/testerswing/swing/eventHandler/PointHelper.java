@@ -266,7 +266,7 @@ public class PointHelper {
             // release 释放无人机
             RobotHelper.move(eveToWorkPoint.getEve_releaseDronePoint(), 94);
             RobotHelper.mouseLeftPress();
-            RobotHelper.delay(GaussianHelper.getGaussianInt(615, 770));
+            RobotHelper.delay(GaussianHelper.getGaussianInt(315, 470));
             // 释放箱子并存点
             doHarvest_sub(eveToWorkPoint);
             // 环绕建筑
@@ -281,40 +281,42 @@ public class PointHelper {
     private static void doHarvest_sub(EveToWorkPoint eveToWorkPoint) {
         EveHarvestPoint eveHarvestPoint = new EveHarvestPoint();
         // 牵引箱子点
-        RobotHelper.move(eveHarvestPoint.getEve_mutPoint());
+        RobotHelper.move(eveHarvestPoint.getEve_mutPoint(),85);
         RobotHelper.mouseRightPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(1060, 1100));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(310, 500));
         // 释放牵引箱子点
-        RobotHelper.move(eveHarvestPoint.getEve_releaseMutPoint());
+        RobotHelper.move(eveHarvestPoint.getEve_releaseMutPoint(),85);
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(510, 600));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(110, 200));
 
         // 堆叠所有
-        RobotHelper.move(eveHarvestPoint.getEve_stackMutPoint());
+        RobotHelper.move(eveHarvestPoint.getEve_stackMutPoint(),85);
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(810, 1000));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(310, 500));
 
 
         // tab1 切换 作战tab
-        RobotHelper.move(eveToWorkPoint.getEve_fightingTabPoint());
+        RobotHelper.move(eveToWorkPoint.getEve_fightingTabPoint(),85);
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(1060, 1100));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(1560, 1600));
 
         // 选中牵引箱子
-        RobotHelper.move(eveHarvestPoint.getEve_spaceMutPoint());
+        RobotHelper.move(eveHarvestPoint.getEve_spaceMutPoint(),85);
         RobotHelper.mouseRightPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(1060, 1100));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(260, 300));
 
         // 保存牵引箱子点
-        RobotHelper.move(eveHarvestPoint.getEve_saveMutPointPoint());
+        RobotHelper.move(eveHarvestPoint.getEve_saveMutPointPoint(),85);
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(540, 570));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(840, 970));
+        RobotHelper.keyPress(KeyEvent.VK_ENTER);
+        RobotHelper.delay(GaussianHelper.getGaussianInt(100, 170));
         RobotHelper.keyPress(KeyEvent.VK_ENTER);
 
 
-        RobotHelper.delay(GaussianHelper.getGaussianInt(1060, 1100));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(260, 300));
         // tab0 切换 生产tab
-        RobotHelper.move(eveToWorkPoint.getEve_buildingTabPoint());
+        RobotHelper.move(eveToWorkPoint.getEve_buildingTabPoint(),85);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(260, 500));
     }
