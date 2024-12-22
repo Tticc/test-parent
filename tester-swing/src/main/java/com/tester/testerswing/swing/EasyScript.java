@@ -76,7 +76,7 @@ public class EasyScript {
                         }
                         // 更新弹窗位置
                         Point location = button.getLocationOnScreen();
-                        dialog.setLocation(location.x - 20, location.y - 50);
+                        dialog.setLocation(location.x - 20, location.y - 80);
                         // 显示弹窗
                         dialog.setVisible(true);
                     }
