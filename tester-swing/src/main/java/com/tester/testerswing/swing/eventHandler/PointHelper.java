@@ -32,13 +32,15 @@ public class PointHelper {
         AccountPoint silot = new AccountPoint();
         silot.setEve_selectPoint(new GaussianStrPointInfoDTO("811,955"));
         silot.setReplica_selectPoint(new GaussianStrPointInfoDTO("304,99"));
-        silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("80,57"));
+        silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("80,58"));//1
         silot.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1850,231", "1862,238"));
         silot.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1622,290", "1650,298"));
         silot.setEve_alignToPoint(new GaussianStrPointInfoDTO("1588,153", "1602,163"));
         silot.setEve_dockPoint(new GaussianStrPointInfoDTO("1663,153", "1676,162"));
-        silot.setRedSt(new PointInfoDTO(37, 133));
-        silot.setRedEd(new PointInfoDTO(55, 651));
+//        silot.setRedSt(new PointInfoDTO(37, 133));
+        silot.setRedSt(new PointInfoDTO(37,20));
+//        silot.setRedEd(new PointInfoDTO(55, 651));
+        silot.setRedEd(new PointInfoDTO(54,503));
         silot.setName("silot");
         silot.setWarnMsg("左警告");
 
@@ -46,13 +48,16 @@ public class PointHelper {
         AccountPoint sailinaa = new AccountPoint();
         sailinaa.setEve_selectPoint(new GaussianStrPointInfoDTO("1068,958"));
         sailinaa.setReplica_selectPoint(new GaussianStrPointInfoDTO("362,123"));
-        sailinaa.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("137,58"));
+//        sailinaa.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("137,58"));
+        sailinaa.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("80,574"));//2
         sailinaa.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1846,230", "1865,239"));
         sailinaa.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1625,288", "1644,299"));
         sailinaa.setEve_alignToPoint(new GaussianStrPointInfoDTO("1590,154", "1601,163"));
         sailinaa.setEve_dockPoint(new GaussianStrPointInfoDTO("1664,151", "1678,165"));
-        sailinaa.setRedSt(new PointInfoDTO(96, 141));
-        sailinaa.setRedEd(new PointInfoDTO(116, 651));
+//        sailinaa.setRedSt(new PointInfoDTO(96, 141));
+        sailinaa.setRedSt(new PointInfoDTO(37,533));
+//        sailinaa.setRedEd(new PointInfoDTO(116, 651));
+        sailinaa.setRedEd(new PointInfoDTO(54,1010));
         sailinaa.setName("sailinna");
         sailinaa.setWarnMsg("中警告");
 
@@ -60,13 +65,16 @@ public class PointHelper {
         AccountPoint colos = new AccountPoint();
         colos.setEve_selectPoint(new GaussianStrPointInfoDTO("1344,948"));
         colos.setReplica_selectPoint(new GaussianStrPointInfoDTO("361,152"));
-        colos.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("194,58"));
+//        colos.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("194,58"));
+        colos.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("135,58"));//3
         colos.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1843,227", "1862,238"));
         colos.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1616,288", "1634,299"));
         colos.setEve_alignToPoint(new GaussianStrPointInfoDTO("1591,150", "1600,161"));
         colos.setEve_dockPoint(new GaussianStrPointInfoDTO("1665,151", "1678,163"));
-        colos.setRedSt(new PointInfoDTO(151, 139));
-        colos.setRedEd(new PointInfoDTO(173, 651));
+//        colos.setRedSt(new PointInfoDTO(151, 139));
+        colos.setRedSt(new PointInfoDTO(93,20));
+//        colos.setRedEd(new PointInfoDTO(173, 651));
+        colos.setRedEd(new PointInfoDTO(111,503));
         colos.setName("colos");
         colos.setWarnMsg("右警告");
 
@@ -74,15 +82,24 @@ public class PointHelper {
         AccountPoint four = new AccountPoint();
         four.setEve_selectPoint(new GaussianStrPointInfoDTO("1527,948"));
         four.setReplica_selectPoint(new GaussianStrPointInfoDTO("327,173"));
-        four.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("251,58"));
+//        four.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("251,58"));
+        four.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("135,574"));//4
         four.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1840,228", "1865,235"));
         four.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1627,289", "1653,294"));
         four.setEve_alignToPoint(new GaussianStrPointInfoDTO("1581,159", "1598,168"));
         four.setEve_dockPoint(new GaussianStrPointInfoDTO("1661,154", "1675,161"));
-        four.setRedSt(new PointInfoDTO(211, 139));
-        four.setRedEd(new PointInfoDTO(231, 651));
+//        four.setRedSt(new PointInfoDTO(211, 139));
+        four.setRedSt(new PointInfoDTO(93,533));
+//        four.setRedEd(new PointInfoDTO(231, 651));
+        four.setRedEd(new PointInfoDTO(111,1010));
         four.setName("four");
         four.setWarnMsg("four警告");
+
+
+//        silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("190,58"));//5
+//        silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("190,574"));//6
+//        silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("245,58"));//7
+//        silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("245,574"));//8
 
 
         list.add(silot);
@@ -365,15 +382,19 @@ public class PointHelper {
         // OnTopReplica选择区域
         public GaussianStrPointInfoDTO replica_selectAreaPoint = new GaussianStrPointInfoDTO("132,123");
         // OnTopReplica区域起点
-        public GaussianStrPointInfoDTO replica_areaStartPoint = new GaussianStrPointInfoDTO("770,68");
+//        public GaussianStrPointInfoDTO replica_areaStartPoint = new GaussianStrPointInfoDTO("770,68");
+        public GaussianStrPointInfoDTO replica_areaStartPoint = new GaussianStrPointInfoDTO("770,115");
         // OnTopReplica区域终点
-        public GaussianStrPointInfoDTO replica_areaEndPoint = new GaussianStrPointInfoDTO("793,346");
+//        public GaussianStrPointInfoDTO replica_areaEndPoint = new GaussianStrPointInfoDTO("793,346");
+        public GaussianStrPointInfoDTO replica_areaEndPoint = new GaussianStrPointInfoDTO("793,323");
         // OnTopReplica区域选择完成按钮
         public GaussianStrPointInfoDTO replica_areaDoneButtonPoint = new GaussianStrPointInfoDTO("1252,278");
         // OnTopReplica拖动放缩起点
-        public GaussianStrPointInfoDTO replica_scrollStartPoint = new GaussianStrPointInfoDTO("86,999");
+//        public GaussianStrPointInfoDTO replica_scrollStartPoint = new GaussianStrPointInfoDTO("86,999");
+        public GaussianStrPointInfoDTO replica_scrollStartPoint = new GaussianStrPointInfoDTO("114,1004");
         // OnTopReplica拖动放缩终点
-        public GaussianStrPointInfoDTO replica_scrollEndPoint = new GaussianStrPointInfoDTO("58,888");
+//        public GaussianStrPointInfoDTO replica_scrollEndPoint = new GaussianStrPointInfoDTO("58,888");
+        public GaussianStrPointInfoDTO replica_scrollEndPoint = new GaussianStrPointInfoDTO("57,790");
         // OnTopReplica准备解除锁定右键位置
         public GaussianStrPointInfoDTO replica_beforeUnlockMenuPoint = new GaussianStrPointInfoDTO("51,55");
         // OnTopReplica解除锁定菜单位置
