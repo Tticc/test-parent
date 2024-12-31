@@ -30,7 +30,7 @@ public class PointHelper {
 
     static {
         AccountPoint silot = new AccountPoint();
-        silot.setEve_selectPoint(new GaussianStrPointInfoDTO("811,955"));
+        silot.setEve_selectPoint(new GaussianStrPointInfoDTO("731,937"));
         silot.setReplica_selectPoint(new GaussianStrPointInfoDTO("304,99"));
         silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("80,58"));//1
         silot.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1850,231", "1862,238"));
@@ -46,7 +46,7 @@ public class PointHelper {
 
 
         AccountPoint sailinaa = new AccountPoint();
-        sailinaa.setEve_selectPoint(new GaussianStrPointInfoDTO("1068,958"));
+        sailinaa.setEve_selectPoint(new GaussianStrPointInfoDTO("999,950"));
         sailinaa.setReplica_selectPoint(new GaussianStrPointInfoDTO("362,123"));
 //        sailinaa.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("137,58"));
         sailinaa.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("80,574"));//2
@@ -57,13 +57,13 @@ public class PointHelper {
 //        sailinaa.setRedSt(new PointInfoDTO(96, 141));
         sailinaa.setRedSt(new PointInfoDTO(37,533));
 //        sailinaa.setRedEd(new PointInfoDTO(116, 651));
-        sailinaa.setRedEd(new PointInfoDTO(54,1010));
+        sailinaa.setRedEd(new PointInfoDTO(54,1005));
         sailinaa.setName("sailinna");
         sailinaa.setWarnMsg("中警告");
 
 
         AccountPoint colos = new AccountPoint();
-        colos.setEve_selectPoint(new GaussianStrPointInfoDTO("1344,948"));
+        colos.setEve_selectPoint(new GaussianStrPointInfoDTO("1258,945"));
         colos.setReplica_selectPoint(new GaussianStrPointInfoDTO("361,152"));
 //        colos.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("194,58"));
         colos.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("135,58"));//3
@@ -91,7 +91,7 @@ public class PointHelper {
 //        four.setRedSt(new PointInfoDTO(211, 139));
         four.setRedSt(new PointInfoDTO(93,533));
 //        four.setRedEd(new PointInfoDTO(231, 651));
-        four.setRedEd(new PointInfoDTO(111,1010));
+        four.setRedEd(new PointInfoDTO(111,1005));
         four.setName("four");
         four.setWarnMsg("four警告");
 
