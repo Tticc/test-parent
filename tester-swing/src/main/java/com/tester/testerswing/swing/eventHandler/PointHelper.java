@@ -1,8 +1,12 @@
 package com.tester.testerswing.swing.eventHandler;
 
+import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.google.common.collect.Lists;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.MyConsumer;
+import com.tester.testerswing.boot.AccountInfo;
 import com.tester.testerswing.capture.GaussianPointInfoDTO;
 import com.tester.testerswing.capture.GaussianStrPointInfoDTO;
 import com.tester.testerswing.capture.PointInfoDTO;
@@ -11,11 +15,15 @@ import com.tester.testerswing.robot.RobotHelper;
 import lombok.Data;
 import lombok.Getter;
 
+import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Data
@@ -27,10 +35,12 @@ public class PointHelper {
         return list.stream().collect(Collectors.toList());
     }
 
+    private static final AtomicBoolean shouldStop = new AtomicBoolean(false);
+
 
     static {
         AccountPoint silot = new AccountPoint();
-        silot.setEve_selectPoint(new GaussianStrPointInfoDTO("731,937"));
+        silot.setEve_selectPoint(new GaussianStrPointInfoDTO("445,953"));
         silot.setReplica_selectPoint(new GaussianStrPointInfoDTO("304,99"));
         silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("80,58"));//1
         silot.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1850,231", "1862,238"));
@@ -46,7 +56,7 @@ public class PointHelper {
 
 
         AccountPoint sailinaa = new AccountPoint();
-        sailinaa.setEve_selectPoint(new GaussianStrPointInfoDTO("999,950"));
+        sailinaa.setEve_selectPoint(new GaussianStrPointInfoDTO("702,960"));
         sailinaa.setReplica_selectPoint(new GaussianStrPointInfoDTO("362,123"));
 //        sailinaa.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("137,58"));
         sailinaa.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("80,574"));//2
@@ -63,7 +73,7 @@ public class PointHelper {
 
 
         AccountPoint colos = new AccountPoint();
-        colos.setEve_selectPoint(new GaussianStrPointInfoDTO("1258,945"));
+        colos.setEve_selectPoint(new GaussianStrPointInfoDTO("975,936"));
         colos.setReplica_selectPoint(new GaussianStrPointInfoDTO("361,152"));
 //        colos.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("194,58"));
         colos.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("135,58"));//3
@@ -80,7 +90,7 @@ public class PointHelper {
 
 
         AccountPoint four = new AccountPoint();
-        four.setEve_selectPoint(new GaussianStrPointInfoDTO("1527,948"));
+        four.setEve_selectPoint(new GaussianStrPointInfoDTO("1240,950"));
         four.setReplica_selectPoint(new GaussianStrPointInfoDTO("327,173"));
 //        four.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("251,58"));
         four.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("135,574"));//4
@@ -96,6 +106,36 @@ public class PointHelper {
         four.setWarnMsg("four警告");
 
 
+
+        AccountPoint five = new AccountPoint();
+        five.setEve_selectPoint(new GaussianStrPointInfoDTO("1476,947")); // todo
+        five.setReplica_selectPoint(new GaussianStrPointInfoDTO("327,200"));
+        five.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("190,58"));//5
+        five.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1840,228", "1865,235"));
+        five.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1627,289", "1653,294"));
+        five.setEve_alignToPoint(new GaussianStrPointInfoDTO("1581,159", "1598,168"));
+        five.setEve_dockPoint(new GaussianStrPointInfoDTO("1661,154", "1675,161"));
+        five.setRedSt(new PointInfoDTO(146,20)); // todo
+        five.setRedEd(new PointInfoDTO(165,503)); // todo
+        five.setName("five");
+        five.setWarnMsg("five警告");
+
+
+
+        AccountPoint six = new AccountPoint();
+        six.setEve_selectPoint(new GaussianStrPointInfoDTO("1735,942")); // todo
+        six.setReplica_selectPoint(new GaussianStrPointInfoDTO("327,225"));
+        six.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("190,574"));//6
+        six.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1840,228", "1865,235"));
+        six.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1627,289", "1653,294"));
+        six.setEve_alignToPoint(new GaussianStrPointInfoDTO("1581,159", "1598,168"));
+        six.setEve_dockPoint(new GaussianStrPointInfoDTO("1661,154", "1675,161"));
+        six.setRedSt(new PointInfoDTO(146,533)); // todo
+        six.setRedEd(new PointInfoDTO(165,1005)); // todo
+        six.setName("six");
+        six.setWarnMsg("six警告");
+
+
 //        silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("190,58"));//5
 //        silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("190,574"));//6
 //        silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("245,58"));//7
@@ -106,6 +146,8 @@ public class PointHelper {
         list.add(sailinaa);
         list.add(colos);
         list.add(four);
+        list.add(five);
+        list.add(six);
     }
 
 
@@ -178,6 +220,8 @@ public class PointHelper {
     public static class CommonEvePoint {
         // 任务栏打开窗口位置
         public GaussianStrPointInfoDTO eve_openSelectPoint = new GaussianStrPointInfoDTO("1212,1051");
+        // 最小化
+        public GaussianStrPointInfoDTO eve_minimize = new GaussianStrPointInfoDTO("1755,6","1779,18");
     }
 
 
@@ -221,10 +265,15 @@ public class PointHelper {
             AccountPoint accountPoint = accountPoints.get(i - 1);
             EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
             eveEscape_sub(accountPoint);
+
+            // 最小化
+            RobotHelper.move(commonEvePoint.getEve_minimize(), 394);
+            RobotHelper.mouseLeftPress();
+            RobotHelper.delay(GaussianHelper.getGaussianInt(315, 470));
         }
     }
 
-    public static void eveEscape_sub(AccountPoint accountPoint) {
+    private static void eveEscape_sub(AccountPoint accountPoint) {
         // 选中跑路tab
         RobotHelper.move(accountPoint.getEve_escapeTabPoint());
         RobotHelper.mouseLeftPress();
@@ -291,7 +340,12 @@ public class PointHelper {
             // speedUp 加速
             RobotHelper.move(eveToWorkPoint.getEve_speedUpPoint(), 94);
             RobotHelper.mouseLeftPress();
-            RobotHelper.delay(GaussianHelper.getGaussianInt(815, 970));
+            RobotHelper.delay(GaussianHelper.getGaussianInt(615, 770));
+
+            // 最小化
+            RobotHelper.move(commonEvePoint.getEve_minimize(), 194);
+            RobotHelper.mouseLeftPress();
+            RobotHelper.delay(GaussianHelper.getGaussianInt(315, 470));
         }
     }
 
@@ -414,30 +468,40 @@ public class PointHelper {
             }
             AccountPoint accountPoint = accountPoints.get(i - 1);
             EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
-            eveEndWork_sub();
+            eveEndWork_sub(commonEvePoint);
         }
     }
 
-    private static void eveEndWork_sub() {
+    private static void eveEndWork_sub(CommonEvePoint commonEvePoint) {
 
         EveToWorkPoint eveToWorkPoint = new EveToWorkPoint();
-        // 靠近建筑
-        RobotHelper.move(eveToWorkPoint.getEve_approachPoint());
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(330, 370));
+//        // 靠近建筑
+//        RobotHelper.move(eveToWorkPoint.getEve_approachPoint());
+//        RobotHelper.mouseLeftPress();
+//        RobotHelper.delay(GaussianHelper.getGaussianInt(330, 370));
 
-        // tab0 切换 生产tab
-        RobotHelper.move(eveToWorkPoint.getEve_buildingTabPoint());
+        // 停止加速
+        RobotHelper.move(eveToWorkPoint.getEve_speedUpPoint(), 194);
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(600, 870));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(315, 470));
 
         // 回收无人机
         RobotHelper.keyPress(KeyEvent.VK_R);
         RobotHelper.delay(GaussianHelper.getGaussianInt(900, 970));
+
+        // tab0 切换 生产tab
+        RobotHelper.move(eveToWorkPoint.getEve_buildingTabPoint());
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(300, 470));
+
+        // 最小化
+        RobotHelper.move(commonEvePoint.getEve_minimize(), 194);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(315, 470));
     }
 
 
-    public static void eveToWorkAll(List<AccountPoint> accountPoints, Integer num) throws BusinessException {
+    public static void eveToWorkAll(List<AccountPoint> accountPoints, Integer num, List<AccountInfo> accountInfoList) throws BusinessException {
         CommonEvePoint commonEvePoint = new CommonEvePoint();
         for (int i = 1; i <= accountPoints.size(); i++) {
             if (num != null && num != i) {
@@ -448,6 +512,14 @@ public class PointHelper {
             RobotHelper.delay(200);
             eveToWork_sub();
             speedUpAndDroneAndSavePoint();
+
+            AccountInfo accountInfo = accountInfoList.get(i - 1);
+            if(!Objects.equals(accountInfo.getSerialNo(),accountInfo.getLeaderSerialNo())) {
+                // 最小化
+                RobotHelper.move(commonEvePoint.getEve_minimize(), 194);
+                RobotHelper.mouseLeftPress();
+                RobotHelper.delay(GaussianHelper.getGaussianInt(315, 470));
+            }
         }
     }
 
@@ -456,20 +528,30 @@ public class PointHelper {
 
     private static void eveToWork_sub() throws BusinessException {
         EveToWorkPoint eveToWorkPoint = new EveToWorkPoint();
+        if (shouldStop.get()) {
+            return;
+        }
+
         // 选中环绕
         RobotHelper.delay(GaussianHelper.getGaussianInt(400, 470));
         // tab0 切换 生产tab
         RobotHelper.move(eveToWorkPoint.getEve_buildingTabPoint(), 94);
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(600, 870));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(500, 660));
 
         // building 选中建筑
         RobotHelper.move(eveToWorkPoint.getEve_buildingPoint(), 88);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(330, 370));
+        if (shouldStop.get()) {
+            return;
+        }
 
         Collections.shuffle(MIDDLE_ACTION_LIST);
         for (MyConsumer myConsumer : MIDDLE_ACTION_LIST) {
+            if (shouldStop.get()) {
+                return;
+            }
             myConsumer.accept(null);
         }
     }
@@ -481,7 +563,7 @@ public class PointHelper {
             // tab1 切换 作战tab
             RobotHelper.move(eveToWorkPoint.getEve_fightingTabPoint(), 100);
             RobotHelper.mouseLeftPress();
-            RobotHelper.delay(GaussianHelper.getGaussianInt(1060, 1100));
+            RobotHelper.delay(GaussianHelper.getGaussianInt(660, 750));
         });
         list.add((e) -> {
             // around 环绕建筑
@@ -507,6 +589,9 @@ public class PointHelper {
             executeList = tempList;
         }
         for (MyConsumer myConsumer : executeList) {
+            if (shouldStop.get()) {
+                return;
+            }
             myConsumer.accept(null);
         }
         RobotHelper.delay(GaussianHelper.getGaussianInt(200, 270));
@@ -519,13 +604,13 @@ public class PointHelper {
             // speedUp 加速
             RobotHelper.move(eveToWorkPoint.getEve_speedUpPoint(), 94);
             RobotHelper.mouseLeftPress();
-            RobotHelper.delay(GaussianHelper.getGaussianInt(815, 970));
+            RobotHelper.delay(GaussianHelper.getGaussianInt(415, 530));
         });
         list.add((e) -> {
             // release 释放无人机
             RobotHelper.move(eveToWorkPoint.getEve_releaseDronePoint(), 94);
             RobotHelper.mouseLeftPress();
-            RobotHelper.delay(GaussianHelper.getGaussianInt(615, 770));
+            RobotHelper.delay(GaussianHelper.getGaussianInt(415, 550));
         });
         list.add((e) -> {
             // 保存点
@@ -536,7 +621,9 @@ public class PointHelper {
 
     private static void savePoint() {
         RobotHelper.keyPress(KeyEvent.VK_CONTROL, KeyEvent.VK_B);
-        RobotHelper.delay(GaussianHelper.getGaussianInt(240, 370));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(640, 770));
+        RobotHelper.keyPress(KeyEvent.VK_ENTER);
+        RobotHelper.delay(GaussianHelper.getGaussianInt(140, 170));
         RobotHelper.keyPress(KeyEvent.VK_ENTER);
     }
 
@@ -608,6 +695,9 @@ public class PointHelper {
             RobotHelper.move(commonReplicaPoint.getReplica_searchPoint1());
             RobotHelper.mouseLeftPress();
             RobotHelper.delay(456);
+            if (shouldStop.get()) {
+                return;
+            }
             RobotHelper.move(commonReplicaPoint.getReplica_searchPoint2());
             RobotHelper.keyPress("OnTopReplica");
             RobotHelper.delay(456);
@@ -624,6 +714,9 @@ public class PointHelper {
             // 移动到起始位置
             RobotHelper.move(commonReplicaPoint.getReplica_lockedStartPoint());
             RobotHelper.mouseRightPress();
+            if (shouldStop.get()) {
+                return;
+            }
             // 选择窗口
             RobotHelper.move(commonReplicaPoint.getReplica_selectWindowMenuPoint());
             RobotHelper.mouseLeftPress();
@@ -638,6 +731,9 @@ public class PointHelper {
             RobotHelper.mouseLeftPress();
             RobotHelper.move(commonReplicaPoint.getReplica_50PercentageWindowMenuPoint());
             RobotHelper.mouseLeftPress();
+            if (shouldStop.get()) {
+                return;
+            }
 
             // 移动到起始位置
             RobotHelper.move(commonReplicaPoint.getReplica_lockedStartPoint());
@@ -656,6 +752,9 @@ public class PointHelper {
             // 区域选择完成
             RobotHelper.move(commonReplicaPoint.getReplica_areaDoneButtonPoint());
             RobotHelper.mouseLeftPress();
+            if (shouldStop.get()) {
+                return;
+            }
 
 //        // 拖动放缩分屏窗口
             RobotHelper.move(commonReplicaPoint.getReplica_scrollStartPoint());
@@ -672,6 +771,9 @@ public class PointHelper {
             RobotHelper.mouseLeftPress();
             RobotHelper.move(commonReplicaPoint.getReplica_unlockPoint());
             RobotHelper.mouseLeftPress();
+            if (shouldStop.get()) {
+                return;
+            }
             // 拖动1
             RobotHelper.move(commonReplicaPoint.getReplica_commonMoveStartPoint());
             RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
@@ -679,6 +781,9 @@ public class PointHelper {
             RobotHelper.delay(500);
             RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
             RobotHelper.delay(500);
+            if (shouldStop.get()) {
+                return;
+            }
         }
         RobotHelper.delay(200);
         RobotHelper.move(555, 555);
@@ -727,6 +832,59 @@ public class PointHelper {
         for (MyConsumer myConsumer : MIDDLE_ACTION_LIST) {
             myConsumer.accept(null);
         }
+    }
+
+    // 提取 DLL 文件
+    private static void extractNativeLibrary() {
+        try {
+            String dllPath = System.getProperty("java.io.tmpdir") + "JNativeHook.dll"; // 临时目录路径
+            if (!new File(dllPath).exists()) {
+                try (InputStream is = PointHelper.class.getResourceAsStream("/native/JNativeHook-2.2.2.x86.dll");
+                     OutputStream os = new FileOutputStream(dllPath)) {
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = is.read(buffer)) > 0) {
+                        os.write(buffer, 0, length);
+                    }
+                }
+            }
+            // 加载 DLL
+            System.load(dllPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void startListeningForEsc() {
+//        extractNativeLibrary(); // 提取并加载 DLL
+        try {
+            GlobalScreen.registerNativeHook();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
+        GlobalScreen.addNativeKeyListener(new NativeKeyListener() {
+            @Override
+            public void nativeKeyPressed(NativeKeyEvent nativeEvent) {
+                if (nativeEvent.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
+                    shouldStop.set(true);
+                    System.out.println("ESC key detected globally. Stopping operation...");
+                }
+            }
+            @Override
+            public void nativeKeyReleased(NativeKeyEvent nativeEvent) {
+                // Not needed
+            }
+            @Override
+            public void nativeKeyTyped(NativeKeyEvent nativeEvent) {
+                // Not needed
+            }
+        });
+    }
+
+    public static void cleanEsc() {
+        shouldStop.set(false);
     }
 
 

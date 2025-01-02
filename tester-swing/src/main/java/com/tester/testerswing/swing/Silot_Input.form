@@ -15,6 +15,10 @@
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:17px:noGrow"/>
+    <rowspec value="center:24px:noGrow"/>
+    <rowspec value="top:20px:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <colspec value="fill:45px:noGrow"/>
     <colspec value="left:0dlu:noGrow"/>
@@ -27,8 +31,14 @@
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:45px:noGrow"/>
     <colspec value="fill:90px:noGrow"/>
+    <colspec value="left:50px:noGrow"/>
+    <colspec value="fill:90px:noGrow"/>
+    <colspec value="left:50px:noGrow"/>
+    <colspec value="fill:90px:noGrow"/>
+    <colspec value="left:50px:noGrow"/>
+    <colspec value="fill:90px:noGrow"/>
     <constraints>
-      <xy x="20" y="20" width="505" height="400"/>
+      <xy x="20" y="20" width="872" height="400"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -360,6 +370,123 @@
         </constraints>
         <properties>
           <text value=""/>
+        </properties>
+      </component>
+      <component id="6cbe2" class="javax.swing.JButton" binding="lead_shift_1">
+        <constraints>
+          <grid row="16" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="1_lead_shift"/>
+        </properties>
+      </component>
+      <component id="6915" class="javax.swing.JButton" binding="lead_shift_2">
+        <constraints>
+          <grid row="16" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="2_lead_shift"/>
+        </properties>
+      </component>
+      <component id="38999" class="javax.swing.JButton" binding="lead_shift_3">
+        <constraints>
+          <grid row="16" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="3_lead_shift"/>
+        </properties>
+      </component>
+      <component id="748cc" class="javax.swing.JButton" binding="lead_shift_4">
+        <constraints>
+          <grid row="16" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="4_lead_shift"/>
+        </properties>
+      </component>
+      <component id="66578" class="javax.swing.JButton" binding="lead_shift_5">
+        <constraints>
+          <grid row="16" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="5_lead_shift"/>
+        </properties>
+      </component>
+      <component id="e59e0" class="javax.swing.JLabel" binding="leader_1">
+        <constraints>
+          <grid row="18" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value="Label"/>
+        </properties>
+      </component>
+      <component id="2d80b" class="javax.swing.JLabel" binding="leader_2">
+        <constraints>
+          <grid row="18" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value="Label"/>
+        </properties>
+      </component>
+      <component id="58ea5" class="javax.swing.JLabel" binding="leader_3">
+        <constraints>
+          <grid row="18" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value="Label"/>
+        </properties>
+      </component>
+      <component id="61a25" class="javax.swing.JLabel" binding="leader_4">
+        <constraints>
+          <grid row="18" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value="Label"/>
+        </properties>
+      </component>
+      <component id="8cb2f" class="javax.swing.JLabel" binding="leader_5">
+        <constraints>
+          <grid row="18" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value="Label"/>
+        </properties>
+      </component>
+      <component id="c7619" class="javax.swing.JLabel" binding="leader_6">
+        <constraints>
+          <grid row="18" column="16" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value="Label"/>
+        </properties>
+      </component>
+      <component id="6d6f" class="javax.swing.JButton" binding="init_shift">
+        <constraints>
+          <grid row="14" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="init_shift"/>
+        </properties>
+      </component>
+      <component id="59438" class="javax.swing.JButton" binding="lead_shift_6">
+        <constraints>
+          <grid row="16" column="16" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="6_lead_shift"/>
         </properties>
       </component>
     </children>

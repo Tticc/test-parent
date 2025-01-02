@@ -9,6 +9,7 @@ import lombok.Data;
 
 import javax.swing.*;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author 温昌营
@@ -75,10 +76,34 @@ public class EasyScript_UI_Main {
     private JButton pure_harvest_colos;
     private JButton pure_harvest_four;
     private JButton pure_all_harvest;
+    private JButton onTopReplica_start5;
+    private JButton onTopReplica_start6;
+    private JButton five_pause;
+    private JButton five_start;
+    private JButton six_start;
+    private JButton six_pause;
+    private JLabel five_status;
+    private JLabel six_status;
+    private JButton open_five;
+    private JButton open_six;
+    private JButton open_run_five;
+    private JButton open_run_six;
+    private JButton five_link;
+    private JButton six_link;
+    private JButton open_end_five;
+    private JButton open_end_six;
+    private JButton pure_harvest_five;
+    private JButton pure_harvest_six;
+    private JButton harvest_five;
+    private JButton harvest_six;
+    private JButton open_all;
+    private JButton clean_client;
 
 
     Boot boot = new Boot();
     List<AccountInfo> accountInfoList = boot.getAccountInfoList();
+    Map<Integer, AccountInfo> serialNoAccountInfoMap = boot.getSerialNoAccountInfoMap();
+
 
     public EasyScript_UI_Main start(Silot_Input silot_input, Sai_Input sai_input) {
         afterInit(silot_input, sai_input);
@@ -86,12 +111,12 @@ public class EasyScript_UI_Main {
     }
 
     public void afterInit(Silot_Input silot_input, Sai_Input sai_input) {
-        // 初始化公共监控事件。 启动、刷新、投屏、批量true等按钮初始化
+        // 启动本地监控
         InitCommonEventHelper.initCommonEvent(this);
 
         // 用于录入点阵用，后面点阵固定，已废弃 - 2023-9-21 15:19:08
         // 初始化 silot 录入事件
-        EventHandle_Silot.handle_silot(silot_input);
+        EventHandle_Silot.handle_silot(silot_input, accountInfoList);
 
         // 废弃 - 2023-9-21 15:19:08
         // 初始化 sai 录入事件

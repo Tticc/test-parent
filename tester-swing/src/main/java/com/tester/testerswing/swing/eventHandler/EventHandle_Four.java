@@ -1,9 +1,12 @@
 package com.tester.testerswing.swing.eventHandler;
 
 
+import com.tester.testerswing.boot.AccountInfo;
 import com.tester.testerswing.swing.EasyScript_UI_Main;
 
 import javax.swing.*;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * four 初始化
@@ -50,9 +53,17 @@ public class EventHandle_Four {
         JButton open_run_four = script.getOpen_run_four();
         open_run_four.addActionListener((e) -> {
             try {
-                PointHelper.eveToWorkAll(PointHelper.getList(),NUM);
+                List<AccountInfo> accountInfoList = script.getAccountInfoList();
+                PointHelper.eveToWorkAll(PointHelper.getList(),NUM,accountInfoList);
                 // 启动监控
-                script.getFour_start().doClick();
+                AccountInfo accountInfo = accountInfoList.get(NUM - 1);
+                if(Objects.equals(accountInfo.getSerialNo(), accountInfo.getLeaderSerialNo())){
+                    accountInfo.setNeedWarn(true);
+                    script.getFour_status().setText("true");
+                }else{
+                    accountInfo.setNeedWarn(false);
+                    script.getFour_status().setText("false");
+                }
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

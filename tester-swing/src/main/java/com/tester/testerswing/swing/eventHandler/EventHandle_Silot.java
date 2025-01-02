@@ -1,5 +1,6 @@
 package com.tester.testerswing.swing.eventHandler;
 
+import com.tester.testerswing.boot.AccountInfo;
 import com.tester.testerswing.capture.GaussianPointInfoDTO;
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.robot.RobotHelper;
@@ -10,6 +11,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * silot 初始化
@@ -79,53 +84,151 @@ public class EventHandle_Silot {
     public static GaussianPointInfoDTO silot_main_view_p1 = new GaussianPointInfoDTO().setSt(silot_main_view_p1_st).setEd(silot_main_view_p1_ed);
 
 
-    public static void handle_silot(Silot_Input script) {
-        // 设置输入事件
-        JTextField silot_open_p1_input = script.getSilot_open_p1_input();
-        setTextField(silot_open_p1_input, silot_open_p1_st);
-
-        JTextField silot_open_p2_input = script.getSilot_open_p2_input();
-        setTextField(silot_open_p2_input, silot_open_p2_st);
-
-        // 返回6个点
-        JTextField silot_return_p1_input = script.getSilot_return_p1_input();
-        setTextField(silot_return_p1_input, silot_return_p1_st);
-        JTextField silot_return_p12_input = script.getSilot_return_p12_input();
-        setTextField(silot_return_p12_input, silot_return_p1_ed);
-
-        JTextField silot_return_p2_input = script.getSilot_return_p2_input();
-        setTextField(silot_return_p2_input, silot_return_p2_st);
-        JTextField silot_return_p22_input = script.getSilot_return_p22_input();
-        setTextField(silot_return_p22_input, silot_return_p2_ed);
-
-        JTextField silot_return_p3_input = script.getSilot_return_p3_input();
-        setTextField(silot_return_p3_input, silot_return_p3_st);
-        JTextField silot_return_p32_input = script.getSilot_return_p32_input();
-        setTextField(silot_return_p32_input, silot_return_p3_ed);
+    public static void handle_silot(Silot_Input script, List<AccountInfo> accountInfoList) {
+        // 取点用
+        getPointInfo(script);
+        leaderShift(script, accountInfoList);
 
 
-        // 跑路6个点
-        JTextField silot_align_p1_input = script.getSilot_align_p1_input();
-        setTextField(silot_align_p1_input, silot_align_p1_st);
-        JTextField silot_align_p12_input = script.getSilot_align_p12_input();
-        setTextField(silot_align_p12_input, silot_align_p1_ed);
+    }
 
-        JTextField silot_align_p2_input = script.getSilot_align_p2_input();
-        setTextField(silot_align_p2_input, silot_align_p2_st);
-        JTextField silot_align_p22_input = script.getSilot_align_p22_input();
-        setTextField(silot_align_p22_input, silot_align_p2_ed);
+    private static void leaderShift(Silot_Input script, List<AccountInfo> accountInfoList){
+        List<JLabel> labels = new ArrayList<>();
+        labels.add(script.getLeader_1());
+        labels.add(script.getLeader_2());
+        labels.add(script.getLeader_3());
+        labels.add(script.getLeader_4());
+        labels.add(script.getLeader_5());
+        labels.add(script.getLeader_6());
+        for (JLabel label : labels) {
+            label.setText("leader");
+        }
 
-        JTextField silot_align_p3_input = script.getSilot_align_p3_input();
-        setTextField(silot_align_p3_input, silot_align_p3_st);
-        JTextField silot_align_p32_input = script.getSilot_align_p32_input();
-        setTextField(silot_align_p32_input, silot_align_p3_ed);
+        JButton init_shift = script.getInit_shift();
+        init_shift.addActionListener((e) -> {
+            try {
+                for (AccountInfo accountInfo : accountInfoList) {
+                    accountInfo.setLeaderSerialNo(accountInfo.getSerialNo());
+                }
+                for (JLabel label : labels) {
+                    label.setText("leader");
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
 
-        // 主览2个点
-        JTextField silot_main_view_input = script.getSilot_main_view_input();
-        setTextField(silot_main_view_input, silot_main_view_p1_st);
-        JTextField silot_main_view2_input = script.getSilot_main_view2_input();
-        setTextField(silot_main_view2_input, silot_main_view_p1_ed);
+        JButton lead_shift_1 = script.getLead_shift_1();
+        lead_shift_1.addActionListener((e) -> {
+            Integer currNum = 1;
+            try {
+                doShift(accountInfoList, currNum, labels);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
 
+        JButton lead_shift_2 = script.getLead_shift_2();
+        lead_shift_2.addActionListener((e) -> {
+            Integer currNum = 2;
+            try {
+                doShift(accountInfoList, currNum, labels);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        JButton lead_shift_3 = script.getLead_shift_3();
+        lead_shift_3.addActionListener((e) -> {
+            Integer currNum = 3;
+            try {
+                doShift(accountInfoList, currNum, labels);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        JButton lead_shift_4 = script.getLead_shift_4();
+        lead_shift_4.addActionListener((e) -> {
+            Integer currNum = 4;
+            try {
+                doShift(accountInfoList, currNum, labels);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        JButton lead_shift_5 = script.getLead_shift_5();
+        lead_shift_5.addActionListener((e) -> {
+            Integer currNum = 5;
+            try {
+                doShift(accountInfoList, currNum, labels);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        JButton lead_shift_6 = script.getLead_shift_6();
+        lead_shift_6.addActionListener((e) -> {
+            Integer currNum = 6;
+            try {
+                doShift(accountInfoList, currNum, labels);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+        lead_shift_2.doClick();
+        RobotHelper.delay(200);
+        lead_shift_3.doClick();
+        RobotHelper.delay(200);
+        lead_shift_4.doClick();
+        RobotHelper.delay(200);
+        lead_shift_4.doClick();
+        RobotHelper.delay(200);
+        lead_shift_6.doClick();
+        RobotHelper.delay(200);
+        lead_shift_6.doClick();
+
+    }
+
+    private static void doShift(List<AccountInfo> accountInfoList, Integer currNum, List<JLabel> labels){
+        AccountInfo currentAccount = null;
+        AccountInfo currLeaderAccount = null;
+        for (AccountInfo accountInfo : accountInfoList) {
+            if(Objects.equals(accountInfo.getSerialNo(), currNum)){
+                currentAccount = accountInfo;
+                break;
+            }
+        }
+        for (AccountInfo accountInfo : accountInfoList) {
+            if(Objects.equals(accountInfo.getSerialNo(), currentAccount.getLeaderSerialNo())){
+                currLeaderAccount = accountInfo;
+                break;
+            }
+        }
+        AccountInfo newLeaderAccount = null;
+        for (AccountInfo accountInfo : accountInfoList) {
+            if(Objects.equals(accountInfo.getSerialNo(), currentAccount.getSerialNo())){
+                continue;
+            }
+            if(null == newLeaderAccount
+                    && Objects.equals(accountInfo.getSerialNo(), accountInfo.getLeaderSerialNo())
+                    && (Objects.equals(currentAccount.getSerialNo(), currLeaderAccount.getSerialNo()) ? 0 : currLeaderAccount.getSerialNo()) < accountInfo.getSerialNo()){
+                newLeaderAccount = accountInfo;
+            }
+        }
+        if(null ==  currentAccount || null == newLeaderAccount){
+            return;
+        }
+        currentAccount.setLeaderSerialNo(newLeaderAccount.getSerialNo());
+        labels.get(currNum-1).setText("follow  "+newLeaderAccount.getSerialNo());
+        // 刷新currentAccount的follow到newLeaderAccount
+        for (AccountInfo accountInfo : accountInfoList) {
+            if(Objects.equals(accountInfo.getLeaderSerialNo(),currentAccount.getSerialNo())){
+                accountInfo.setLeaderSerialNo(currentAccount.getLeaderSerialNo());
+                labels.get(accountInfo.getSerialNo()-1).setText("follow  "+currentAccount.getLeaderSerialNo());
+            }
+        }
     }
 
 
@@ -162,9 +265,17 @@ public class EventHandle_Silot {
         JButton open_run_silot = script.getOpen_run_silot();
         open_run_silot.addActionListener((e) -> {
             try {
-                PointHelper.eveToWorkAll(PointHelper.getList(),NUM);
+                List<AccountInfo> accountInfoList = script.getAccountInfoList();
+                PointHelper.eveToWorkAll(PointHelper.getList(),NUM,accountInfoList);
                 // 启动监控
-                script.getSilot_start().doClick();
+                AccountInfo accountInfo = accountInfoList.get(NUM - 1);
+                if(Objects.equals(accountInfo.getSerialNo(), accountInfo.getLeaderSerialNo())){
+                    accountInfo.setNeedWarn(true);
+                    script.getSilot_status().setText("true");
+                }else{
+                    accountInfo.setNeedWarn(false);
+                    script.getSilot_status().setText("false");
+                }
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -216,12 +327,55 @@ public class EventHandle_Silot {
     }
 
 
-    public static void quick_run(){
-        try {
-            PointHelper.eveEscapeAll(PointHelper.getList(),NUM);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
+
+
+    private static void getPointInfo(Silot_Input script) {
+        // 设置输入事件
+        JTextField silot_open_p1_input = script.getSilot_open_p1_input();
+        setTextField(silot_open_p1_input, silot_open_p1_st);
+
+        JTextField silot_open_p2_input = script.getSilot_open_p2_input();
+        setTextField(silot_open_p2_input, silot_open_p2_st);
+
+        // 返回6个点
+        JTextField silot_return_p1_input = script.getSilot_return_p1_input();
+        setTextField(silot_return_p1_input, silot_return_p1_st);
+        JTextField silot_return_p12_input = script.getSilot_return_p12_input();
+        setTextField(silot_return_p12_input, silot_return_p1_ed);
+
+        JTextField silot_return_p2_input = script.getSilot_return_p2_input();
+        setTextField(silot_return_p2_input, silot_return_p2_st);
+        JTextField silot_return_p22_input = script.getSilot_return_p22_input();
+        setTextField(silot_return_p22_input, silot_return_p2_ed);
+
+        JTextField silot_return_p3_input = script.getSilot_return_p3_input();
+        setTextField(silot_return_p3_input, silot_return_p3_st);
+        JTextField silot_return_p32_input = script.getSilot_return_p32_input();
+        setTextField(silot_return_p32_input, silot_return_p3_ed);
+
+
+        // 跑路6个点
+        JTextField silot_align_p1_input = script.getSilot_align_p1_input();
+        setTextField(silot_align_p1_input, silot_align_p1_st);
+        JTextField silot_align_p12_input = script.getSilot_align_p12_input();
+        setTextField(silot_align_p12_input, silot_align_p1_ed);
+
+        JTextField silot_align_p2_input = script.getSilot_align_p2_input();
+        setTextField(silot_align_p2_input, silot_align_p2_st);
+        JTextField silot_align_p22_input = script.getSilot_align_p22_input();
+        setTextField(silot_align_p22_input, silot_align_p2_ed);
+
+        JTextField silot_align_p3_input = script.getSilot_align_p3_input();
+        setTextField(silot_align_p3_input, silot_align_p3_st);
+        JTextField silot_align_p32_input = script.getSilot_align_p32_input();
+        setTextField(silot_align_p32_input, silot_align_p3_ed);
+
+        // 主览2个点
+        JTextField silot_main_view_input = script.getSilot_main_view_input();
+        setTextField(silot_main_view_input, silot_main_view_p1_st);
+        JTextField silot_main_view2_input = script.getSilot_main_view2_input();
+        setTextField(silot_main_view2_input, silot_main_view_p1_ed);
+
     }
 
     private static void setTextField(JTextField field, PointInfoDTO sPoint) {

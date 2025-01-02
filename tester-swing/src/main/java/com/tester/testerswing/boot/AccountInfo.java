@@ -13,6 +13,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Accessors(chain = true)
 @Data
 public class AccountInfo extends BaseDTO {
+
+    // 序号。从1开始
+    private Integer serialNo;
+
+    // leader序号。默认为自己的序号
+    private Integer leaderSerialNo;
+
     // 账号alias
     private String account;
 

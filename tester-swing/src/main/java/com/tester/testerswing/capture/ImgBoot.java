@@ -26,6 +26,8 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -112,13 +114,28 @@ public class ImgBoot {
      * @Date 9:49 2022/8/11
      * @Author 温昌营
      **/
-    public static void checkIfNeedWarning(AccountInfo accountInfo, int imgType) throws Exception {
+    public static void checkIfNeedWarning(AccountInfo accountInfo, int imgType, Map<Integer, AccountInfo> serialNoAccountInfoMap) throws Exception {
+        // red 截图起点
+        PointInfoDTO redSt = accountInfo.getRedSt();
+        // red 截图终点
+        PointInfoDTO redEd = accountInfo.getRedEd();
         if (!accountInfo.isNeedWarn()) {
-            // 无需告警，直接返回
-            return;
+            if (Objects.equals(accountInfo.getSerialNo(), accountInfo.getLeaderSerialNo())) {
+                // 无需告警，直接返回
+                return;
+            } else {
+                AccountInfo leaderAccount = serialNoAccountInfoMap.get(accountInfo.getLeaderSerialNo());
+                if (!leaderAccount.isNeedWarn()) {
+                    return;
+                }
+                // 设置为leader的截图起点
+                redSt = leaderAccount.getRedSt();
+                // 设置为leader的截图终点
+                redEd = leaderAccount.getRedEd();
+            }
         }
         boolean warning = false;
-        Mat src = createScreenAnd2Mat(accountInfo.getRedSt(), accountInfo.getRedEd(), imgType, accountInfo.getAccount());
+        Mat src = createScreenAnd2Mat(redSt, redEd, imgType, accountInfo.getAccount());
         if (src == null) {
             System.out.println("异常，无法获取警告mat");
             warning = true;

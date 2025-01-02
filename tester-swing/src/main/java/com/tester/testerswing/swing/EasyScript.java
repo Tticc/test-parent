@@ -45,6 +45,7 @@ public class EasyScript {
         JPanel main = easyScript_uiMain.getMain();
         // 设置按钮鼠标hover颜色
         setupAllButtonsHoverEffect(main);
+        setupAllButtonsHoverEffect(silot_input_panel);
 
         JTabbedPane tab = new JTabbedPane();
         tab.addTab("main", main);

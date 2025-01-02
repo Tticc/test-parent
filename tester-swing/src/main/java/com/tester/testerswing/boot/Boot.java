@@ -11,9 +11,7 @@ import com.tester.testerswing.swing.eventHandler.PointHelper;
 import com.tester.testerswing.voice.BeepSoundProcessor;
 import org.opencv.imgcodecs.Imgcodecs;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -46,19 +44,24 @@ public class Boot {
 
 
     private final List<AccountInfo> accountInfoList = new ArrayList<>();
+    private final Map<Integer, AccountInfo> serialNoAccountInfoMap = new HashMap<>();
 
     public Boot() {
         List<PointHelper.AccountPoint> list = PointHelper.getList();
         for (int i = 1; i <= list.size(); i++) {
             Integer finalI = i;
             PointHelper.AccountPoint accountPoint = list.get(finalI - 1);
-            accountInfoList.add(new AccountInfo()
+            AccountInfo accountInfo = new AccountInfo()
+                    .setSerialNo(finalI)
+                    .setLeaderSerialNo(finalI)
                     .setWarnMsg(accountPoint.getWarnMsg())
                     .setAccount(accountPoint.getName())
                     .setRedSt(accountPoint.getRedSt())
                     .setRedEd(accountPoint.getRedEd())
                     .setLastQuickRunTime(DateUtil.getYesterdayStart())
-                    .setConsumer((e) -> PointHelper.eveEscapeAll(PointHelper.getList(),finalI)));
+                    .setConsumer((e) -> PointHelper.eveEscapeAll(PointHelper.getList(), finalI));
+            accountInfoList.add(accountInfo);
+            serialNoAccountInfoMap.put(finalI, accountInfo);
         }
 //        accountInfoList.add(new AccountInfo()
 //                .setWarnMsg("左警告")
@@ -131,12 +134,12 @@ public class Boot {
 
     private void startMySelf() {
         int delay = 2000;
-        int period = 500;
+        int period = 1000;
         checkerExecutorService.scheduleAtFixedRate(() -> {
                     try {
                         for (AccountInfo accountInfo : accountInfoList) {
                             // 监控数量取原图
-                            ImgBoot.checkIfNeedWarning(accountInfo, Imgcodecs.IMREAD_UNCHANGED);
+                            ImgBoot.checkIfNeedWarning(accountInfo, Imgcodecs.IMREAD_UNCHANGED, serialNoAccountInfoMap);
                         }
 //                        for (AccountInfo accountInfo : accountInfoList) {
 //                            // 监控数量取灰度图，比较本地数量变化 - 已废弃
@@ -158,5 +161,9 @@ public class Boot {
 
     public List<AccountInfo> getAccountInfoList() {
         return accountInfoList;
+    }
+
+    public Map<Integer, AccountInfo> getSerialNoAccountInfoMap() {
+        return serialNoAccountInfoMap;
     }
 }

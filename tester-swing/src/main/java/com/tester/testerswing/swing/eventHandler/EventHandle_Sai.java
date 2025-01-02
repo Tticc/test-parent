@@ -1,5 +1,6 @@
 package com.tester.testerswing.swing.eventHandler;
 
+import com.tester.testerswing.boot.AccountInfo;
 import com.tester.testerswing.capture.GaussianPointInfoDTO;
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.robot.RobotHelper;
@@ -10,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * sai 初始化
@@ -147,9 +150,17 @@ public class EventHandle_Sai {
         JButton open_run_sai = script.getOpen_run_sai();
         open_run_sai.addActionListener((e) -> {
             try {
-                PointHelper.eveToWorkAll(PointHelper.getList(),NUM);
+                List<AccountInfo> accountInfoList = script.getAccountInfoList();
+                PointHelper.eveToWorkAll(PointHelper.getList(),NUM,accountInfoList);
                 // 启动监控
-                script.getSai_start().doClick();
+                AccountInfo accountInfo = accountInfoList.get(NUM - 1);
+                if(Objects.equals(accountInfo.getSerialNo(), accountInfo.getLeaderSerialNo())){
+                    accountInfo.setNeedWarn(true);
+                    script.getSai_status().setText("true");
+                }else{
+                    accountInfo.setNeedWarn(false);
+                    script.getSai_status().setText("false");
+                }
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

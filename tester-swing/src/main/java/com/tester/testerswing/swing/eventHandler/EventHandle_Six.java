@@ -9,38 +9,38 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * colos 初始化
+ * six 初始化
  *
  * @Author 温昌营
  * @Date 2022-8-4 13:47:36F
  */
-public class EventHandle_Colos {
+public class EventHandle_Six {
 
-    private static Integer NUM = 3;
+    private static Integer NUM = 6;
 
 
-    // colos 操作处理
-    public static void handle_colos_main(EasyScript_UI_Main script) {
+    // six 操作处理
+    public static void handle_six_main(EasyScript_UI_Main script) {
         // 自动投屏事件3
-        script.getOnTopReplica_start3().addActionListener((e) -> {
+        script.getOnTopReplica_start6().addActionListener((e) -> {
             PointHelper.onTopReplicaPrepare(PointHelper.getList(),NUM);
         });
-        // 暂停 colos
-        script.getColos_pause().addActionListener((e) -> {
+        // 暂停 six
+        script.getSix_pause().addActionListener((e) -> {
             script.getAccountInfoList().get(NUM-1).setNeedWarn(false);
-            script.getColos_status().setText("false");
+            script.getSix_status().setText("false");
             script.getWarn_status().setText("false");
         });
-        // 继续 colos
-        script.getColos_start().addActionListener((e) -> {
+        // 继续 six
+        script.getSix_start().addActionListener((e) -> {
             script.getAccountInfoList().get(NUM-1).setNeedWarn(true);
-            script.getColos_status().setText("true");
+            script.getSix_status().setText("true");
         });
 
 
         // 设置 open 按钮事件。打开账号
-        JButton open_colos = script.getOpen_colos();
-        open_colos.addActionListener((e) -> {
+        JButton open_six = script.getOpen_six();
+        open_six.addActionListener((e) -> {
             try {
                 PointHelper.openAll(PointHelper.getList(),NUM);
             } catch (Exception exception) {
@@ -50,19 +50,19 @@ public class EventHandle_Colos {
 
 
         // 设置 run 按钮事件。开工
-        JButton open_run_colos = script.getOpen_run_colos();
-        open_run_colos.addActionListener((e) -> {
+        JButton open_run_six = script.getOpen_run_six();
+        open_run_six.addActionListener((e) -> {
             try {
                 List<AccountInfo> accountInfoList = script.getAccountInfoList();
-                PointHelper.eveToWorkAll(PointHelper.getList(),NUM, accountInfoList);
+                PointHelper.eveToWorkAll(PointHelper.getList(),NUM,accountInfoList);
                 // 启动监控
                 AccountInfo accountInfo = accountInfoList.get(NUM - 1);
                 if(Objects.equals(accountInfo.getSerialNo(), accountInfo.getLeaderSerialNo())){
                     accountInfo.setNeedWarn(true);
-                    script.getColos_status().setText("true");
+                    script.getSix_status().setText("true");
                 }else{
                     accountInfo.setNeedWarn(false);
-                    script.getColos_status().setText("false");
+                    script.getSix_status().setText("false");
                 }
             } catch (Exception exception) {
                 exception.printStackTrace();
@@ -70,10 +70,10 @@ public class EventHandle_Colos {
         });
 
         // 设置 end 按钮事件。收工
-        JButton open_end_colos = script.getOpen_end_colos();
-        open_end_colos.addActionListener((e) -> {
+        JButton open_end_six = script.getOpen_end_six();
+        open_end_six.addActionListener((e) -> {
             try {
-                script.getColos_pause().doClick();
+                script.getSix_pause().doClick();
                 PointHelper.eveEndWorkAll(PointHelper.getList(),NUM);
             } catch (Exception exception) {
                 exception.printStackTrace();
@@ -81,8 +81,8 @@ public class EventHandle_Colos {
         });
 
         // 设置 找回无人机
-        JButton colos_link = script.getColos_link();
-        colos_link.addActionListener((e) -> {
+        JButton six_link = script.getSix_link();
+        six_link.addActionListener((e) -> {
             try {
                 PointHelper.linkDrone(PointHelper.getList(),NUM);
 
@@ -92,20 +92,20 @@ public class EventHandle_Colos {
         });
 
         // 设置 放置开工+牵引 按钮事件
-        JButton harvest_colos = script.getHarvest_colos();
-        harvest_colos.addActionListener((e) -> {
+        JButton harvest_six = script.getHarvest_six();
+        harvest_six.addActionListener((e) -> {
             try {
                 PointHelper.doHarvestAll(PointHelper.getList(),NUM);
                 // 启动监控
-                script.getColos_start().doClick();
+                script.getSix_start().doClick();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
         });
 
         // 设置 纯放置牵引 按钮事件
-        JButton pure_harvest_colos = script.getPure_harvest_colos();
-        pure_harvest_colos.addActionListener((e) -> {
+        JButton pure_harvest_six = script.getPure_harvest_six();
+        pure_harvest_six.addActionListener((e) -> {
             try {
                 PointHelper.doPureHarvestAll(PointHelper.getList(),NUM);
             } catch (Exception exception) {
