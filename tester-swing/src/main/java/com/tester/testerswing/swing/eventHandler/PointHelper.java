@@ -267,9 +267,7 @@ public class PointHelper {
             eveEscape_sub(accountPoint);
 
             // 最小化
-            RobotHelper.move(commonEvePoint.getEve_minimize(), 394);
-            RobotHelper.mouseLeftPress();
-            RobotHelper.delay(GaussianHelper.getGaussianInt(315, 470));
+            minimize(commonEvePoint.getEve_minimize());
         }
     }
 
@@ -343,9 +341,7 @@ public class PointHelper {
             RobotHelper.delay(GaussianHelper.getGaussianInt(615, 770));
 
             // 最小化
-            RobotHelper.move(commonEvePoint.getEve_minimize(), 194);
-            RobotHelper.mouseLeftPress();
-            RobotHelper.delay(GaussianHelper.getGaussianInt(315, 470));
+            minimize(commonEvePoint.getEve_minimize());
         }
     }
 
@@ -495,9 +491,7 @@ public class PointHelper {
         RobotHelper.delay(GaussianHelper.getGaussianInt(300, 470));
 
         // 最小化
-        RobotHelper.move(commonEvePoint.getEve_minimize(), 194);
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(315, 470));
+        minimize(commonEvePoint.getEve_minimize());
     }
 
 
@@ -516,9 +510,7 @@ public class PointHelper {
             AccountInfo accountInfo = accountInfoList.get(i - 1);
             if(!Objects.equals(accountInfo.getSerialNo(),accountInfo.getLeaderSerialNo())) {
                 // 最小化
-                RobotHelper.move(commonEvePoint.getEve_minimize(), 194);
-                RobotHelper.mouseLeftPress();
-                RobotHelper.delay(GaussianHelper.getGaussianInt(315, 470));
+                minimize(commonEvePoint.getEve_minimize());
             }
         }
     }
@@ -637,6 +629,7 @@ public class PointHelper {
             EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
             RobotHelper.delay(200);
             evePrepare_sub();
+            minimize(commonEvePoint.getEve_minimize());
         }
 
     }
@@ -833,6 +826,14 @@ public class PointHelper {
             myConsumer.accept(null);
         }
     }
+
+    public static void minimize(GaussianStrPointInfoDTO p1) {
+        // 最小化
+        RobotHelper.move(p1, 394);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(315, 470));
+    }
+
 
     // 提取 DLL 文件
     private static void extractNativeLibrary() {
