@@ -11,10 +11,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * silot 初始化
@@ -109,6 +109,7 @@ public class EventHandle_Silot {
             try {
                 for (AccountInfo accountInfo : accountInfoList) {
                     accountInfo.setLeaderSerialNo(accountInfo.getSerialNo());
+                    accountInfo.setFollows(new HashMap<>());
                 }
                 for (JLabel label : labels) {
                     label.setText("leader");
@@ -192,6 +193,9 @@ public class EventHandle_Silot {
     }
 
     private static void doShift(List<AccountInfo> accountInfoList, Integer currNum, List<JLabel> labels){
+        Map<Integer, AccountInfo> accountInfoMap= accountInfoList
+                .stream()
+                .collect(Collectors.toMap(item -> item.getSerialNo(), Function.identity(), (oldValue, newValue) -> oldValue));
         AccountInfo currentAccount = null;
         AccountInfo currLeaderAccount = null;
         for (AccountInfo accountInfo : accountInfoList) {
@@ -220,15 +224,27 @@ public class EventHandle_Silot {
         if(null ==  currentAccount || null == newLeaderAccount){
             return;
         }
-        currentAccount.setLeaderSerialNo(newLeaderAccount.getSerialNo());
-        labels.get(currNum-1).setText("follow  "+newLeaderAccount.getSerialNo());
+        doShiftLeader(accountInfoMap, currentAccount, newLeaderAccount, labels, currNum);
         // 刷新currentAccount的follow到newLeaderAccount
-        for (AccountInfo accountInfo : accountInfoList) {
+        for (AccountInfo accountInfo : currentAccount.getFollows().values()) {
             if(Objects.equals(accountInfo.getLeaderSerialNo(),currentAccount.getSerialNo())){
-                accountInfo.setLeaderSerialNo(currentAccount.getLeaderSerialNo());
-                labels.get(accountInfo.getSerialNo()-1).setText("follow  "+currentAccount.getLeaderSerialNo());
+                doShiftLeader(accountInfoMap, accountInfo, newLeaderAccount, labels, accountInfo.getSerialNo());
             }
         }
+    }
+
+    private static void doShiftLeader(Map<Integer, AccountInfo> accountInfoMap,
+                               AccountInfo currentAccount,
+                               AccountInfo newLeaderAccount,
+                               List<JLabel> labels,
+                               Integer currNum){
+        AccountInfo oldLeader = accountInfoMap.get(currentAccount.getLeaderSerialNo());
+        // 从旧leader的follow中移除当前
+        oldLeader.getFollows().remove(currentAccount.getSerialNo());
+        currentAccount.setLeaderSerialNo(newLeaderAccount.getSerialNo());
+        // 将当前添加到新leader的follow中
+        newLeaderAccount.getFollows().put(currentAccount.getSerialNo(), currentAccount);
+        labels.get(currNum-1).setText("follow  "+newLeaderAccount.getSerialNo());
     }
 
 

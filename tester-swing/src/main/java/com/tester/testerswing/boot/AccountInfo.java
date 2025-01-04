@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.opencv.core.Mat;
 
-import java.util.Date;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Accessors(chain = true)
@@ -19,6 +19,10 @@ public class AccountInfo extends BaseDTO {
 
     // leader序号。默认为自己的序号
     private Integer leaderSerialNo;
+
+    // 所有follow。自己也是自己的follow
+//    private List<AccountInfo> follows = new ArrayList<>();
+    private Map<Integer, AccountInfo> follows = new HashMap<>();
 
     // 账号alias
     private String account;

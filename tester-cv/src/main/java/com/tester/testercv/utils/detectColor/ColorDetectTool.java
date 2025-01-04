@@ -118,7 +118,10 @@ public class ColorDetectTool {
         Core.inRange(dest, minValues, maxValues, resultMat);
         return resultMat;
     }
-    public static boolean doDetect(Mat src, List<Scalar> minValues,  List<Scalar> maxValues, Consumer<Mat> consumer) throws BusinessException {
+    public static boolean doDetect(Mat src,
+                                   List<Scalar> minValues,
+                                   List<Scalar> maxValues,
+                                   Consumer<Mat> consumer) throws BusinessException {
         // remove some noise
         Mat blurredImage = blur(src);
         Mat dest = cvtColor(blurredImage);

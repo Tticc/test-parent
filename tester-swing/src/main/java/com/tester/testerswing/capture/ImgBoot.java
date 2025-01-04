@@ -141,23 +141,33 @@ public class ImgBoot {
             warning = true;
         }
         if (warning || doCheckIfNeedWarning(src, accountInfo)) {
-            long time = new Date().getTime();
             if(accountInfo.isIfAuto()){
-                if(time > accountInfo.getLastQuickRunTime().getTime() + auto_activeInterval) {
-                    accountInfo.setLastQuickRunTime(new Date());
-                    accountInfo.getConsumer().accept(null);
-
-                    // 发送电子邮件
-                    SendMailText.sendMsg(accountInfo.getAccount());
-                    // 发消息 - 企业微信消息不可靠，取消 2023-9-21 14:58:58
-//                    QywxMessageTaskDTO qywxMessageTaskDTO = new QywxMessageTaskDTO(accountInfo.getAccount()+"_"+DateUtil.dateFormat(new Date()));
-//                    BeepSoundProcessor.putTask(qywxMessageTaskDTO);
+                doEscape(accountInfo);
+                for (AccountInfo value : accountInfo.getFollows().values()) {
+                    doEscape(value);
                 }
             }else {
                 sendVoice(accountInfo.getWarnMsg(), false);
+                for (AccountInfo value : accountInfo.getFollows().values()) {
+                    sendVoice(value.getWarnMsg(), false);
+                }
             }
         }
 
+    }
+
+    private static void doEscape(AccountInfo accountInfo) throws Exception {
+        long time = new Date().getTime();
+        if(time > accountInfo.getLastQuickRunTime().getTime() + auto_activeInterval) {
+            accountInfo.setLastQuickRunTime(new Date());
+            accountInfo.getConsumer().accept(null);
+
+            // 发送电子邮件
+            SendMailText.sendMsg(accountInfo.getAccount());
+            // 发消息 - 企业微信消息不可靠，取消 2023-9-21 14:58:58
+//                    QywxMessageTaskDTO qywxMessageTaskDTO = new QywxMessageTaskDTO(accountInfo.getAccount()+"_"+DateUtil.dateFormat(new Date()));
+//                    BeepSoundProcessor.putTask(qywxMessageTaskDTO);
+        }
     }
 
     private static boolean doCheckIfNeedWarning_ori(Mat src, AccountInfo accountInfo) throws BusinessException {
@@ -176,7 +186,12 @@ public class ImgBoot {
      */
     private static boolean doCheckIfNeedWarning(Mat src, AccountInfo accountInfo) throws BusinessException {
         String basePath = getBasePath(accountInfo.getAccount());
-        return ColorDetectTool.doDetect(src,ColorDetectTool.defaultMinValues,ColorDetectTool.defaultMaxValues,(targetMat) -> OpenCVHelper.saveMat2Img(basePath, targetMat, getCountPrefix(accountInfo.getRefreshCount().get()) + "_warning.png"));
+        return ColorDetectTool.doDetect(src,
+                ColorDetectTool.defaultMinValues,
+                ColorDetectTool.defaultMaxValues,
+                // 不需要保存，去掉2025-1-4 22:40:41
+                // (targetMat) -> OpenCVHelper.saveMat2Img(basePath, targetMat, getCountPrefix(accountInfo.getRefreshCount().get()) + "_warning.png"));
+                (targetMat) -> {});
     }
 
     public static void sendVoice(String msg, boolean needFront) {

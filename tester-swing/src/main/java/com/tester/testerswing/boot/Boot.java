@@ -134,11 +134,15 @@ public class Boot {
 
     private void startMySelf() {
         int delay = 2000;
-        int period = 1000;
+        int period = 500;
         checkerExecutorService.scheduleAtFixedRate(() -> {
                     try {
                         for (AccountInfo accountInfo : accountInfoList) {
+                            if(!Objects.equals(accountInfo.getSerialNo(), accountInfo.getLeaderSerialNo())){
+                                continue;
+                            }
                             // 监控数量取原图
+                            System.out.println("accountInfo.getSerialNo() = " + accountInfo.getSerialNo());
                             ImgBoot.checkIfNeedWarning(accountInfo, Imgcodecs.IMREAD_UNCHANGED, serialNoAccountInfoMap);
                         }
 //                        for (AccountInfo accountInfo : accountInfoList) {
@@ -152,7 +156,7 @@ public class Boot {
                 }
                 , delay
                 , period
-                , TimeUnit.MICROSECONDS);
+                , TimeUnit.MILLISECONDS);
     }
 
     public boolean isStarted() {
