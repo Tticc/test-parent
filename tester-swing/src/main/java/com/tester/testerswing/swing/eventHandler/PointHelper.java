@@ -7,15 +7,12 @@ import com.google.common.collect.Lists;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.MyConsumer;
 import com.tester.testerswing.boot.AccountInfo;
-import com.tester.testerswing.capture.GaussianPointInfoDTO;
 import com.tester.testerswing.capture.GaussianStrPointInfoDTO;
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.gaussian.GaussianHelper;
 import com.tester.testerswing.robot.RobotHelper;
 import lombok.Data;
-import lombok.Getter;
 
-import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.*;
@@ -51,8 +48,8 @@ public class PointHelper {
         silot.setRedSt(new PointInfoDTO(37,20));
 //        silot.setRedEd(new PointInfoDTO(55, 651));
         silot.setRedEd(new PointInfoDTO(54,503));
-        silot.setName("silot");
-        silot.setWarnMsg("左警告");
+        silot.setName("one");
+        silot.setWarnMsg("one警告");
 
 
         AccountPoint sailinaa = new AccountPoint();
@@ -68,8 +65,8 @@ public class PointHelper {
         sailinaa.setRedSt(new PointInfoDTO(37,533));
 //        sailinaa.setRedEd(new PointInfoDTO(116, 651));
         sailinaa.setRedEd(new PointInfoDTO(54,1005));
-        sailinaa.setName("sailinna");
-        sailinaa.setWarnMsg("中警告");
+        sailinaa.setName("two");
+        sailinaa.setWarnMsg("two警告");
 
 
         AccountPoint colos = new AccountPoint();
@@ -85,8 +82,8 @@ public class PointHelper {
         colos.setRedSt(new PointInfoDTO(93,20));
 //        colos.setRedEd(new PointInfoDTO(173, 651));
         colos.setRedEd(new PointInfoDTO(111,503));
-        colos.setName("colos");
-        colos.setWarnMsg("右警告");
+        colos.setName("three");
+        colos.setWarnMsg("three警告");
 
 
         AccountPoint four = new AccountPoint();
@@ -178,6 +175,8 @@ public class PointHelper {
 
         private String warnMsg;
 
+        private AccountInfo accountInfo;
+
     }
 
 
@@ -206,6 +205,8 @@ public class PointHelper {
         public GaussianStrPointInfoDTO eve_fightingTabPoint = new GaussianStrPointInfoDTO("1633,226", "1655,236");
         // 环绕点
         public GaussianStrPointInfoDTO eve_aroundPoint = new GaussianStrPointInfoDTO("1662,159", "1674,168");
+        // 残骸环绕点
+        public GaussianStrPointInfoDTO eve_aroundTrashPoint = new GaussianStrPointInfoDTO("1696,161", "1708,171");
         // 启动加速点
         public GaussianStrPointInfoDTO eve_speedUpPoint = new GaussianStrPointInfoDTO("1107,878", "1122,891");
         // 释放无人机点
@@ -501,13 +502,13 @@ public class PointHelper {
             if (num != null && num != i) {
                 continue;
             }
+            AccountInfo accountInfo = accountInfoList.get(i - 1);
             AccountPoint accountPoint = accountPoints.get(i - 1);
             EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
             RobotHelper.delay(200);
-            eveToWork_sub();
+            eveToWork_sub(accountInfo);
             speedUpAndDroneAndSavePoint();
 
-            AccountInfo accountInfo = accountInfoList.get(i - 1);
             if(!Objects.equals(accountInfo.getSerialNo(),accountInfo.getLeaderSerialNo())) {
                 // 最小化
                 minimize(commonEvePoint.getEve_minimize());
@@ -518,7 +519,7 @@ public class PointHelper {
     // 中间两项操作。切回作战tab、环绕
     public static List<MyConsumer> MIDDLE_ACTION_LIST = middleActionList();
 
-    private static void eveToWork_sub() throws BusinessException {
+    private static void eveToWork_sub(AccountInfo accountInfo) throws BusinessException {
         EveToWorkPoint eveToWorkPoint = new EveToWorkPoint();
         if (shouldStop.get()) {
             return;
@@ -544,7 +545,7 @@ public class PointHelper {
             if (shouldStop.get()) {
                 return;
             }
-            myConsumer.accept(null);
+            myConsumer.accept(accountInfo.getArroundTrash());
         }
     }
 
@@ -558,8 +559,12 @@ public class PointHelper {
             RobotHelper.delay(GaussianHelper.getGaussianInt(660, 750));
         });
         list.add((e) -> {
-            // around 环绕建筑
-            RobotHelper.move(eveToWorkPoint.getEve_aroundPoint(), 100);
+            // around 环绕建筑/残骸
+            if(e!=null && e instanceof Boolean && (Boolean)e){
+                RobotHelper.move(eveToWorkPoint.getEve_aroundTrashPoint(), 100);
+            }else {
+                RobotHelper.move(eveToWorkPoint.getEve_aroundPoint(), 100);
+            }
             RobotHelper.mouseLeftPress();
             RobotHelper.delay(GaussianHelper.getGaussianInt(30, 70));
             RobotHelper.mouseLeftPress();
@@ -792,11 +797,11 @@ public class PointHelper {
             }
             AccountPoint accountPoint = accountPoints.get(i - 1);
             EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
-            linkDrone_sub();
+            linkDrone_sub(accountPoint);
         }
     }
 
-    private static void linkDrone_sub() throws BusinessException {
+    private static void linkDrone_sub(AccountPoint accountPoint) throws BusinessException {
         EveToWorkPoint eveToWorkPoint = new EveToWorkPoint();
 
         RobotHelper.delay(GaussianHelper.getGaussianInt(400, 470));
@@ -820,10 +825,14 @@ public class PointHelper {
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(330, 370));
 
-
+        AccountInfo accountInfo = accountPoint.getAccountInfo();
+        Boolean aroundTrash = false;
+        if(accountInfo != null){
+            aroundTrash =accountInfo.getArroundTrash();
+        }
         // 环绕+切回作战tab
         for (MyConsumer myConsumer : MIDDLE_ACTION_LIST) {
-            myConsumer.accept(null);
+            myConsumer.accept(aroundTrash);
         }
     }
 

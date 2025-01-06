@@ -20,6 +20,9 @@ public class AccountInfo extends BaseDTO {
     // leader序号。默认为自己的序号
     private Integer leaderSerialNo;
 
+    // 是否环绕残骸。默认为false
+    private Boolean arroundTrash = false;
+
     // 所有follow。自己也是自己的follow
 //    private List<AccountInfo> follows = new ArrayList<>();
     private Map<Integer, AccountInfo> follows = new HashMap<>();

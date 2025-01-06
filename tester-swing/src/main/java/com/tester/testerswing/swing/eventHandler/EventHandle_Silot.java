@@ -87,11 +87,71 @@ public class EventHandle_Silot {
     public static void handle_silot(Silot_Input script, List<AccountInfo> accountInfoList) {
         // 取点用
         getPointInfo(script);
+        // 初始化leader follow
         leaderShift(script, accountInfoList);
+        // 初始化环绕残骸
+        initAroundTrash(script, accountInfoList);
 
 
     }
 
+    private static void initAroundTrash(Silot_Input script, List<AccountInfo> accountInfoList){
+        List<JLabel> labels = new ArrayList<>();
+        labels.add(script.getAround_trash_status1());
+        labels.add(script.getAround_trash_status2());
+        labels.add(script.getAround_trash_status3());
+        labels.add(script.getAround_trash_status4());
+        labels.add(script.getAround_trash_status5());
+        labels.add(script.getAround_trash_status6());
+
+        List<JButton> buttons = new ArrayList<>();
+        buttons.add(script.getAround_trash1());
+        buttons.add(script.getAround_trash2());
+        buttons.add(script.getAround_trash3());
+        buttons.add(script.getAround_trash4());
+        buttons.add(script.getAround_trash5());
+        buttons.add(script.getAround_trash6());
+
+        for (JLabel label : labels) {
+            label.setText("false");
+        }
+        JButton init_trash = script.getInit_trash();
+        init_trash.addActionListener((e) -> {
+            try {
+                for (AccountInfo accountInfo : accountInfoList) {
+                    accountInfo.setArroundTrash(false);
+                }
+                for (JLabel label : labels) {
+                    label.setText("false");
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        for (int i = 0; i < buttons.size(); i++) {
+            int index = i;
+            JButton jButton = buttons.get(index);
+            jButton.addActionListener((e) -> {
+                Integer currNum = index+1;
+                try {
+                    labels.get(index).setText("true");
+                    for (AccountInfo accountInfo : accountInfoList) {
+                        if(Objects.equals(accountInfo.getSerialNo(), currNum)){
+                            accountInfo.setArroundTrash(true);
+                            return;
+                        }
+                    }
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            });
+        }
+        buttons.get(4).doClick();
+        RobotHelper.delay(200);
+        buttons.get(5).doClick();
+        RobotHelper.delay(200);
+    }
     private static void leaderShift(Silot_Input script, List<AccountInfo> accountInfoList){
         List<JLabel> labels = new ArrayList<>();
         labels.add(script.getLeader_1());
@@ -180,11 +240,11 @@ public class EventHandle_Silot {
         });
         lead_shift_2.doClick();
         RobotHelper.delay(200);
-        lead_shift_3.doClick();
-        RobotHelper.delay(200);
         lead_shift_4.doClick();
         RobotHelper.delay(200);
         lead_shift_4.doClick();
+        RobotHelper.delay(200);
+        lead_shift_6.doClick();
         RobotHelper.delay(200);
         lead_shift_6.doClick();
         RobotHelper.delay(200);

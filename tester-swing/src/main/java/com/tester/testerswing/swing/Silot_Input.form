@@ -19,6 +19,10 @@
     <rowspec value="top:20px:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:18px:noGrow"/>
+    <rowspec value="top:15px:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <colspec value="fill:45px:noGrow"/>
     <colspec value="left:0dlu:noGrow"/>
@@ -487,6 +491,123 @@
         </constraints>
         <properties>
           <text value="6_lead_shift"/>
+        </properties>
+      </component>
+      <component id="6ab81" class="javax.swing.JButton" binding="init_trash">
+        <constraints>
+          <grid row="14" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="残骸init"/>
+        </properties>
+      </component>
+      <component id="81aeb" class="javax.swing.JButton" binding="around_trash1">
+        <constraints>
+          <grid row="20" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="1残骸"/>
+        </properties>
+      </component>
+      <component id="1ad74" class="javax.swing.JButton" binding="around_trash2">
+        <constraints>
+          <grid row="20" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="2残骸"/>
+        </properties>
+      </component>
+      <component id="b0727" class="javax.swing.JButton" binding="around_trash3">
+        <constraints>
+          <grid row="20" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="3残骸"/>
+        </properties>
+      </component>
+      <component id="1dc03" class="javax.swing.JButton" binding="around_trash4">
+        <constraints>
+          <grid row="20" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="4残骸"/>
+        </properties>
+      </component>
+      <component id="9bb93" class="javax.swing.JButton" binding="around_trash5">
+        <constraints>
+          <grid row="20" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="5残骸"/>
+        </properties>
+      </component>
+      <component id="d7f59" class="javax.swing.JButton" binding="around_trash6">
+        <constraints>
+          <grid row="20" column="16" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="6残骸"/>
+        </properties>
+      </component>
+      <component id="e08a7" class="javax.swing.JLabel" binding="around_trash_status1">
+        <constraints>
+          <grid row="22" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value="Label"/>
+        </properties>
+      </component>
+      <component id="83181" class="javax.swing.JLabel" binding="around_trash_status2">
+        <constraints>
+          <grid row="22" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value="Label"/>
+        </properties>
+      </component>
+      <component id="6e0c6" class="javax.swing.JLabel" binding="around_trash_status3">
+        <constraints>
+          <grid row="22" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value="Label"/>
+        </properties>
+      </component>
+      <component id="28abc" class="javax.swing.JLabel" binding="around_trash_status4">
+        <constraints>
+          <grid row="22" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value="Label"/>
+        </properties>
+      </component>
+      <component id="15d8" class="javax.swing.JLabel" binding="around_trash_status5">
+        <constraints>
+          <grid row="22" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value="Label"/>
+        </properties>
+      </component>
+      <component id="a462e" class="javax.swing.JLabel" binding="around_trash_status6">
+        <constraints>
+          <grid row="22" column="16" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value="Label"/>
         </properties>
       </component>
     </children>

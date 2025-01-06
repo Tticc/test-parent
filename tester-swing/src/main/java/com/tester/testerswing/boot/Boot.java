@@ -60,45 +60,10 @@ public class Boot {
                     .setRedEd(accountPoint.getRedEd())
                     .setLastQuickRunTime(DateUtil.getYesterdayStart())
                     .setConsumer((e) -> PointHelper.eveEscapeAll(PointHelper.getList(), finalI));
+            accountPoint.setAccountInfo(accountInfo);
             accountInfoList.add(accountInfo);
             serialNoAccountInfoMap.put(finalI, accountInfo);
         }
-//        accountInfoList.add(new AccountInfo()
-//                .setWarnMsg("左警告")
-//                .setAccount(silot)
-////                .setSt(st_silot)
-////                .setEd(ed_silot)
-//                .setRedSt(red_st_silot)
-//                .setRedEd(red_ed_silot)
-//                .setLastQuickRunTime(DateUtil.getYesterdayStart())
-//                .setConsumer((e) -> EventHandle_Silot.quick_run()));
-//        accountInfoList.add(new AccountInfo()
-//                .setWarnMsg("中警告")
-//                .setAccount(sailinna)
-////                .setSt(st_sai)
-////                .setEd(ed_sai)
-//                .setRedSt(red_st_sai)
-//                .setRedEd(red_ed_sai)
-//                .setLastQuickRunTime(DateUtil.getYesterdayStart())
-//                .setConsumer((e) -> EventHandle_Sai.quick_run()));
-//        accountInfoList.add(new AccountInfo()
-//                .setWarnMsg("右警告")
-//                .setAccount(colos)
-////                .setSt(st_colos)
-////                .setEd(ed_colos)
-//                .setRedSt(red_st_colos)
-//                .setRedEd(red_ed_colos)
-//                .setLastQuickRunTime(DateUtil.getYesterdayStart())
-//                .setConsumer((e) -> EventHandle_Colos.quick_run()));
-//        accountInfoList.add(new AccountInfo()
-//                .setWarnMsg("4警告")
-//                .setAccount(four)
-////                .setSt(st_colos)
-////                .setEd(ed_colos)
-//                .setRedSt(red_st_colos)
-//                .setRedEd(red_ed_colos)
-//                .setLastQuickRunTime(DateUtil.getYesterdayStart())
-//                .setConsumer((e) -> EventHandle_Colos.quick_run()));
     }
 
 
