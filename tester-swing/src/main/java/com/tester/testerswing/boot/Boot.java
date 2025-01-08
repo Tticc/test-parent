@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * 启动检测
@@ -25,20 +26,8 @@ public class Boot {
 
     private boolean started = false;
 
-    private String silot = "silot";
-    private String sailinna = "sailinna";
-    private String colos = "colos";
-    private String four = "four";
+    private static Integer accountNum = 0;
 
-
-    private PointInfoDTO red_st_silot = new PointInfoDTO().setX(37).setY(87);
-    private PointInfoDTO red_ed_silot = new PointInfoDTO().setX(58).setY(688);
-
-    private PointInfoDTO red_st_sai = new PointInfoDTO().setX(94).setY(131);
-    private PointInfoDTO red_ed_sai = new PointInfoDTO().setX(118).setY(688);
-
-    private PointInfoDTO red_st_colos = new PointInfoDTO().setX(151).setY(131);
-    private PointInfoDTO red_ed_colos = new PointInfoDTO().setX(172).setY(688);
 
     private final ScheduledExecutorService checkerExecutorService = Executors.newSingleThreadScheduledExecutor(new SwingThreadFactoryImpl("warn-checker"));
 
@@ -47,7 +36,8 @@ public class Boot {
     private final Map<Integer, AccountInfo> serialNoAccountInfoMap = new HashMap<>();
 
     public Boot() {
-        List<PointHelper.AccountPoint> list = PointHelper.getList();
+        List<PointHelper.AccountPoint> list = PointHelper.getListAll();
+        Boot.setAccountNum(list.size());
         for (int i = 1; i <= list.size(); i++) {
             Integer finalI = i;
             PointHelper.AccountPoint accountPoint = list.get(finalI - 1);
@@ -102,7 +92,7 @@ public class Boot {
         int period = 1000;
         checkerExecutorService.scheduleAtFixedRate(() -> {
                     try {
-                        for (AccountInfo accountInfo : accountInfoList) {
+                        for (AccountInfo accountInfo : getAccountInfoList()) {
                             if(!Objects.equals(accountInfo.getSerialNo(), accountInfo.getLeaderSerialNo())){
                                 continue;
                             }
@@ -128,10 +118,31 @@ public class Boot {
     }
 
     public List<AccountInfo> getAccountInfoList() {
+        if(Boot.getAccountNum() > 0){
+            return accountInfoList.stream().limit(accountNum).collect(Collectors.toList());
+        }
         return accountInfoList;
     }
 
     public Map<Integer, AccountInfo> getSerialNoAccountInfoMap() {
         return serialNoAccountInfoMap;
+    }
+
+
+    public static Integer getAccountNum() {
+        return accountNum;
+    }
+
+    public static void setAccountNum(Integer newNum) {
+        accountNum = newNum;
+    }
+
+
+    public static boolean checkIfReturn(Integer num) {
+        // 如果最大账号数小于当前账号序号，那么return true
+        if(getAccountNum() < num){
+            return true;
+        }
+        return false;
     }
 }

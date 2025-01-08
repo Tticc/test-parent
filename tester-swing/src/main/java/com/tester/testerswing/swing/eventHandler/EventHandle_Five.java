@@ -2,6 +2,7 @@ package com.tester.testerswing.swing.eventHandler;
 
 
 import com.tester.testerswing.boot.AccountInfo;
+import com.tester.testerswing.boot.Boot;
 import com.tester.testerswing.swing.EasyScript_UI_Main;
 
 import javax.swing.*;
@@ -23,16 +24,25 @@ public class EventHandle_Five {
     public static void handle_five_main(EasyScript_UI_Main script) {
         // 自动投屏事件3
         script.getOnTopReplica_start5().addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             PointHelper.onTopReplicaPrepare(PointHelper.getList(),NUM);
         });
         // 暂停 five
         script.getFive_pause().addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             script.getAccountInfoList().get(NUM-1).setNeedWarn(false);
             script.getFive_status().setText("false");
             script.getWarn_status().setText("false");
         });
         // 继续 five
         script.getFive_start().addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             script.getAccountInfoList().get(NUM-1).setNeedWarn(true);
             script.getFive_status().setText("true");
         });
@@ -41,6 +51,9 @@ public class EventHandle_Five {
         // 设置 open 按钮事件。打开账号
         JButton open_five = script.getOpen_five();
         open_five.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 PointHelper.openAll(PointHelper.getList(),NUM);
             } catch (Exception exception) {
@@ -52,6 +65,9 @@ public class EventHandle_Five {
         // 设置 run 按钮事件。开工
         JButton open_run_five = script.getOpen_run_five();
         open_run_five.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 List<AccountInfo> accountInfoList = script.getAccountInfoList();
                 PointHelper.eveToWorkAll(PointHelper.getList(),NUM, accountInfoList);
@@ -72,6 +88,9 @@ public class EventHandle_Five {
         // 设置 end 按钮事件。收工
         JButton open_end_five = script.getOpen_end_five();
         open_end_five.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 script.getFive_pause().doClick();
                 PointHelper.eveEndWorkAll(PointHelper.getList(),NUM);
@@ -83,6 +102,9 @@ public class EventHandle_Five {
         // 设置 找回无人机
         JButton five_link = script.getFive_link();
         five_link.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 PointHelper.linkDrone(PointHelper.getList(),NUM);
 
@@ -94,6 +116,9 @@ public class EventHandle_Five {
         // 设置 放置开工+牵引 按钮事件
         JButton harvest_five = script.getHarvest_five();
         harvest_five.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 PointHelper.doHarvestAll(PointHelper.getList(),NUM);
                 // 启动监控
@@ -106,6 +131,9 @@ public class EventHandle_Five {
         // 设置 纯放置牵引 按钮事件
         JButton pure_harvest_five = script.getPure_harvest_five();
         pure_harvest_five.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 PointHelper.doPureHarvestAll(PointHelper.getList(),NUM);
             } catch (Exception exception) {
@@ -113,14 +141,5 @@ public class EventHandle_Five {
             }
         });
     }
-
-    public static void quick_run() {
-        try {
-            PointHelper.eveEscapeAll(PointHelper.getList(), NUM);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
-
 
 }

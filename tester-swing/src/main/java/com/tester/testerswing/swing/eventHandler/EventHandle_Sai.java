@@ -1,6 +1,7 @@
 package com.tester.testerswing.swing.eventHandler;
 
 import com.tester.testerswing.boot.AccountInfo;
+import com.tester.testerswing.boot.Boot;
 import com.tester.testerswing.capture.GaussianPointInfoDTO;
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.robot.RobotHelper;
@@ -120,16 +121,25 @@ public class EventHandle_Sai {
     public static void handle_sai_main(EasyScript_UI_Main script) {
         // 自动投屏事件2
         script.getOnTopReplica_start2().addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             PointHelper.onTopReplicaPrepare(PointHelper.getList(),NUM);
         });
         // 暂停 sai
         script.getSai_pause().addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             script.getAccountInfoList().get(NUM-1).setNeedWarn(false);
             script.getSai_status().setText("false");
             script.getWarn_status().setText("false");
         });
         // 继续 sai
         script.getSai_start().addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             script.getAccountInfoList().get(NUM-1).setNeedWarn(true);
             script.getSai_status().setText("true");
         });
@@ -138,6 +148,9 @@ public class EventHandle_Sai {
         // 设置 open 按钮事件。打开账号
         JButton open_sai = script.getOpen_sai();
         open_sai.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 PointHelper.openAll(PointHelper.getList(),NUM);
             } catch (Exception exception) {
@@ -149,6 +162,9 @@ public class EventHandle_Sai {
         // 设置 run 按钮事件。开工
         JButton open_run_sai = script.getOpen_run_sai();
         open_run_sai.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 List<AccountInfo> accountInfoList = script.getAccountInfoList();
                 PointHelper.eveToWorkAll(PointHelper.getList(),NUM,accountInfoList);
@@ -169,6 +185,9 @@ public class EventHandle_Sai {
         // 设置 end 按钮事件。收工
         JButton open_end_sai = script.getOpen_end_sai();
         open_end_sai.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 script.getSai_pause().doClick();
                 PointHelper.eveEndWorkAll(PointHelper.getList(),NUM);
@@ -179,6 +198,9 @@ public class EventHandle_Sai {
         // 设置 找回无人机
         JButton sai_link = script.getSai_link();
         sai_link.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 PointHelper.linkDrone(PointHelper.getList(),NUM);
             } catch (Exception exception) {
@@ -189,6 +211,9 @@ public class EventHandle_Sai {
         // 设置sai 放置开工+牵引 按钮事件
         JButton harvest_sai = script.getHarvest_sai();
         harvest_sai.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 PointHelper.doHarvestAll(PointHelper.getList(),NUM);
                 // 启动监控
@@ -201,21 +226,15 @@ public class EventHandle_Sai {
         // 设置 纯放置牵引 按钮事件
         JButton pure_harvest_sai = script.getPure_harvest_sai();
         pure_harvest_sai.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 PointHelper.doPureHarvestAll(PointHelper.getList(),NUM);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
         });
-    }
-
-
-    public static void quick_run(){
-        try {
-            PointHelper.eveEscapeAll(PointHelper.getList(),NUM);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
     }
 
 

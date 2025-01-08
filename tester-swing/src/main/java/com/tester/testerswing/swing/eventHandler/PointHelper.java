@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.MyConsumer;
 import com.tester.testerswing.boot.AccountInfo;
+import com.tester.testerswing.boot.Boot;
 import com.tester.testerswing.capture.GaussianStrPointInfoDTO;
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.gaussian.GaussianHelper;
@@ -16,10 +17,7 @@ import lombok.Data;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -28,22 +26,32 @@ public class PointHelper {
 
     public static List<AccountPoint> list = new ArrayList<>();
 
+    public static Map<Integer, List<GaussianStrPointInfoDTO>> spListMap = new HashMap<>();
+
+    public static List<AccountPoint> getListAll() {
+        return list;
+    }
+
     public static List<AccountPoint> getList() {
-        return list.stream().collect(Collectors.toList());
+        return list.stream().limit(Boot.getAccountNum()).collect(Collectors.toList());
     }
 
     private static final AtomicBoolean shouldStop = new AtomicBoolean(false);
 
 
+
+
     static {
+        spListMap = initPointMap();
         AccountPoint silot = new AccountPoint();
+        silot.setSerialNo(1);
         silot.setEve_selectPoint(new GaussianStrPointInfoDTO("445,953"));
         silot.setReplica_selectPoint(new GaussianStrPointInfoDTO("304,99"));
         silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("80,58"));//1
-        silot.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1850,231", "1862,238"));
-        silot.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1622,290", "1650,298"));
-        silot.setEve_alignToPoint(new GaussianStrPointInfoDTO("1588,153", "1602,163"));
-        silot.setEve_dockPoint(new GaussianStrPointInfoDTO("1663,153", "1676,162"));
+        silot.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1840,228", "1865,235"));
+        silot.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1627,289", "1653,294"));
+        silot.setEve_alignToPoint(new GaussianStrPointInfoDTO("1581,159", "1598,168"));
+        silot.setEve_dockPoint(new GaussianStrPointInfoDTO("1661,154", "1675,161"));
 //        silot.setRedSt(new PointInfoDTO(37, 133));
         silot.setRedSt(new PointInfoDTO(37,20));
 //        silot.setRedEd(new PointInfoDTO(55, 651));
@@ -53,14 +61,15 @@ public class PointHelper {
 
 
         AccountPoint sailinaa = new AccountPoint();
+        sailinaa.setSerialNo(2);
         sailinaa.setEve_selectPoint(new GaussianStrPointInfoDTO("702,960"));
         sailinaa.setReplica_selectPoint(new GaussianStrPointInfoDTO("362,123"));
 //        sailinaa.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("137,58"));
         sailinaa.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("80,574"));//2
-        sailinaa.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1846,230", "1865,239"));
-        sailinaa.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1625,288", "1644,299"));
-        sailinaa.setEve_alignToPoint(new GaussianStrPointInfoDTO("1590,154", "1601,163"));
-        sailinaa.setEve_dockPoint(new GaussianStrPointInfoDTO("1664,151", "1678,165"));
+        sailinaa.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1840,228", "1865,235"));
+        sailinaa.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1627,289", "1653,294"));
+        sailinaa.setEve_alignToPoint(new GaussianStrPointInfoDTO("1581,159", "1598,168"));
+        sailinaa.setEve_dockPoint(new GaussianStrPointInfoDTO("1661,154", "1675,161"));
 //        sailinaa.setRedSt(new PointInfoDTO(96, 141));
         sailinaa.setRedSt(new PointInfoDTO(37,533));
 //        sailinaa.setRedEd(new PointInfoDTO(116, 651));
@@ -70,14 +79,15 @@ public class PointHelper {
 
 
         AccountPoint colos = new AccountPoint();
+        colos.setSerialNo(3);
         colos.setEve_selectPoint(new GaussianStrPointInfoDTO("975,936"));
         colos.setReplica_selectPoint(new GaussianStrPointInfoDTO("361,152"));
 //        colos.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("194,58"));
         colos.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("135,58"));//3
-        colos.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1843,227", "1862,238"));
-        colos.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1616,288", "1634,299"));
-        colos.setEve_alignToPoint(new GaussianStrPointInfoDTO("1591,150", "1600,161"));
-        colos.setEve_dockPoint(new GaussianStrPointInfoDTO("1665,151", "1678,163"));
+        colos.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1840,228", "1865,235"));
+        colos.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1627,289", "1653,294"));
+        colos.setEve_alignToPoint(new GaussianStrPointInfoDTO("1581,159", "1598,168"));
+        colos.setEve_dockPoint(new GaussianStrPointInfoDTO("1661,154", "1675,161"));
 //        colos.setRedSt(new PointInfoDTO(151, 139));
         colos.setRedSt(new PointInfoDTO(93,20));
 //        colos.setRedEd(new PointInfoDTO(173, 651));
@@ -87,6 +97,7 @@ public class PointHelper {
 
 
         AccountPoint four = new AccountPoint();
+        four.setSerialNo(4);
         four.setEve_selectPoint(new GaussianStrPointInfoDTO("1240,950"));
         four.setReplica_selectPoint(new GaussianStrPointInfoDTO("327,173"));
 //        four.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("251,58"));
@@ -105,6 +116,7 @@ public class PointHelper {
 
 
         AccountPoint five = new AccountPoint();
+        five.setSerialNo(5);
         five.setEve_selectPoint(new GaussianStrPointInfoDTO("1476,947")); // todo
         five.setReplica_selectPoint(new GaussianStrPointInfoDTO("327,200"));
         five.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("190,58"));//5
@@ -120,6 +132,7 @@ public class PointHelper {
 
 
         AccountPoint six = new AccountPoint();
+        six.setSerialNo(6);
         six.setEve_selectPoint(new GaussianStrPointInfoDTO("1735,942")); // todo
         six.setReplica_selectPoint(new GaussianStrPointInfoDTO("327,225"));
         six.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("190,574"));//6
@@ -150,6 +163,7 @@ public class PointHelper {
 
     @Data
     public static class AccountPoint {
+        private Integer serialNo;
         // 点击任务栏选择账号窗口
         public GaussianStrPointInfoDTO eve_selectPoint;
         // onTopReplica 窗口选择账号点
@@ -177,6 +191,51 @@ public class PointHelper {
 
         private AccountInfo accountInfo;
 
+        public GaussianStrPointInfoDTO getEve_selectPoint() {
+            List<GaussianStrPointInfoDTO> gaussianStrPointInfoDTOS = spListMap.get(Boot.getAccountNum());
+            GaussianStrPointInfoDTO gaussianStrPointInfoDTO = gaussianStrPointInfoDTOS.get(this.serialNo - 1);
+            return gaussianStrPointInfoDTO;
+        }
+
+        public void setEve_selectPoint(GaussianStrPointInfoDTO eve_selectPoint) {
+            this.eve_selectPoint = eve_selectPoint;
+        }
+    }
+
+    private static Map<Integer, List<GaussianStrPointInfoDTO>> initPointMap(){
+        Map<Integer, List<GaussianStrPointInfoDTO>> spMap = new HashMap<>();
+        ArrayList<GaussianStrPointInfoDTO> _3Account = new ArrayList<>();
+        ArrayList<GaussianStrPointInfoDTO> _4Account = new ArrayList<>();
+        ArrayList<GaussianStrPointInfoDTO> _5Account = new ArrayList<>();
+        ArrayList<GaussianStrPointInfoDTO> _6Account = new ArrayList<>();
+        spMap.put(3, _3Account);
+        spMap.put(4, _4Account);
+        spMap.put(5, _5Account);
+        spMap.put(6, _6Account);
+
+        _3Account.add(new GaussianStrPointInfoDTO("958,924"));
+        _3Account.add(new GaussianStrPointInfoDTO("1186,935"));
+        _3Account.add(new GaussianStrPointInfoDTO("1449,946"));
+
+        _4Account.add(new GaussianStrPointInfoDTO("801,940"));
+        _4Account.add(new GaussianStrPointInfoDTO("1087,941"));
+        _4Account.add(new GaussianStrPointInfoDTO("1338,939"));
+        _4Account.add(new GaussianStrPointInfoDTO("1535,951"));
+
+        _5Account.add(new GaussianStrPointInfoDTO("686,937"));
+        _5Account.add(new GaussianStrPointInfoDTO("924,944"));
+        _5Account.add(new GaussianStrPointInfoDTO("1202,936"));
+        _5Account.add(new GaussianStrPointInfoDTO("1458,939"));
+        _5Account.add(new GaussianStrPointInfoDTO("1674,953"));
+
+        _6Account.add(new GaussianStrPointInfoDTO("445,953"));
+        _6Account.add(new GaussianStrPointInfoDTO("702,960"));
+        _6Account.add(new GaussianStrPointInfoDTO("975,936"));
+        _6Account.add(new GaussianStrPointInfoDTO("1240,950"));
+        _6Account.add(new GaussianStrPointInfoDTO("1476,947"));
+        _6Account.add(new GaussianStrPointInfoDTO("1735,942"));
+
+        return spMap;
     }
 
 

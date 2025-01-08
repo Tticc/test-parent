@@ -1,6 +1,7 @@
 package com.tester.testerswing.swing.eventHandler;
 
 import com.tester.testerswing.boot.AccountInfo;
+import com.tester.testerswing.boot.Boot;
 import com.tester.testerswing.capture.GaussianPointInfoDTO;
 import com.tester.testerswing.capture.PointInfoDTO;
 import com.tester.testerswing.robot.RobotHelper;
@@ -91,10 +92,32 @@ public class EventHandle_Silot {
         leaderShift(script, accountInfoList);
         // 初始化环绕残骸
         initAroundTrash(script, accountInfoList);
+        // 初始化账号变更
+        initAccountNum(script);
+    }
+
+    private static void initAccountNum(Silot_Input script){
+        script.getAccountNum1().setText(Boot.getAccountNum()+"");
+        script.getAccountNum2().setText(Boot.getAccountNum()+"");
+        JButton reduce_use = script.getReduce_use();
+        JButton add_use = script.getAdd_use();
+        reduce_use.addActionListener((e) -> {
+            Integer newNum = Boot.getAccountNum()-1;
+            if(newNum < 3){
+                return;
+            }
+            Boot.setAccountNum(newNum);
+            script.getAccountNum1().setText(Boot.getAccountNum()+"");
+            script.getAccountNum2().setText(Boot.getAccountNum()+"");
+        });
+        add_use.addActionListener((e) -> {
+            Boot.setAccountNum(Boot.getAccountNum()+1);
+            script.getAccountNum1().setText(Boot.getAccountNum()+"");
+            script.getAccountNum2().setText(Boot.getAccountNum()+"");
+        });
 
 
     }
-
     private static void initAroundTrash(Silot_Input script, List<AccountInfo> accountInfoList){
         List<JLabel> labels = new ArrayList<>();
         labels.add(script.getAround_trash_status1());
@@ -312,16 +335,25 @@ public class EventHandle_Silot {
     public static void handle_silot_main(EasyScript_UI_Main script) {
         // 自动投屏事件1
         script.getOnTopReplica_start1().addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             PointHelper.onTopReplicaPrepare(PointHelper.getList(),NUM);
         });
         // 暂停 silot
         script.getSilot_pause().addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             script.getAccountInfoList().get(NUM-1).setNeedWarn(false);
             script.getSilot_status().setText("false");
             script.getWarn_status().setText("false");
         });
         // 继续 silot
         script.getSilot_start().addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             script.getAccountInfoList().get(NUM-1).setNeedWarn(true);
             script.getSilot_status().setText("true");
         });
@@ -329,6 +361,9 @@ public class EventHandle_Silot {
         // 设置 open 按钮事件。打开账号
         JButton open_silot = script.getOpen_silot();
         open_silot.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 PointHelper.openAll(PointHelper.getList(),NUM);
             } catch (Exception exception) {
@@ -340,6 +375,9 @@ public class EventHandle_Silot {
         // 设置 run 按钮事件。开工
         JButton open_run_silot = script.getOpen_run_silot();
         open_run_silot.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 List<AccountInfo> accountInfoList = script.getAccountInfoList();
                 PointHelper.eveToWorkAll(PointHelper.getList(),NUM,accountInfoList);
@@ -361,6 +399,9 @@ public class EventHandle_Silot {
         // 设置 end 按钮事件。收工
         JButton open_end_silot = script.getOpen_end_silot();
         open_end_silot.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 script.getSilot_pause().doClick();
                 PointHelper.eveEndWorkAll(PointHelper.getList(),NUM);
@@ -372,6 +413,9 @@ public class EventHandle_Silot {
         // 设置 找回无人机
         JButton silot_link = script.getSilot_link();
         silot_link.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 PointHelper.linkDrone(PointHelper.getList(),NUM);
             } catch (Exception exception) {
@@ -382,6 +426,9 @@ public class EventHandle_Silot {
         // 设置silot 放置开工+牵引 按钮事件
         JButton harvest_silot = script.getHarvest_silot();
         harvest_silot.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 PointHelper.doHarvestAll(PointHelper.getList(),NUM);
                 // 启动监控
@@ -394,6 +441,9 @@ public class EventHandle_Silot {
         // 设置 纯放置牵引 按钮事件
         JButton pure_harvest_silot = script.getPure_harvest_silot();
         pure_harvest_silot.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 PointHelper.doPureHarvestAll(PointHelper.getList(),NUM);
             } catch (Exception exception) {
@@ -428,30 +478,6 @@ public class EventHandle_Silot {
         setTextField(silot_return_p3_input, silot_return_p3_st);
         JTextField silot_return_p32_input = script.getSilot_return_p32_input();
         setTextField(silot_return_p32_input, silot_return_p3_ed);
-
-
-        // 跑路6个点
-        JTextField silot_align_p1_input = script.getSilot_align_p1_input();
-        setTextField(silot_align_p1_input, silot_align_p1_st);
-        JTextField silot_align_p12_input = script.getSilot_align_p12_input();
-        setTextField(silot_align_p12_input, silot_align_p1_ed);
-
-        JTextField silot_align_p2_input = script.getSilot_align_p2_input();
-        setTextField(silot_align_p2_input, silot_align_p2_st);
-        JTextField silot_align_p22_input = script.getSilot_align_p22_input();
-        setTextField(silot_align_p22_input, silot_align_p2_ed);
-
-        JTextField silot_align_p3_input = script.getSilot_align_p3_input();
-        setTextField(silot_align_p3_input, silot_align_p3_st);
-        JTextField silot_align_p32_input = script.getSilot_align_p32_input();
-        setTextField(silot_align_p32_input, silot_align_p3_ed);
-
-        // 主览2个点
-        JTextField silot_main_view_input = script.getSilot_main_view_input();
-        setTextField(silot_main_view_input, silot_main_view_p1_st);
-        JTextField silot_main_view2_input = script.getSilot_main_view2_input();
-        setTextField(silot_main_view2_input, silot_main_view_p1_ed);
-
     }
 
     private static void setTextField(JTextField field, PointInfoDTO sPoint) {

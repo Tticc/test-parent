@@ -2,6 +2,7 @@ package com.tester.testerswing.swing.eventHandler;
 
 
 import com.tester.testerswing.boot.AccountInfo;
+import com.tester.testerswing.boot.Boot;
 import com.tester.testerswing.swing.EasyScript_UI_Main;
 
 import javax.swing.*;
@@ -23,16 +24,25 @@ public class EventHandle_Four {
     public static void handle_four_main(EasyScript_UI_Main script) {
         // 自动投屏事件3
         script.getOnTopReplica_start4().addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             PointHelper.onTopReplicaPrepare(PointHelper.getList(),NUM);
         });
         // 暂停 four
         script.getFour_pause().addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             script.getAccountInfoList().get(NUM-1).setNeedWarn(false);
             script.getFour_status().setText("false");
             script.getWarn_status().setText("false");
         });
         // 继续 four
         script.getFour_start().addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             script.getAccountInfoList().get(NUM-1).setNeedWarn(true);
             script.getFour_status().setText("true");
         });
@@ -41,6 +51,9 @@ public class EventHandle_Four {
         // 设置 open 按钮事件。打开账号
         JButton open_four = script.getOpen_four();
         open_four.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 PointHelper.openAll(PointHelper.getList(),NUM);
             } catch (Exception exception) {
@@ -52,6 +65,9 @@ public class EventHandle_Four {
         // 设置 run 按钮事件。开工
         JButton open_run_four = script.getOpen_run_four();
         open_run_four.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 List<AccountInfo> accountInfoList = script.getAccountInfoList();
                 PointHelper.eveToWorkAll(PointHelper.getList(),NUM,accountInfoList);
@@ -72,6 +88,9 @@ public class EventHandle_Four {
         // 设置 end 按钮事件。收工
         JButton open_end_four = script.getOpen_end_four();
         open_end_four.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 script.getFour_pause().doClick();
                 PointHelper.eveEndWorkAll(PointHelper.getList(),NUM);
@@ -83,6 +102,9 @@ public class EventHandle_Four {
         // 设置 找回无人机
         JButton four_link = script.getFour_link();
         four_link.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 PointHelper.linkDrone(PointHelper.getList(),NUM);
 
@@ -94,6 +116,9 @@ public class EventHandle_Four {
         // 设置 放置开工+牵引 按钮事件
         JButton harvest_four = script.getHarvest_four();
         harvest_four.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 PointHelper.doHarvestAll(PointHelper.getList(),NUM);
                 // 启动监控
@@ -106,6 +131,9 @@ public class EventHandle_Four {
         // 设置 纯放置牵引 按钮事件
         JButton pure_harvest_four = script.getPure_harvest_four();
         pure_harvest_four.addActionListener((e) -> {
+            if(Boot.checkIfReturn(NUM)){
+                return;
+            }
             try {
                 PointHelper.doPureHarvestAll(PointHelper.getList(),NUM);
             } catch (Exception exception) {
@@ -113,14 +141,4 @@ public class EventHandle_Four {
             }
         });
     }
-
-    public static void quick_run() {
-        try {
-            PointHelper.eveEscapeAll(PointHelper.getList(), NUM);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
-
-
 }

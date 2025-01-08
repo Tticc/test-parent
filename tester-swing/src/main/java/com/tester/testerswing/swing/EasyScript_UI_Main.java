@@ -10,6 +10,7 @@ import lombok.Data;
 import javax.swing.*;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Author 温昌营
@@ -104,6 +105,13 @@ public class EasyScript_UI_Main {
     List<AccountInfo> accountInfoList = boot.getAccountInfoList();
     Map<Integer, AccountInfo> serialNoAccountInfoMap = boot.getSerialNoAccountInfoMap();
 
+    public List<AccountInfo> getAccountInfoList() {
+        return accountInfoList.stream().limit(Boot.getAccountNum()).collect(Collectors.toList());
+    }
+
+    public void setAccountInfoList(List<AccountInfo> accountInfoList) {
+        this.accountInfoList = accountInfoList;
+    }
 
     public EasyScript_UI_Main start(Silot_Input silot_input, Sai_Input sai_input) {
         afterInit(silot_input, sai_input);
@@ -116,7 +124,7 @@ public class EasyScript_UI_Main {
 
         // 用于录入点阵用，后面点阵固定，已废弃 - 2023-9-21 15:19:08
         // 初始化 silot 录入事件
-        EventHandle_Silot.handle_silot(silot_input, accountInfoList);
+        EventHandle_Silot.handle_silot(silot_input, getAccountInfoList());
 
         // 废弃 - 2023-9-21 15:19:08
         // 初始化 sai 录入事件

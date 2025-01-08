@@ -9,6 +9,7 @@ import com.tester.testerswing.swing.EasyScript_UI_Main;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,62 +37,27 @@ public class EventHandle_Main {
      * 新账号需要调整内容
      */
     private static void handle_newAccountNeedUpdate(EasyScript_UI_Main script) {
+
+        List<JLabel> labels = new ArrayList<>();
+        labels.add(script.getSilot_status());
+        labels.add(script.getSai_status());
+        labels.add(script.getColos_status());
+        labels.add(script.getFour_status());
+        labels.add(script.getFive_status());
+        labels.add(script.getSix_status());
+
         // warn开始
         script.getWarn_start().addActionListener((e) -> {
             script.getWarn_status().setText("true");
-
-            AccountInfo accountInfo1 = script.getAccountInfoList().get(0);
-            if(Objects.equals(accountInfo1.getSerialNo(), accountInfo1.getLeaderSerialNo())) {
-                accountInfo1.setNeedWarn(true);
-                script.getSilot_status().setText("true");
-            }else{
-                accountInfo1.setNeedWarn(false);
-                script.getSilot_status().setText("false");
-            }
-
-            AccountInfo accountInfo2 = script.getAccountInfoList().get(1);
-            if(Objects.equals(accountInfo2.getSerialNo(), accountInfo2.getLeaderSerialNo())) {
-                accountInfo2.setNeedWarn(true);
-                script.getSai_status().setText("true");
-            }else{
-                accountInfo2.setNeedWarn(false);
-                script.getSai_status().setText("false");
-            }
-
-            AccountInfo accountInfo3 = script.getAccountInfoList().get(2);
-            if(Objects.equals(accountInfo3.getSerialNo(), accountInfo3.getLeaderSerialNo())) {
-                accountInfo3.setNeedWarn(true);
-                script.getColos_status().setText("true");
-            }else{
-                accountInfo3.setNeedWarn(false);
-                script.getColos_status().setText("false");
-            }
-
-            AccountInfo accountInfo4 = script.getAccountInfoList().get(3);
-            if(Objects.equals(accountInfo4.getSerialNo(), accountInfo4.getLeaderSerialNo())) {
-                accountInfo4.setNeedWarn(true);
-                script.getFour_status().setText("true");
-            }else{
-                accountInfo4.setNeedWarn(false);
-                script.getFour_status().setText("false");
-            }
-
-            AccountInfo accountInfo5 = script.getAccountInfoList().get(4);
-            if(Objects.equals(accountInfo5.getSerialNo(), accountInfo5.getLeaderSerialNo())) {
-                accountInfo5.setNeedWarn(true);
-                script.getFive_status().setText("true");
-            }else{
-                accountInfo5.setNeedWarn(false);
-                script.getFive_status().setText("false");
-            }
-
-            AccountInfo accountInfo6 = script.getAccountInfoList().get(5);
-            if(Objects.equals(accountInfo6.getSerialNo(), accountInfo6.getLeaderSerialNo())) {
-                accountInfo6.setNeedWarn(true);
-                script.getSix_status().setText("true");
-            }else{
-                accountInfo6.setNeedWarn(false);
-                script.getSix_status().setText("false");
+            for (AccountInfo accountInfo : script.getAccountInfoList()) {
+                JLabel jLabel = labels.get(accountInfo.getSerialNo() - 1);
+                if(Objects.equals(accountInfo.getSerialNo(), accountInfo.getLeaderSerialNo())) {
+                    accountInfo.setNeedWarn(true);
+                    jLabel.setText("true");
+                }else{
+                    accountInfo.setNeedWarn(false);
+                    jLabel.setText("false");
+                }
             }
         });
 
@@ -99,18 +65,11 @@ public class EventHandle_Main {
         script.getWarn_end().addActionListener((e) -> {
             PointHelper.cleanEsc();
             script.getWarn_status().setText("false");
-            script.getAccountInfoList().get(0).setNeedWarn(false);
-            script.getSilot_status().setText("false");
-            script.getAccountInfoList().get(1).setNeedWarn(false);
-            script.getSai_status().setText("false");
-            script.getAccountInfoList().get(2).setNeedWarn(false);
-            script.getColos_status().setText("false");
-            script.getAccountInfoList().get(3).setNeedWarn(false);
-            script.getFour_status().setText("false");
-            script.getAccountInfoList().get(4).setNeedWarn(false);
-            script.getFive_status().setText("false");
-            script.getAccountInfoList().get(5).setNeedWarn(false);
-            script.getSix_status().setText("false");
+            for (AccountInfo accountInfo : script.getAccountInfoList()) {
+                JLabel jLabel = labels.get(accountInfo.getSerialNo() - 1);
+                accountInfo.setNeedWarn(false);
+                jLabel.setText("false");
+            }
         });
     }
     private static void handle_all(EasyScript_UI_Main script) {
