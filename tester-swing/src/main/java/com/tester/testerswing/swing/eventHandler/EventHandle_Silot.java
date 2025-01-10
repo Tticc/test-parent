@@ -94,8 +94,28 @@ public class EventHandle_Silot {
         initAroundTrash(script, accountInfoList);
         // 初始化账号变更
         initAccountNum(script);
+        // 设置警卫状态
+        initGuardStatus(script, accountInfoList);
     }
 
+    private static void initGuardStatus(Silot_Input script, List<AccountInfo> accountInfoList){
+        JButton use_guard = script.getUse_guard();
+        JButton ban_guard = script.getBan_guard();
+        JLabel hasGuard = script.getHasGuard();
+        use_guard.addActionListener((e) -> {
+            for (AccountInfo accountInfo : accountInfoList) {
+                accountInfo.setHasGuard(true);
+            }
+            hasGuard.setText("true");
+        });
+        ban_guard.addActionListener((e) -> {
+            for (AccountInfo accountInfo : accountInfoList) {
+                accountInfo.setHasGuard(false);
+            }
+            hasGuard.setText("false");
+        });
+        use_guard.doClick();
+    }
     private static void initAccountNum(Silot_Input script){
         script.getAccountNum1().setText(Boot.getAccountNum()+"");
         script.getAccountNum2().setText(Boot.getAccountNum()+"");
@@ -468,16 +488,6 @@ public class EventHandle_Silot {
         setTextField(silot_return_p1_input, silot_return_p1_st);
         JTextField silot_return_p12_input = script.getSilot_return_p12_input();
         setTextField(silot_return_p12_input, silot_return_p1_ed);
-
-        JTextField silot_return_p2_input = script.getSilot_return_p2_input();
-        setTextField(silot_return_p2_input, silot_return_p2_st);
-        JTextField silot_return_p22_input = script.getSilot_return_p22_input();
-        setTextField(silot_return_p22_input, silot_return_p2_ed);
-
-        JTextField silot_return_p3_input = script.getSilot_return_p3_input();
-        setTextField(silot_return_p3_input, silot_return_p3_st);
-        JTextField silot_return_p32_input = script.getSilot_return_p32_input();
-        setTextField(silot_return_p32_input, silot_return_p3_ed);
     }
 
     private static void setTextField(JTextField field, PointInfoDTO sPoint) {

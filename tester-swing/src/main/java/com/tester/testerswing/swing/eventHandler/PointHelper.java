@@ -48,106 +48,81 @@ public class PointHelper {
         silot.setEve_selectPoint(new GaussianStrPointInfoDTO("445,953"));
         silot.setReplica_selectPoint(new GaussianStrPointInfoDTO("304,99"));
         silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("80,58"));//1
-        silot.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1840,228", "1865,235"));
-        silot.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1627,289", "1653,294"));
-        silot.setEve_alignToPoint(new GaussianStrPointInfoDTO("1581,159", "1598,168"));
-        silot.setEve_dockPoint(new GaussianStrPointInfoDTO("1661,154", "1675,161"));
-//        silot.setRedSt(new PointInfoDTO(37, 133));
         silot.setRedSt(new PointInfoDTO(37,20));
-//        silot.setRedEd(new PointInfoDTO(55, 651));
         silot.setRedEd(new PointInfoDTO(54,503));
+        silot.setEnemySt(new PointInfoDTO(80,35));
+        silot.setEnemyEd(new PointInfoDTO(99,56));
         silot.setName("one");
-        silot.setWarnMsg("one警告");
+        silot.setWarnMsg("1警告");
 
 
         AccountPoint sailinaa = new AccountPoint();
         sailinaa.setSerialNo(2);
         sailinaa.setEve_selectPoint(new GaussianStrPointInfoDTO("702,960"));
         sailinaa.setReplica_selectPoint(new GaussianStrPointInfoDTO("362,123"));
-//        sailinaa.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("137,58"));
         sailinaa.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("80,574"));//2
-        sailinaa.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1840,228", "1865,235"));
-        sailinaa.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1627,289", "1653,294"));
-        sailinaa.setEve_alignToPoint(new GaussianStrPointInfoDTO("1581,159", "1598,168"));
-        sailinaa.setEve_dockPoint(new GaussianStrPointInfoDTO("1661,154", "1675,161"));
-//        sailinaa.setRedSt(new PointInfoDTO(96, 141));
         sailinaa.setRedSt(new PointInfoDTO(37,533));
-//        sailinaa.setRedEd(new PointInfoDTO(116, 651));
         sailinaa.setRedEd(new PointInfoDTO(54,1005));
+        sailinaa.setEnemySt(new PointInfoDTO(80,548));
+        sailinaa.setEnemyEd(new PointInfoDTO(99,569));
         sailinaa.setName("two");
-        sailinaa.setWarnMsg("two警告");
+        sailinaa.setWarnMsg("2警告");
 
 
         AccountPoint colos = new AccountPoint();
         colos.setSerialNo(3);
         colos.setEve_selectPoint(new GaussianStrPointInfoDTO("975,936"));
         colos.setReplica_selectPoint(new GaussianStrPointInfoDTO("361,152"));
-//        colos.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("194,58"));
-        colos.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("135,58"));//3
-        colos.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1840,228", "1865,235"));
-        colos.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1627,289", "1653,294"));
-        colos.setEve_alignToPoint(new GaussianStrPointInfoDTO("1581,159", "1598,168"));
-        colos.setEve_dockPoint(new GaussianStrPointInfoDTO("1661,154", "1675,161"));
-//        colos.setRedSt(new PointInfoDTO(151, 139));
-        colos.setRedSt(new PointInfoDTO(93,20));
-//        colos.setRedEd(new PointInfoDTO(173, 651));
-        colos.setRedEd(new PointInfoDTO(111,503));
+        colos.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("147,58"));//3
+        colos.setRedSt(new PointInfoDTO(105,20));
+        colos.setRedEd(new PointInfoDTO(123,503));
+        colos.setEnemySt(new PointInfoDTO(148,35));
+        colos.setEnemyEd(new PointInfoDTO(167,56));
         colos.setName("three");
-        colos.setWarnMsg("three警告");
+        colos.setWarnMsg("3警告");
 
 
         AccountPoint four = new AccountPoint();
         four.setSerialNo(4);
         four.setEve_selectPoint(new GaussianStrPointInfoDTO("1240,950"));
         four.setReplica_selectPoint(new GaussianStrPointInfoDTO("327,173"));
-//        four.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("251,58"));
-        four.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("135,574"));//4
-        four.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1840,228", "1865,235"));
-        four.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1627,289", "1653,294"));
-        four.setEve_alignToPoint(new GaussianStrPointInfoDTO("1581,159", "1598,168"));
-        four.setEve_dockPoint(new GaussianStrPointInfoDTO("1661,154", "1675,161"));
-//        four.setRedSt(new PointInfoDTO(211, 139));
-        four.setRedSt(new PointInfoDTO(93,533));
-//        four.setRedEd(new PointInfoDTO(231, 651));
-        four.setRedEd(new PointInfoDTO(111,1005));
+        four.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("147,574"));//4
+        four.setRedSt(new PointInfoDTO(105,533));
+        four.setRedEd(new PointInfoDTO(123,1005));
+        four.setEnemySt(new PointInfoDTO(148,548));
+        four.setEnemyEd(new PointInfoDTO(167,569));
         four.setName("four");
-        four.setWarnMsg("four警告");
+        four.setWarnMsg("4警告");
 
 
 
         AccountPoint five = new AccountPoint();
         five.setSerialNo(5);
-        five.setEve_selectPoint(new GaussianStrPointInfoDTO("1476,947")); // todo
+        five.setEve_selectPoint(new GaussianStrPointInfoDTO("1476,947"));
         five.setReplica_selectPoint(new GaussianStrPointInfoDTO("327,200"));
-        five.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("190,58"));//5
-        five.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1840,228", "1865,235"));
-        five.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1627,289", "1653,294"));
-        five.setEve_alignToPoint(new GaussianStrPointInfoDTO("1581,159", "1598,168"));
-        five.setEve_dockPoint(new GaussianStrPointInfoDTO("1661,154", "1675,161"));
-        five.setRedSt(new PointInfoDTO(146,20)); // todo
-        five.setRedEd(new PointInfoDTO(165,503)); // todo
+        five.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("214,58"));//5
+        five.setRedSt(new PointInfoDTO(170,20));
+        five.setRedEd(new PointInfoDTO(189,503));
+        five.setEnemySt(new PointInfoDTO(213,35));
+        five.setEnemyEd(new PointInfoDTO(232,56));
         five.setName("five");
-        five.setWarnMsg("five警告");
+        five.setWarnMsg("5警告");
 
 
 
         AccountPoint six = new AccountPoint();
         six.setSerialNo(6);
-        six.setEve_selectPoint(new GaussianStrPointInfoDTO("1735,942")); // todo
+        six.setEve_selectPoint(new GaussianStrPointInfoDTO("1735,942"));
         six.setReplica_selectPoint(new GaussianStrPointInfoDTO("327,225"));
-        six.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("190,574"));//6
-        six.setEve_escapeTabPoint(new GaussianStrPointInfoDTO("1840,228", "1865,235"));
-        six.setEve_dockingBuildingPoint(new GaussianStrPointInfoDTO("1627,289", "1653,294"));
-        six.setEve_alignToPoint(new GaussianStrPointInfoDTO("1581,159", "1598,168"));
-        six.setEve_dockPoint(new GaussianStrPointInfoDTO("1661,154", "1675,161"));
-        six.setRedSt(new PointInfoDTO(146,533)); // todo
-        six.setRedEd(new PointInfoDTO(165,1005)); // todo
+        six.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("214,574"));//6
+        six.setRedSt(new PointInfoDTO(170,533));
+        six.setRedEd(new PointInfoDTO(189,1005));
+        six.setEnemySt(new PointInfoDTO(213,548));
+        six.setEnemyEd(new PointInfoDTO(232,569));
         six.setName("six");
-        six.setWarnMsg("six警告");
+        six.setWarnMsg("6警告");
 
 
-//        silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("190,58"));//5
-//        silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("190,574"));//6
 //        silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("245,58"));//7
 //        silot.setReplica_moveEndPoint(new GaussianStrPointInfoDTO("245,574"));//8
 
@@ -170,20 +145,15 @@ public class PointHelper {
         public GaussianStrPointInfoDTO replica_selectPoint;
         // onTopReplica 窗口选择账号点
         public GaussianStrPointInfoDTO replica_moveEndPoint;
-        // 特殊tab，跑路用
-        public GaussianStrPointInfoDTO eve_escapeTabPoint;
-        // 停靠建筑
-        public GaussianStrPointInfoDTO eve_dockingBuildingPoint;
-        // 朝向按钮
-        public GaussianStrPointInfoDTO eve_alignToPoint;
-        // 停靠按钮
-        public GaussianStrPointInfoDTO eve_dockPoint;
 
         // red 截图起点
         private PointInfoDTO redSt;
-
         // red 截图终点
         private PointInfoDTO redEd;
+        // 敌对 截图起点
+        private PointInfoDTO enemySt;
+        // 敌对 截图终点
+        private PointInfoDTO enemyEd;
 
         private String name;
 
@@ -270,6 +240,8 @@ public class PointHelper {
         public GaussianStrPointInfoDTO eve_speedUpPoint = new GaussianStrPointInfoDTO("1107,878", "1122,891");
         // 释放无人机点
         public GaussianStrPointInfoDTO eve_releaseDronePoint = new GaussianStrPointInfoDTO("1892,770", "1900,780");
+        public GaussianStrPointInfoDTO eve_releaseDronePoint1 = new GaussianStrPointInfoDTO("1616,803", "1705,805");
+        public GaussianStrPointInfoDTO eve_releaseDronePoint2 = new GaussianStrPointInfoDTO("1639,824", "1692,824");
         // 接近建筑点
         public GaussianStrPointInfoDTO eve_approachPoint = new GaussianStrPointInfoDTO("1701,161", "1709,171");
 
@@ -282,6 +254,17 @@ public class PointHelper {
         public GaussianStrPointInfoDTO eve_openSelectPoint = new GaussianStrPointInfoDTO("1212,1051");
         // 最小化
         public GaussianStrPointInfoDTO eve_minimize = new GaussianStrPointInfoDTO("1755,6","1779,18");
+
+        // 特殊tab，跑路用
+        public GaussianStrPointInfoDTO eve_escapeTabPoint = new GaussianStrPointInfoDTO("1840,228", "1865,235");
+        // 停靠建筑
+        public GaussianStrPointInfoDTO eve_dockingBuildingPoint = new GaussianStrPointInfoDTO("1627,289", "1653,294");
+        // 朝向按钮
+        public GaussianStrPointInfoDTO eve_alignToPoint = new GaussianStrPointInfoDTO("1581,159", "1598,168");
+        // 停靠按钮
+        public GaussianStrPointInfoDTO eve_dockPoint = new GaussianStrPointInfoDTO("1661,154", "1675,161");
+        // 首tab
+        public GaussianStrPointInfoDTO eve_firstTabPoint = new GaussianStrPointInfoDTO("1590,229","1605,237");
     }
 
 
@@ -293,6 +276,8 @@ public class PointHelper {
         public GaussianStrPointInfoDTO eve_spaceMapPoint = new GaussianStrPointInfoDTO("13,456", "21,462");
         // 维修装备点
         public GaussianStrPointInfoDTO eve_reparePoint = new GaussianStrPointInfoDTO("1414,971", "1429,980");
+        // 脚本装备点
+        public GaussianStrPointInfoDTO eve_scriptPoint = new GaussianStrPointInfoDTO("1363,971", "1380,984");
     }
 
 
@@ -316,6 +301,46 @@ public class PointHelper {
         public GaussianStrPointInfoDTO eve_dockPoint_3 = new GaussianStrPointInfoDTO("1665,151", "1678,163");
     }
 
+
+    public static void toStandByAll(List<AccountPoint> accountPoints, Integer num) {
+        CommonEvePoint commonEvePoint = new CommonEvePoint();
+        EveToWorkPoint eveToWorkPoint = new EveToWorkPoint();
+        for (int i = 1; i <= accountPoints.size(); i++) {
+            if (num != null && num != i) {
+                continue;
+            }
+            AccountPoint accountPoint = accountPoints.get(i - 1);
+            EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
+
+            // tab1 切换 作战tab
+            RobotHelper.move(eveToWorkPoint.getEve_fightingTabPoint(), 100);
+            RobotHelper.mouseLeftPress();
+            RobotHelper.delay(GaussianHelper.getGaussianInt(360, 450));
+            AccountInfo accountInfo = accountPoint.getAccountInfo();
+            if(!Objects.equals(accountInfo.getSerialNo(),accountInfo.getLeaderSerialNo())) {
+                // 最小化
+                minimize(commonEvePoint.getEve_minimize());
+            }
+        }
+    }
+    public static void toWatchAll(List<AccountPoint> accountPoints, Integer num) {
+        CommonEvePoint commonEvePoint = new CommonEvePoint();
+        PrepareEvePoint prepareEvePoint = new PrepareEvePoint();
+        for (int i = 1; i <= accountPoints.size(); i++) {
+            if (num != null && num != i) {
+                continue;
+            }
+            AccountPoint accountPoint = accountPoints.get(i - 1);
+            EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
+
+            // 打开警戒tab
+            RobotHelper.move(commonEvePoint.getEve_firstTabPoint(),203);
+            RobotHelper.mouseLeftPress();
+            RobotHelper.delay(GaussianHelper.getGaussianInt(200, 270));
+        }
+
+    }
+
     public static void eveEscapeAll(List<AccountPoint> accountPoints, Integer num) {
         CommonEvePoint commonEvePoint = new CommonEvePoint();
         for (int i = 1; i <= accountPoints.size(); i++) {
@@ -324,27 +349,27 @@ public class PointHelper {
             }
             AccountPoint accountPoint = accountPoints.get(i - 1);
             EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
-            eveEscape_sub(accountPoint);
+            eveEscape_sub(commonEvePoint);
 
             // 最小化
             minimize(commonEvePoint.getEve_minimize());
         }
     }
 
-    private static void eveEscape_sub(AccountPoint accountPoint) {
+    private static void eveEscape_sub(CommonEvePoint commonEvePoint) {
         // 选中跑路tab
-        RobotHelper.move(accountPoint.getEve_escapeTabPoint());
+        RobotHelper.move(commonEvePoint.getEve_escapeTabPoint());
         RobotHelper.mouseLeftPress();
         // 选中建筑
-        RobotHelper.move(accountPoint.getEve_dockingBuildingPoint());
+        RobotHelper.move(commonEvePoint.getEve_dockingBuildingPoint());
         RobotHelper.mouseLeftPress();
         // 朝向建筑
-        RobotHelper.move(accountPoint.getEve_alignToPoint());
+        RobotHelper.move(commonEvePoint.getEve_alignToPoint());
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(130, 170));
         RobotHelper.mouseLeftPress();
         // 跃迁进入建筑
-        RobotHelper.move(accountPoint.getEve_dockPoint(), 1534);
+        RobotHelper.move(commonEvePoint.getEve_dockPoint(), 1534);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(1530, 1770));
         RobotHelper.mouseLeftPress();
@@ -388,9 +413,7 @@ public class PointHelper {
             EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
             EveToWorkPoint eveToWorkPoint = new EveToWorkPoint();
             // release 释放无人机
-            RobotHelper.move(eveToWorkPoint.getEve_releaseDronePoint(), 94);
-            RobotHelper.mouseLeftPress();
-            RobotHelper.delay(GaussianHelper.getGaussianInt(315, 470));
+            releaseDone_new(eveToWorkPoint);
             // 释放箱子并存点
             doHarvest_sub(eveToWorkPoint);
             // 环绕建筑
@@ -492,19 +515,15 @@ public class PointHelper {
         // OnTopReplica选择区域
         public GaussianStrPointInfoDTO replica_selectAreaPoint = new GaussianStrPointInfoDTO("132,123");
         // OnTopReplica区域起点
-//        public GaussianStrPointInfoDTO replica_areaStartPoint = new GaussianStrPointInfoDTO("770,68");
         public GaussianStrPointInfoDTO replica_areaStartPoint = new GaussianStrPointInfoDTO("770,115");
         // OnTopReplica区域终点
-//        public GaussianStrPointInfoDTO replica_areaEndPoint = new GaussianStrPointInfoDTO("793,346");
-        public GaussianStrPointInfoDTO replica_areaEndPoint = new GaussianStrPointInfoDTO("793,323");
+        public GaussianStrPointInfoDTO replica_areaEndPoint = new GaussianStrPointInfoDTO("798,323");
         // OnTopReplica区域选择完成按钮
         public GaussianStrPointInfoDTO replica_areaDoneButtonPoint = new GaussianStrPointInfoDTO("1252,278");
         // OnTopReplica拖动放缩起点
-//        public GaussianStrPointInfoDTO replica_scrollStartPoint = new GaussianStrPointInfoDTO("86,999");
-        public GaussianStrPointInfoDTO replica_scrollStartPoint = new GaussianStrPointInfoDTO("114,1004");
+        public GaussianStrPointInfoDTO replica_scrollStartPoint = new GaussianStrPointInfoDTO("138,1005");
         // OnTopReplica拖动放缩终点
-//        public GaussianStrPointInfoDTO replica_scrollEndPoint = new GaussianStrPointInfoDTO("58,888");
-        public GaussianStrPointInfoDTO replica_scrollEndPoint = new GaussianStrPointInfoDTO("57,790");
+        public GaussianStrPointInfoDTO replica_scrollEndPoint = new GaussianStrPointInfoDTO("67,516");
         // OnTopReplica准备解除锁定右键位置
         public GaussianStrPointInfoDTO replica_beforeUnlockMenuPoint = new GaussianStrPointInfoDTO("51,55");
         // OnTopReplica解除锁定菜单位置
@@ -569,6 +588,7 @@ public class PointHelper {
             speedUpAndDroneAndSavePoint();
 
             if(!Objects.equals(accountInfo.getSerialNo(),accountInfo.getLeaderSerialNo())) {
+                EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
                 // 最小化
                 minimize(commonEvePoint.getEve_minimize());
             }
@@ -663,16 +683,30 @@ public class PointHelper {
             RobotHelper.delay(GaussianHelper.getGaussianInt(415, 530));
         });
         list.add((e) -> {
-            // release 释放无人机
-            RobotHelper.move(eveToWorkPoint.getEve_releaseDronePoint(), 94);
-            RobotHelper.mouseLeftPress();
-            RobotHelper.delay(GaussianHelper.getGaussianInt(415, 550));
+            releaseDone_new(eveToWorkPoint);
         });
         list.add((e) -> {
             // 保存点
             savePoint();
         });
         return list;
+    }
+
+    private static void releaseDone_ori(EveToWorkPoint eveToWorkPoint){
+        // release 释放无人机
+        RobotHelper.move(eveToWorkPoint.getEve_releaseDronePoint(), 94);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(415, 550));
+    }
+
+    private static void releaseDone_new(EveToWorkPoint eveToWorkPoint){
+        // release 释放无人机
+        RobotHelper.move(eveToWorkPoint.getEve_releaseDronePoint1(), 94);
+        RobotHelper.mouseRightPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(310, 500));
+        RobotHelper.move(eveToWorkPoint.getEve_releaseDronePoint2(), 194);
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(415, 550));
     }
 
     private static void savePoint() {
@@ -731,6 +765,11 @@ public class PointHelper {
 
         // 启动维修
         RobotHelper.move(prepareEvePoint.getEve_reparePoint());
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(424, 470));
+
+        // 启动脚本
+        RobotHelper.move(prepareEvePoint.getEve_scriptPoint());
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(424, 470));
 

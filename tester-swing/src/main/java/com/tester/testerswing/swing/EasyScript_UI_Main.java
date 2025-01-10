@@ -108,6 +108,9 @@ public class EasyScript_UI_Main {
     public List<AccountInfo> getAccountInfoList() {
         return accountInfoList.stream().limit(Boot.getAccountNum()).collect(Collectors.toList());
     }
+    public List<AccountInfo> getAllAccountInfoList() {
+        return accountInfoList.stream().limit(Boot.getAccountNum()).collect(Collectors.toList());
+    }
 
     public void setAccountInfoList(List<AccountInfo> accountInfoList) {
         this.accountInfoList = accountInfoList;
@@ -124,7 +127,7 @@ public class EasyScript_UI_Main {
 
         // 用于录入点阵用，后面点阵固定，已废弃 - 2023-9-21 15:19:08
         // 初始化 silot 录入事件
-        EventHandle_Silot.handle_silot(silot_input, getAccountInfoList());
+        EventHandle_Silot.handle_silot(silot_input, getAllAccountInfoList());
 
         // 废弃 - 2023-9-21 15:19:08
         // 初始化 sai 录入事件

@@ -48,8 +48,13 @@ public class Boot {
                     .setAccount(accountPoint.getName())
                     .setRedSt(accountPoint.getRedSt())
                     .setRedEd(accountPoint.getRedEd())
+                    .setEnemySt(accountPoint.getEnemySt())
+                    .setEnemyEd(accountPoint.getEnemyEd())
                     .setLastQuickRunTime(DateUtil.getYesterdayStart())
-                    .setConsumer((e) -> PointHelper.eveEscapeAll(PointHelper.getList(), finalI));
+                    .setGuardTime(DateUtil.getYesterdayStart())
+                    .setConsumer((e) -> PointHelper.eveEscapeAll(PointHelper.getList(), finalI))
+                    .setToWatch((e) -> PointHelper.toWatchAll(PointHelper.getList(), finalI))
+                    .setToStandBy((e) -> PointHelper.toStandByAll(PointHelper.getList(), finalI));
             accountPoint.setAccountInfo(accountInfo);
             accountInfoList.add(accountInfo);
             serialNoAccountInfoMap.put(finalI, accountInfo);
@@ -92,17 +97,18 @@ public class Boot {
         int period = 1000;
         checkerExecutorService.scheduleAtFixedRate(() -> {
                     try {
-                        for (AccountInfo accountInfo : getAccountInfoList()) {
+                        List<AccountInfo> accountInfoList = getAccountInfoList();
+                        for (AccountInfo accountInfo : accountInfoList) {
                             if(!Objects.equals(accountInfo.getSerialNo(), accountInfo.getLeaderSerialNo())){
                                 continue;
                             }
                             // 监控数量取原图
                             ImgBoot.checkIfNeedWarning(accountInfo, Imgcodecs.IMREAD_UNCHANGED, serialNoAccountInfoMap);
                         }
-//                        for (AccountInfo accountInfo : accountInfoList) {
-//                            // 监控数量取灰度图，比较本地数量变化 - 已废弃
-//                            ImgBoot.checkNumber(accountInfo, Imgcodecs.IMREAD_GRAYSCALE);
-//                        }
+                        for (AccountInfo accountInfo : accountInfoList) {
+                            // 监控数量取灰度图，比较本地数量变化 - 已废弃
+                            ImgBoot.checkNumber(accountInfo, Imgcodecs.IMREAD_GRAYSCALE, accountInfoList);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

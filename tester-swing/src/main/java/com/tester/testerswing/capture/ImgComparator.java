@@ -1,12 +1,14 @@
 package com.tester.testerswing.capture;
 
 import com.tester.testercv.utils.opencv.OpenCVHelper;
+import com.tester.testerswing.boot.AccountInfo;
 import com.tester.testerswing.loadlibrary.LibraryLoader;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 图片处理比较类
@@ -32,23 +34,36 @@ public class ImgComparator {
         String destPath = "C:\\Users\\18883\\Desktop\\jacob\\test1.png";
         Mat src = OpenCVHelper.readImg2Mat(srcPath);
         Mat dest = OpenCVHelper.readImg2Mat(destPath);
-        boolean b = doCompareIfTheSame(src, dest);
-        System.out.println("比较结果：" + b);
+        boolean b = doCompareIfTheSame(src, dest, null);
+        System.out.println("比较的结果：" + b);
     }
 
-    public static boolean doCompareIfTheSame(Mat src, Mat dest) {
+    public static boolean doCompareIfTheSame(Mat src, Mat dest, AccountInfo accountInfo) {
+        // 确保图像大小一致
+        Imgproc.resize(dest, dest, new Size(src.cols(), src.rows()));
         Mat srcHist = processImgForCompare(src);
         Mat destHist = processImgForCompare(dest);
-        double res = compareImg(srcHist, destHist, Imgproc.HISTCMP_CORREL);
-        if (res < 1.0) {
-            System.out.println("比较结果：" + res);
+        double res = Imgproc.compareHist(srcHist, destHist, Imgproc.HISTCMP_INTERSECT);
+        if (res < 0.99) {
+            int i = accountInfo.getRefreshCount().get();
+            System.out.println(accountInfo.getAccount()+"_"+(i+1)+"比较结果：" + res);
+            // 记录图像
+            int count = accountInfo.getRefreshCount().incrementAndGet();
+            String basePath = ImgBoot.getBasePath(accountInfo.getAccount());
+            OpenCVHelper.saveMat2Img(basePath, destHist, ImgBoot.getHisImgName(count, "number"));
+            OpenCVHelper.saveMat2Img(basePath, srcHist, ImgBoot.getHisImgName(count, "number_his"));
             return false;
         }
         return true;
     }
 
-
     public static Mat processImgForCompare(Mat mat) {
+        System.out.println("mat = " + mat.channels());
+        if (mat.channels() == 3) {
+            Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2GRAY);
+        } else if (mat.channels() == 4) {
+            Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGRA2GRAY);
+        }
         MatOfFloat mfloat = new MatOfFloat(0, 256);
         MatOfInt mint = new MatOfInt(255);
 
@@ -58,7 +73,8 @@ public class ImgComparator {
         //直方图计算 详见 https://blog.csdn.net/ren365880/article/details/103957456
         Imgproc.calcHist(matList, new MatOfInt(0), new Mat(), hist, mint, mfloat);
         //图片归一化 详见 https://blog.csdn.net/ren365880/article/details/103923813
-        Core.normalize(hist, hist, 1, hist.rows(), Core.NORM_MINMAX, -1, new Mat());
+        Core.normalize(hist, hist, 0, 1, Core.NORM_MINMAX);
+//        Core.normalize(hist, hist, 1, 0, Core.NORM_L1);
         return hist;
     }
 

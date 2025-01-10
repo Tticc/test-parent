@@ -1,7 +1,6 @@
 package com.tester.testerswing.capture;
 
 import com.tester.base.dto.exception.BusinessException;
-import com.tester.testercommon.util.DateUtil;
 import com.tester.testercv.utils.detectColor.ColorDetectTool;
 import com.tester.testercv.utils.opencv.OpenCVHelper;
 import com.tester.testerswing.boot.AccountInfo;
@@ -10,9 +9,8 @@ import com.tester.testerswing.robot.RobotHelper;
 import com.tester.testerswing.swing.EasyScript;
 import com.tester.testerswing.voice.BeepSoundProcessor;
 import com.tester.testerswing.voice.dto.BeepSoundTaskDTO;
-import com.tester.testerswing.voice.dto.QywxMessageTaskDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.springframework.util.CollectionUtils;
 
@@ -21,14 +19,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.File;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -38,6 +34,7 @@ import java.util.function.Consumer;
  * @Date 9:54 2022/8/2
  * @Author 温昌营
  **/
+@Slf4j
 public class ImgBoot {
 
 
@@ -50,8 +47,11 @@ public class ImgBoot {
     // 至少每隔1分钟弹起窗口
     public static long activeInterval = 60 * 1000;
 
-    // 有白时，至少每隔1分钟自动跑路一次
-    public static long auto_activeInterval = 5*60 * 1000;
+    // 有白时，至少每隔5分钟自动跑路一次
+    public static long auto_activeInterval = 5 * 60 * 1000;
+
+    // 警戒结束后保留时间
+    public static long guarding2standByInterval = 2 * 60 * 1000;
 
     /**
      * 启动
@@ -78,39 +78,43 @@ public class ImgBoot {
     /**
      * 通过图片比较本地数量变化，并通知后续处理
      * <br/>已废弃
+     *
      * @Date 9:49 2022/8/2
      * @Author 温昌营
      **/
-//    @Deprecated
-//    public static void checkNumber(AccountInfo accountInfo, int imgType) throws Exception {
-//        if (!accountInfo.isNeedInfo()) {
-//            // 无需通知，直接返回
-//            return;
-//        }
-//        Mat newMat = createScreenAnd2Mat(accountInfo.getSt(), accountInfo.getEd(), imgType, accountInfo.getAccount());
-//        Mat hisMat = null;
-//        if (accountInfo.getHisMat() != null) {
-//            hisMat = accountInfo.getHisMat();
-//        } else {
-//            hisMat = OpenCVHelper.readImg2Mat(getHisImgPath(accountInfo.getAccount(), accountInfo.getRefreshCount().get(), "number"));
-//        }
-//        boolean normal = ImgComparator.doCompareIfTheSame(hisMat, newMat);
-//        if (!normal) {
-//            // 提示通知
-//            sendVoice(accountInfo.getInfoMsg(), false);
-//            // 最多提醒1次
-//            AtomicInteger noticeTime = accountInfo.getNoticeTime();
-//            int andIncrement = noticeTime.incrementAndGet();
-//            if(andIncrement >= 1){
-//                noticeTime.getAndSet(0);
-//                refreshHisImg(accountInfo);
-//            }
-//        }
-//
-//
-//    }
+    public static void checkNumber(AccountInfo accountInfo, int imgType, List<AccountInfo> accountInfoList) throws Exception {
+        if ((!Objects.equals(AccountInfo.GuardStatusEnum.WATCHING_OUT.getCode(), accountInfo.getGuardStatus())
+                && !Objects.equals(AccountInfo.GuardStatusEnum.BEFORE_STAND_BY.getCode(), accountInfo.getGuardStatus()))
+                || accountInfo.getHisMat() == null) {
+            // 无需通知，直接返回
+            return;
+        }
+        Mat newMat = createScreenAnd2Mat(accountInfo.getEnemySt(), accountInfo.getEnemyEd(), imgType, accountInfo.getAccount());
+        boolean needWarning = doCheckIfNeedWarning(newMat, accountInfo);
+        if (needWarning) {
+            if (accountInfo.checkIfLeader()) {
+                doEscapeWithFollows(accountInfo);
+                setGuardStatusWithFollows(accountInfo, AccountInfo.GuardStatusEnum.RUN.getCode());
+            } else {
+                doEscape(accountInfo);
+                for (AccountInfo leader : accountInfoList) {
+                    if (Objects.equals(leader.getSerialNo(), accountInfo.getLeaderSerialNo())) {
+                        doEscapeWithFollows(leader);
+                        setGuardStatusWithFollows(leader, AccountInfo.GuardStatusEnum.RUN.getCode());
+                        break;
+                    }
+                }
+            }
+            // 记录图像
+            int count = accountInfo.getRefreshCount().incrementAndGet();
+            String basePath = ImgBoot.getBasePath(accountInfo.getAccount());
+            OpenCVHelper.saveMat2Img(basePath, newMat, ImgBoot.getHisImgName(count, "number"));
+        }
+    }
+
     /**
      * 通过图片检查本地进红状态。后续通知或直接跑路处理
+     *
      * @Date 9:49 2022/8/11
      * @Author 温昌营
      **/
@@ -120,19 +124,8 @@ public class ImgBoot {
         // red 截图终点
         PointInfoDTO redEd = accountInfo.getRedEd();
         if (!accountInfo.isNeedWarn()) {
-            if (Objects.equals(accountInfo.getSerialNo(), accountInfo.getLeaderSerialNo())) {
-                // 无需告警，直接返回
-                return;
-            } else {
-                AccountInfo leaderAccount = serialNoAccountInfoMap.get(accountInfo.getLeaderSerialNo());
-                if (!leaderAccount.isNeedWarn()) {
-                    return;
-                }
-                // 设置为leader的截图起点
-                redSt = leaderAccount.getRedSt();
-                // 设置为leader的截图终点
-                redEd = leaderAccount.getRedEd();
-            }
+            // 无需告警，直接返回
+            return;
         }
         boolean warning = false;
         Mat src = createScreenAnd2Mat(redSt, redEd, imgType, accountInfo.getAccount());
@@ -141,32 +134,114 @@ public class ImgBoot {
             warning = true;
         }
         if (warning || doCheckIfNeedWarning(src, accountInfo)) {
-            if(accountInfo.isIfAuto()){
-                doEscape(accountInfo);
-                for (AccountInfo value : accountInfo.getFollows().values()) {
-                    doEscape(value);
+            // 如果来敌人，且启用了自动化
+            if (accountInfo.isIfAuto()) {
+                if (accountInfo.isHasGuard()) {
+                    // 如果有警卫，且警卫处于待命状态，命令其警戒
+                    if (Objects.equals(AccountInfo.GuardStatusEnum.STAND_BY.getCode(), accountInfo.getGuardStatus())) {
+                        System.out.println("【"+accountInfo.getAccount()+"】STAND_BY转换为WATCHING_OUT状态");
+                        doWatchWithFollows(accountInfo);
+                        setGuardStatusWithFollowsWithGuardTime(accountInfo, AccountInfo.GuardStatusEnum.WATCHING_OUT.getCode(), new Date());
+                    }
+                } else {
+                    // 如果没有警卫，直接跑路
+                    doEscapeWithFollows(accountInfo);
                 }
-            }else {
+            } else {
+                // 如果没有启用自动化，发音提醒
                 sendVoice(accountInfo.getWarnMsg(), false);
                 for (AccountInfo value : accountInfo.getFollows().values()) {
                     sendVoice(value.getWarnMsg(), false);
                 }
             }
+        } else {
+            // 否则如果安全，且处于警戒状态。解除警戒
+            if (accountInfo.isHasGuard()) {
+                if (Objects.equals(AccountInfo.GuardStatusEnum.WATCHING_OUT.getCode(), accountInfo.getGuardStatus())) {
+                    System.out.println("【"+accountInfo.getAccount()+"】WATCHING_OUT转换为BEFORE_STAND_BY状态");
+                    // 重置为伪待命状态
+                    setGuardStatusWithFollows(accountInfo, AccountInfo.GuardStatusEnum.BEFORE_STAND_BY.getCode());
+                } else if (Objects.equals(AccountInfo.GuardStatusEnum.BEFORE_STAND_BY.getCode(), accountInfo.getGuardStatus())) {
+                    // 否则如果安全，且处于伪待命状态，且处于伪待命状态一段时间后。解除警戒
+                    long time = new Date().getTime();
+                    if (time > accountInfo.getGuardTime().getTime() + guarding2standByInterval) {
+                        System.out.println("【"+accountInfo.getAccount()+"】BEFORE_STAND_BY转换为STAND_BY状态");
+                        // 重置为待命状态
+                        setGuardStatusWithFollows(accountInfo, AccountInfo.GuardStatusEnum.STAND_BY.getCode());
+                        doStandByWithFollows(accountInfo);
+                    }
+                }
+            }
         }
+    }
 
+    /**
+     * 开始警戒
+     *
+     * @param accountInfo
+     * @throws Exception
+     */
+    private static void doWatchWithFollows(AccountInfo accountInfo) throws Exception {
+        accountInfo.getToWatch().accept(null);
+        for (AccountInfo value : accountInfo.getFollows().values()) {
+            value.getToWatch().accept(null);
+        }
+        // 设置初始mat
+        accountInfo.setHisMat(createScreenAnd2Mat(accountInfo.getEnemySt(), accountInfo.getEnemyEd(), Imgcodecs.IMREAD_GRAYSCALE, accountInfo.getAccount()));
+        for (AccountInfo value : accountInfo.getFollows().values()) {
+            value.setHisMat(createScreenAnd2Mat(value.getEnemySt(), value.getEnemyEd(), Imgcodecs.IMREAD_GRAYSCALE, value.getAccount()));
+        }
+    }
+
+    /**
+     * 解除警戒
+     *
+     * @param accountInfo
+     * @throws Exception
+     */
+    private static void doStandByWithFollows(AccountInfo accountInfo) throws Exception {
+        accountInfo.getToStandBy().accept(null);
+        for (AccountInfo value : accountInfo.getFollows().values()) {
+            value.getToStandBy().accept(null);
+        }
+    }
+
+    private static void setGuardStatusWithFollows(AccountInfo accountInfo, Integer statusCode) {
+        setGuardStatusWithFollowsWithGuardTime(accountInfo, statusCode, null);
+    }
+
+    private static void setGuardStatusWithFollowsWithGuardTime(AccountInfo accountInfo, Integer statusCode, Date guardTime) {
+        accountInfo.setGuardStatus(statusCode);
+        if (null != guardTime) {
+            accountInfo.setGuardTime(guardTime);
+        }
+        for (AccountInfo value : accountInfo.getFollows().values()) {
+            value.setGuardStatus(statusCode);
+            if (null != guardTime) {
+                value.setGuardTime(guardTime);
+            }
+        }
+    }
+
+
+    private static void doEscapeWithFollows(AccountInfo accountInfo) throws Exception {
+        doEscape(accountInfo);
+        for (AccountInfo value : accountInfo.getFollows().values()) {
+            doEscape(value);
+        }
     }
 
     private static void doEscape(AccountInfo accountInfo) throws Exception {
         long time = new Date().getTime();
-        if(time > accountInfo.getLastQuickRunTime().getTime() + auto_activeInterval) {
+        if (time > accountInfo.getLastQuickRunTime().getTime() + auto_activeInterval) {
             accountInfo.setLastQuickRunTime(new Date());
             accountInfo.getConsumer().accept(null);
-
-            // 发送电子邮件
-            SendMailText.sendMsg(accountInfo.getAccount());
-            // 发消息 - 企业微信消息不可靠，取消 2023-9-21 14:58:58
-//                    QywxMessageTaskDTO qywxMessageTaskDTO = new QywxMessageTaskDTO(accountInfo.getAccount()+"_"+DateUtil.dateFormat(new Date()));
-//                    BeepSoundProcessor.putTask(qywxMessageTaskDTO);
+            try {
+                // 发送电子邮件
+                SendMailText.sendMsg(accountInfo.getAccount());
+            } catch (Exception e) {
+                log.info("发送邮件失败", e);
+            }
         }
     }
 
@@ -179,6 +254,7 @@ public class ImgBoot {
 
     /**
      * 判断是否本地进红
+     *
      * @param src
      * @param accountInfo
      * @return
@@ -191,7 +267,8 @@ public class ImgBoot {
                 ColorDetectTool.defaultMaxValues,
                 // 不需要保存，去掉2025-1-4 22:40:41
                 // (targetMat) -> OpenCVHelper.saveMat2Img(basePath, targetMat, getCountPrefix(accountInfo.getRefreshCount().get()) + "_warning.png"));
-                (targetMat) -> {});
+                (targetMat) -> {
+                });
     }
 
     public static void sendVoice(String msg, boolean needFront) {
@@ -219,8 +296,9 @@ public class ImgBoot {
     public static void refreshHisImg(AccountInfo account) throws BusinessException {
         try {
             int count = account.getRefreshCount().incrementAndGet();
-//            Mat numberCheckImage = createScreenAnd2Mat(account.getSt(), account.getEd(), Imgcodecs.IMREAD_GRAYSCALE, account.getAccount());
-//            account.setHisMat(numberCheckImage);
+            Mat hisMat = account.getHisMat();
+            Mat numberCheckImage = createScreenAnd2Mat(account.getEnemySt(), account.getEnemyEd(), Imgcodecs.IMREAD_GRAYSCALE, account.getAccount());
+            account.setHisMat(numberCheckImage);
             Mat warnCheckImage = createScreenAnd2Mat(account.getRedSt(), account.getRedEd(), Imgcodecs.IMREAD_UNCHANGED, account.getAccount());
             //将缓存里面的屏幕信息以图片的格式存在制定的磁盘位置
             String basePath = getBasePath(account.getAccount());
@@ -232,7 +310,10 @@ public class ImgBoot {
                     System.out.println("dir create failed! --" + basePath);
                 }
             }
-//            OpenCVHelper.saveMat2Img(basePath, numberCheckImage, getHisImgName(count, "number"));
+            OpenCVHelper.saveMat2Img(basePath, numberCheckImage, getHisImgName(count, "number"));
+            if (null != hisMat) {
+                OpenCVHelper.saveMat2Img(basePath, hisMat, getHisImgName(count, "number_his"));
+            }
             OpenCVHelper.saveMat2Img(basePath, warnCheckImage, getHisImgName(count, "warn"));
         } catch (Exception e) {
             throw new BusinessException(500, "刷新初始图像失败", e);
@@ -264,9 +345,9 @@ public class ImgBoot {
         AtomicReference<Mat> imgRef = new AtomicReference<>();
         doCreateScreen(st, ed, (bufferedImage) -> {
             try {
-                imgRef.set(OpenCVHelper.BufferedImage2Mat(bufferedImage, imgType));
-            } catch (IOException e) {
-                System.out.println("异常，截图转换失败. account:" + account);
+                imgRef.set(OpenCVHelper.BufferedImage2Mat(bufferedImage));
+            } catch (Exception e) {
+                log.error("异常，截图转换失败. account:{}", account, e);
             }
         });
         return imgRef.get();
@@ -288,7 +369,7 @@ public class ImgBoot {
         return split[split.length - 1];
     }
 
-    private static String getBasePath(String folderName) {
+    public static String getBasePath(String folderName) {
         return BUFFER_IMAGE_AREA + folderName + File.separator;
     }
 
@@ -296,7 +377,7 @@ public class ImgBoot {
         return BUFFER_IMAGE_AREA + folderName + File.separator + getHisImgName(count, type);
     }
 
-    private static String getHisImgName(int count, String type) {
+    public static String getHisImgName(int count, String type) {
         return String.format(HIS_IMG_NAME, getCountPrefix(count), type);
     }
 

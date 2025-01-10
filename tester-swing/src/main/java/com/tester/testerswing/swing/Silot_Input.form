@@ -116,26 +116,6 @@
           <text value="    Silot"/>
         </properties>
       </component>
-      <component id="26b53" class="javax.swing.JLabel" binding="silot_return_p32_label">
-        <constraints>
-          <grid row="8" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="10" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="收3.2"/>
-        </properties>
-      </component>
-      <component id="614cf" class="javax.swing.JTextField" binding="silot_return_p32_input">
-        <constraints>
-          <grid row="8" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <text value=""/>
-        </properties>
-      </component>
       <component id="3b15b" class="javax.swing.JLabel" binding="silot_return_p12_label">
         <constraints>
           <grid row="6" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -148,66 +128,6 @@
       <component id="499af" class="javax.swing.JTextField" binding="silot_return_p12_input">
         <constraints>
           <grid row="6" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <text value=""/>
-        </properties>
-      </component>
-      <component id="be01b" class="javax.swing.JLabel" binding="silot_return_p22_label">
-        <constraints>
-          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="10" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="收2.2"/>
-        </properties>
-      </component>
-      <component id="7d3a1" class="javax.swing.JTextField" binding="silot_return_p22_input">
-        <constraints>
-          <grid row="8" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <text value=""/>
-        </properties>
-      </component>
-      <component id="d9b74" class="javax.swing.JLabel" binding="silot_return_p3_label">
-        <constraints>
-          <grid row="8" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="10" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="收3.1"/>
-        </properties>
-      </component>
-      <component id="100d9" class="javax.swing.JTextField" binding="silot_return_p3_input">
-        <constraints>
-          <grid row="8" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <text value=""/>
-        </properties>
-      </component>
-      <component id="96122" class="javax.swing.JLabel" binding="silot_return_p2_label">
-        <constraints>
-          <grid row="6" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="0" left="10" bottom="0" right="0"/>
-        </constraints>
-        <properties>
-          <text value="收2.1"/>
-        </properties>
-      </component>
-      <component id="21502" class="javax.swing.JTextField" binding="silot_return_p2_input">
-        <constraints>
-          <grid row="6" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
           <forms defaultalign-horz="false"/>
@@ -480,6 +400,33 @@
       <component id="cde76" class="javax.swing.JLabel" binding="accountNum1">
         <constraints>
           <grid row="12" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <text value="Label"/>
+        </properties>
+      </component>
+      <component id="67578" class="javax.swing.JButton" binding="ban_guard">
+        <constraints>
+          <grid row="10" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="禁用警卫"/>
+        </properties>
+      </component>
+      <component id="11980" class="javax.swing.JButton" binding="use_guard">
+        <constraints>
+          <grid row="8" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="启用警卫"/>
+        </properties>
+      </component>
+      <component id="4a1d" class="javax.swing.JLabel" binding="hasGuard">
+        <constraints>
+          <grid row="12" column="10" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
           <forms defaultalign-horz="false"/>
         </constraints>
         <properties>
