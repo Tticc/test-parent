@@ -70,6 +70,7 @@ public class EventHandle_Main {
                 JLabel jLabel = labels.get(accountInfo.getSerialNo() - 1);
                 accountInfo.setNeedWarn(false);
                 jLabel.setText("false");
+                accountInfo.setGuardStatus(AccountInfo.GuardStatusEnum.STAND_BY.getCode());
             }
         });
     }

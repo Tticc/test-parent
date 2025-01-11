@@ -34,7 +34,12 @@ public class EventHandle_Six {
             if(Boot.checkIfReturn(NUM)){
                 return;
             }
-            script.getAccountInfoList().get(NUM-1).setNeedWarn(false);
+            AccountInfo accountInfo = script.getAccountInfoList().get(NUM - 1);
+            accountInfo.setNeedWarn(false);
+            if(accountInfo.checkIfLeader()) {
+                accountInfo.setGuardStatus(AccountInfo.GuardStatusEnum.STAND_BY.getCode());
+                accountInfo.getFollows().values().forEach(acc -> acc.setGuardStatus(AccountInfo.GuardStatusEnum.STAND_BY.getCode()));
+            }
             script.getSix_status().setText("false");
             script.getWarn_status().setText("false");
         });

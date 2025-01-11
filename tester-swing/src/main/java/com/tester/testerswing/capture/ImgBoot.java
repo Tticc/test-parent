@@ -1,6 +1,7 @@
 package com.tester.testerswing.capture;
 
 import com.tester.base.dto.exception.BusinessException;
+import com.tester.testercommon.util.DateUtil;
 import com.tester.testercv.utils.detectColor.ColorDetectTool;
 import com.tester.testercv.utils.opencv.OpenCVHelper;
 import com.tester.testerswing.boot.AccountInfo;
@@ -105,6 +106,7 @@ public class ImgBoot {
                     }
                 }
             }
+            System.out.println("【"+accountInfo.getAccount()+"】WATCHING_OUT/BEFORE_STAND_BY转换为RUN状态_"+ DateUtil.dateFormat(new Date()));
             // 记录图像
             int count = accountInfo.getRefreshCount().incrementAndGet();
             String basePath = ImgBoot.getBasePath(accountInfo.getAccount());
@@ -139,7 +141,7 @@ public class ImgBoot {
                 if (accountInfo.isHasGuard()) {
                     // 如果有警卫，且警卫处于待命状态，命令其警戒
                     if (Objects.equals(AccountInfo.GuardStatusEnum.STAND_BY.getCode(), accountInfo.getGuardStatus())) {
-                        System.out.println("【"+accountInfo.getAccount()+"】STAND_BY转换为WATCHING_OUT状态");
+                        System.out.println("【"+accountInfo.getAccount()+"】STAND_BY转换为WATCHING_OUT状态_"+ DateUtil.dateFormat(new Date()));
                         doWatchWithFollows(accountInfo);
                         setGuardStatusWithFollowsWithGuardTime(accountInfo, AccountInfo.GuardStatusEnum.WATCHING_OUT.getCode(), new Date());
                     }
@@ -158,14 +160,14 @@ public class ImgBoot {
             // 否则如果安全，且处于警戒状态。解除警戒
             if (accountInfo.isHasGuard()) {
                 if (Objects.equals(AccountInfo.GuardStatusEnum.WATCHING_OUT.getCode(), accountInfo.getGuardStatus())) {
-                    System.out.println("【"+accountInfo.getAccount()+"】WATCHING_OUT转换为BEFORE_STAND_BY状态");
+                    System.out.println("【"+accountInfo.getAccount()+"】WATCHING_OUT转换为BEFORE_STAND_BY状态_"+ DateUtil.dateFormat(new Date()));
                     // 重置为伪待命状态
                     setGuardStatusWithFollows(accountInfo, AccountInfo.GuardStatusEnum.BEFORE_STAND_BY.getCode());
                 } else if (Objects.equals(AccountInfo.GuardStatusEnum.BEFORE_STAND_BY.getCode(), accountInfo.getGuardStatus())) {
                     // 否则如果安全，且处于伪待命状态，且处于伪待命状态一段时间后。解除警戒
                     long time = new Date().getTime();
                     if (time > accountInfo.getGuardTime().getTime() + guarding2standByInterval) {
-                        System.out.println("【"+accountInfo.getAccount()+"】BEFORE_STAND_BY转换为STAND_BY状态");
+                        System.out.println("【"+accountInfo.getAccount()+"】BEFORE_STAND_BY转换为STAND_BY状态_"+ DateUtil.dateFormat(new Date()));
                         // 重置为待命状态
                         setGuardStatusWithFollows(accountInfo, AccountInfo.GuardStatusEnum.STAND_BY.getCode());
                         doStandByWithFollows(accountInfo);

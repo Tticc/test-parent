@@ -7,6 +7,7 @@ import com.tester.testerswing.swing.EasyScript_UI_Main;
 
 import javax.swing.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -34,7 +35,12 @@ public class EventHandle_Colos {
             if(Boot.checkIfReturn(NUM)){
                 return;
             }
-            script.getAccountInfoList().get(NUM-1).setNeedWarn(false);
+            AccountInfo accountInfo = script.getAccountInfoList().get(NUM - 1);
+            accountInfo.setNeedWarn(false);
+            if(accountInfo.checkIfLeader()) {
+                accountInfo.setGuardStatus(AccountInfo.GuardStatusEnum.STAND_BY.getCode());
+                accountInfo.getFollows().values().forEach(acc -> acc.setGuardStatus(AccountInfo.GuardStatusEnum.STAND_BY.getCode()));
+            }
             script.getColos_status().setText("false");
             script.getWarn_status().setText("false");
         });
