@@ -68,6 +68,9 @@ public class AccountInfo extends BaseDTO {
     // 警戒时间
     private Date guardTime;
 
+    // 刷新次数
+    private AtomicInteger guardingCount = new AtomicInteger(0);
+
     // 自动化跑路时，上次跑路操作时间
     private Date lastQuickRunTime;
 

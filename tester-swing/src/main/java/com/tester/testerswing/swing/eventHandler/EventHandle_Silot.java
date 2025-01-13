@@ -190,8 +190,6 @@ public class EventHandle_Silot {
                 }
             });
         }
-        buttons.get(4).doClick();
-        RobotHelper.delay(200);
         buttons.get(5).doClick();
         RobotHelper.delay(200);
     }

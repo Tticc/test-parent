@@ -1,5 +1,6 @@
 package com.tester.testerswing.swing.eventHandler;
 
+import com.google.common.collect.Lists;
 import com.tester.testercommon.util.DateUtil;
 import com.tester.testerswing.boot.AccountInfo;
 import com.tester.testerswing.capture.GaussianStrPointInfoDTO;
@@ -106,8 +107,14 @@ public class EventHandle_Main {
 
         // 自动投屏事件
         script.getOnTopReplica_start().addActionListener((e) -> {
-            PointHelper.onTopReplicaPrepare(PointHelper.getList(),1);
-            PointHelper.onTopReplicaPrepare(PointHelper.getList(),null);
+            PointHelper.CommonEvePoint commonEvePoint = new PointHelper.CommonEvePoint();
+            List<PointHelper.AccountPoint> accountPoints = PointHelper.getList();
+            List<PointHelper.AccountPoint> reverse = Lists.reverse(accountPoints);
+            for (PointHelper.AccountPoint accountPoint : reverse) {
+                EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
+                RobotHelper.delay(200);
+            }
+            PointHelper.onTopReplicaPrepare(accountPoints,null);
         });
 
         // 全部准备

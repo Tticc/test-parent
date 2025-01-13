@@ -135,7 +135,7 @@ public class Silot_Input {
         leader_6.setText("Label");
         silot_input_panel.add(leader_6, cc.xy(17, 19, CellConstraints.CENTER, CellConstraints.DEFAULT));
         init_shift = new JButton();
-        init_shift.setText("init_shift");
+        init_shift.setText("init_leader");
         silot_input_panel.add(init_shift, cc.xy(11, 15));
         lead_shift_6 = new JButton();
         lead_shift_6.setText("6_lead_shift");

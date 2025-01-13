@@ -241,7 +241,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="init_shift"/>
+          <text value="init_leader"/>
         </properties>
       </component>
       <component id="59438" class="javax.swing.JButton" binding="lead_shift_6">
