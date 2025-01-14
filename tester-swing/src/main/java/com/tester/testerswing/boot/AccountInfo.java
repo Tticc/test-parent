@@ -50,6 +50,12 @@ public class AccountInfo extends BaseDTO {
     // 敌对 截图终点
     private PointInfoDTO enemyEd;
 
+    // 本地 截图起点
+    private PointInfoDTO localSt;
+
+    // 本地 截图终点
+    private PointInfoDTO localEd;
+
     // 刷新次数
     private AtomicInteger refreshCount = new AtomicInteger(0);
 
@@ -74,6 +80,9 @@ public class AccountInfo extends BaseDTO {
     // 自动化跑路时，上次跑路操作时间
     private Date lastQuickRunTime;
 
+    // 上一次检测本地账号ocr识别检测时间。(检测是否有高危账号)
+    private Date lastOcrTime;
+
     // 自动化操作
     private MyConsumer consumer;
 
@@ -82,6 +91,9 @@ public class AccountInfo extends BaseDTO {
 
     // 解除警戒
     private MyConsumer toStandBy;
+
+    // 打开
+    private MyConsumer openConsumer;
 
     // 刷新次数
     private Mat hisMat;

@@ -2,6 +2,7 @@ package com.tester.testerswing.capture;
 
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.DateUtil;
+import com.tester.testercommon.util.file.TxtWrite;
 import com.tester.testercv.utils.detectColor.ColorDetectTool;
 import com.tester.testercv.utils.opencv.OpenCVHelper;
 import com.tester.testerswing.boot.AccountInfo;
@@ -11,23 +12,29 @@ import com.tester.testerswing.swing.EasyScript;
 import com.tester.testerswing.voice.BeepSoundProcessor;
 import com.tester.testerswing.voice.dto.BeepSoundTaskDTO;
 import lombok.extern.slf4j.Slf4j;
+import net.sourceforge.tess4j.ITesseract;
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.springframework.util.CollectionUtils;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 图片处理启动类
@@ -37,6 +44,10 @@ import java.util.function.Consumer;
  **/
 @Slf4j
 public class ImgBoot {
+
+    private static ITesseract iTesseract;
+
+    private static List<String> dangerousList;
 
 
     public static final String HIS_IMG_NAME = "%s_hisImg_%s.png";
@@ -53,6 +64,23 @@ public class ImgBoot {
 
     // 警戒结束后保留时间
     public static long guarding2standByInterval = 2 * 60 * 1000;
+
+    // ocr检测间隔
+    public static long ocrInterval = 25 * 1000;
+
+    static {
+        iTesseract = new Tesseract();
+        iTesseract.setDatapath("C:\\Users\\18883\\Desktop\\near2\\MyDetect\\tessdata");// 语言包放置文件夹
+        iTesseract.setLanguage("eng"); // 使用英文语言包
+
+        try {
+            String s = TxtWrite.file2String("C:\\Users\\18883\\Desktop\\near2\\MyDetect\\tessdata\\dangerous.txt");
+            String[] split = s.split(System.lineSeparator());
+            dangerousList = Stream.of(split).map(e -> e.trim()).map(e -> e.substring(0, Math.min(12, e.length()))).collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 启动
@@ -90,23 +118,31 @@ public class ImgBoot {
             // 无需通知，直接返回
             return;
         }
+        boolean ifLeader = accountInfo.checkIfLeader();
+        AccountInfo leader = accountInfo;
+        if(ifLeader){
+            leader = accountInfo;
+        }else{
+            for (AccountInfo accInfo : accountInfoList) {
+                if (Objects.equals(accInfo.getSerialNo(), accountInfo.getLeaderSerialNo())) {
+                    leader = accInfo;
+                    break;
+                }
+            }
+        }
+        if(!leader.isNeedWarn()){
+            // 无需告警，直接返回
+            return;
+        }
         Mat newMat = createScreenAnd2Mat(accountInfo.getEnemySt(), accountInfo.getEnemyEd(), imgType, accountInfo.getAccount());
         boolean needWarning = doCheckIfNeedWarning(newMat, accountInfo);
         if (needWarning) {
-            if (accountInfo.checkIfLeader()) {
-                doEscapeWithFollows(accountInfo);
-                setGuardStatusWithFollows(accountInfo, AccountInfo.GuardStatusEnum.RUN.getCode());
+            if (ifLeader) {
+                runAndSetGuardStatus(accountInfo);
             } else {
                 doEscape(accountInfo);
-                for (AccountInfo leader : accountInfoList) {
-                    if (Objects.equals(leader.getSerialNo(), accountInfo.getLeaderSerialNo())) {
-                        doEscapeWithFollows(leader);
-                        setGuardStatusWithFollows(leader, AccountInfo.GuardStatusEnum.RUN.getCode());
-                        break;
-                    }
-                }
+                runAndSetGuardStatus(leader);
             }
-            System.out.println("【"+accountInfo.getAccount()+"-"+accountInfo.getGuardingCount().get()+"】 -> RUN 【"+DateUtil.dateFormat(new Date())+"】");
             // 记录图像
             int count = accountInfo.getRefreshCount().incrementAndGet();
             String basePath = ImgBoot.getBasePath(accountInfo.getAccount());
@@ -139,12 +175,29 @@ public class ImgBoot {
             // 如果来敌人，且启用了自动化
             if (accountInfo.isIfAuto()) {
                 if (accountInfo.isHasGuard()) {
+                    Date date = new Date();
                     // 如果有警卫，且警卫处于待命状态，命令其警戒
                     if (Objects.equals(AccountInfo.GuardStatusEnum.STAND_BY.getCode(), accountInfo.getGuardStatus())) {
                         int count = accountInfo.getGuardingCount().incrementAndGet();
-                        System.out.println("【"+accountInfo.getAccount()+"-"+count+"】 -> WATCHING_OUT 【"+DateUtil.dateFormat(new Date())+"】");
-                        doWatchWithFollows(accountInfo);
-                        setGuardStatusWithFollowsWithGuardTime(accountInfo, AccountInfo.GuardStatusEnum.WATCHING_OUT.getCode(), new Date());
+                        if(checkIfHasDanger(accountInfo)){
+                            // 本地进了高危账号，直接跑路
+                            runAndSetGuardStatus(accountInfo);
+                        }else {
+                            accountInfo.setLastOcrTime(date);
+                            System.out.println("【" + accountInfo.getAccount() + "-" + count + "】 -> WATCHING_OUT 【" + DateUtil.dateFormat(new Date()) + "】");
+                            doWatchWithFollows(accountInfo);
+                            setGuardStatusWithFollowsWithGuardTime(accountInfo, AccountInfo.GuardStatusEnum.WATCHING_OUT.getCode(), new Date());
+                        }
+                    }else if (Objects.equals(AccountInfo.GuardStatusEnum.WATCHING_OUT.getCode(), accountInfo.getGuardStatus())) {
+                        // 根据上次检测时间判断是否需要再次截图检测本地账号
+                        if(date.getTime() > accountInfo.getLastOcrTime().getTime() + ocrInterval){
+                            if(checkIfHasDanger(accountInfo)){
+                                // 本地进了高危账号，直接跑路
+                                runAndSetGuardStatus(accountInfo);
+                            }else {
+                                accountInfo.setLastOcrTime(date);
+                            }
+                        }
                     }
                 } else {
                     // 如果没有警卫，直接跑路
@@ -176,6 +229,45 @@ public class ImgBoot {
                 }
             }
         }
+    }
+
+    /**
+     * 使用ocr识别本地账号，检测本地是否进入高危账号
+     * @return
+     */
+    private static boolean checkIfHasDanger(AccountInfo accountInfo) throws BusinessException {
+        accountInfo.getOpenConsumer().accept(null);
+        RobotHelper.delay(120);
+        AtomicBoolean atomicBoolean = new AtomicBoolean(true);
+        doCreateScreen(accountInfo.getLocalSt(), accountInfo.getLocalEd(), (bufferedImage) -> {
+            try {
+                String basePath = getBasePath(accountInfo.getAccount());
+                int count = accountInfo.getGuardingCount().get();
+                String localFile = basePath + File.separator + getHisImgName(count, "local");
+                // 保存为图片文件
+                File outputFile = new File(localFile); // 使用 PNG 格式保存截图
+                boolean result = ImageIO.write(bufferedImage, "png", outputFile);
+                String s = iTesseract.doOCR(bufferedImage);
+                System.out.println("【"+accountInfo.getAccount()+"】 local: " + s);
+                for (String s1 : dangerousList) {
+                    if(s.contains(s1)){
+                        System.out.println("dangerous account: " + s1+". tobe running");
+                        return;
+                    }
+                }
+                atomicBoolean.set(false);
+            } catch (TesseractException | IOException e) {
+                e.printStackTrace();
+            }
+        });
+        return atomicBoolean.get();
+    }
+
+    private static void runAndSetGuardStatus(AccountInfo accountInfo) throws Exception {
+        // 直接跑路
+        doEscapeWithFollows(accountInfo);
+        setGuardStatusWithFollows(accountInfo, AccountInfo.GuardStatusEnum.RUN.getCode());
+        System.out.println("【"+accountInfo.getAccount()+"-"+accountInfo.getGuardingCount().get()+"】 -> RUN 【"+DateUtil.dateFormat(new Date())+"】");
     }
 
     /**
@@ -362,7 +454,7 @@ public class ImgBoot {
      * @Date 16:01 2022/8/10
      * @Author 温昌营
      **/
-    private static void doCreateScreen(PointInfoDTO st, PointInfoDTO ed, Consumer<BufferedImage> consumer) throws AWTException {
+    private static void doCreateScreen(PointInfoDTO st, PointInfoDTO ed, Consumer<BufferedImage> consumer) {
         BufferedImage image = RobotHelper.createScreenCapture(st, ed);
         consumer.accept(image);
     }

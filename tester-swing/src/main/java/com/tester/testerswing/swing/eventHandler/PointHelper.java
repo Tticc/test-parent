@@ -265,6 +265,14 @@ public class PointHelper {
         public GaussianStrPointInfoDTO eve_dockPoint = new GaussianStrPointInfoDTO("1661,154", "1675,161");
         // 首tab
         public GaussianStrPointInfoDTO eve_firstTabPoint = new GaussianStrPointInfoDTO("1590,229","1605,237");
+
+        // 本地账号截图起点
+        public PointInfoDTO eve_localStPoint = new PointInfoDTO(1409,260);
+
+        // 本地账号截图终点
+        public PointInfoDTO eve_localEdPoint = new PointInfoDTO(1536,678);
+
+
     }
 
 

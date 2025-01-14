@@ -4,10 +4,7 @@ import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.DateUtil;
 import com.tester.testerswing.capture.ImgBoot;
 import com.tester.testerswing.capture.PointInfoDTO;
-import com.tester.testerswing.swing.eventHandler.EventHandle_Colos;
-import com.tester.testerswing.swing.eventHandler.EventHandle_Sai;
-import com.tester.testerswing.swing.eventHandler.EventHandle_Silot;
-import com.tester.testerswing.swing.eventHandler.PointHelper;
+import com.tester.testerswing.swing.eventHandler.*;
 import com.tester.testerswing.voice.BeepSoundProcessor;
 import org.opencv.imgcodecs.Imgcodecs;
 
@@ -36,6 +33,7 @@ public class Boot {
     private final Map<Integer, AccountInfo> serialNoAccountInfoMap = new HashMap<>();
 
     public Boot() {
+        PointHelper.CommonEvePoint commonEvePoint = new PointHelper.CommonEvePoint();
         List<PointHelper.AccountPoint> list = PointHelper.getListAll();
         Boot.setAccountNum(list.size());
         for (int i = 1; i <= list.size(); i++) {
@@ -50,11 +48,15 @@ public class Boot {
                     .setRedEd(accountPoint.getRedEd())
                     .setEnemySt(accountPoint.getEnemySt())
                     .setEnemyEd(accountPoint.getEnemyEd())
+                    .setLocalSt(commonEvePoint.getEve_localStPoint())
+                    .setLocalEd(commonEvePoint.getEve_localEdPoint())
                     .setLastQuickRunTime(DateUtil.getYesterdayStart())
                     .setGuardTime(DateUtil.getYesterdayStart())
+                    .setLastOcrTime(DateUtil.getYesterdayStart())
                     .setConsumer((e) -> PointHelper.eveEscapeAll(PointHelper.getList(), finalI))
                     .setToWatch((e) -> PointHelper.toWatchAll(PointHelper.getList(), finalI))
-                    .setToStandBy((e) -> PointHelper.toStandByAll(PointHelper.getList(), finalI));
+                    .setToStandBy((e) -> PointHelper.toStandByAll(PointHelper.getList(), finalI))
+                    .setOpenConsumer((e) -> EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint()));
             accountPoint.setAccountInfo(accountInfo);
             accountInfoList.add(accountInfo);
             serialNoAccountInfoMap.put(finalI, accountInfo);
