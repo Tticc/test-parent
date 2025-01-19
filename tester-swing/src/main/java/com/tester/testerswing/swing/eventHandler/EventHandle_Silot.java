@@ -114,7 +114,7 @@ public class EventHandle_Silot {
             }
             hasGuard.setText("false");
         });
-        use_guard.doClick();
+        ban_guard.doClick();
     }
     private static void initAccountNum(Silot_Input script){
         script.getAccountNum1().setText(Boot.getAccountNum()+"");
@@ -190,8 +190,8 @@ public class EventHandle_Silot {
                 }
             });
         }
-        buttons.get(5).doClick();
-        RobotHelper.delay(200);
+        script.getAround_trash5().doClick();
+        script.getAround_trash6().doClick();
     }
     private static void leaderShift(Silot_Input script, List<AccountInfo> accountInfoList){
         List<JLabel> labels = new ArrayList<>();
@@ -280,8 +280,6 @@ public class EventHandle_Silot {
             }
         });
         lead_shift_2.doClick();
-        RobotHelper.delay(200);
-        lead_shift_4.doClick();
         RobotHelper.delay(200);
         lead_shift_4.doClick();
         RobotHelper.delay(200);
@@ -377,7 +375,11 @@ public class EventHandle_Silot {
             if(Boot.checkIfReturn(NUM)){
                 return;
             }
-            script.getAccountInfoList().get(NUM-1).setNeedWarn(true);
+            AccountInfo accountInfo = script.getAccountInfoList().get(NUM - 1);
+            accountInfo.setNeedWarn(true);
+            if(accountInfo.checkIfLeader()) {
+                accountInfo.setAutoReturnTime(System.currentTimeMillis());
+            }
             script.getSilot_status().setText("true");
         });
 

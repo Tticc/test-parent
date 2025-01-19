@@ -49,7 +49,11 @@ public class EventHandle_Colos {
             if(Boot.checkIfReturn(NUM)){
                 return;
             }
-            script.getAccountInfoList().get(NUM-1).setNeedWarn(true);
+            AccountInfo accountInfo = script.getAccountInfoList().get(NUM - 1);
+            accountInfo.setNeedWarn(true);
+            if(accountInfo.checkIfLeader()) {
+                accountInfo.setAutoReturnTime(System.currentTimeMillis());
+            }
             script.getColos_status().setText("true");
         });
 

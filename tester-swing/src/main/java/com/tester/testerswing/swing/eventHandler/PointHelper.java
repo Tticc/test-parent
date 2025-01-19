@@ -239,9 +239,8 @@ public class PointHelper {
         // 启动加速点
         public GaussianStrPointInfoDTO eve_speedUpPoint = new GaussianStrPointInfoDTO("1107,878", "1122,891");
         // 释放无人机点
-        public GaussianStrPointInfoDTO eve_releaseDronePoint = new GaussianStrPointInfoDTO("1892,770", "1900,780");
-        public GaussianStrPointInfoDTO eve_releaseDronePoint1 = new GaussianStrPointInfoDTO("1616,803", "1705,805");
-        public GaussianStrPointInfoDTO eve_releaseDronePoint2 = new GaussianStrPointInfoDTO("1639,824", "1692,824");
+        public GaussianStrPointInfoDTO eve_releaseDronePoint = new GaussianStrPointInfoDTO("1892,745", "1902,751");
+        public GaussianStrPointInfoDTO eve_releaseDronePoint_new = new GaussianStrPointInfoDTO("1892,768", "1901,774");
         // 接近建筑点
         public GaussianStrPointInfoDTO eve_approachPoint = new GaussianStrPointInfoDTO("1701,161", "1709,171");
 
@@ -421,7 +420,7 @@ public class PointHelper {
             EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
             EveToWorkPoint eveToWorkPoint = new EveToWorkPoint();
             // release 释放无人机
-            releaseDone_new(eveToWorkPoint);
+            releaseDone_ori(eveToWorkPoint);
             // 释放箱子并存点
             doHarvest_sub(eveToWorkPoint);
             // 环绕建筑
@@ -596,9 +595,11 @@ public class PointHelper {
             speedUpAndDroneAndSavePoint();
 
             if(!Objects.equals(accountInfo.getSerialNo(),accountInfo.getLeaderSerialNo())) {
-                EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
+//                EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
                 // 最小化
                 minimize(commonEvePoint.getEve_minimize());
+            }else{
+                accountInfo.setAutoReturnTime(System.currentTimeMillis());
             }
         }
     }
@@ -691,7 +692,7 @@ public class PointHelper {
             RobotHelper.delay(GaussianHelper.getGaussianInt(415, 530));
         });
         list.add((e) -> {
-            releaseDone_new(eveToWorkPoint);
+            releaseDone_ori(eveToWorkPoint);
         });
         list.add((e) -> {
             // 保存点
@@ -709,10 +710,7 @@ public class PointHelper {
 
     private static void releaseDone_new(EveToWorkPoint eveToWorkPoint){
         // release 释放无人机
-        RobotHelper.move(eveToWorkPoint.getEve_releaseDronePoint1(), 94);
-        RobotHelper.mouseRightPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(310, 500));
-        RobotHelper.move(eveToWorkPoint.getEve_releaseDronePoint2(), 194);
+        RobotHelper.move(eveToWorkPoint.getEve_releaseDronePoint_new(), 94);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(415, 550));
     }

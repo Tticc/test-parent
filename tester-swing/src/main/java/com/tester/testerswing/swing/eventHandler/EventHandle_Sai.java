@@ -145,7 +145,11 @@ public class EventHandle_Sai {
             if(Boot.checkIfReturn(NUM)){
                 return;
             }
-            script.getAccountInfoList().get(NUM-1).setNeedWarn(true);
+            AccountInfo accountInfo = script.getAccountInfoList().get(NUM - 1);
+            accountInfo.setNeedWarn(true);
+            if(accountInfo.checkIfLeader()) {
+                accountInfo.setAutoReturnTime(System.currentTimeMillis());
+            }
             script.getSai_status().setText("true");
         });
 

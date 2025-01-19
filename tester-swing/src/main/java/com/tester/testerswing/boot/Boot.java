@@ -56,7 +56,8 @@ public class Boot {
                     .setConsumer((e) -> PointHelper.eveEscapeAll(PointHelper.getList(), finalI))
                     .setToWatch((e) -> PointHelper.toWatchAll(PointHelper.getList(), finalI))
                     .setToStandBy((e) -> PointHelper.toStandByAll(PointHelper.getList(), finalI))
-                    .setOpenConsumer((e) -> EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint()));
+                    .setOpenConsumer((e) -> EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint()))
+                    .setReturnConsumer((e) -> PointHelper.eveEndWorkAll(PointHelper.getList(), finalI));
             accountPoint.setAccountInfo(accountInfo);
             accountInfoList.add(accountInfo);
             serialNoAccountInfoMap.put(finalI, accountInfo);

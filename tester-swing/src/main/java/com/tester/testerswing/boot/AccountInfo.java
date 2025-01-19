@@ -66,13 +66,16 @@ public class AccountInfo extends BaseDTO {
     private boolean ifAuto = false;
 
     // 是否有警卫
-    private boolean hasGuard = true;
+    private boolean hasGuard = false;
 
     // 警卫状态。1=待命, 2=警戒中, 3=跑路
     private Integer guardStatus = 1;
 
     // 警戒时间
     private Date guardTime;
+
+    // 自动回归时间
+    private Long autoReturnTime;
 
     // 刷新次数
     private AtomicInteger guardingCount = new AtomicInteger(0);
@@ -95,6 +98,9 @@ public class AccountInfo extends BaseDTO {
     // 打开
     private MyConsumer openConsumer;
 
+    // 回收
+    private MyConsumer returnConsumer;
+
     // 刷新次数
     private Mat hisMat;
 
@@ -103,6 +109,13 @@ public class AccountInfo extends BaseDTO {
 
     public boolean checkIfLeader(){
         return Objects.equals(this.getSerialNo(), this.getLeaderSerialNo());
+    }
+
+    public void setAutoReturnTime(Long time){
+        if(null == time){
+            this.autoReturnTime = time;
+        }
+        this.autoReturnTime = time+50*60*1000;
     }
 
     @Getter

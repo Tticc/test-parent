@@ -53,9 +53,10 @@ public class EventHandle_Main {
             for (AccountInfo accountInfo : script.getAccountInfoList()) {
                 accountInfo.setGuardStatus(AccountInfo.GuardStatusEnum.STAND_BY.getCode());
                 JLabel jLabel = labels.get(accountInfo.getSerialNo() - 1);
-                if(Objects.equals(accountInfo.getSerialNo(), accountInfo.getLeaderSerialNo())) {
+                if(accountInfo.checkIfLeader()) {
                     accountInfo.setNeedWarn(true);
                     jLabel.setText("true");
+                    accountInfo.setAutoReturnTime(System.currentTimeMillis());
                 }else{
                     accountInfo.setNeedWarn(false);
                     jLabel.setText("false");

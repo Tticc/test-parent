@@ -229,6 +229,16 @@ public class ImgBoot {
                 }
             }
         }
+        if(accountInfo.getAutoReturnTime() != null && System.currentTimeMillis() > accountInfo.getAutoReturnTime()){
+            if(System.currentTimeMillis() < accountInfo.getAutoReturnTime()+8*1000) {
+                // 回收all
+                doReturnWithFollows(accountInfo);
+            }
+            if(System.currentTimeMillis() > accountInfo.getAutoReturnTime()+2*60*1000) {
+                doEscapeWithFollows(accountInfo);
+                accountInfo.setAutoReturnTime(null);
+            }
+        }
     }
 
     /**
@@ -319,6 +329,12 @@ public class ImgBoot {
     }
 
 
+    private static void doReturnWithFollows(AccountInfo accountInfo) throws Exception {
+        accountInfo.getReturnConsumer().accept(null);
+        for (AccountInfo value : accountInfo.getFollows().values()) {
+            value.getReturnConsumer().accept(null);
+        }
+    }
     private static void doEscapeWithFollows(AccountInfo accountInfo) throws Exception {
         doEscape(accountInfo);
         for (AccountInfo value : accountInfo.getFollows().values()) {
