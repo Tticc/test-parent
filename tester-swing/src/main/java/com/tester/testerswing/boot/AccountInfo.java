@@ -112,6 +112,9 @@ public class AccountInfo extends BaseDTO {
     }
 
     public void setAutoReturnTime(Long time){
+        this.autoReturnTime = null;
+    }
+    public void setAutoReturnTime_ori(Long time){
         if(null == time){
             this.autoReturnTime = time;
         }
