@@ -49,13 +49,30 @@ public class OKXPositionQuery {
 //        getPosi8();
     }
 
+
+    public static String getKlineData() {
+        try {
+            String instId = "BTC-USDT";
+            String bar = "5m";
+            String limit = "100";
+            String urlP1 = "/api/v5/market/candles?instId={}&bar={}&limit={}";
+            String urlP = format(urlP1, instId,bar,limit);
+            String result = commonGet(urlP);
+            System.out.println("8 合约清算订单数据: " + result);
+            return result;
+        } catch (Exception e) {
+            log.error("err:",e);
+        }
+        return null;
+    }
+
     /**
      * K线
      */
     public static void getKline() {
         try {
 
-            String instId = "BTC -USDT";
+            String instId = "BTC-USDT";
             String bar = "1m";
             String limit = "10";
             String urlP1 = "/api/v5/market/candles?instId={}&bar={}&limit={}";
