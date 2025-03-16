@@ -61,7 +61,7 @@ public class OKXPositionQuery {
             Long before = getTime("20240310000000");
             Long after = getTime("20250314000000");
             String instId = "BTC-USDT";
-            String bar = "1H";
+            String bar = "5m";
 //            String urlP1 = "/api/v5/market/candles?instId={}&bar={}&limit={}&before={}&after={}";
             String urlP1 = "/api/v5/market/candles?instId={}&bar={}&limit={}";
 //            String urlP = format(urlP1, instId,bar,limit,before,after);
