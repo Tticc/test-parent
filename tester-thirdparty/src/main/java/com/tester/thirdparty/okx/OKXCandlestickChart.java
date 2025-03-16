@@ -1,27 +1,43 @@
 package com.tester.thirdparty.okx;
 
+import com.tester.testercommon.util.DateUtil;
+import lombok.Data;
+import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.annotations.XYTextAnnotation;
+import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.CandlestickRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.time.Second;
+import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.DefaultHighLowDataset;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.util.CollectionUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class OKXCandlestickChart {
     private static JFrame frame;
     private static ChartPanel chartPanel;
-    private static JLabel infoLabel;  // 显示蜡烛信息
+    private static JLabel infoLabel;
+    private static Map<Long, BuySellInfo> sellBuyPilot = new LinkedHashMap<>();
+    private static Map<Long, DataInfo> dataInfoList = new LinkedHashMap<>();
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -30,48 +46,102 @@ public class OKXCandlestickChart {
             frame.setSize(1000, 600);
             frame.setLayout(new BorderLayout());
 
-            // 创建 K 线图
+            // 初始化时创建一次图表
             JFreeChart chart = createChart();
             chartPanel = new ChartPanel(chart);
-
-            // ✅ 启用拖动 & 缩放
-            XYPlot plot = (XYPlot) chart.getPlot();
-            plot.setDomainPannable(true);  // 允许 X 轴拖动
-            plot.setRangePannable(true);   // 允许 Y 轴拖动
-            chartPanel.setMouseWheelEnabled(true);  // 启用鼠标滚轮缩放
-
+            chartPanel.setMouseWheelEnabled(true);
             frame.add(chartPanel, BorderLayout.CENTER);
 
-            // 显示 K 线数据的标签
-            infoLabel = new JLabel("鼠标移动到蜡烛上查看详细数据");
+            infoLabel = new JLabel("鼠标悬停查看蜡烛数据");
             frame.add(infoLabel, BorderLayout.SOUTH);
-
-            // 添加鼠标事件监听
             addMouseHoverListener(chartPanel);
-
             frame.setVisible(true);
 
-            // 每 5 分钟自动更新
+            // 使用单线程更新图表
             ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
             scheduler.scheduleAtFixedRate(() -> {
                 JFreeChart updatedChart = createChart();
                 SwingUtilities.invokeLater(() -> {
-                    frame.remove(chartPanel);
-                    chartPanel = new ChartPanel(updatedChart);
-
-                    // ✅ 重新启用缩放 & 拖动
-                    XYPlot updatedPlot = (XYPlot) updatedChart.getPlot();
-                    updatedPlot.setDomainPannable(true);
-                    updatedPlot.setRangePannable(true);
-                    chartPanel.setMouseWheelEnabled(true);
-
-                    frame.add(chartPanel, BorderLayout.CENTER);
-                    addMouseHoverListener(chartPanel);  // 重新添加监听
-                    frame.revalidate();
-                    frame.repaint();
+                    // 直接更新现有ChartPanel的内容
+                    chartPanel.setChart(updatedChart);
+                    chartPanel.repaint();
                 });
             }, 5, 1, TimeUnit.SECONDS);
         });
+    }
+
+    @Data
+    public static class BuySellInfo{
+        private long time;
+        private double closePrice;
+        private boolean buySign;
+        private XYTextAnnotation annotation;
+    }
+    public static Map<Long, DataInfo> getOKXKlineData(List<Date> timestamps, List<Double> openPrices, List<Double> highPrices, List<Double> lowPrices, List<Double> closePrices, List<Double> volumes) {
+        String apiUrl = "https://www.okx.com/api/v5/market/candles?instId=BTC-USDT&bar=5m&limit=100";
+
+        try {
+            String klineData;
+            if(CollectionUtils.isEmpty(dataInfoList)) {
+                klineData = OKXPositionQuery.getKlineDataWithLimit("25");
+            }else {
+                klineData = OKXPositionQuery.getKlineDataWithLimit("2");
+            }
+
+
+            JSONObject jsonResponse = new JSONObject(klineData);
+            JSONArray dataArray = jsonResponse.getJSONArray("data");
+
+            for (int i = dataArray.length() - 1; i >= 0; i--) {
+                JSONArray candle = dataArray.getJSONArray(i);
+                long timestamp = candle.getLong(0);
+                double openPrice = candle.getDouble(1);
+                double highPrice = candle.getDouble(2);
+                double lowPrice = candle.getDouble(3);
+                double closePrice = candle.getDouble(4);
+                double volume = candle.getDouble(5);
+
+                DataInfo dataInfo = new DataInfo();
+                dataInfo.setTimestamp(timestamp)
+                        .setOpenPrice(openPrice)
+                        .setHighPrice(highPrice)
+                        .setLowPrice(lowPrice)
+                        .setClosePrice(closePrice)
+                        .setVolume(volume);
+                dataInfoList.put(timestamp, dataInfo);
+            }
+
+            boolean removeOne = false;
+            if(dataInfoList.size() > 300){
+                removeOne = true;
+            }
+            for (DataInfo value : dataInfoList.values()) {
+                if(removeOne){
+                    removeOne = false;
+                    continue;
+                }
+                timestamps.add(new Date(value.getTimestamp()));
+                openPrices.add(value.getOpenPrice());
+                highPrices.add(value.getHighPrice());
+                lowPrices.add(value.getLowPrice());
+                closePrices.add(value.getClosePrice());
+                volumes.add(value.getVolume());
+            }
+        } catch (Exception e) {
+            log.error("数据解析失败");
+        }
+        return dataInfoList;
+    }
+
+    @Data
+    @Accessors(chain = true)
+    public static class DataInfo{
+        private long timestamp;
+        private double openPrice;
+        private double highPrice;
+        private double lowPrice;
+        private double closePrice;
+        private double volume;
     }
 
     private static JFreeChart createChart() {
@@ -82,26 +152,188 @@ public class OKXCandlestickChart {
         List<Double> closePrices = new ArrayList<>();
         List<Double> volumes = new ArrayList<>();
 
-        OKXCandlestickChart2.getOKXKlineData(timestamps, openPrices, highPrices, lowPrices, closePrices, volumes);
+        Map<Long, DataInfo> okxKlineData = getOKXKlineData(timestamps, openPrices, highPrices, lowPrices, closePrices, volumes);
+        List<Double> ma5 = calculateMA(closePrices, 5);
+        List<Double> ma10 = calculateMA(closePrices, 10);
+        List<Double> ma20 = calculateMA(closePrices, 20);
 
-        // 计算 MA
-        List<Double> ma5 = OKXCandlestickChart2.calculateMA(closePrices, 5);
-        List<Double> ma10 = OKXCandlestickChart2.calculateMA(closePrices, 10);
-        List<Double> ma20 = OKXCandlestickChart2.calculateMA(closePrices, 20);
-
-        // 创建 K 线数据集
-        DefaultHighLowDataset dataset = OKXCandlestickChart2.createCandlestickDataset(timestamps, openPrices, highPrices, lowPrices, closePrices, volumes);
-
-        // 创建 MA 线数据集
+        DefaultHighLowDataset dataset = createCandlestickDataset(timestamps, openPrices, highPrices, lowPrices, closePrices, volumes);
         TimeSeriesCollection maDataset = new TimeSeriesCollection();
-        OKXCandlestickChart2.addMAToDataset(maDataset, "MA5", timestamps, ma5);
-        OKXCandlestickChart2.addMAToDataset(maDataset, "MA10", timestamps, ma10);
-        OKXCandlestickChart2.addMAToDataset(maDataset, "MA20", timestamps, ma20);
+        addMAToDataset(maDataset, "MA5", timestamps, ma5);
+        addMAToDataset(maDataset, "MA10", timestamps, ma10);
+        addMAToDataset(maDataset, "MA20", timestamps, ma20);
 
-        // 创建 K 线 + MA 线的图表
-        return OKXCandlestickChart2.createCombinedChart(dataset, maDataset);
+        JFreeChart chart = createCombinedChart(dataset, maDataset);
+        XYPlot plot = (XYPlot) chart.getPlot();
+
+        // 清理旧标记后添加新标记
+        plot.clearAnnotations();
+
+        Boolean lastBuySign = null;
+        for (BuySellInfo value : sellBuyPilot.values()) {
+            lastBuySign = value.buySign;
+        }
+        for (int i = 1; i < timestamps.size(); i++) {
+            if (ma5.get(i - 1) != null && ma10.get(i - 1) != null &&
+                    ma5.get(i) != null && ma10.get(i) != null) {
+
+                int openIndex = i+1 >= openPrices.size() ? openPrices.size()-1 : i+1;
+                double openPrice = openPrices.get(i);
+                double closePrice = closePrices.get(i);
+                Date candleTime = timestamps.get(i);
+                long time = candleTime.getTime();
+
+                BuySellInfo buySellInfo1 = sellBuyPilot.get(time);
+                if(null != buySellInfo1){
+                    plot.addAnnotation(buySellInfo1.getAnnotation());
+                    continue;
+                }
+
+                if(i == timestamps.size()-1 && lastBuySign != null){
+                    if(ma5.get(i) >= ma10.get(i) && !lastBuySign){
+                        System.out.println("Buy signal at " + candleTime + ", buy Price: " + closePrice);
+                        XYTextAnnotation annotation = new XYTextAnnotation("Buy" + closePrice, candleTime.getTime(), closePrice);
+                        annotation.setFont(new Font("SansSerif", Font.BOLD, 12));
+                        annotation.setPaint(Color.BLUE);
+                        plot.addAnnotation(annotation);
+
+                        BuySellInfo buySellInfo = new BuySellInfo();
+                        buySellInfo.setAnnotation(annotation);
+                        buySellInfo.setBuySign(true);
+                        buySellInfo.setClosePrice(closePrice);
+                        buySellInfo.setTime(time);
+                        sellBuyPilot.put(time, buySellInfo);
+                    }else if(ma5.get(i) < ma10.get(i) && lastBuySign){
+                        System.out.println("Sell signal at " + candleTime + ", Open Price: " + closePrice);
+                        XYTextAnnotation annotation = new XYTextAnnotation("Sell" + closePrice, candleTime.getTime(), closePrice);
+                        annotation.setFont(new Font("SansSerif", Font.BOLD, 12));
+                        annotation.setPaint(Color.BLACK);
+                        plot.addAnnotation(annotation);
+
+
+                        BuySellInfo buySellInfo = new BuySellInfo();
+                        buySellInfo.setAnnotation(annotation);
+                        buySellInfo.setBuySign(false);
+                        buySellInfo.setClosePrice(closePrice);
+                        buySellInfo.setTime(time);
+                        sellBuyPilot.put(time, buySellInfo);
+                    }else{
+                        continue;
+                    }
+                }else {
+                    if (ma5.get(i - 1) < ma10.get(i - 1) && ma5.get(i) >= ma10.get(i)) {
+                        System.out.println("Buy signal at " + candleTime + ", buy Price: " + closePrice);
+                        XYTextAnnotation annotation = new XYTextAnnotation("Buy" + closePrice, candleTime.getTime(), closePrice);
+                        annotation.setFont(new Font("SansSerif", Font.BOLD, 12));
+                        annotation.setPaint(Color.BLUE);
+                        plot.addAnnotation(annotation);
+
+                        BuySellInfo buySellInfo = new BuySellInfo();
+                        buySellInfo.setAnnotation(annotation);
+                        buySellInfo.setBuySign(true);
+                        buySellInfo.setClosePrice(closePrice);
+                        buySellInfo.setTime(time);
+                        sellBuyPilot.put(time, buySellInfo);
+                    } else if (ma5.get(i - 1) > ma10.get(i - 1) && ma5.get(i) <= ma10.get(i)) {
+                        System.out.println("Sell signal at " + candleTime + ", Open Price: " + closePrice);
+                        XYTextAnnotation annotation = new XYTextAnnotation("Sell" + closePrice, candleTime.getTime(), closePrice);
+                        annotation.setFont(new Font("SansSerif", Font.BOLD, 12));
+                        annotation.setPaint(Color.BLACK);
+                        plot.addAnnotation(annotation);
+
+
+                        BuySellInfo buySellInfo = new BuySellInfo();
+                        buySellInfo.setAnnotation(annotation);
+                        buySellInfo.setBuySign(false);
+                        buySellInfo.setClosePrice(closePrice);
+                        buySellInfo.setTime(time);
+                        sellBuyPilot.put(time, buySellInfo);
+                    } else {
+                        continue;
+                    }
+                }
+                for (BuySellInfo value : sellBuyPilot.values()) {
+                    if(value.buySign){
+                        System.out.println("buy at "+DateUtil.dateFormat( new Date(value.getTime())) +"， with "+value.getClosePrice());
+                    }else{
+                        System.out.println("sell at "+DateUtil.dateFormat( new Date(value.getTime())) +"， with "+value.getClosePrice());
+                    }
+                }
+                Double st = null;
+                Double ed = null;
+                double sum = 0d;
+                List<Double> changeList = new ArrayList<>();
+                for (BuySellInfo value : sellBuyPilot.values()) {
+                    if(null == st && null == ed){
+                        st = ed = value.getClosePrice();
+                    }else{
+                        st=ed;
+                        ed=value.getClosePrice();
+                        if(!value.buySign){
+                            changeList.add(ed-st);
+                            sum+=(ed-st);
+                        }else{
+                            sum+=(st-ed);
+                            changeList.add(st-ed);
+                        }
+                    }
+                }
+                System.out.println("sum = " + sum);
+                System.out.println("changeList = " + changeList);
+            }
+        }
+        return chart;
+    }
+    public static DefaultHighLowDataset createCandlestickDataset(List<Date> timestamps, List<Double> open, List<Double> high, List<Double> low, List<Double> close, List<Double> volume) {
+        Date[] dateArr = timestamps.toArray(new Date[0]);
+        double[] openArr = open.stream().mapToDouble(Double::doubleValue).toArray();
+        double[] highArr = high.stream().mapToDouble(Double::doubleValue).toArray();
+        double[] lowArr = low.stream().mapToDouble(Double::doubleValue).toArray();
+        double[] closeArr = close.stream().mapToDouble(Double::doubleValue).toArray();
+        double[] volumeArr = volume.stream().mapToDouble(Double::doubleValue).toArray();
+
+        return new DefaultHighLowDataset("Candlestick", dateArr, highArr, lowArr, openArr, closeArr, volumeArr);
     }
 
+    private static List<Double> calculateMA(List<Double> prices, int period) {
+        List<Double> maValues = new ArrayList<>();
+        for (int i = 0; i < prices.size(); i++) {
+            if (i < period - 1) {
+                maValues.add(null);
+            } else {
+                double sum = 0;
+                for (int j = i - period + 1; j <= i; j++) {
+                    sum += prices.get(j);
+                }
+                maValues.add(sum / period);
+            }
+        }
+        return maValues;
+    }
+
+    private static void addMAToDataset(TimeSeriesCollection dataset, String name, List<Date> timestamps, List<Double> maValues) {
+        TimeSeries series = new TimeSeries(name);
+        for (int i = 0; i < timestamps.size(); i++) {
+            if (maValues.get(i) != null) {
+                series.add(new Second(timestamps.get(i)), maValues.get(i));
+            }
+        }
+        dataset.addSeries(series);
+    }
+
+    public static JFreeChart createCombinedChart(DefaultHighLowDataset dataset, TimeSeriesCollection maDataset) {
+        NumberAxis yAxis = new NumberAxis("Price");
+        yAxis.setAutoRangeIncludesZero(false);
+        CandlestickRenderer candlestickRenderer = new CandlestickRenderer();
+        XYPlot plot = new XYPlot(dataset, new DateAxis("Time"), yAxis, candlestickRenderer);
+        XYLineAndShapeRenderer maRenderer = new XYLineAndShapeRenderer(true, false);
+        plot.setDataset(1, maDataset);
+        plot.setRenderer(1, maRenderer);
+        maRenderer.setSeriesPaint(0, Color.ORANGE);
+        maRenderer.setSeriesPaint(1, Color.RED);
+        maRenderer.setSeriesPaint(2, Color.GREEN);
+        return new JFreeChart("OKX BTC/USDT 5m K线 + MA", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
+    }
     private static void addMouseHoverListener(ChartPanel panel) {
         panel.addChartMouseListener(new ChartMouseListener() {
             @Override

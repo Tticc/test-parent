@@ -17,11 +17,11 @@ import java.net.Proxy;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.X509Certificate;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -31,6 +31,8 @@ public class OKXPositionQuery {
     private static final String SECRET_KEY = "D246AC7C2DDA7903181E4092E7013B65"; // 秘钥
     private static final String PASSPHRASE = "Q!w2e3r4";
     private static final String BASE_URL = "https://www.okx.com";
+
+    public static Map<Long, String> dataSet = new LinkedHashMap<>();
 
 
     private static final String CCY = "BTC";
@@ -50,20 +52,34 @@ public class OKXPositionQuery {
     }
 
 
+
     public static String getKlineData() {
+        return getKlineDataWithLimit("300");
+    }
+    public static String getKlineDataWithLimit(String limit) {
         try {
+            Long before = getTime("20240310000000");
+            Long after = getTime("20250314000000");
             String instId = "BTC-USDT";
-            String bar = "5m";
-            String limit = "100";
+            String bar = "1H";
+//            String urlP1 = "/api/v5/market/candles?instId={}&bar={}&limit={}&before={}&after={}";
             String urlP1 = "/api/v5/market/candles?instId={}&bar={}&limit={}";
+//            String urlP = format(urlP1, instId,bar,limit,before,after);
             String urlP = format(urlP1, instId,bar,limit);
             String result = commonGet(urlP);
-            System.out.println("8 合约清算订单数据: " + result);
+//            System.out.println("8 合约清算订单数据: " + result);
             return result;
         } catch (Exception e) {
-            log.error("err:",e);
+            log.error("获取okx数据失败");
         }
         return null;
+    }
+
+    private static Long getTime(String dateStr){
+        LocalDateTime localDateTime = DateUtil.getLocalDateTime(dateStr);
+        ZoneId zoneId = ZoneId.systemDefault();
+        Date from = Date.from(localDateTime.atZone(zoneId).toInstant());
+        return from.getTime();
     }
 
     /**
@@ -266,8 +282,6 @@ public class OKXPositionQuery {
 
     public static String commonGet(String urlP) throws Exception {
         String url = BASE_URL + urlP;
-
-
         String timestamp = DateTimeFormatter
                 .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                 .withZone(ZoneOffset.UTC)
