@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tester.testersearch.dao.mapper.TradeDataBaseMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tester.testersearch.dao.domain.TradeDataBaseDomain">
+        <id column="id" property="id"/>
+        <result column="b_key" property="bKey"/>
+        <result column="bar" property="bar"/>
+        <result column="open" property="open"/>
+        <result column="close" property="close"/>
+        <result column="high" property="high"/>
+        <result column="low" property="low"/>
+        <result column="volume" property="volume"/>
+        <result column="real_data" property="realData"/>
+        <result column="deleted" property="deleted"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+    ${tableName}.`id`,
+    ${tableName}.`b_key`,
+    ${tableName}.`bar`,
+    ${tableName}.`open`,
+    ${tableName}.`close`,
+    ${tableName}.`high`,
+    ${tableName}.`low`,
+    ${tableName}.`volume`,
+    ${tableName}.`real_data`,
+    ${tableName}.`deleted`,
+    ${tableName}.`create_time`,
+    ${tableName}.`update_time`
+    </sql>
+    <!-- 通用查询结果列 -->
+    <sql id="list_column_list">
+            ${tableName}.`b_key`,
+            ${tableName}.`bar`,
+            ${tableName}.`open`,
+            ${tableName}.`close`,
+            ${tableName}.`high`,
+            ${tableName}.`low`,
+            ${tableName}.`volume`,
+            ${tableName}.`real_data`,
+            ${tableName}.`create_time`,
+            ${tableName}.`update_time`
+    </sql>
+
+    <!--基础CRUD、分页、列表部分 begin-->
+    <insert id="save" parameterType="com.tester.testersearch.dao.domain.TradeDataBaseDomain"
+            keyProperty="id" useGeneratedKeys="true">
+        insert into trade_data_base
+        (
+            `id`,
+            `b_key`,
+            `bar`,
+            `open`,
+            `close`,
+            `high`,
+            `low`,
+            `volume`,
+            `real_data`,
+            `deleted`,
+            `create_time`,
+            `update_time`
+        )
+        values
+        (
+            #{id},
+            #{bKey},
+            #{bar},
+            #{open},
+            #{close},
+            #{high},
+            #{low},
+            #{volume},
+            #{realData},
+            #{deleted},
+            #{createTime},
+            #{updateTime}
+
+        )
+    </insert>
+
+    <update id="update" parameterType="com.tester.testersearch.dao.domain.TradeDataBaseDomain">
+        update trade_data_base
+        <set>
+            <if test="bKey != null and bKey != ''">
+                `b_key` = #{bKey},
+            </if>
+            <if test="bar != null and bar != ''">
+                `bar` = #{bar},
+            </if>
+            <if test="open != null">
+                `open` = #{open},
+            </if>
+            <if test="close != null">
+                `close` = #{close},
+            </if>
+            <if test="high != null">
+                `high` = #{high},
+            </if>
+            <if test="low != null">
+                `low` = #{low},
+            </if>
+            <if test="volume != null">
+                `volume` = #{volume},
+            </if>
+            <if test="realData != null">
+                `real_data` = #{realData},
+            </if>
+            <if test="deleted != null">
+                `deleted` = #{deleted},
+            </if>
+            <if test="updateTime != null">
+                `update_time` = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="delete">
+        update trade_data_base
+        <set>
+            deleted = 1,
+            updated_at = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="get" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List">
+            <property name="tableName" value="t_alias"></property>
+        </include>
+        from trade_data_base t_alias
+        where t_alias.id = #{id}
+        and t_alias.deleted = 0
+    </select>
+
+
+    <select id="getMinId" resultType="java.lang.Long">
+        select
+        min(t_alias.id)
+        from trade_data_base t_alias
+        where t_alias.deleted = 0
+    </select>
+
+    <select id="list" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List">
+            <property name="tableName" value="t_alias"></property>
+        </include>
+        from trade_data_base t_alias
+        <where>
+            <trim prefixOverrides="AND |OR ">
+                <if test="id != null">
+                    AND t_alias.`id` = #{id}
+                </if>
+                <if test="bKey != null and bKey != ''">
+                    AND t_alias.`b_key` = #{bKey}
+                </if>
+                <if test="bar != null and bar != ''">
+                    AND t_alias.`bar` = #{bar}
+                </if>
+                <if test="open != null">
+                    AND t_alias.`open` = #{open}
+                </if>
+                <if test="close != null">
+                    AND t_alias.`close` = #{close}
+                </if>
+                <if test="high != null">
+                    AND t_alias.`high` = #{high}
+                </if>
+                <if test="low != null">
+                    AND t_alias.`low` = #{low}
+                </if>
+                <if test="volume != null">
+                    AND t_alias.`volume` = #{volume}
+                </if>
+                <if test="realData != null">
+                    AND t_alias.`real_data` = #{realData}
+                </if>
+                <if test="deleted != null">
+                    AND t_alias.`deleted` = #{deleted}
+                </if>
+            </trim>
+        </where>
+        order by t_alias.id asc
+    </select>
+
+    <insert id="batchSave" parameterType="java.util.List" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO trade_data_base
+        (
+        `id`,
+        `b_key`,
+        `bar`,
+        `open`,
+        `close`,
+        `high`,
+        `low`,
+        `volume`,
+        `real_data`
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.bKey},
+            #{item.bar},
+            #{item.open},
+            #{item.close},
+            #{item.high},
+            #{item.low},
+            #{item.volume},
+            #{item.realData}
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        `b_key` = VALUES(`b_key`),
+        `bar` = VALUES(`bar`),
+        `open` = VALUES(`open`),
+        `close` = VALUES(`close`),
+        `high` = VALUES(`high`),
+        `low` = VALUES(`low`),
+        `volume` = VALUES(`volume`),
+        `real_data` = VALUES(`real_data`)
+    </insert>
+    <!--基础CRUD、分页、列表部分 end-->
+</mapper>

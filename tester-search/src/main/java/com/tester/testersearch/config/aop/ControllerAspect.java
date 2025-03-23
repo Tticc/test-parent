@@ -1,0 +1,54 @@
+package com.tester.testersearch.config.aop;
+
+import com.tester.testercommon.constant.ConstantList;
+import com.tester.base.dto.controller.RestResult;
+import com.tester.base.dto.exception.BusinessException;
+import com.tester.testercommon.util.CommonUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.MDC;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+@Aspect
+@Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
+@Slf4j
+public class ControllerAspect {
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    @Around("@within(org.springframework.web.bind.annotation.RestController) || @within(org.springframework.stereotype.Controller)")
+    public Object execute(ProceedingJoinPoint pjp) throws Throwable {
+        MDC.put(ConstantList.MDC_TRACE_ID_KEY, CommonUtil.getUUID());
+        Object obj = null;
+        try {
+            obj = pjp.proceed();
+        } catch (BusinessException be) {
+            if (be.getExCode() == 5000L) {
+                log.error(be.getMessage(), be);
+            } else {
+                log.warn("{}", be.getMessage());
+            }
+            obj = this.buildExceptionRestResult(be);
+            throw be;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            BusinessException businessException = new BusinessException(5000L, e.getMessage());
+            obj = this.buildExceptionRestResult(businessException);
+            throw businessException;
+        } finally {
+        }
+
+        return obj;
+    }
+
+    private RestResult buildExceptionRestResult(BusinessException businessException) {
+        RestResult restResult = new RestResult();
+        restResult.setCode(businessException.getExCode());
+        restResult.setMessage(businessException.getMessage());
+        return restResult;
+    }
+
+}

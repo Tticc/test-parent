@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>K 线图（实时更新）</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div id="main" style="width: 100%; height: 700%;"></div>
+
+<script>
+    var chart = echarts.init(document.getElementById('main'));
+    // 保存历史数据
+    var historicalData = [];
+
+    function fetchData(limit, currentPage) {
+        $.ajax({
+            url: "/api/trade/trade",  // 后端接口
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({limit: limit, page: currentPage}),
+            success: function (response) {
+                updateHistoricalData(response.data);
+                updateChart();
+            },
+            error: function (xhr, status, error) {
+                console.error("数据加载失败:", error);
+            }
+        });
+    }
+
+    // 更新历史数据
+    function updateHistoricalData(newData) {
+        // 创建一个映射，按 timestamp 存储数据
+        const timestampMap = new Map();
+
+        // 将现有历史数据按照 timestamp 存入 Map
+        historicalData.forEach(item => {
+            timestampMap.set(item.timestamp, item);
+        });
+
+        // 更新 Map 中的数据或添加新数据
+        newData.forEach(item => {
+            timestampMap.set(item.timestamp, item);
+        });
+
+        // 将 Map 中的数据转回数组，更新历史数据
+        historicalData = Array.from(timestampMap.values());
+    }
+
+    function updateChart() {
+        var categoryData = [];
+        var klineData = [];
+        var ma5Data = [];
+        var ma10Data = [];
+        var ma20Data = [];
+
+        // 解析数据
+        historicalData.forEach((item, index) => {
+            categoryData.push(new Date(item.timestamp).toLocaleString());
+            klineData.push([item.open, item.close, item.low, item.high]);
+
+            // 计算 MA5
+            if (index >= 4) {
+                let sum = 0;
+                for (let i = index - 4; i <= index; i++) {
+                    sum += parseFloat(historicalData[i].close);
+                }
+                ma5Data.push(sum / 5);
+            } else {
+                ma5Data.push(null);
+            }
+
+            // 计算 MA10
+            if (index >= 9) {
+                let sum = 0;
+                for (let i = index - 9; i <= index; i++) {
+                    sum += parseFloat(historicalData[i].close);
+                }
+                ma10Data.push(sum / 10);
+            } else {
+                ma10Data.push(null);
+            }
+
+            // 计算 MA20
+            if (index >= 19) {
+                let sum = 0;
+                for (let i = index - 19; i <= index; i++) {
+                    sum += parseFloat(historicalData[i].close);
+                }
+                ma20Data.push(sum / 20);
+            } else {
+                ma20Data.push(null);
+            }
+        });
+
+        // **获取当前的 dataZoom 状态**
+        var currentOption = chart.getOption();
+        var zoomStart = 0;  // 默认值
+        var zoomEnd = 100;   // 默认值
+
+        if (currentOption && currentOption.dataZoom && currentOption.dataZoom.length > 0) {
+            zoomStart = currentOption.dataZoom[0].start;
+            zoomEnd = currentOption.dataZoom[0].end;
+        }
+        let {middleBand, upperBand, lowerBand} = calculateBollingerBands(historicalData);
+        let {plusDI, minusDI, ADX} = calculateADX(historicalData);
+        debugger;
+        var option = {
+            title: {text: '实时更新的 K 线图'},
+            tooltip: {trigger: 'axis'},
+            legend: {
+                data: ['K线', 'MA5', 'MA10', 'MA20', 'BB 上轨', 'BB 中轨', 'BB 下轨', '+DI', '-DI', 'ADX'],
+                bottom: '35%', // 放置在图表底部
+                left: 'center',
+                textStyle: {fontSize: 18}
+            },
+            grid: [
+                {
+                    left: '10%', right: '10%',
+                    top: '10%', height: '40%'  // ✅ K 线图占 50%（留出间距）
+                },
+                {
+                    left: '10%', right: '10%',
+                    top: '45%', height: '50%'  // ✅ ADX 占 50%
+                }
+            ],
+            xAxis: [
+                { type: 'category', data: categoryData, gridIndex: 0 }, // K 线 x 轴
+                { type: 'category', data: categoryData, gridIndex: 1, show:false }  // ADX x 轴。隐藏
+            ],
+            yAxis: [{
+                type: 'value',
+                scale: true,  // 让Y轴根据数据自适应，不从0开始
+                min: function (value) {
+                    return value.min;
+                }, // Y轴最小值略小于数据最小值
+                max: function (value) {
+                    return value.max;
+                },  // Y轴最大值略大于数据最大值
+                gridIndex: 0,
+                name: '价格'
+            }, {
+                type: 'value',
+                min: 0,
+                max: 100,  // ADX 的范围一般在 0-100
+                gridIndex: 1,
+                name: 'ADX 指标',
+                axisLine: { lineStyle: { color: 'purple' } },
+                splitLine: { show: false }  // 不显示网格线，避免干扰
+            }
+            ],
+            dataZoom: [
+                {
+                    type: 'inside',  // ✅ 开启 **鼠标滚轮缩放**
+                    xAxisIndex: [0, 1], // 作用于 X 轴
+                    start: zoomStart,       // 初始展示 80% 右侧数据
+                    end: zoomEnd          // 初始展示 100% 右侧数据
+                },
+                {
+                    type: 'slider',   // ✅ 开启 **拖拽缩放**
+                    xAxisIndex: [0, 1],  // 作用于 X 轴
+                    start: zoomStart,
+                    end: zoomEnd,
+                    bottom: 30  // 移动 dataZoom，避免与 legend 重叠
+                }
+            ],
+            series: [
+                {
+                    type: 'candlestick',
+                    name: 'K线',
+                    data: klineData,
+                    itemStyle: {
+                        color: '#00AA00',    // 阳线（收盘价 > 开盘价）填充色（绿色）
+                        color0: '#AA0000',   // 阴线（收盘价 < 开盘价）填充色（红色）
+                        borderColor: '#00AA00',   // 阳线（边框颜色）
+                        borderColor0: '#AA0000'   // 阴线（边框颜色）
+                    },
+                    xAxisIndex: 0,
+                    yAxisIndex: 0,
+                    // markPoint: { // 买入卖出信号
+                    //     data: getTradeSignals(categoryData, klineData, ma5Data, ma20Data),
+                    //     symbol: 'arrow',  // 改为箭头样式
+                    //     symbolSize: [20, 30], // 控制箭头大小，适当调整宽高
+                    //     label: {
+                    //         show: true,
+                    //         color: '#fff',
+                    //         fontWeight: 'bold',
+                    //         formatter: function(param) {
+                    //             return param.data.type + '\n' + param.value;
+                    //         }
+                    //     }
+                    // }
+                },
+                {// MA5
+                    name: 'MA5',
+                    type: 'line',
+                    data: ma5Data,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'orange'},
+                    xAxisIndex: 0,
+                    yAxisIndex: 0
+                },
+                {// MA10
+                    name: 'MA10',
+                    type: 'line',
+                    data: ma10Data,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'red'},
+                    xAxisIndex: 0,
+                    yAxisIndex: 0
+                },
+                {// MA20
+                    name: 'MA20',
+                    type: 'line',
+                    data: ma20Data,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'green'},
+                    xAxisIndex: 0,
+                    yAxisIndex: 0
+                },
+                // 布林带上轨
+                {
+                    name: 'BB 上轨',
+                    type: 'line',
+                    data: upperBand,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'blue', type: 'dashed'},
+                    xAxisIndex: 0,
+                    yAxisIndex: 0
+                },
+                // 布林带中轨（与 MA20 相同）
+                {
+                    name: 'BB 中轨',
+                    type: 'line',
+                    data: middleBand,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'purple'},
+                    xAxisIndex: 0,
+                    yAxisIndex: 0
+                },
+                // 布林带下轨
+                {
+                    name: 'BB 下轨',
+                    type: 'line',
+                    data: lowerBand,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'blue', type: 'dashed'},
+                    xAxisIndex: 0,
+                    yAxisIndex: 0
+                },
+                {
+                    name: '+DI',
+                    type: 'line',
+                    data: plusDI,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'blue'},
+                    xAxisIndex: 1,
+                    yAxisIndex: 1
+                },
+                {
+                    name: '-DI',
+                    type: 'line',
+                    data: minusDI,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'red'},
+                    xAxisIndex: 1,
+                    yAxisIndex: 1
+                },
+                {
+                    name: 'ADX',
+                    type: 'line',
+                    data: ADX,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'purple'},
+                    xAxisIndex: 1,
+                    yAxisIndex: 1
+                }
+            ]
+        };
+        chart.setOption(option);
+    }
+
+    // 初始加载数据
+    fetchData(300, 1);
+    // 每 5 秒自动刷新
+    setInterval(function () {
+        fetchData(2, 1);  // 传递page和limit参数
+    }, 1000);
+
+
+    // **获取买入/卖出信号并生成气泡数据**
+    function getTradeSignals(categoryData, klineData, ma5Data, ma10Data) {
+        let tradeSignals = [];
+        for (let i = 1; i < ma5Data.length; i++) {
+            if (ma5Data[i] === null || ma5Data[i - 1] === null ||
+                ma10Data[i] === null || ma10Data[i - 1] === null) {
+                continue;
+            }
+            let lowPrice = klineData[i][2];  // 最低价
+            let highPrice = klineData[i][3]; // 最高价
+            // let offset = (highPrice - lowPrice) * 0.5; // 偏移量，设为K线高度的10%
+            let offset = 50; // 偏移量，设置为50
+            if (ma5Data[i] > ma10Data[i] && ma5Data[i - 1] <= ma10Data[i - 1]) {
+                // **买入信号 (MA5 上穿 MA10)**
+                tradeSignals.push({
+                    coord: [categoryData[i], lowPrice - offset],  // `coord` 定义标注位置：[时间，收盘价]
+                    value: klineData[i][2].toFixed(2), // 显示价格
+                    type: '买入',
+                    itemStyle: {color: 'green'}
+                });
+            } else if (ma5Data[i] < ma10Data[i] && ma5Data[i - 1] >= ma10Data[i - 1]) {
+                // **卖出信号 (MA5 下穿 MA10)**
+                tradeSignals.push({
+                    coord: [categoryData[i], highPrice + offset],  // `coord` 定义标注位置：[时间，最高价]
+                    value: klineData[i][3].toFixed(2), // 显示价格
+                    type: '卖出',
+                    itemStyle: {color: 'red'}
+                });
+            }
+        }
+
+        return tradeSignals;
+    }
+
+    function calculateBollingerBands(historicalData, period = 20, stdDevMultiplier = 2) {
+        let middleBand = [];
+        let upperBand = [];
+        let lowerBand = [];
+
+        for (let i = 0; i < historicalData.length; i++) {
+            if (i < period - 1) {
+                middleBand.push(null);
+                upperBand.push(null);
+                lowerBand.push(null);
+                continue;
+            }
+
+            // 计算 MA20
+            let sum = 0;
+            for (let j = i - period + 1; j <= i; j++) {
+                sum += historicalData[j].close;
+            }
+            let ma20 = sum / period;
+            middleBand.push(ma20);
+
+            // 计算标准差
+            let variance = 0;
+            for (let j = i - period + 1; j <= i; j++) {
+                variance += Math.pow(historicalData[j].close - ma20, 2);
+            }
+            let stdDev = Math.sqrt(variance / period);
+
+            // 计算上轨和下轨
+            upperBand.push(ma20 + stdDevMultiplier * stdDev);
+            lowerBand.push(ma20 - stdDevMultiplier * stdDev);
+        }
+
+        return {middleBand, upperBand, lowerBand};
+    }
+
+
+    // 计算 ADX 指标
+    function calculateADX(klineData, period = 14) {
+        let plusDM = [];
+        let minusDM = [];
+        let trueRange = [];
+        let plusDI = [];
+        let minusDI = [];
+        let DX = [];
+        let ADX = [];
+
+        for (let i = 1; i < klineData.length; i++) {
+            let high = klineData[i].high;   // 最高价
+            let low = klineData[i].low;    // 最低价
+            let close = klineData[i].close;  // 收盘价
+            let prevHigh = klineData[i - 1].high;
+            let prevLow = klineData[i - 1].low;
+            let prevClose = klineData[i - 1].close;
+
+            let upMove = high - prevHigh;
+            let downMove = prevLow - low;
+
+            // 计算 +DM 和 -DM
+            plusDM.push(upMove > downMove && upMove > 0 ? upMove : 0);
+            minusDM.push(downMove > upMove && downMove > 0 ? downMove : 0);
+
+            // 计算 TR（真实波动范围）
+            let tr = Math.max(high - low, Math.abs(high - prevClose), Math.abs(low - prevClose));
+            trueRange.push(tr);
+        }
+
+        let smoothedPlusDM = smoothedMovingAverage(plusDM, period);
+        let smoothedMinusDM = smoothedMovingAverage(minusDM, period);
+        let smoothedTR = smoothedMovingAverage(trueRange, period);
+
+        // 计算 +DI 和 -DI
+        for (let i = 0; i < smoothedPlusDM.length; i++) {
+            if (smoothedTR[i] === null) {
+                plusDI.push(null);
+                minusDI.push(null);
+            } else {
+                plusDI.push((smoothedPlusDM[i] / smoothedTR[i]) * 100);
+                minusDI.push((smoothedMinusDM[i] / smoothedTR[i]) * 100);
+            }
+        }
+
+        // 计算 DX
+        for (let i = 0; i < plusDI.length; i++) {
+            if (plusDI[i] === null || minusDI[i] === null) {
+                DX.push(null);
+            } else {
+                DX.push((Math.abs(plusDI[i] - minusDI[i]) / (plusDI[i] + minusDI[i])) * 100);
+            }
+        }
+
+        // 计算 ADX
+        let smoothedADX = smoothedMovingAverage(DX, period);
+        ADX = smoothedADX;
+
+        return {plusDI, minusDI, ADX};
+    }
+
+
+    // 计算 14 日滑动平均值
+    function smoothedMovingAverage(data, period) {
+        let result = [];
+        let sum = 0;
+
+        for (let i = 0; i < data.length; i++) {
+            sum += data[i];
+            if (i >= period - 1) {
+                result.push(sum / period);
+                sum -= data[i - period + 1];
+            } else {
+                result.push(null);
+            }
+        }
+
+        return result;
+    }
+
+    function safeNumber(value) {
+        return isNaN(value) || value === null || value === undefined ? 0 : value;
+    }
+
+</script>
+</body>
+</html>

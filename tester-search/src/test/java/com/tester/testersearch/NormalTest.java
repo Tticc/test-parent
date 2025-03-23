@@ -7,24 +7,13 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NormalTest {
     @Test
     public void test() throws IOException {
-        String s = TxtWrite.file2String("D:\\desktop\\test_knowledge_new.json");
-        String[] split = s.split("\n");
-        List<String> sList = new ArrayList<>();
-        List<Knowledge> kList = new ArrayList<>();
-        for (String s1 : split) {
-            if(s1.startsWith("{\"index")){
-                continue;
-            }
-            sList.add(s1);
-//            System.out.println(s1);
-            Knowledge knowledge = JSON.parseObject(s1, Knowledge.class);
-            kList.add(knowledge);
-        }
-        System.out.println("kList.size() = " + kList.size());
+        Date date = new Date(1742037060000L);
+        System.out.println("date = " + date);
     }
 }
