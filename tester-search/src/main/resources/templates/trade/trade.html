@@ -363,9 +363,12 @@
 
     // 计算 ADX 指标
     function calculateADX(klineData, period = 14) {
-        let plusDM = [];
-        let minusDM = [];
-        let trueRange = [];
+        let plusDM = [null];
+        let minusDM = [null];
+        let trueRange = [null];
+        // let plusDM = [];
+        // let minusDM = [];
+        // let trueRange = [];
         let plusDI = [];
         let minusDI = [];
         let DX = [];
@@ -390,7 +393,7 @@
             let tr = Math.max(high - low, Math.abs(high - prevClose), Math.abs(low - prevClose));
             trueRange.push(tr);
         }
-
+        // 当前使用smoothedMovingAverage。可以替换为EMA:exponentialMovingAverage
         let smoothedPlusDM = smoothedMovingAverage(plusDM, period);
         let smoothedMinusDM = smoothedMovingAverage(minusDM, period);
         let smoothedTR = smoothedMovingAverage(trueRange, period);
@@ -423,6 +426,40 @@
     }
 
 
+    // EMA据说更适合短线
+    function exponentialMovingAverage(data, period) {
+        let result = [];
+        let multiplier = 2 / (period + 1);
+        let ema = null;
+
+        // 计算第一个 EMA 值，使用 SMA 作为初始值
+        let sum = 0;
+        let count = 0;
+        for (let i = 0; i < period; i++) {
+            if (data[i] !== null) {
+                sum += data[i];
+                count++;
+            }
+        }
+        ema = count > 0 ? sum / count : null; // 避免 NaN
+
+        for (let i = 0; i < data.length; i++) {
+            if (i < period - 1) {
+                result.push(null); // 前 period-1 个数据为空
+            } else if (i === period - 1) {
+                result.push(ema);
+            } else {
+                if (data[i] !== null) {
+                    ema = (data[i] - ema) * multiplier + ema; // 计算 EMA
+                }
+                result.push(ema);
+            }
+        }
+        return result;
+    }
+
+
+    // SMA据说更适合长线
     // 计算 14 日滑动平均值
     function smoothedMovingAverage(data, period) {
         let result = [];

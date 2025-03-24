@@ -39,7 +39,7 @@ public class TradeController extends BaseController {
      **/
     @RequestMapping(value = "/trade", method = RequestMethod.POST)
     public RestResult<List<TradeDataBaseDomain>> trace(@Validated @RequestBody TradeDataRequest request) throws BusinessException {
-        return success(OkxHelper.getOKXKlineData(request.getLimit() + "", "30m"));
+        return success(OkxHelper.getOKXKlineData(request.getLimit() + "", "15m"));
     }
 
 
