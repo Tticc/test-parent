@@ -1,23 +1,19 @@
 package com.tester.testersearch.util.binance;
 
 import com.tester.base.dto.exception.BusinessException;
-import com.tester.testercommon.util.BeanCopyUtil;
-import com.tester.testersearch.dao.domain.TradeDataBaseDomain;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
-import com.tester.testersearch.service.okx.OkxHelper;
 import com.tester.testersearch.util.okx.OkxCommon;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class DetectTradeSign15_25min {
+public class DetectTradeSign15_25min_anti {
 
     /**
      * todo 优化。将买卖信号放进蜡烛信息里，买入设置为"buy"，卖出设置为"sale"，否则设置为空
@@ -33,11 +29,14 @@ public class DetectTradeSign15_25min {
         }
 
         Boolean lastBuySign = null;
+        TradeSignDTO lastTradeSignDTO = null;
         for (TradeSignDTO value : tradeSignList) {
             if (Objects.equals(value.getTradeSign(), 1)) {
                 lastBuySign = true;
+                lastTradeSignDTO = value;
             } else if (Objects.equals(value.getTradeSign(), -1)) {
                 lastBuySign = false;
+                lastTradeSignDTO = value;
             }
         }
         TradeSignDTO tradeSignDTO = tradeSignList.get(tradeSignList.size() - 1);
@@ -51,15 +50,15 @@ public class DetectTradeSign15_25min {
 
         // 交易信号到来
         boolean tradeSignCome = false;
-        if (tradeSignDTO.getMa5().compareTo(tradeSignDTO.getMa20()) > 0 && !lastBuySign) {
-            // 如果上穿，且最近一次信号是sell。设置此次信号为BUY
-            tradeSignDTO.setTradeSign(OkxCommon.BUY_SIGN);
+        if (tradeSignDTO.getMa5().compareTo(tradeSignDTO.getMa20()) > 0 && lastBuySign) {
+            // 如果上穿，且最近一次信号是buy。设置此次信号为SELL
+            tradeSignDTO.setTradeSign(OkxCommon.SELL_SIGN);
             tradeSignDTO.setTradePrice(tradePrice);
             tradeSignDTO.setTradeTime(new Date());
             tradeSignCome = true;
-        } else if (tradeSignDTO.getMa5().compareTo(tradeSignDTO.getMa20()) < 0 && lastBuySign) {
-            // 如果下穿，且最近一次信号是buy。设置此次信号为SELL
-            tradeSignDTO.setTradeSign(OkxCommon.SELL_SIGN);
+        } else if (tradeSignDTO.getMa5().compareTo(tradeSignDTO.getMa20()) < 0 && !lastBuySign) {
+            // 如果下穿，且最近一次信号是sell。设置此次信号为BUY
+            tradeSignDTO.setTradeSign(OkxCommon.BUY_SIGN);
             tradeSignDTO.setTradePrice(tradePrice);
             tradeSignDTO.setTradeTime(new Date());
             tradeSignCome = true;
@@ -70,7 +69,7 @@ public class DetectTradeSign15_25min {
         if (!tradeSignCome) {
             return;
         }
-        OkxCommon.printProfits(tradeSignList);
+        OkxCommon.printProfits_anti(tradeSignList);
     }
 
 

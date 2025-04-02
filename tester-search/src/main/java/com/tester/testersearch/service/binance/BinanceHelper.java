@@ -8,6 +8,7 @@ import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
 import com.tester.testersearch.dao.service.TradeDataBaseService;
 import com.tester.testersearch.util.BarEnum;
 import com.tester.testersearch.util.binance.CombineCandle;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,20 +19,26 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Data
 @Slf4j
 @Service
 public class BinanceHelper {
 
-    private static Map<String, Map<Long, TradeSignDTO>> hisDataMap = new HashMap();
+    public static Map<String, Map<Long, TradeSignDTO>> hisDataMap = new HashMap();
+
+    public static Map<Long, TradeSignDTO> getByBarEnumCode(String code){
+        return hisDataMap.get(code);
+    }
 
     @Autowired
     private TradeDataBaseService tradeDataBaseService;
 
 
-    public List<TradeSignDTO> traceLocal(Integer limit, Integer step, BarEnum barEnum) throws BusinessException {
+    public List<TradeSignDTO> traceLocal(String startAt, Integer limit, Integer step, BarEnum barEnum) throws BusinessException {
         Map<Long, TradeSignDTO> hisData = hisDataMap.get(barEnum.getCode());
         if (null == hisData) {
             hisData = new LinkedHashMap<>();
+            hisDataMap.put(barEnum.getCode(), hisData);
         }
         List<TradeSignDTO> res = new ArrayList<>();
         if (limit < 10) {
@@ -55,7 +62,7 @@ public class BinanceHelper {
                         .collect(Collectors.toList());
             } else {
                 // 初始化，获取数据
-                res = this.fetchData("20250327000000", null, limit * barEnum.getInterval(), barEnum);
+                res = this.fetchData(startAt, null, limit * barEnum.getInterval(), barEnum);
                 for (TradeSignDTO signDTO : res) {
                     hisData.put(signDTO.getId(), signDTO);
                 }

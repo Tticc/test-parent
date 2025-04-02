@@ -31,13 +31,63 @@ public class OkxCommon {
         Integer st = null;
         Integer ed = null;
         List<Integer> changeList = new ArrayList<>();
+        double defaultTimes = 1.0d;
+        double multiTimes = 1.0d;
         for (TradeSignDTO value : tradeList) {
             if (null == st && null == ed) {
                 st = ed = value.getTradePrice().intValue();
                 if (checkIfBuySign(value)) {
-                    System.out.println("买入信号。价格:" + value.getTradePrice() + ", 时间:" + DateUtil.dateFormat(value.getTradeTime()));
+                    System.out.println("买入信号。价格:" + value.getTradePrice() + ", open时间:" + DateUtil.dateFormat(new Date(value.getOpenTimestamp())));
                 } else {
-                    System.out.println("卖出信号。价格:" + value.getTradePrice() + ", 时间:" + DateUtil.dateFormat(value.getTradeTime()));
+                    System.out.println("卖出信号。价格:" + value.getTradePrice() + ", open时间:" + DateUtil.dateFormat(new Date(value.getOpenTimestamp())));
+                }
+            } else {
+                st = ed;
+                ed = value.getTradePrice().intValue();
+                if (checkIfBuySign(value)) {
+                    int profits = st - ed;
+                    profits = (int) (profits*defaultTimes);
+                    if(profits < 0){
+                        defaultTimes = defaultTimes*multiTimes;
+                    }else{
+                        defaultTimes = 1;
+                    }
+                    System.out.println("收益:" + profits);
+                    changeList.add(profits);
+                    System.out.println("买入信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(new Date(value.getOpenTimestamp())));
+                } else {
+                    int profits = ed - st;
+                    profits = (int) (profits*defaultTimes);
+                    if(profits < 0){
+                        defaultTimes = defaultTimes*multiTimes;
+                    }else{
+                        defaultTimes = 1;
+                    }
+                    System.out.println("收益:" + profits);
+                    changeList.add(profits);
+                    System.out.println("卖出信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(new Date(value.getOpenTimestamp())));
+                }
+            }
+        }
+        Integer sum = changeList.stream().reduce(0, Integer::sum);
+        System.out.println("changeList = " + changeList);
+        System.out.println("sum = " + sum);
+        System.out.println("累计盈利:" + (sum - changeList.size() * 40) + ". 交易数(买+卖一次记1)：" + changeList.size() + ", 交易费总计：" + changeList.size() * 40);
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------");
+    }
+
+    public static void printProfits_anti(List<TradeSignDTO> tradeSignList) {
+        List<TradeSignDTO> tradeList = tradeSignList.stream().filter(e -> checkIfHasTradeSign(e)).collect(Collectors.toList());
+        Integer st = null;
+        Integer ed = null;
+        List<Integer> changeList = new ArrayList<>();
+        for (TradeSignDTO value : tradeList) {
+            if (null == st && null == ed) {
+                st = ed = value.getTradePrice().intValue();
+                if (checkIfBuySign(value)) {
+                    System.out.println("买入信号。价格:" + value.getTradePrice() + ", open时间:" + DateUtil.dateFormat(new Date(value.getOpenTimestamp())));
+                } else {
+                    System.out.println("卖出信号。价格:" + value.getTradePrice() + ", open时间:" + DateUtil.dateFormat(new Date(value.getOpenTimestamp())));
                 }
             } else {
                 st = ed;
@@ -45,13 +95,19 @@ public class OkxCommon {
                 if (checkIfBuySign(value)) {
                     int profits = st - ed;
                     System.out.println("收益:" + profits);
+//                    if(profits <= -500){
+//                        profits = -500;
+//                    }
                     changeList.add(profits);
-                    System.out.println("买入信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), 时间:" + DateUtil.dateFormat(value.getTradeTime()));
+                    System.out.println("买入信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(new Date(value.getOpenTimestamp())));
                 } else {
                     int profits = ed - st;
                     System.out.println("收益:" + profits);
+//                    if(profits <= -500){
+//                        profits = -500;
+//                    }
                     changeList.add(profits);
-                    System.out.println("卖出信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), 时间:" + DateUtil.dateFormat(value.getTradeTime()));
+                    System.out.println("卖出信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(new Date(value.getOpenTimestamp())));
                 }
             }
         }
