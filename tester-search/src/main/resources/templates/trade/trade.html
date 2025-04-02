@@ -13,10 +13,12 @@
     var chart = echarts.init(document.getElementById('main'));
     // 保存历史数据
     var historicalData = [];
+    var historicalTradeData = [];
 
     function fetchData(limit, currentPage) {
         $.ajax({
-            url: "/api/trade/trade",  // 后端接口
+            // url: "/api/trade/tradeOkx",  // 后端接口
+            url: "/api/trade/tradeLocal",  // 后端接口
             method: "POST",
             contentType: "application/json",
             data: JSON.stringify({limit: limit, page: currentPage}),
@@ -62,37 +64,68 @@
             klineData.push([item.open, item.close, item.low, item.high]);
 
             // 计算 MA5
-            if (index >= 4) {
+            let period5 = 5;
+            let period5Index = period5 - 1;
+            if (index >= period5Index) {
                 let sum = 0;
-                for (let i = index - 4; i <= index; i++) {
+                for (let i = index - period5Index; i <= index; i++) {
                     sum += parseFloat(historicalData[i].close);
                 }
-                ma5Data.push(sum / 5);
+                ma5Data.push(sum / period5);
             } else {
                 ma5Data.push(null);
             }
 
             // 计算 MA10
-            if (index >= 9) {
+            let period10 = 10;
+            let period10Index = period10 - 1;
+            if (index >= period10Index) {
                 let sum = 0;
-                for (let i = index - 9; i <= index; i++) {
+                for (let i = index - period10Index; i <= index; i++) {
                     sum += parseFloat(historicalData[i].close);
                 }
-                ma10Data.push(sum / 10);
+                ma10Data.push(sum / period10);
             } else {
                 ma10Data.push(null);
             }
 
             // 计算 MA20
-            if (index >= 19) {
+            let period20 = 25;
+            let period20Index = period20 - 1;
+            if (index >= period20Index) {
                 let sum = 0;
-                for (let i = index - 19; i <= index; i++) {
+                for (let i = index - period20Index; i <= index; i++) {
                     sum += parseFloat(historicalData[i].close);
                 }
-                ma20Data.push(sum / 20);
+                ma20Data.push(sum / period20);
             } else {
                 ma20Data.push(null);
             }
+        });
+
+
+        debugger;
+
+        let tradeSignals = getTradeSignals(categoryData, klineData, ma5Data, ma20Data);
+        const timestampMap = new Map();
+        historicalTradeData.forEach(item => {
+            timestampMap.set(item.timestamp, item);
+        });
+        // 更新 Map 中的数据或添加新数据
+        tradeSignals.forEach(item => {
+            let value = timestampMap.get(item.timestamp);
+            if(value === undefined){
+                timestampMap.set(item.timestamp, item);
+            }
+        });
+        // 将 Map 中的数据转回数组，更新历史数据
+        // historicalTradeData = Array.from(timestampMap.values());
+        historicalTradeData = Array.from(timestampMap.values()).sort((a, b) =>
+            new Date(a.timestamp) - new Date(b.timestamp)
+        );
+        // 过滤 historicalTradeData，只保留第一个元素和 type 不与前一个相同的元素。
+        historicalTradeData = historicalTradeData.filter((item, index, arr) => {
+            return index === 0 || item.type !== arr[index - 1].type;
         });
 
         // **获取当前的 dataZoom 状态**
@@ -179,19 +212,20 @@
                     },
                     xAxisIndex: 0,
                     yAxisIndex: 0,
-                    // markPoint: { // 买入卖出信号
-                    //     data: getTradeSignals(categoryData, klineData, ma5Data, ma20Data),
-                    //     symbol: 'arrow',  // 改为箭头样式
-                    //     symbolSize: [20, 30], // 控制箭头大小，适当调整宽高
-                    //     label: {
-                    //         show: true,
-                    //         color: '#fff',
-                    //         fontWeight: 'bold',
-                    //         formatter: function(param) {
-                    //             return param.data.type + '\n' + param.value;
-                    //         }
-                    //     }
-                    // }
+                    markPoint: { // 买入卖出信号
+                        data: historicalTradeData,
+                        symbol: 'arrow',  // 改为箭头样式
+                        symbolSize: [70, 80], // 控制箭头大小，适当调整宽高
+                        symbolOffset: [0, 80], // [X偏移, Y偏移]，Y轴正值向下移动
+                        label: {
+                            show: true,
+                            color: '#fff',
+                            fontWeight: 'bold',
+                            formatter: function(param) {
+                                return param.data.type + '\n' + param.value;
+                            }
+                        }
+                    }
                 },
                 {// MA5
                     name: 'MA5',
@@ -283,11 +317,11 @@
     }
 
     // 初始加载数据
-    fetchData(300, 1);
+    fetchData(50, 1);
     // 每 5 秒自动刷新
     setInterval(function () {
         fetchData(2, 1);  // 传递page和limit参数
-    }, 1000);
+    }, 200);
 
 
     // **获取买入/卖出信号并生成气泡数据**
@@ -305,16 +339,18 @@
             if (ma5Data[i] > ma10Data[i] && ma5Data[i - 1] <= ma10Data[i - 1]) {
                 // **买入信号 (MA5 上穿 MA10)**
                 tradeSignals.push({
+                    timestamp: categoryData[i],  // timestamp
                     coord: [categoryData[i], lowPrice - offset],  // `coord` 定义标注位置：[时间，收盘价]
-                    value: klineData[i][2].toFixed(2), // 显示价格
+                    value: klineData[i][1].toFixed(2), // 显示价格.收盘价
                     type: '买入',
                     itemStyle: {color: 'green'}
                 });
             } else if (ma5Data[i] < ma10Data[i] && ma5Data[i - 1] >= ma10Data[i - 1]) {
                 // **卖出信号 (MA5 下穿 MA10)**
                 tradeSignals.push({
+                    timestamp: categoryData[i],  // timestamp
                     coord: [categoryData[i], highPrice + offset],  // `coord` 定义标注位置：[时间，最高价]
-                    value: klineData[i][3].toFixed(2), // 显示价格
+                    value: klineData[i][1].toFixed(2),  // 显示价格.收盘价
                     type: '卖出',
                     itemStyle: {color: 'red'}
                 });

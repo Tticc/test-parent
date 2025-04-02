@@ -164,7 +164,11 @@ public class OkxCommon {
 
 
     public static void calculateAndSetMA(List<TradeSignDTO> tradeSignList) {
-        int period = 5;
+        calculateAndSetMA(tradeSignList,5,10,20);
+    }
+
+    public static void calculateAndSetMA(List<TradeSignDTO> tradeSignList, int period1, int period2, int period3) {
+        int period = period1;
         for (int i = 0; i < tradeSignList.size(); i++) {
             if (i < period - 1) {
                 tradeSignList.get(i).setMa5(null);
@@ -176,7 +180,7 @@ public class OkxCommon {
                 tradeSignList.get(i).setMa5(sum.divide(BigDecimal.valueOf(period)));
             }
         }
-        period = 10;
+        period = period2;
         for (int i = 0; i < tradeSignList.size(); i++) {
             if (i < period - 1) {
                 tradeSignList.get(i).setMa10(null);
@@ -188,7 +192,7 @@ public class OkxCommon {
                 tradeSignList.get(i).setMa10(sum.divide(BigDecimal.valueOf(period)));
             }
         }
-        period = 20;
+        period = period3;
         for (int i = 0; i < tradeSignList.size(); i++) {
             if (i < period - 1) {
                 tradeSignList.get(i).setMa20(null);

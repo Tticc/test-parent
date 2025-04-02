@@ -31,6 +31,18 @@ spring:
     contentnegotiation:
       favor-parameter: true
 
+#mybatis
+mybatis:
+  mapper-locations: classpath*:com/**/*Mapper.xml
+  configuration:
+    # 自动匹配字段驼峰规则。mybatis-config.xml也可以配置 <setting name="mapUnderscoreToCamelCase" value="true"/>
+    map-underscore-to-camel-case: true
+    # 注：config-location和configuration配置不能同时存在
+    # 但是，可以在这里配置configuration后，在配置sessionFactory的地方读取mybatis-config.xml的方式加入
+    # 如：com.tester.testermybatis.config.NormalDataBaseConfiguration.normalSqlSessionFactory
+#  config-location: classpath:mybatis-config.xml
+
+
 my:
   es:
 #    host: 10.100.68.165

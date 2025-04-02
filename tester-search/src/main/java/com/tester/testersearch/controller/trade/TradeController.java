@@ -5,8 +5,11 @@ import com.tester.base.dto.controller.RestResult;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.controller.BaseController;
 import com.tester.testersearch.dao.domain.TradeDataBaseDomain;
+import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.model.TradeDataRequest;
+import com.tester.testersearch.service.binance.BinanceHelper;
 import com.tester.testersearch.service.okx.OkxHelper;
+import com.tester.testersearch.util.BarEnum;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +34,27 @@ import java.util.List;
 public class TradeController extends BaseController {
 
     @Autowired
-    private OkxHelper okxHelper;
+    private BinanceHelper binanceHelper;
 
     /**
      * @Date 14:57 2022/10/10
      * @Author 温昌营
      **/
-    @RequestMapping(value = "/trade", method = RequestMethod.POST)
-    public RestResult<List<TradeDataBaseDomain>> trace(@Validated @RequestBody TradeDataRequest request) throws BusinessException {
+    @RequestMapping(value = "/tradeOkx", method = RequestMethod.POST)
+    public RestResult<List<TradeDataBaseDomain>> traceOkx(@Validated @RequestBody TradeDataRequest request) throws BusinessException {
         return success(OkxHelper.getOKXKlineData(request.getLimit() + "", "15m"));
+    }
+
+    /**
+     * @Date 14:57 2022/10/10
+     * @Author 温昌营
+     **/
+    @RequestMapping(value = "/tradeLocal", method = RequestMethod.POST)
+    public RestResult<List<TradeSignDTO>> traceLocal(@Validated @RequestBody TradeDataRequest request) throws BusinessException {
+        // 步长。默认1s
+        int step = 20;
+        BarEnum barEnum = BarEnum._19m;
+        return success(binanceHelper.traceLocal(request.getLimit(), step, barEnum));
     }
 
 

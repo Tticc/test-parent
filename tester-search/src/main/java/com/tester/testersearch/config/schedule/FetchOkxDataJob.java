@@ -16,7 +16,7 @@ import java.util.List;
  * wenc
  */
 @Slf4j
-@Component
+//@Component
 public class FetchOkxDataJob {
 
 

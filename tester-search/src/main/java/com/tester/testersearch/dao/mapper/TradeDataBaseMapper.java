@@ -2,9 +2,10 @@ package com.tester.testersearch.dao.mapper;
 
 import com.tester.base.dto.dao.BaseMapper;
 import com.tester.testersearch.dao.domain.TradeDataBaseDomain;
+import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
-import com.tester.testersearch.dao.model.TradeDataBaseResponse;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,7 +24,9 @@ public interface TradeDataBaseMapper extends BaseMapper<TradeDataBaseDomain, Lon
      * @param request
      * @return List<TradeDataBaseDomain>
      */
-    List<TradeDataBaseResponse> list(TradeDataBasePageRequest request);
+    List<TradeDataBaseDomain> list(TradeDataBasePageRequest request);
+
+    List<TradeSignDTO> listAfter(@Param("id") Long id);
 
     /**
      * 批量插入
@@ -34,4 +37,6 @@ public interface TradeDataBaseMapper extends BaseMapper<TradeDataBaseDomain, Lon
     int batchSave(List<TradeDataBaseDomain> entities);
 
     Long getMinId();
+
+    Long getMaxId();
 }

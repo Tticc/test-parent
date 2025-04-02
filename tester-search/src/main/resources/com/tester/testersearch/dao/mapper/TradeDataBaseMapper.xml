@@ -146,6 +146,14 @@
         where t_alias.deleted = 0
     </select>
 
+
+    <select id="getMaxId" resultType="java.lang.Long">
+        select
+        max(t_alias.id)
+        from trade_data_base t_alias
+        where t_alias.deleted = 0
+    </select>
+
     <select id="list" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List">
@@ -186,6 +194,17 @@
                 </if>
             </trim>
         </where>
+        order by t_alias.id asc
+    </select>
+
+    <select id="listAfter" resultType="com.tester.testersearch.dao.domain.TradeSignDTO">
+        select
+        <include refid="Base_Column_List">
+            <property name="tableName" value="t_alias"></property>
+        </include>
+        from trade_data_base t_alias
+        where t_alias.`id` >= #{id}
+        AND t_alias.`deleted` = 0
         order by t_alias.id asc
     </select>
 

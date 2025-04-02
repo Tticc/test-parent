@@ -1,9 +1,10 @@
 package com.tester.testersearch.dao.service;
 
+import com.github.pagehelper.PageInfo;
 import com.tester.base.dto.dao.BaseService;
 import com.tester.testersearch.dao.domain.TradeDataBaseDomain;
+import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
-import com.tester.testersearch.dao.model.TradeDataBaseResponse;
 
 import java.util.List;
 
@@ -23,7 +24,9 @@ public interface TradeDataBaseService extends BaseService<Long, TradeDataBaseDom
      * @param request 请求对象
      * @return
      */
-    List<TradeDataBaseResponse> list(TradeDataBasePageRequest request);
+    List<TradeDataBaseDomain> list(TradeDataBasePageRequest request);
+
+    PageInfo<TradeSignDTO> listPage(TradeDataBasePageRequest request);
 
     /**
      * 批量保存
@@ -34,6 +37,8 @@ public interface TradeDataBaseService extends BaseService<Long, TradeDataBaseDom
     int batchSave(List<TradeDataBaseDomain> entities);
 
     Long getMinId();
+
+    Long getMaxId();
 
     /* 基础CRUD、分页、列表部分 end */
 }

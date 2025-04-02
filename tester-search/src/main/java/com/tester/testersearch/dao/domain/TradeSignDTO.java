@@ -1,6 +1,7 @@
 package com.tester.testersearch.dao.domain;
 
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -45,5 +46,21 @@ public class TradeSignDTO extends TradeDataBaseDomain {
      * ma20
      */
     private BigDecimal ma20;
+
+    /**
+     * 开始毫秒时间戳
+     */
+    @ApiModelProperty(value = "开始毫秒时间戳", name = "timestamp")
+    private Long openTimestamp;
+    /**
+     * 最后更新毫秒时间戳
+     */
+    @ApiModelProperty(value = "最后更新毫秒时间戳", name = "lastUpdateTimestamp")
+    private Long lastUpdateTimestamp;
+    /**
+     * 结束毫秒时间戳
+     */
+    @ApiModelProperty(value = "结束毫秒时间戳", name = "endTimestamp")
+    private Long endTimestamp;
 
 }
