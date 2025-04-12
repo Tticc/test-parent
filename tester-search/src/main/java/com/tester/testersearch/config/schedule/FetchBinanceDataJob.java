@@ -33,7 +33,7 @@ public class FetchBinanceDataJob {
     private TradeDataBaseService tradeDataBaseService;
 
     // 每隔 5分钟 执行一次
-    @Scheduled(fixedRate = 5 * 60 * 1000)
+    @Scheduled(fixedRate = 60 * 60 * 1000)
     public void performTask() {
         try {
             int batchSize = 500;

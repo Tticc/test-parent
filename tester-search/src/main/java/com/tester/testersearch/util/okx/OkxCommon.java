@@ -31,6 +31,7 @@ public class OkxCommon {
         Integer st = null;
         Integer ed = null;
         List<Integer> changeList = new ArrayList<>();
+        List<Integer> tradeFeeList = new ArrayList<>();
         double defaultTimes = 1.0d;
         double multiTimes = 1.0d;
         for (TradeSignDTO value : tradeList) {
@@ -47,6 +48,7 @@ public class OkxCommon {
                 if (checkIfBuySign(value)) {
                     int profits = st - ed;
                     profits = (int) (profits*defaultTimes);
+                    int fee = (int)(40*defaultTimes);
                     if(profits < 0){
                         defaultTimes = defaultTimes*multiTimes;
                     }else{
@@ -54,10 +56,12 @@ public class OkxCommon {
                     }
                     System.out.println("收益:" + profits);
                     changeList.add(profits);
+                    tradeFeeList.add(fee);
                     System.out.println("买入信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(new Date(value.getOpenTimestamp())));
                 } else {
                     int profits = ed - st;
                     profits = (int) (profits*defaultTimes);
+                    int fee = (int)(40*defaultTimes);
                     if(profits < 0){
                         defaultTimes = defaultTimes*multiTimes;
                     }else{
@@ -65,14 +69,28 @@ public class OkxCommon {
                     }
                     System.out.println("收益:" + profits);
                     changeList.add(profits);
+                    tradeFeeList.add(fee);
                     System.out.println("卖出信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(new Date(value.getOpenTimestamp())));
                 }
             }
         }
-        Integer sum = changeList.stream().reduce(0, Integer::sum);
+        Integer sum = 0;
+        Integer feeSum = 0;
+        int skip = 0;
+        for (int i = 0; i < changeList.size(); i++) {
+            if(skip > 0){
+                skip-=1;
+                continue;
+            }
+            sum+=changeList.get(i);
+            feeSum+=tradeFeeList.get(i);
+            if(changeList.get(i)>=1000){
+                skip = 0;
+            }
+        }
         System.out.println("changeList = " + changeList);
         System.out.println("sum = " + sum);
-        System.out.println("累计盈利:" + (sum - changeList.size() * 40) + ". 交易数(买+卖一次记1)：" + changeList.size() + ", 交易费总计：" + changeList.size() * 40);
+        System.out.println("累计盈利:" + (sum - feeSum) + ". 交易数(买+卖一次记1)：" + changeList.size() + ", 交易费总计：" + feeSum);
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
@@ -233,7 +251,7 @@ public class OkxCommon {
                 for (int j = i - period + 1; j <= i; j++) {
                     sum = sum.add(tradeSignList.get(j).getClose());
                 }
-                tradeSignList.get(i).setMa5(sum.divide(BigDecimal.valueOf(period)));
+                tradeSignList.get(i).setMa5(sum.divide(BigDecimal.valueOf(period),2,BigDecimal.ROUND_HALF_UP));
             }
         }
         period = period2;
@@ -245,7 +263,7 @@ public class OkxCommon {
                 for (int j = i - period + 1; j <= i; j++) {
                     sum = sum.add(tradeSignList.get(j).getClose());
                 }
-                tradeSignList.get(i).setMa10(sum.divide(BigDecimal.valueOf(period)));
+                tradeSignList.get(i).setMa10(sum.divide(BigDecimal.valueOf(period),2,BigDecimal.ROUND_HALF_UP));
             }
         }
         period = period3;
@@ -257,7 +275,7 @@ public class OkxCommon {
                 for (int j = i - period + 1; j <= i; j++) {
                     sum = sum.add(tradeSignList.get(j).getClose());
                 }
-                tradeSignList.get(i).setMa20(sum.divide(BigDecimal.valueOf(period)));
+                tradeSignList.get(i).setMa20(sum.divide(BigDecimal.valueOf(period),2,BigDecimal.ROUND_HALF_UP));
             }
         }
     }

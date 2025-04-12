@@ -53,8 +53,8 @@ public class TradeController extends BaseController {
     public RestResult<List<TradeSignDTO>> traceLocal(@Validated @RequestBody TradeDataRequest request) throws BusinessException {
         // 步长。默认1s
         int step = 20;
-        BarEnum barEnum = BarEnum._19m;
-        return success(binanceHelper.traceLocal("20250323000000",request.getLimit(), step, barEnum));
+        BarEnum barEnum = BarEnum._30m;
+        return success(binanceHelper.traceLocal("20250401000000",request.getLimit(), step, barEnum));
     }
 
 

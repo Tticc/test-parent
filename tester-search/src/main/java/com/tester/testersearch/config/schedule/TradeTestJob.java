@@ -32,10 +32,10 @@ public class TradeTestJob {
 
     @EventListener(ApplicationReadyEvent.class)
     public void runOnce() throws BusinessException {
-        String startAt = "20250301000000";
+        String startAt = "20250401000000";
         int step = 5;
-        BarEnum barEnum = BarEnum._15m;
-        binanceHelper.traceLocal(startAt,50, step, barEnum);
+        BarEnum barEnum = BarEnum._30m;
+        binanceHelper.traceLocal(startAt,80, step, barEnum);
         Map<Long, TradeSignDTO> hisDataMap = BinanceHelper.getByBarEnumCode(barEnum.getCode());
         List<TradeSignDTO> tradeSignDTOS = hisDataMap.values().stream().sorted(Comparator.comparing(e -> e.getTimestamp())).collect(Collectors.toList());
         do {
