@@ -13,9 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 public class TradePageController {
 
     @GetMapping("/trade")
-    public String getInit(HttpServletRequest req) {
+    public String getTrade(HttpServletRequest req) {
         req.setAttribute("content", "something");
         req.setAttribute("someAttr", "here is the someAttr");
         return "trade/trade";
+    }
+
+    @GetMapping("/trade2")
+    public String getTrade2(HttpServletRequest req) {
+        req.setAttribute("content", "something");
+        req.setAttribute("someAttr", "here is the someAttr");
+        return "trade/trade2";
     }
 }

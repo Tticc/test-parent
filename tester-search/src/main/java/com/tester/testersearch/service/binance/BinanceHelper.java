@@ -8,6 +8,9 @@ import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
 import com.tester.testersearch.dao.service.TradeDataBaseService;
 import com.tester.testersearch.util.BarEnum;
 import com.tester.testersearch.util.binance.CombineCandle;
+import com.tester.testersearch.util.trade.ADXUtil;
+import com.tester.testersearch.util.trade.BollingerBandsUtil;
+import com.tester.testersearch.util.trade.MAUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +29,7 @@ public class BinanceHelper {
 
     public static Map<String, Map<Long, TradeSignDTO>> hisDataMap = new HashMap();
 
-    public static Map<Long, TradeSignDTO> getByBarEnumCode(String code){
+    public static Map<Long, TradeSignDTO> getByBarEnumCode(String code) {
         return hisDataMap.get(code);
     }
 
@@ -37,11 +40,16 @@ public class BinanceHelper {
     public List<TradeSignDTO> traceLocal(String startAt, Integer limit, Integer step, BarEnum barEnum) throws BusinessException {
         Map<Long, TradeSignDTO> hisData = hisDataMap.get(barEnum.getCode());
         if (null == hisData) {
-            hisData = new LinkedHashMap<>();
+            hisData = new HashMap<>();
             hisDataMap.put(barEnum.getCode(), hisData);
         }
         List<TradeSignDTO> res = new ArrayList<>();
+        boolean first = false;
         if (limit < 10) {
+            if (CollectionUtils.isEmpty(hisData)) {
+                log.error("异常，数据未初始化完成");
+                throw new BusinessException(5000L);
+            }
             // 获取最新1s数据
             Long aLong = hisData.keySet().stream().max(Comparator.naturalOrder()).orElse(0L);
             TradeSignDTO tradeSignDTOBefore = hisData.get(aLong - barEnum.getInterval() * 1000);
@@ -57,6 +65,7 @@ public class BinanceHelper {
             }
             res.addAll(tradeSignDTOS);
         } else {
+            first = true;
             if (!CollectionUtils.isEmpty(hisData)) {
                 res = hisData.values().stream().sorted(Comparator.comparing(TradeSignDTO::getId))
                         .collect(Collectors.toList());
@@ -68,10 +77,24 @@ public class BinanceHelper {
                 }
             }
         }
+        List<TradeSignDTO> allTradeDatas = hisData.values().stream()
+                .sorted(Comparator.comparing(TradeSignDTO::getId))
+                .collect(Collectors.toList());
+
+        this.calculateTradeData(allTradeDatas, first);
         return res;
     }
 
-    public List<TradeSignDTO> fetchData(String startAt, TradeSignDTO last, int size, BarEnum barEnum) {
+    /**
+     * 获取交易数据
+     *
+     * @param startAt
+     * @param last
+     * @param size
+     * @param barEnum
+     * @return
+     */
+    private List<TradeSignDTO> fetchData(String startAt, TradeSignDTO last, int size, BarEnum barEnum) {
         Long minId;
         if (null != last) {
             minId = last.getLastUpdateTimestamp();
@@ -110,5 +133,31 @@ public class BinanceHelper {
             currentId = pageInfo.getList().get(pageInfo.getList().size() - 1).getId(); // 更新当前ID
         }
         return combineMap.values().stream().sorted(Comparator.comparing(TradeSignDTO::getId)).collect(Collectors.toList());
+    }
+
+
+    /**
+     * 计算交易数据
+     *
+     * @param allTradeDatas
+     */
+    private void calculateTradeData(List<TradeSignDTO> allTradeDatas, boolean first) throws BusinessException {
+        int branderPeriod = 20;
+        int adxPeriod = 14;
+        int dataSize = Math.max(branderPeriod, adxPeriod*2+2);
+        List<TradeSignDTO> data = allTradeDatas;
+        if(!first){
+            // 如果不是第一次初始化数据，取最后 dataSize 条数据处理
+            data = allTradeDatas.stream().skip(Math.max(0, allTradeDatas.size() - dataSize)).collect(Collectors.toList());
+        }
+        log.info("size:{}",data.size());
+        // todo 计算MA
+        MAUtil.calculateAndSetMA(data, 5, 10, 20);
+        MAUtil.calculateTradeSign(allTradeDatas);
+        // todo 计算Brander
+        BollingerBandsUtil.calculateBollingerBands(data,branderPeriod,2);
+        // todo 计算ADX
+        ADXUtil.calculateADX(data, adxPeriod);
+
     }
 }

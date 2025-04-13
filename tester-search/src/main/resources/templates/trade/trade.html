@@ -44,10 +44,12 @@
             timestampMap.set(item.timestamp, item);
         });
 
-        // 更新 Map 中的数据或添加新数据
-        newData.forEach(item => {
-            timestampMap.set(item.timestamp, item);
-        });
+        if(null !== newData) {
+            // 更新 Map 中的数据或添加新数据
+            newData.forEach(item => {
+                timestampMap.set(item.timestamp, item);
+            });
+        }
 
         // 将 Map 中的数据转回数组，更新历史数据
         historicalData = Array.from(timestampMap.values());

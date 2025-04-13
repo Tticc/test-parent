@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>K 线图（实时更新）</title>
-<!--    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>-->
-<!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+    <!--    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>-->
+    <!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
     <script th:src="@{/static/js/echarts.min.js}"></script>
     <script th:src="@{/static/js/jquery.min.js}"></script>
 </head>
@@ -15,7 +15,6 @@
     var chart = echarts.init(document.getElementById('main'));
     // 保存历史数据
     var historicalData = [];
-    var historicalTradeData = [];
 
     function fetchData(limit, currentPage) {
         $.ajax({
@@ -44,7 +43,7 @@
             timestampMap.set(item.timestamp, item);
         });
 
-        if(null !== newData) {
+        if (null !== newData) {
             // 更新 Map 中的数据或添加新数据
             newData.forEach(item => {
                 timestampMap.set(item.timestamp, item);
@@ -61,89 +60,62 @@
         var ma5Data = [];
         var ma10Data = [];
         var ma20Data = [];
+        var tradeSignals = [];
+        var middleBand = [];
+        var upperBand = [];
+        var lowerBand = [];
+        var plusDI = [];
+        var minusDI = [];
+        var ADX = [];
+        let offset = 50; // 偏移量，设置为50
 
         // 解析数据
         historicalData.forEach((item, index) => {
-            categoryData.push(new Date(item.timestamp).toLocaleString());
+            let dateStr = new Date(item.timestamp).toLocaleString();
+            categoryData.push(dateStr);
             klineData.push([item.open, item.close, item.low, item.high]);
+            ma5Data.push(item.ma5);
+            ma10Data.push(item.ma10);
+            ma20Data.push(item.ma20);
 
-            // 计算 MA5
-            let period5 = 5;
-            let period5Index = period5 - 1;
-            if (index >= period5Index) {
-                let sum = 0;
-                for (let i = index - period5Index; i <= index; i++) {
-                    sum += parseFloat(historicalData[i].close);
-                }
-                ma5Data.push(sum / period5);
-            } else {
-                ma5Data.push(null);
+            middleBand.push(item.middleBand);
+            upperBand.push(item.upperBand);
+            lowerBand.push(item.lowerBand);
+
+            plusDI.push(item.plusDI);
+            minusDI.push(item.minusDI);
+            ADX.push(item.ADX);
+
+            debugger;
+            if (item.tradeSign === 1) {
+                // **买入信号 (MA5 上穿 MA10)**
+                tradeSignals.push({
+                    timestamp: dateStr,  // timestamp
+                    coord: [dateStr, item.low - offset],  // `coord` 定义标注位置：[时间，收盘价]
+                    value: item.tradePrice.toFixed(2), // 显示价格.收盘价
+                    type: '买入',
+                    itemStyle: {color: 'green'}
+                });
+            } else if (item.tradeSign === -1) {
+                // **卖出信号 (MA5 下穿 MA10)**
+                tradeSignals.push({
+                    timestamp: dateStr,  // timestamp
+                    coord: [dateStr, item.high + offset],  // `coord` 定义标注位置：[时间，最高价]
+                    value: item.tradePrice.toFixed(2),  // 显示价格.收盘价
+                    type: '卖出',
+                    itemStyle: {color: 'red'}
+                });
             }
-
-            // 计算 MA10
-            let period10 = 10;
-            let period10Index = period10 - 1;
-            if (index >= period10Index) {
-                let sum = 0;
-                for (let i = index - period10Index; i <= index; i++) {
-                    sum += parseFloat(historicalData[i].close);
-                }
-                ma10Data.push(sum / period10);
-            } else {
-                ma10Data.push(null);
-            }
-
-            // 计算 MA20
-            let period20 = 20;
-            let period20Index = period20 - 1;
-            if (index >= period20Index) {
-                let sum = 0;
-                for (let i = index - period20Index; i <= index; i++) {
-                    sum += parseFloat(historicalData[i].close);
-                }
-                ma20Data.push(sum / period20);
-            } else {
-                ma20Data.push(null);
-            }
-        });
-
-
-        debugger;
-
-        let tradeSignals = getTradeSignals(categoryData, klineData, ma5Data, ma20Data);
-        const timestampMap = new Map();
-        historicalTradeData.forEach(item => {
-            timestampMap.set(item.timestamp, item);
-        });
-        // 更新 Map 中的数据或添加新数据
-        tradeSignals.forEach(item => {
-            let value = timestampMap.get(item.timestamp);
-            if(value === undefined){
-                timestampMap.set(item.timestamp, item);
-            }
-        });
-        // 将 Map 中的数据转回数组，更新历史数据
-        // historicalTradeData = Array.from(timestampMap.values());
-        historicalTradeData = Array.from(timestampMap.values()).sort((a, b) =>
-            new Date(a.timestamp) - new Date(b.timestamp)
-        );
-        // 过滤 historicalTradeData，只保留第一个元素和 type 不与前一个相同的元素。
-        historicalTradeData = historicalTradeData.filter((item, index, arr) => {
-            return index === 0 || item.type !== arr[index - 1].type;
         });
 
         // **获取当前的 dataZoom 状态**
         var currentOption = chart.getOption();
         var zoomStart = 0;  // 默认值
         var zoomEnd = 100;   // 默认值
-
         if (currentOption && currentOption.dataZoom && currentOption.dataZoom.length > 0) {
             zoomStart = currentOption.dataZoom[0].start;
             zoomEnd = currentOption.dataZoom[0].end;
         }
-        let {middleBand, upperBand, lowerBand} = calculateBollingerBands(historicalData);
-        let {plusDI, minusDI, ADX} = calculateADX(historicalData);
-        debugger;
         var option = {
             title: {text: '实时更新的 K 线图'},
             tooltip: {trigger: 'axis'},
@@ -164,8 +136,8 @@
                 }
             ],
             xAxis: [
-                { type: 'category', data: categoryData, gridIndex: 0 }, // K 线 x 轴
-                { type: 'category', data: categoryData, gridIndex: 1, show:false }  // ADX x 轴。隐藏
+                {type: 'category', data: categoryData, gridIndex: 0}, // K 线 x 轴
+                {type: 'category', data: categoryData, gridIndex: 1, show: false}  // ADX x 轴。隐藏
             ],
             yAxis: [{
                 type: 'value',
@@ -184,8 +156,8 @@
                 max: 100,  // ADX 的范围一般在 0-100
                 gridIndex: 1,
                 name: 'ADX 指标',
-                axisLine: { lineStyle: { color: 'purple' } },
-                splitLine: { show: false }  // 不显示网格线，避免干扰
+                axisLine: {lineStyle: {color: 'purple'}},
+                splitLine: {show: false}  // 不显示网格线，避免干扰
             }
             ],
             dataZoom: [
@@ -217,7 +189,7 @@
                     xAxisIndex: 0,
                     yAxisIndex: 0,
                     markPoint: { // 买入卖出信号
-                        data: historicalTradeData,
+                        data: tradeSignals,
                         symbol: 'arrow',  // 改为箭头样式
                         symbolSize: [70, 80], // 控制箭头大小，适当调整宽高
                         symbolOffset: [0, 80], // [X偏移, Y偏移]，Y轴正值向下移动
@@ -225,7 +197,7 @@
                             show: true,
                             color: '#fff',
                             fontWeight: 'bold',
-                            formatter: function(param) {
+                            formatter: function (param) {
                                 return param.data.type + '\n' + param.value;
                             }
                         }
@@ -321,206 +293,12 @@
     }
 
     // 初始加载数据
-    fetchData(50, 1);
+    fetchData(25, 1);
     // 每 5 秒自动刷新
     setInterval(function () {
         fetchData(2, 1);  // 传递page和limit参数
-    }, 5000);
+    }, 200);
 
-
-    // **获取买入/卖出信号并生成气泡数据**
-    function getTradeSignals(categoryData, klineData, ma5Data, ma10Data) {
-        let tradeSignals = [];
-        for (let i = 1; i < ma5Data.length; i++) {
-            if (ma5Data[i] === null || ma5Data[i - 1] === null ||
-                ma10Data[i] === null || ma10Data[i - 1] === null) {
-                continue;
-            }
-            let lowPrice = klineData[i][2];  // 最低价
-            let highPrice = klineData[i][3]; // 最高价
-            // let offset = (highPrice - lowPrice) * 0.5; // 偏移量，设为K线高度的10%
-            let offset = 50; // 偏移量，设置为50
-            if (ma5Data[i] > ma10Data[i] && ma5Data[i - 1] <= ma10Data[i - 1]) {
-                // **买入信号 (MA5 上穿 MA10)**
-                tradeSignals.push({
-                    timestamp: categoryData[i],  // timestamp
-                    coord: [categoryData[i], lowPrice - offset],  // `coord` 定义标注位置：[时间，收盘价]
-                    value: klineData[i][1].toFixed(2), // 显示价格.收盘价
-                    type: '买入',
-                    itemStyle: {color: 'green'}
-                });
-            } else if (ma5Data[i] < ma10Data[i] && ma5Data[i - 1] >= ma10Data[i - 1]) {
-                // **卖出信号 (MA5 下穿 MA10)**
-                tradeSignals.push({
-                    timestamp: categoryData[i],  // timestamp
-                    coord: [categoryData[i], highPrice + offset],  // `coord` 定义标注位置：[时间，最高价]
-                    value: klineData[i][1].toFixed(2),  // 显示价格.收盘价
-                    type: '卖出',
-                    itemStyle: {color: 'red'}
-                });
-            }
-        }
-
-        return tradeSignals;
-    }
-
-    function calculateBollingerBands(historicalData, period = 20, stdDevMultiplier = 2) {
-        let middleBand = [];
-        let upperBand = [];
-        let lowerBand = [];
-
-        for (let i = 0; i < historicalData.length; i++) {
-            if (i < period - 1) {
-                middleBand.push(null);
-                upperBand.push(null);
-                lowerBand.push(null);
-                continue;
-            }
-
-            // 计算 MA20
-            let sum = 0;
-            for (let j = i - period + 1; j <= i; j++) {
-                sum += historicalData[j].close;
-            }
-            let ma20 = sum / period;
-            middleBand.push(ma20);
-
-            // 计算标准差
-            let variance = 0;
-            for (let j = i - period + 1; j <= i; j++) {
-                variance += Math.pow(historicalData[j].close - ma20, 2);
-            }
-            let stdDev = Math.sqrt(variance / period);
-
-            // 计算上轨和下轨
-            upperBand.push(ma20 + stdDevMultiplier * stdDev);
-            lowerBand.push(ma20 - stdDevMultiplier * stdDev);
-        }
-
-        return {middleBand, upperBand, lowerBand};
-    }
-
-
-    // 计算 ADX 指标
-    function calculateADX(klineData, period = 14) {
-        let plusDM = [null];
-        let minusDM = [null];
-        let trueRange = [null];
-        // let plusDM = [];
-        // let minusDM = [];
-        // let trueRange = [];
-        let plusDI = [];
-        let minusDI = [];
-        let DX = [];
-        let ADX = [];
-
-        for (let i = 1; i < klineData.length; i++) {
-            let high = klineData[i].high;   // 最高价
-            let low = klineData[i].low;    // 最低价
-            let close = klineData[i].close;  // 收盘价
-            let prevHigh = klineData[i - 1].high;
-            let prevLow = klineData[i - 1].low;
-            let prevClose = klineData[i - 1].close;
-
-            let upMove = high - prevHigh;
-            let downMove = prevLow - low;
-
-            // 计算 +DM 和 -DM
-            plusDM.push(upMove > downMove && upMove > 0 ? upMove : 0);
-            minusDM.push(downMove > upMove && downMove > 0 ? downMove : 0);
-
-            // 计算 TR（真实波动范围）
-            let tr = Math.max(high - low, Math.abs(high - prevClose), Math.abs(low - prevClose));
-            trueRange.push(tr);
-        }
-        // 当前使用smoothedMovingAverage。可以替换为EMA:exponentialMovingAverage
-        let smoothedPlusDM = smoothedMovingAverage(plusDM, period);
-        let smoothedMinusDM = smoothedMovingAverage(minusDM, period);
-        let smoothedTR = smoothedMovingAverage(trueRange, period);
-
-        // 计算 +DI 和 -DI
-        for (let i = 0; i < smoothedPlusDM.length; i++) {
-            if (smoothedTR[i] === null) {
-                plusDI.push(null);
-                minusDI.push(null);
-            } else {
-                plusDI.push((smoothedPlusDM[i] / smoothedTR[i]) * 100);
-                minusDI.push((smoothedMinusDM[i] / smoothedTR[i]) * 100);
-            }
-        }
-
-        // 计算 DX
-        for (let i = 0; i < plusDI.length; i++) {
-            if (plusDI[i] === null || minusDI[i] === null) {
-                DX.push(null);
-            } else {
-                DX.push((Math.abs(plusDI[i] - minusDI[i]) / (plusDI[i] + minusDI[i])) * 100);
-            }
-        }
-
-        // 计算 ADX
-        let smoothedADX = smoothedMovingAverage(DX, period);
-        ADX = smoothedADX;
-
-        return {plusDI, minusDI, ADX};
-    }
-
-
-    // EMA据说更适合短线
-    function exponentialMovingAverage(data, period) {
-        let result = [];
-        let multiplier = 2 / (period + 1);
-        let ema = null;
-
-        // 计算第一个 EMA 值，使用 SMA 作为初始值
-        let sum = 0;
-        let count = 0;
-        for (let i = 0; i < period; i++) {
-            if (data[i] !== null) {
-                sum += data[i];
-                count++;
-            }
-        }
-        ema = count > 0 ? sum / count : null; // 避免 NaN
-
-        for (let i = 0; i < data.length; i++) {
-            if (i < period - 1) {
-                result.push(null); // 前 period-1 个数据为空
-            } else if (i === period - 1) {
-                result.push(ema);
-            } else {
-                if (data[i] !== null) {
-                    ema = (data[i] - ema) * multiplier + ema; // 计算 EMA
-                }
-                result.push(ema);
-            }
-        }
-        return result;
-    }
-
-
-    // SMA据说更适合长线
-    // 计算 14 日滑动平均值
-    function smoothedMovingAverage(data, period) {
-        let result = [];
-        let sum = 0;
-
-        for (let i = 0; i < data.length; i++) {
-            sum += data[i];
-            if (i >= period - 1) {
-                result.push(sum / period);
-                sum -= data[i - period + 1];
-            } else {
-                result.push(null);
-            }
-        }
-
-        return result;
-    }
-
-    function safeNumber(value) {
-        return isNaN(value) || value === null || value === undefined ? 0 : value;
-    }
 
 </script>
 </body>
