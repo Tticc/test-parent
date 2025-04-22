@@ -54,7 +54,7 @@ public class TradeController extends BaseController {
         // 步长。默认1s
         int step = 20;
         BarEnum barEnum = BarEnum._30m;
-        return success(binanceHelper.traceLocal("20250408000000",request.getLimit(), step, barEnum));
+        return success(binanceHelper.traceLocal("20250417000000",request.getLimit(), step, barEnum));
     }
 
 

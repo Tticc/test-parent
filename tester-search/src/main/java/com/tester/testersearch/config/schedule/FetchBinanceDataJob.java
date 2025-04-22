@@ -33,7 +33,7 @@ public class FetchBinanceDataJob {
     private TradeDataBaseService tradeDataBaseService;
 
     // 每隔 5分钟 执行一次
-    @Scheduled(fixedRate = 60 * 60 * 1000)
+    @Scheduled(fixedRate = 15 * 60 * 1000)
     public void performTask() {
         try {
             int batchSize = 500;
@@ -43,7 +43,7 @@ public class FetchBinanceDataJob {
             }
             this.fetchDataAfter(maxId, batchSize);
             Long minId = tradeDataBaseService.getMinId();
-            this.fetchDataBefore(minId, batchSize, 10000);
+            this.fetchDataBefore(minId, batchSize, 5000);
 
             // 检查所有数据
 //            this.checkAllData();
