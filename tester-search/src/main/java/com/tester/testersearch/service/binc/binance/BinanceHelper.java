@@ -3,6 +3,7 @@ package com.tester.testersearch.service.binc.binance;
 import com.github.pagehelper.PageInfo;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.DateUtil;
+import com.tester.testercommon.util.MyConsumer;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
 import com.tester.testersearch.dao.service.TradeDataBaseService;
@@ -37,14 +38,16 @@ public class BinanceHelper {
     private TradeDataBaseService tradeDataBaseService;
 
 
-    public List<TradeSignDTO> traceLocal(String startAt, Integer limit, Integer step, BarEnum barEnum) throws BusinessException {
+    public List<TradeSignDTO> traceLocal(String startAt, Integer limit, Integer step, BarEnum barEnum, MyConsumer<Boolean> myConsumer) throws BusinessException {
         Map<Long, TradeSignDTO> hisData = hisDataMap.get(barEnum.getCode());
         if (null == hisData) {
             hisData = new HashMap<>();
             hisDataMap.put(barEnum.getCode(), hisData);
         }
-        List<TradeSignDTO> res = new ArrayList<>();
         boolean first = false;
+        if (null == limit) {
+            limit = 2;
+        }
         if (limit < 10) {
             if (CollectionUtils.isEmpty(hisData)) {
                 log.error("异常，数据未初始化完成");
@@ -52,26 +55,24 @@ public class BinanceHelper {
             }
             // 获取最新1s数据
             Long aLong = hisData.keySet().stream().max(Comparator.naturalOrder()).orElse(0L);
-            TradeSignDTO tradeSignDTOBefore = hisData.get(aLong - barEnum.getInterval() * 1000);
-            TradeSignDTO tradeSignDTO = hisData.get(aLong);
-            if (null == tradeSignDTOBefore || null == tradeSignDTO) {
+            TradeSignDTO lastTradeSignDTO = hisData.get(aLong);
+            if (null == lastTradeSignDTO) {
                 log.error("异常，未找到数据");
                 throw new BusinessException(5000L);
             }
-            res.add(tradeSignDTOBefore);
-            List<TradeSignDTO> tradeSignDTOS = this.fetchData(null, tradeSignDTO, 1 + step, barEnum);
+            Long lastUpdateTimestamp = lastTradeSignDTO.getLastUpdateTimestamp();
+            List<TradeSignDTO> tradeSignDTOS = this.fetchData(null, lastTradeSignDTO, step, barEnum);
             for (TradeSignDTO signDTO : tradeSignDTOS) {
                 hisData.put(signDTO.getId(), signDTO);
             }
-            res.addAll(tradeSignDTOS);
+            TradeSignDTO newLastTradeSignDTO = tradeSignDTOS.get(tradeSignDTOS.size() - 1);
+            // 是否已经取完所有数据
+            myConsumer.accept(Objects.equals(lastUpdateTimestamp, newLastTradeSignDTO.getLastUpdateTimestamp()));
         } else {
             first = true;
-            if (!CollectionUtils.isEmpty(hisData)) {
-                res = hisData.values().stream().sorted(Comparator.comparing(TradeSignDTO::getId))
-                        .collect(Collectors.toList());
-            } else {
+            if (CollectionUtils.isEmpty(hisData)) {
                 // 初始化，获取数据
-                res = this.fetchData(startAt, null, limit * barEnum.getInterval(), barEnum);
+                List<TradeSignDTO> res = this.fetchData(startAt, null, limit * barEnum.getInterval(), barEnum);
                 for (TradeSignDTO signDTO : res) {
                     hisData.put(signDTO.getId(), signDTO);
                 }
@@ -80,9 +81,8 @@ public class BinanceHelper {
         List<TradeSignDTO> allTradeDatas = hisData.values().stream()
                 .sorted(Comparator.comparing(TradeSignDTO::getId))
                 .collect(Collectors.toList());
-
         this.calculateTradeData(allTradeDatas, first);
-        return res;
+        return first ? allTradeDatas : allTradeDatas.stream().skip(Math.max(0, allTradeDatas.size() - limit)).collect(Collectors.toList());
     }
 
     /**
@@ -103,7 +103,7 @@ public class BinanceHelper {
             Date startDate = DateUtil.getDateFromLocalDateTime(localDateTime);
             minId = startDate.getTime();
         } else {
-            LocalDateTime localDateTime = DateUtil.getLocalDateTime("20250301000000");
+            LocalDateTime localDateTime = DateUtil.getLocalDateTime("20250401000000");
             Date startDate = DateUtil.getDateFromLocalDateTime(localDateTime);
             minId = startDate.getTime();
         }
@@ -144,19 +144,19 @@ public class BinanceHelper {
     private void calculateTradeData(List<TradeSignDTO> allTradeDatas, boolean first) throws BusinessException {
         int branderPeriod = 20;
         int adxPeriod = 14;
-        int dataSize = Math.max(branderPeriod, adxPeriod*2+2);
+        int dataSize = Math.max(branderPeriod, adxPeriod * 2 + 2);
         List<TradeSignDTO> data = allTradeDatas;
-        if(!first){
+        if (!first) {
             // 如果不是第一次初始化数据，取最后 dataSize 条数据处理
             data = allTradeDatas.stream().skip(Math.max(0, allTradeDatas.size() - dataSize)).collect(Collectors.toList());
         }
 //        log.info("size:{}",data.size());
-        // todo 计算MA
+        // 计算MA
         MAUtil.calculateAndSetMA(data, 5, 10, 20);
         MAUtil.calculateTradeSign(allTradeDatas);
-        // todo 计算Brander
-        BollingerBandsUtil.calculateBollingerBands(data,branderPeriod,2);
-        // todo 计算ADX
+        // 计算Brander
+        BollingerBandsUtil.calculateBollingerBands(data, branderPeriod, 2);
+        // 计算ADX
         ADXUtil.calculateADX(data, adxPeriod);
 
     }

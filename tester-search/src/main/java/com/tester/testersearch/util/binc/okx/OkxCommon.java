@@ -31,9 +31,20 @@ public class OkxCommon {
         Integer st = null;
         Integer ed = null;
         List<Integer> changeList = new ArrayList<>();
+        List<Integer> profitList = new ArrayList<>();
         List<Integer> tradeFeeList = new ArrayList<>();
+        // 默认倍率
         double defaultTimes = 1.0d;
+        // 默认倍率提升率。当一次交易为负数，下次提升交易数额，数额由此交易倍率决定。
+        // 例如：默认数额为100，multiTimes=1.2。
+        // 那么当一次交易收益为负数之后，下次交易数额为100*1.2。仍然收益为负数，下下次交易数额为100*1.2*1.2
+        // 当某一次收益为正multiTimes重置为1.0
         double multiTimes = 1.0d;
+
+        // 跳过的横盘交易次数。设置为0代表不会跳过
+        int skipAfterHuge = 0;
+        // 当收益超过skipNumber时，跳过未来几次的交易信号。因为每次大收益之后，都会进入横盘，因此跳过几次交易，避免部分横盘交易
+        int skipNumber = 1000;
         for (TradeSignDTO value : tradeList) {
             if (null == st && null == ed) {
                 st = ed = value.getTradePrice().intValue();
@@ -47,11 +58,11 @@ public class OkxCommon {
                 ed = value.getTradePrice().intValue();
                 if (checkIfBuySign(value)) {
                     int profits = st - ed;
-                    profits = (int) (profits*defaultTimes);
-                    int fee = (int)(40*defaultTimes);
-                    if(profits < 0){
-                        defaultTimes = defaultTimes*multiTimes;
-                    }else{
+                    profits = (int) (profits * defaultTimes);
+                    int fee = (int) (40 * defaultTimes);
+                    if (profits < 0) {
+                        defaultTimes = defaultTimes * multiTimes;
+                    } else {
                         defaultTimes = 1;
                     }
                     System.out.println("收益:" + profits);
@@ -60,11 +71,11 @@ public class OkxCommon {
                     System.out.println("买入信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(new Date(value.getOpenTimestamp())));
                 } else {
                     int profits = ed - st;
-                    profits = (int) (profits*defaultTimes);
-                    int fee = (int)(40*defaultTimes);
-                    if(profits < 0){
-                        defaultTimes = defaultTimes*multiTimes;
-                    }else{
+                    profits = (int) (profits * defaultTimes);
+                    int fee = (int) (40 * defaultTimes);
+                    if (profits < 0) {
+                        defaultTimes = defaultTimes * multiTimes;
+                    } else {
                         defaultTimes = 1;
                     }
                     System.out.println("收益:" + profits);
@@ -78,17 +89,19 @@ public class OkxCommon {
         Integer feeSum = 0;
         int skip = 0;
         for (int i = 0; i < changeList.size(); i++) {
-            if(skip > 0){
-                skip-=1;
+            if (skip > 0) {
+                skip -= 1;
                 continue;
             }
-            sum+=changeList.get(i);
-            feeSum+=tradeFeeList.get(i);
-            if(changeList.get(i)>=1000){
-                skip = 0;
+            sum += changeList.get(i);
+            feeSum += tradeFeeList.get(i);
+            profitList.add(changeList.get(i));
+            if (changeList.get(i) >= skipNumber) {
+                skip = skipAfterHuge;
             }
         }
         System.out.println("changeList = " + changeList);
+        System.out.println("profitList.size():"+profitList.size()+", profitList = " + profitList);
         System.out.println("sum = " + sum);
         System.out.println("累计盈利:" + (sum - feeSum) + ". 交易数(买+卖一次记1)：" + changeList.size() + ", 交易费总计：" + feeSum);
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------");
@@ -238,7 +251,7 @@ public class OkxCommon {
 
 
     public static void calculateAndSetMA(List<TradeSignDTO> tradeSignList) {
-        calculateAndSetMA(tradeSignList,5,10,20);
+        calculateAndSetMA(tradeSignList, 5, 10, 20);
     }
 
     public static void calculateAndSetMA(List<TradeSignDTO> tradeSignList, int period1, int period2, int period3) {
@@ -251,7 +264,7 @@ public class OkxCommon {
                 for (int j = i - period + 1; j <= i; j++) {
                     sum = sum.add(tradeSignList.get(j).getClose());
                 }
-                tradeSignList.get(i).setMa5(sum.divide(BigDecimal.valueOf(period),2,BigDecimal.ROUND_HALF_UP));
+                tradeSignList.get(i).setMa5(sum.divide(BigDecimal.valueOf(period), 2, BigDecimal.ROUND_HALF_UP));
             }
         }
         period = period2;
@@ -263,7 +276,7 @@ public class OkxCommon {
                 for (int j = i - period + 1; j <= i; j++) {
                     sum = sum.add(tradeSignList.get(j).getClose());
                 }
-                tradeSignList.get(i).setMa10(sum.divide(BigDecimal.valueOf(period),2,BigDecimal.ROUND_HALF_UP));
+                tradeSignList.get(i).setMa10(sum.divide(BigDecimal.valueOf(period), 2, BigDecimal.ROUND_HALF_UP));
             }
         }
         period = period3;
@@ -275,7 +288,7 @@ public class OkxCommon {
                 for (int j = i - period + 1; j <= i; j++) {
                     sum = sum.add(tradeSignList.get(j).getClose());
                 }
-                tradeSignList.get(i).setMa20(sum.divide(BigDecimal.valueOf(period),2,BigDecimal.ROUND_HALF_UP));
+                tradeSignList.get(i).setMa20(sum.divide(BigDecimal.valueOf(period), 2, BigDecimal.ROUND_HALF_UP));
             }
         }
     }
