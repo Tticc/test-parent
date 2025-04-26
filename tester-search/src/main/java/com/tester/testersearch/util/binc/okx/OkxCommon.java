@@ -42,7 +42,7 @@ public class OkxCommon {
         double multiTimes = 1.0d;
 
         // 跳过的横盘交易次数。设置为0代表不会跳过
-        int skipAfterHuge = 0;
+        int skipAfterHuge = 10;
         // 当收益超过skipNumber时，跳过未来几次的交易信号。因为每次大收益之后，都会进入横盘，因此跳过几次交易，避免部分横盘交易
         int skipNumber = 1000;
         for (TradeSignDTO value : tradeList) {

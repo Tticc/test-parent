@@ -22,6 +22,9 @@ public class DetectTradeSign {
             return;
         }
         TradeSignDTO last = tradeSignList.get(tradeSignList.size() - 1);
+        if(last.getTradeSign() == null){
+            last = tradeSignList.get(tradeSignList.size() - 2);
+        }
         if(!Objects.equals(last.getTradeSign(), OkxCommon.SELL_SIGN) && !Objects.equals(last.getTradeSign(), OkxCommon.BUY_SIGN)){
             return;
         }

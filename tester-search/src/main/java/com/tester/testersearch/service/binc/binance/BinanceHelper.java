@@ -81,7 +81,8 @@ public class BinanceHelper {
         List<TradeSignDTO> allTradeDatas = hisData.values().stream()
                 .sorted(Comparator.comparing(TradeSignDTO::getId))
                 .collect(Collectors.toList());
-        this.calculateTradeData(allTradeDatas, first);
+        this.calculateTradeData(allTradeDatas, first, false);
+//        this.calculateTradeData(allTradeDatas, first, true);
         return first ? allTradeDatas : allTradeDatas.stream().skip(Math.max(0, allTradeDatas.size() - limit)).collect(Collectors.toList());
     }
 
@@ -138,10 +139,12 @@ public class BinanceHelper {
 
     /**
      * 计算交易数据
-     *
-     * @param allTradeDatas
+     * @param allTradeDatas 所有数据
+     * @param first 是否时第一次。非第一次取后半部分计算
+     * @param excludeLast 是否排除最后一个蜡烛，确保计算的蜡烛都是已完成的
+     * @throws BusinessException
      */
-    private void calculateTradeData(List<TradeSignDTO> allTradeDatas, boolean first) throws BusinessException {
+    private void calculateTradeData(List<TradeSignDTO> allTradeDatas, boolean first, boolean excludeLast) throws BusinessException {
         int branderPeriod = 20;
         int adxPeriod = 14;
         int dataSize = Math.max(branderPeriod, adxPeriod * 2 + 2);
@@ -153,11 +156,10 @@ public class BinanceHelper {
 //        log.info("size:{}",data.size());
         // 计算MA
         MAUtil.calculateAndSetMA(data, 5, 10, 20);
-        MAUtil.calculateTradeSign(allTradeDatas);
+        MAUtil.calculateTradeSign(allTradeDatas, excludeLast);
         // 计算Brander
         BollingerBandsUtil.calculateBollingerBands(data, branderPeriod, 2);
         // 计算ADX
         ADXUtil.calculateADX(data, adxPeriod);
-
     }
 }

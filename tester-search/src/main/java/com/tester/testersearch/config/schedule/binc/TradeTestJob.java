@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * wenc
  */
 @Slf4j
-//@Component
+@Component
 public class TradeTestJob {
 
     @Autowired
@@ -23,7 +23,7 @@ public class TradeTestJob {
 
     @EventListener(ApplicationReadyEvent.class)
     public void runOnce() throws BusinessException {
-        maCrossStrategy.runOnce("20250301000000",5, BarEnum._30m);
+        maCrossStrategy.runOnce("20250201000000",5, BarEnum._30m,"20250301000000");
         log.info("测试完成");
     }
 }
