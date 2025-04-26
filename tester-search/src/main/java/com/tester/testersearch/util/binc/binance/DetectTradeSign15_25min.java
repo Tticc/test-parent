@@ -1,68 +1,26 @@
-package com.tester.testersearch.util.okx;
+package com.tester.testersearch.util.binc.binance;
 
 import com.tester.base.dto.exception.BusinessException;
-import com.tester.testercommon.util.BeanCopyUtil;
-import com.tester.testersearch.dao.domain.TradeDataBaseDomain;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
-import com.tester.testersearch.service.okx.OkxHelper;
+import com.tester.testersearch.util.binc.okx.OkxCommon;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class DetectTradeSign5_20min {
-    private static Map<Long, TradeSignDTO> dataInfoList = new LinkedHashMap<>();
-
-
-    public static void main(String[] args) {
-        String bar = "5m";
-        System.out.println("bar = " + bar);
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(() -> {
-            try {
-                createChart(bar);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }, 5, 4, TimeUnit.SECONDS);
-    }
-
-    public static Map<Long, TradeSignDTO> getOKXKlineData(String bar) {
-        Map<Long, TradeSignDTO> res = new LinkedHashMap<>();
-        List<TradeDataBaseDomain> okxKlineData;
-        if (CollectionUtils.isEmpty(dataInfoList)) {
-            okxKlineData = OkxHelper.getOKXKlineData("35", bar);
-        } else {
-            okxKlineData = OkxHelper.getOKXKlineData("2", bar);
-        }
-        for (TradeDataBaseDomain value : okxKlineData) {
-            TradeSignDTO tradeSignDTO = new TradeSignDTO();
-            TradeSignDTO oriData = dataInfoList.get(value.getTimestamp());
-            if (null != oriData) {
-                BeanCopyUtil.copyPropertiesIgnoreNull(oriData, tradeSignDTO);
-            }
-            BeanCopyUtil.copyPropertiesIgnoreNull(value, tradeSignDTO);
-            dataInfoList.put(value.getTimestamp(), tradeSignDTO);
-        }
-        return res;
-    }
+public class DetectTradeSign15_25min {
 
     /**
      * todo 优化。将买卖信号放进蜡烛信息里，买入设置为"buy"，卖出设置为"sale"，否则设置为空
      */
-    private static void createChart(String bar) throws BusinessException {
-        getOKXKlineData(bar);
-        if (CollectionUtils.isEmpty(dataInfoList)) {
+    public static void createChart(List<TradeSignDTO> tradeSignList) throws BusinessException {
+        if (CollectionUtils.isEmpty(tradeSignList)) {
             return;
         }
-        List<TradeSignDTO> tradeSignList = dataInfoList.values().stream().collect(Collectors.toList());
-        OkxCommon.calculateAndSetMA(tradeSignList);
+        OkxCommon.calculateAndSetMA(tradeSignList,5,10,20);
 
         if (tradeSignList.get(0).getTradeSign() == null) {
             OkxCommon.initTradeSignM5M20(tradeSignList);
@@ -77,6 +35,7 @@ public class DetectTradeSign5_20min {
             }
         }
         TradeSignDTO tradeSignDTO = tradeSignList.get(tradeSignList.size() - 1);
+        // 如果当前蜡烛已经出现过交易信号，立即返回（避免在同一个蜡烛内反复买卖）
         if (OkxCommon.checkIfHasTradeSign(tradeSignDTO)) {
             return;
         }
@@ -101,10 +60,12 @@ public class DetectTradeSign5_20min {
         } else {
             tradeSignDTO.setTradeSign(OkxCommon.NONE_SIGN);
         }
+        List<TradeSignDTO> tradeList = tradeSignList.stream().filter(e -> OkxCommon.checkIfHasTradeSign(e)).collect(Collectors.toList());
         if (!tradeSignCome) {
             return;
         }
         OkxCommon.printProfits(tradeSignList);
     }
+
 
 }

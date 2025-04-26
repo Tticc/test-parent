@@ -1,4 +1,4 @@
-package com.tester.testersearch.util.binance;
+package com.tester.testersearch.util.binc.binance;
 
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.http.HttpsClient;

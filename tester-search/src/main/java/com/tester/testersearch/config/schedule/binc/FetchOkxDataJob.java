@@ -1,12 +1,11 @@
-package com.tester.testersearch.config.schedule;
+package com.tester.testersearch.config.schedule.binc;
 
 import com.tester.testersearch.dao.domain.TradeDataBaseDomain;
 import com.tester.testersearch.dao.service.TradeDataBaseService;
-import com.tester.testersearch.service.okx.OkxHelper;
+import com.tester.testersearch.service.binc.okx.OkxHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;

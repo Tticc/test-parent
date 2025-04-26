@@ -1,4 +1,4 @@
-package com.tester.testersearch.util.okx;
+package com.tester.testersearch.util.binc.okx;
 
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.DateUtil;

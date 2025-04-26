@@ -1,4 +1,4 @@
-package com.tester.testersearch.controller.trade;
+package com.tester.testersearch.controller.binc;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

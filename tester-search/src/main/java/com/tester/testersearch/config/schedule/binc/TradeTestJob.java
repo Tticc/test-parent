@@ -1,16 +1,14 @@
-package com.tester.testersearch.config.schedule;
+package com.tester.testersearch.config.schedule.binc;
 
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
-import com.tester.testersearch.service.binance.BinanceHelper;
+import com.tester.testersearch.service.binc.binance.BinanceHelper;
 import com.tester.testersearch.util.BarEnum;
-import com.tester.testersearch.util.binance.DetectTradeSign15_25min;
-import com.tester.testersearch.util.binance.DetectTradeSign15_25min_anti;
+import com.tester.testersearch.util.binc.binance.DetectTradeSign15_25min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Comparator;

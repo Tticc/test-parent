@@ -1,17 +1,16 @@
-package com.tester.testersearch.util.trade;
+package com.tester.testersearch.util.binc.tradeSign;
 
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.DateUtil;
 import com.tester.testercommon.util.DecimalUtil;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
-import com.tester.testersearch.util.okx.OkxCommon;
+import com.tester.testersearch.util.binc.okx.OkxCommon;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * MA计算工具

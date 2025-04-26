@@ -1,4 +1,4 @@
-package com.tester.testersearch.util.trade;
+package com.tester.testersearch.util.binc.tradeSign;
 
 import com.tester.testercommon.util.DecimalUtil;
 import com.tester.testersearch.dao.domain.TradeSignDTO;

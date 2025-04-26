@@ -1,4 +1,4 @@
-package com.tester.testersearch.util.binance;
+package com.tester.testersearch.util.binc.binance;
 
 import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.util.BarEnum;

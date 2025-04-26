@@ -1,10 +1,10 @@
-package com.tester.testersearch.util.okx;
+package com.tester.testersearch.util.binc.okx;
 
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.BeanCopyUtil;
 import com.tester.testersearch.dao.domain.TradeDataBaseDomain;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
-import com.tester.testersearch.service.okx.OkxHelper;
+import com.tester.testersearch.service.binc.okx.OkxHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
@@ -16,12 +16,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class DetectTradeSign30_20min {
+public class DetectTradeSign15_20min {
     private static Map<Long, TradeSignDTO> dataInfoList = new LinkedHashMap<>();
 
 
     public static void main(String[] args) {
-        String bar = "30m";
+        String bar = "15m";
         System.out.println("bar = " + bar);
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(() -> {

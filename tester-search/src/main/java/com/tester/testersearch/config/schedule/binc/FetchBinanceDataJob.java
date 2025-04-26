@@ -1,4 +1,4 @@
-package com.tester.testersearch.config.schedule;
+package com.tester.testersearch.config.schedule.binc;
 
 import com.github.pagehelper.PageInfo;
 import com.tester.testercommon.util.DateUtil;
@@ -7,7 +7,7 @@ import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
 import com.tester.testersearch.dao.service.TradeDataBaseService;
 import com.tester.testersearch.util.BarEnum;
-import com.tester.testersearch.util.binance.BinCommon;
+import com.tester.testersearch.util.binc.binance.BinCommon;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

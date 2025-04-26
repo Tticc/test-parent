@@ -1,4 +1,4 @@
-package com.tester.testersearch.service.okx;
+package com.tester.testersearch.service.binc.okx;
 
 import com.tester.testersearch.dao.domain.TradeDataBaseDomain;
 import lombok.extern.slf4j.Slf4j;

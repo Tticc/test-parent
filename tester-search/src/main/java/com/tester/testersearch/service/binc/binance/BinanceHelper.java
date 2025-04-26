@@ -1,4 +1,4 @@
-package com.tester.testersearch.service.binance;
+package com.tester.testersearch.service.binc.binance;
 
 import com.github.pagehelper.PageInfo;
 import com.tester.base.dto.exception.BusinessException;
@@ -7,10 +7,10 @@ import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
 import com.tester.testersearch.dao.service.TradeDataBaseService;
 import com.tester.testersearch.util.BarEnum;
-import com.tester.testersearch.util.binance.CombineCandle;
-import com.tester.testersearch.util.trade.ADXUtil;
-import com.tester.testersearch.util.trade.BollingerBandsUtil;
-import com.tester.testersearch.util.trade.MAUtil;
+import com.tester.testersearch.util.binc.binance.CombineCandle;
+import com.tester.testersearch.util.binc.tradeSign.ADXUtil;
+import com.tester.testersearch.util.binc.tradeSign.BollingerBandsUtil;
+import com.tester.testersearch.util.binc.tradeSign.MAUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,7 +150,7 @@ public class BinanceHelper {
             // 如果不是第一次初始化数据，取最后 dataSize 条数据处理
             data = allTradeDatas.stream().skip(Math.max(0, allTradeDatas.size() - dataSize)).collect(Collectors.toList());
         }
-        log.info("size:{}",data.size());
+//        log.info("size:{}",data.size());
         // todo 计算MA
         MAUtil.calculateAndSetMA(data, 5, 10, 20);
         MAUtil.calculateTradeSign(allTradeDatas);

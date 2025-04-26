@@ -1,10 +1,10 @@
-package com.tester.testersearch.util.okx;
+package com.tester.testersearch.util.binc.okx;
 
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.BeanCopyUtil;
 import com.tester.testersearch.dao.domain.TradeDataBaseDomain;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
-import com.tester.testersearch.service.okx.OkxHelper;
+import com.tester.testersearch.service.binc.okx.OkxHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 

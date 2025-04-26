@@ -1,8 +1,8 @@
-package com.tester.testersearch.util.binance;
+package com.tester.testersearch.util.binc.binance;
 
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
-import com.tester.testersearch.util.okx.OkxCommon;
+import com.tester.testersearch.util.binc.okx.OkxCommon;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 

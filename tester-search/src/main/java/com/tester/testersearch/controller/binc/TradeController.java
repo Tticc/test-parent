@@ -1,4 +1,4 @@
-package com.tester.testersearch.controller.trade;
+package com.tester.testersearch.controller.binc;
 
 
 import com.tester.base.dto.controller.RestResult;
@@ -7,8 +7,8 @@ import com.tester.testercommon.controller.BaseController;
 import com.tester.testersearch.dao.domain.TradeDataBaseDomain;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.model.TradeDataRequest;
-import com.tester.testersearch.service.binance.BinanceHelper;
-import com.tester.testersearch.service.okx.OkxHelper;
+import com.tester.testersearch.service.binc.binance.BinanceHelper;
+import com.tester.testersearch.service.binc.okx.OkxHelper;
 import com.tester.testersearch.util.BarEnum;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +54,7 @@ public class TradeController extends BaseController {
         // 步长。默认1s
         int step = 20;
         BarEnum barEnum = BarEnum._30m;
-        return success(binanceHelper.traceLocal("20250417000000",request.getLimit(), step, barEnum));
+        return success(binanceHelper.traceLocal("20250424000000",request.getLimit(), step, barEnum));
     }
 
 
