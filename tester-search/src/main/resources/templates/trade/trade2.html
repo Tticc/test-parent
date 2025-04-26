@@ -120,7 +120,7 @@
             title: {text: '实时更新的 K 线图'},
             tooltip: {trigger: 'axis'},
             legend: {
-                data: ['K线', 'MA5', 'MA10', 'MA20', 'BB 上轨', 'BB 中轨', 'BB 下轨', '+DI', '-DI', 'ADX'],
+                data: ['K线', 'MA5', /*'MA10', */'MA20', 'BB 上轨', /*'BB 中轨', */'BB 下轨', '+DI', '-DI', 'ADX'],
                 bottom: '35%', // 放置在图表底部
                 left: 'center',
                 textStyle: {fontSize: 18}
@@ -212,7 +212,7 @@
                     xAxisIndex: 0,
                     yAxisIndex: 0
                 },
-                {// MA10
+                /*{// MA10
                     name: 'MA10',
                     type: 'line',
                     data: ma10Data,
@@ -220,7 +220,7 @@
                     lineStyle: {width: 2, color: 'red'},
                     xAxisIndex: 0,
                     yAxisIndex: 0
-                },
+                },*/
                 {// MA20
                     name: 'MA20',
                     type: 'line',
@@ -240,7 +240,7 @@
                     xAxisIndex: 0,
                     yAxisIndex: 0
                 },
-                // 布林带中轨（与 MA20 相同）
+                /*// 布林带中轨（与 MA20 相同）
                 {
                     name: 'BB 中轨',
                     type: 'line',
@@ -249,7 +249,7 @@
                     lineStyle: {width: 2, color: 'purple'},
                     xAxisIndex: 0,
                     yAxisIndex: 0
-                },
+                },*/
                 // 布林带下轨
                 {
                     name: 'BB 下轨',
