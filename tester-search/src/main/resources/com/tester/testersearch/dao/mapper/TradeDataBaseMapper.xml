@@ -143,7 +143,6 @@
         select
         min(t_alias.id)
         from trade_data_base t_alias
-        where t_alias.deleted = 0
     </select>
 
 
@@ -151,7 +150,6 @@
         select
         max(t_alias.id)
         from trade_data_base t_alias
-        where t_alias.deleted = 0
     </select>
 
     <select id="list" resultMap="BaseResultMap">

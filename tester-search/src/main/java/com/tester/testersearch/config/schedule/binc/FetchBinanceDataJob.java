@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StopWatch;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,17 +37,30 @@ public class FetchBinanceDataJob {
     @Scheduled(fixedRate = 15 * 60 * 1000)
     public void performTask() {
         try {
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start("查询最大id");
             int batchSize = 500;
             Long maxId = tradeDataBaseService.getMaxId();
+            stopWatch.stop();
             if(null == maxId){
                 maxId = new Date().getTime()-60*60*1000;
             }
+            stopWatch.start("取最近数据fetchDataAfter");
             this.fetchDataAfter(maxId, batchSize);
+            stopWatch.stop();
+            stopWatch.start("查询最小id");
             Long minId = tradeDataBaseService.getMinId();
+            stopWatch.stop();
+            stopWatch.start("取历史数据fetchDataAfter");
             this.fetchDataBefore(minId, batchSize, 5000);
+            stopWatch.stop();
 
-            // 检查所有数据
+//            // 检查所有数据
+//            stopWatch.start("检查所有数据");
 //            this.checkAllData();
+//            stopWatch.stop();
+
+            System.out.println("stopWatch.prettyPrint() = " + stopWatch.prettyPrint());
         } catch (Exception e) {
             log.error("定时任务执行失败。", e);
         }
@@ -148,5 +162,6 @@ public class FetchBinanceDataJob {
                 this.fetchDataBefore(lackDatum + 2, 10, 5);
             }
         }
+        log.info("数据检查完成");
     }
 }
