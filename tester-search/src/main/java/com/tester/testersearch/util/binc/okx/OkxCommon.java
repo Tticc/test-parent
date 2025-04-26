@@ -6,10 +6,7 @@ import com.tester.testercommon.util.DecimalUtil;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class OkxCommon {
@@ -31,7 +28,7 @@ public class OkxCommon {
         Integer st = null;
         Integer ed = null;
         List<Integer> changeList = new ArrayList<>();
-        List<Integer> profitList = new ArrayList<>();
+        List<Integer> profitsList = new ArrayList<>();
         List<Integer> tradeFeeList = new ArrayList<>();
         // 默认倍率
         double defaultTimes = 1.0d;
@@ -95,15 +92,17 @@ public class OkxCommon {
             }
             sum += changeList.get(i);
             feeSum += tradeFeeList.get(i);
-            profitList.add(changeList.get(i));
+            profitsList.add(changeList.get(i));
             if (changeList.get(i) >= skipNumber) {
                 skip = skipAfterHuge;
             }
         }
-        System.out.println("changeList = " + changeList);
-        System.out.println("profitList.size():"+profitList.size()+", profitList = " + profitList);
+        Collections.reverse(changeList);
+        Collections.reverse(profitsList);
+        System.out.println("changeList.size():"+changeList.size()+", changeList = " + changeList);
+        System.out.println("profitList.size():"+profitsList.size()+", profitList = " + profitsList);
         System.out.println("sum = " + sum);
-        System.out.println("累计盈利:" + (sum - feeSum) + ". 交易数(买+卖一次记1)：" + changeList.size() + ", 交易费总计：" + feeSum);
+        System.out.println("累计盈利:" + (sum - feeSum) + ". 交易数(买+卖一次记1)：" + profitsList.size() + ", 交易费总计：" + feeSum);
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 

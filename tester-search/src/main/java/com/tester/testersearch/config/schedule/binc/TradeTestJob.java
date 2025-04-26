@@ -23,7 +23,7 @@ public class TradeTestJob {
 
     @EventListener(ApplicationReadyEvent.class)
     public void runOnce() throws BusinessException {
-        maCrossStrategy.runOnce("20250201000000",5, BarEnum._30m,"20250301000000");
+        maCrossStrategy.runOnce("20250101000000",5, BarEnum._30m,null);
         log.info("测试完成");
     }
 }
