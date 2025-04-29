@@ -2,6 +2,7 @@ package com.tester.testersearch.config.schedule.binc;
 
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testersearch.service.binc.strategy.MACrossStrategy;
+import com.tester.testersearch.service.binc.strategy.MACrossWithTPSLStrategy;
 import com.tester.testersearch.util.BarEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,14 @@ public class TradeTestJob {
     @Autowired
     private MACrossStrategy maCrossStrategy;
 
+    @Autowired
+    private MACrossWithTPSLStrategy maCrossWithTPSLStrategy;
+
 
     @EventListener(ApplicationReadyEvent.class)
     public void runOnce() throws BusinessException {
-        maCrossStrategy.runOnce("20250101000000",5, BarEnum._30m,null);
+//        maCrossStrategy.runOnce("20230101000000",5, BarEnum._30m,"20250501000000");
+        maCrossWithTPSLStrategy.runOnce("20220801000000",5, BarEnum._30m,"20250501000000");
         log.info("测试完成");
     }
 }

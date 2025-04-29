@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * wenc
  */
 @Slf4j
-@Component
+//@Component
 public class FetchBinanceDataJob {
 
 
@@ -34,7 +34,7 @@ public class FetchBinanceDataJob {
     private TradeDataBaseService tradeDataBaseService;
 
     // 每隔 5分钟 执行一次
-    @Scheduled(fixedRate = 15 * 60 * 1000)
+    @Scheduled(fixedRate = 20 * 60 * 1000)
     public void performTask() {
         try {
             StopWatch stopWatch = new StopWatch();
@@ -46,7 +46,7 @@ public class FetchBinanceDataJob {
                 maxId = new Date().getTime()-60*60*1000;
             }
             stopWatch.start("取最近数据fetchDataAfter");
-            this.fetchDataAfter(maxId, batchSize);
+//            this.fetchDataAfter(maxId, batchSize);
             stopWatch.stop();
             stopWatch.start("查询最小id");
             Long minId = tradeDataBaseService.getMinId();
@@ -69,7 +69,7 @@ public class FetchBinanceDataJob {
 
     private void fetchDataBefore(Long endAt, int pageSize, int totalSize) {
         long startTime = endAt;
-        long stopTime = endAt - totalSize * 1000;
+        long stopTime = endAt - (totalSize * 1000);
         long startAt;
         do {
             startAt = endAt - pageSize * 1000;

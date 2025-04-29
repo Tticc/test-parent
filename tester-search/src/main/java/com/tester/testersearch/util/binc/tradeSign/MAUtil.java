@@ -62,61 +62,7 @@ public class MAUtil {
         }
     }
 
-    /**
-     * 计算并设置MA交易信号
-     * @param tradeSignList
-     * @param excludeLast
-     * @throws BusinessException
-     */
-    public static void calculateTradeSign(List<TradeSignDTO> tradeSignList, boolean excludeLast) throws BusinessException {
-        TradeSignDTO lastCalcTradeSignDTO = tradeSignList.get(tradeSignList.size() - 1);
-        TradeSignDTO lastTradeSignDTO = tradeSignList.get(tradeSignList.size() - 1);
-        List<TradeSignDTO> tempTradeSignList = tradeSignList;
-        if(excludeLast){
-            tempTradeSignList = tempTradeSignList.stream().limit(tempTradeSignList.size()-1).collect(Collectors.toList());
-            lastCalcTradeSignDTO = tempTradeSignList.get(tempTradeSignList.size() - 1);
-        }
-        if (tempTradeSignList.get(0).getTradeSign() == null) {
-            MAUtil.initTradeSignM5M20(tempTradeSignList);
-        }
-        Boolean lastBuySign = null;
-        for (TradeSignDTO value : tempTradeSignList) {
-            if (Objects.equals(value.getTradeSign(), 1)) {
-                lastBuySign = true;
-            } else if (Objects.equals(value.getTradeSign(), -1)) {
-                lastBuySign = false;
-            }
-        }
-        // 如果当前蜡烛已经出现过交易信号，立即返回（避免在同一个蜡烛内反复买卖）
-        if (OkxCommon.checkIfHasTradeSign(lastTradeSignDTO)) {
-            return;
-        }
-        // 默认使用最新价格作为成交价格
-        // BigDecimal tradePrice = tradeSignDTO.getOpen();
-        BigDecimal tradePrice = lastTradeSignDTO.getClose();
-
-        // 交易信号到来
-        boolean tradeSignCome = false;
-        if (lastCalcTradeSignDTO.getMa5().compareTo(lastCalcTradeSignDTO.getMa20()) > 0 && (null == lastBuySign || !lastBuySign)) {
-            // 如果上穿，且最近一次信号是sell。设置此次信号为BUY
-            lastTradeSignDTO.setTradeSign(OkxCommon.BUY_SIGN);
-            lastTradeSignDTO.setTradePrice(tradePrice);
-            lastTradeSignDTO.setTradeTime(new Date(lastTradeSignDTO.getLastUpdateTimestamp()));
-            tradeSignCome = true;
-            log.info("交易信号来临。buy。交易时间:{},交易价格:{}",DateUtil.dateFormat(lastTradeSignDTO.getTradeTime()),DecimalUtil.format(lastTradeSignDTO.getTradePrice()));
-        } else if (lastCalcTradeSignDTO.getMa5().compareTo(lastCalcTradeSignDTO.getMa20()) < 0 && (null == lastBuySign || lastBuySign)) {
-            // 如果下穿，且最近一次信号是buy。设置此次信号为SELL
-            lastTradeSignDTO.setTradeSign(OkxCommon.SELL_SIGN);
-            lastTradeSignDTO.setTradePrice(tradePrice);
-            lastTradeSignDTO.setTradeTime(new Date(lastTradeSignDTO.getLastUpdateTimestamp()));
-            tradeSignCome = true;
-            log.info("交易信号来临。sell。交易时间:{},交易价格:{}",DateUtil.dateFormat(lastTradeSignDTO.getTradeTime()),DecimalUtil.format(lastTradeSignDTO.getTradePrice()));
-        } else {
-            lastTradeSignDTO.setTradeSign(OkxCommon.NONE_SIGN);
-        }
-    }
-
-    private static void initTradeSignM5M20(List<TradeSignDTO> tradeSignList) throws BusinessException {
+    public static void initTradeSignM5M20(List<TradeSignDTO> tradeSignList) throws BusinessException {
         long lastSignTime = -1L;
         TradeSignDTO lastSignT = null;
         for (int i = 1; i < tradeSignList.size(); i++) {
@@ -125,13 +71,13 @@ public class MAUtil {
                     tradeSignList.get(i).getMa5() == null || tradeSignList.get(i).getMa20() == null) {
                 continue;
             }
-            if (tradeSignList.get(i - 1).getMa5().compareTo(tradeSignList.get(i - 1).getMa20()) < 0
+            if (tradeSignList.get(i - 1).getMa5().compareTo(tradeSignList.get(i - 1).getMa20()) <= 0
                     && tradeSignList.get(i).getMa5().compareTo(tradeSignList.get(i).getMa20()) > 0) {
                 tradeSignDTO.setTradeSign(BUY_SIGN);
                 tradeSignDTO.setTradePrice(tradeSignDTO.getClose());
                 lastSignTime = tradeSignDTO.getTimestamp();
                 lastSignT = tradeSignDTO;
-            } else if (tradeSignList.get(i - 1).getMa5().compareTo(tradeSignList.get(i - 1).getMa20()) > 0
+            } else if (tradeSignList.get(i - 1).getMa5().compareTo(tradeSignList.get(i - 1).getMa20()) >= 0
                     && tradeSignList.get(i).getMa5().compareTo(tradeSignList.get(i).getMa20()) < 0) {
                 tradeSignDTO.setTradeSign(SELL_SIGN);
                 tradeSignDTO.setTradePrice(tradeSignDTO.getClose());

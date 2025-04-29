@@ -96,6 +96,24 @@
                     type: '买入',
                     itemStyle: {color: 'green'}
                 });
+            } else if (item.tradeSign === 11) {
+                // **买入信号 (MA5 上穿 MA10)**
+                tradeSignals.push({
+                    timestamp: dateStr,  // timestamp
+                    coord: [dateStr, item.low - offset],  // `coord` 定义标注位置：[时间，收盘价]
+                    value: item.tradePrice.toFixed(2), // 显示价格.收盘价
+                    type: '止损买入',
+                    itemStyle: {color: 'blue'}
+                });
+            } else if (item.tradeSign === 12) {
+                // **买入信号 (MA5 上穿 MA10)**
+                tradeSignals.push({
+                    timestamp: dateStr,  // timestamp
+                    coord: [dateStr, item.low - offset],  // `coord` 定义标注位置：[时间，收盘价]
+                    value: item.tradePrice.toFixed(2), // 显示价格.收盘价
+                    type: '止盈买入',
+                    itemStyle: {color: 'green'}
+                });
             } else if (item.tradeSign === -1) {
                 // **卖出信号 (MA5 下穿 MA10)**
                 tradeSignals.push({
@@ -103,6 +121,24 @@
                     coord: [dateStr, item.high + offset],  // `coord` 定义标注位置：[时间，最高价]
                     value: item.tradePrice.toFixed(2),  // 显示价格.收盘价
                     type: '卖出',
+                    itemStyle: {color: 'red'}
+                });
+            } else if (item.tradeSign === -11) {
+                // **卖出信号 (MA5 下穿 MA10)**
+                tradeSignals.push({
+                    timestamp: dateStr,  // timestamp
+                    coord: [dateStr, item.high + offset],  // `coord` 定义标注位置：[时间，最高价]
+                    value: item.tradePrice.toFixed(2),  // 显示价格.收盘价
+                    type: '止损卖出',
+                    itemStyle: {color: 'grey'}
+                });
+            } else if (item.tradeSign === -12) {
+                // **卖出信号 (MA5 下穿 MA10)**
+                tradeSignals.push({
+                    timestamp: dateStr,  // timestamp
+                    coord: [dateStr, item.high + offset],  // `coord` 定义标注位置：[时间，最高价]
+                    value: item.tradePrice.toFixed(2),  // 显示价格.收盘价
+                    type: '止盈卖出',
                     itemStyle: {color: 'red'}
                 });
             }

@@ -7,6 +7,8 @@ import com.tester.testercommon.util.MyConsumer;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
 import com.tester.testersearch.dao.service.TradeDataBaseService;
+import com.tester.testersearch.service.binc.strategy.MACrossStrategy;
+import com.tester.testersearch.service.binc.strategy.MACrossWithTPSLStrategy;
 import com.tester.testersearch.util.BarEnum;
 import com.tester.testersearch.util.binc.binance.CombineCandle;
 import com.tester.testersearch.util.binc.tradeSign.ADXUtil;
@@ -38,7 +40,7 @@ public class BinanceHelper {
     private TradeDataBaseService tradeDataBaseService;
 
 
-    public List<TradeSignDTO> traceLocal(String startAt, Integer limit, Integer step, BarEnum barEnum, MyConsumer<Boolean> myConsumer) throws BusinessException {
+    public List<TradeSignDTO> traceLocal(String startAt, Integer limit, Integer step, BarEnum barEnum, MyConsumer<Boolean> myConsumer, boolean tpsl) throws BusinessException {
         Map<Long, TradeSignDTO> hisData = hisDataMap.get(barEnum.getCode());
         if (null == hisData) {
             hisData = new HashMap<>();
@@ -81,8 +83,8 @@ public class BinanceHelper {
         List<TradeSignDTO> allTradeDatas = hisData.values().stream()
                 .sorted(Comparator.comparing(TradeSignDTO::getId))
                 .collect(Collectors.toList());
-        this.calculateTradeData(allTradeDatas, first, false);
-//        this.calculateTradeData(allTradeDatas, first, true);
+//        this.calculateTradeData(allTradeDatas, first, false);
+        this.calculateTradeData(allTradeDatas, first, true, tpsl);
         return first ? allTradeDatas : allTradeDatas.stream().skip(Math.max(0, allTradeDatas.size() - limit)).collect(Collectors.toList());
     }
 
@@ -144,7 +146,7 @@ public class BinanceHelper {
      * @param excludeLast 是否排除最后一个蜡烛，确保计算的蜡烛都是已完成的
      * @throws BusinessException
      */
-    private void calculateTradeData(List<TradeSignDTO> allTradeDatas, boolean first, boolean excludeLast) throws BusinessException {
+    private void calculateTradeData(List<TradeSignDTO> allTradeDatas, boolean first, boolean excludeLast, boolean tpsl) throws BusinessException {
         int branderPeriod = 20;
         int adxPeriod = 14;
         int dataSize = Math.max(branderPeriod, adxPeriod * 2 + 2);
@@ -156,10 +158,14 @@ public class BinanceHelper {
 //        log.info("size:{}",data.size());
         // 计算MA
         MAUtil.calculateAndSetMA(data, 5, 10, 20);
-        MAUtil.calculateTradeSign(allTradeDatas, excludeLast);
+        if(tpsl) {
+            MACrossWithTPSLStrategy.calculateTradeSign_excludeLast(allTradeDatas);
+        }else {
+            MACrossStrategy.calculateTradeSign(allTradeDatas, excludeLast);
+        }
         // 计算Brander
-        BollingerBandsUtil.calculateBollingerBands(data, branderPeriod, 2);
+//        BollingerBandsUtil.calculateBollingerBands(data, branderPeriod, 2);
         // 计算ADX
-        ADXUtil.calculateADX(data, adxPeriod);
+//        ADXUtil.calculateADX(data, adxPeriod);
     }
 }
