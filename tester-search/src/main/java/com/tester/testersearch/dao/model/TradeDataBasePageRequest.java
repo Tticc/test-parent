@@ -28,6 +28,11 @@ public class TradeDataBasePageRequest extends PageRequest {
     @ApiModelProperty(value = "id", name = "id")
     private Long id;
     /**
+     * 结束id。sharding范围查询用
+     */
+    @ApiModelProperty(value = "endId", name = "endId")
+    private Long endId;
+    /**
      * 毫秒时间戳
      */
     @ApiModelProperty(value = "毫秒时间戳", name = "timestamp")

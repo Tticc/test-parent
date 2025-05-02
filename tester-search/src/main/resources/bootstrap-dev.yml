@@ -5,20 +5,20 @@ spring:
   elasticsearch:
     rest:
       uris: http://192.168.31.149:9200
-
-  datasource:
-    #    driver-class-name: com.mysql.jdbc.Driver
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/test_parent?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8
-    username: root
-    password: 123456
-    #Hikari
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      maximum-pool-size: 20
-      minimum-idle: 8
-      connection-timeout: 30000
-      connection-test-query: select 1
+# 常规数据源配置
+#  datasource:
+#    #    driver-class-name: com.mysql.jdbc.Driver
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/test_parent?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8
+#    username: root
+#    password: 123456
+#    #Hikari
+#    type: com.zaxxer.hikari.HikariDataSource
+#    hikari:
+#      maximum-pool-size: 20
+#      minimum-idle: 8
+#      connection-timeout: 30000
+#      connection-test-query: select 1
   # REDIS (RedisProperties)
   # Redis数据库索引（默认为0）
   redis:
@@ -44,11 +44,21 @@ spring:
 #        # 连接池中的最小空闲连接
 #        min-idle: 0
 
+normal-datasource:
+  jdbc-url: jdbc:mysql://localhost:3306/test_parent?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8
+  username: root
+  password: 123456
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  ds: ds0
+  logic-table: trade_data_base
+  actual-data-nodes: trade_data_base_$->{2019..2025}${(1..12).collect{ it.toString().padLeft(2, '0')}}
+#  actual-data-nodes: trade_data_base_$->{2025..2025}${(4..4).collect{ it.toString().padLeft(2, '0')}}
+  show-sql: false
 
-logging:
-  level:
-    com.tester.testersearch.dao.mapper: debug
 
+#logging:
+#  level:
+#    com.tester.testersearch.dao.mapper: debug
 
 # 禁用es，redis健康检查
 management:

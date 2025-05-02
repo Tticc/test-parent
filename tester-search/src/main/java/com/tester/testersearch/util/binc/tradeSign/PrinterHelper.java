@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class PrinterHelper {
@@ -123,6 +124,9 @@ public class PrinterHelper {
         // 当收益超过skipNumber时，跳过未来几次的交易信号。因为每次大收益之后，都会进入横盘，因此跳过几次交易，避免部分横盘交易
         int skipNumber = 1000;
         boolean lastIsMa = true;
+        Integer sum = 0;
+        Integer feeSum = 0;
+        AtomicInteger skip = new AtomicInteger(0);
         for (TradeSignDTO value : tradeList) {
             if (null == st && null == ed) {
                 st = ed = value.getTradePrice().intValue();
@@ -147,9 +151,10 @@ public class PrinterHelper {
                             defaultTimes = 1;
                         }
                         System.out.println("收益:" + profits);
-                        changeList.add(profits);
-                        tradeFeeList.add(fee);
                         System.out.println("买入信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(value.getTradeTime()));
+
+                        peocessList(changeList, profitsList, tradeFeeList,  profits,  fee,  skip,  skipNumber,  skipAfterHuge);
+
                     } else {
                         System.out.println("单边买入信号。价格:" + value.getTradePrice() + DateUtil.dateFormat(value.getTradeTime()));
                     }
@@ -165,9 +170,10 @@ public class PrinterHelper {
                         defaultTimes = 1;
                     }
                     System.out.println("收益:" + profits);
-                    changeList.add(profits);
-                    tradeFeeList.add(fee);
                     System.out.println("止盈止损买入信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(value.getTradeTime()));
+
+                    peocessList(changeList, profitsList, tradeFeeList,  profits,  fee,  skip,  skipNumber,  skipAfterHuge);
+
                 } else if (OkxCommon.checkIfMASellSign(value)) {
                     if (lastIsMa) {
                         int profits = ed - st;
@@ -179,9 +185,10 @@ public class PrinterHelper {
                             defaultTimes = 1;
                         }
                         System.out.println("收益:" + profits);
-                        changeList.add(profits);
-                        tradeFeeList.add(fee);
                         System.out.println("卖出信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(value.getTradeTime()));
+
+                        peocessList(changeList, profitsList, tradeFeeList,  profits,  fee,  skip,  skipNumber,  skipAfterHuge);
+
                     } else {
                         System.out.println("单边卖出信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(value.getTradeTime()));
                     }
@@ -197,28 +204,18 @@ public class PrinterHelper {
                         defaultTimes = 1;
                     }
                     System.out.println("收益:" + profits);
-                    changeList.add(profits);
-                    tradeFeeList.add(fee);
                     System.out.println("止盈止损卖出信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(value.getTradeTime()));
+
+                    peocessList(changeList, profitsList, tradeFeeList,  profits,  fee,  skip,  skipNumber,  skipAfterHuge);
+
                 }
             }
             BigDecimal multiply = DecimalUtil.toDecimal(value.getTradePrice()).multiply(new BigDecimal("0.012"));
             skipNumber = multiply.intValue();
         }
-        Integer sum = 0;
-        Integer feeSum = 0;
-        int skip = 0;
-        for (int i = 0; i < changeList.size(); i++) {
-            if (skip > 0) {
-                skip -= 1;
-                continue;
-            }
-            sum += changeList.get(i);
+        for (int i = 0; i < profitsList.size(); i++) {
+            sum += profitsList.get(i);
             feeSum += tradeFeeList.get(i);
-            profitsList.add(changeList.get(i));
-            if (changeList.get(i) >= skipNumber) {
-                skip = skipAfterHuge;
-            }
         }
         Collections.reverse(changeList);
         Collections.reverse(profitsList);
@@ -228,5 +225,24 @@ public class PrinterHelper {
         System.out.println("累计盈利:" + (sum - feeSum) + ". 交易数(买+卖一次记1)：" + profitsList.size() + ", 交易费总计：" + feeSum);
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
+
+    private static void peocessList(List<Integer> changeList, List<Integer> profitsList, List<Integer> tradeFeeList, int profits, int fee, AtomicInteger skip, int skipNumber, int skipAfterHuge){
+        changeList.add(profits);
+        if (skip.get() > 0) {
+            skip.decrementAndGet();
+            if(profits >= skipNumber){
+                System.out.println("重置skip");
+                skip.set(skipAfterHuge);
+            }
+            return;
+        }
+        tradeFeeList.add(fee);
+        profitsList.add(profits);
+        if(profits >= skipNumber){
+            skip.set(skipAfterHuge);
+        }
+    }
+
+
 
 }

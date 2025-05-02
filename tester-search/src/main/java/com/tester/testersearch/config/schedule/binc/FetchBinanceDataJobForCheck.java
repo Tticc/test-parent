@@ -16,9 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StopWatch;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,7 +30,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 //@Component
-public class FetchBinanceDataJob {
+public class FetchBinanceDataJobForCheck {
 
 
     @Autowired
@@ -41,52 +38,13 @@ public class FetchBinanceDataJob {
 
 
     // 每隔 5分钟 执行一次
-    @Scheduled(fixedRate = 20 * 60 * 1000)
+    @Scheduled(fixedRate = 14 * 60 * 1000)
     public void performTask() {
         try {
             StopWatch stopWatch = new StopWatch();
-            stopWatch.start("查询最大id");
             int batchSize = 500;
-            Long maxId = tradeDataBaseService.getMaxId();
-            stopWatch.stop();
-            if(null == maxId){
-                maxId = new Date().getTime()-60*60*1000;
-            }
-            stopWatch.start("取最近数据fetchDataAfter");
-//            this.fetchDataAfter(maxId, batchSize);
-            stopWatch.stop();
-
-            stopWatch.start("查询最小id");
-            Long minId = tradeDataBaseService.getMinId();
-            stopWatch.stop();
-
-            stopWatch.start("取历史数据fetchDataBefore");
-            AtomicInteger integer = new AtomicInteger(0);
-            long checkStartTime = minId;
-            long checkEndTime = minId;
-            int sizePerTask = 1200000;
-            int maxTask = 5;
-            for (int i = 0; i < maxTask; i++) {
-                Long fetchMaxId = checkStartTime;
-                DefaultPool.exec(() -> {
-                    this.fetchDataBefore(fetchMaxId, batchSize, sizePerTask);
-                    integer.incrementAndGet();
-                });
-                checkStartTime = fetchMaxId-(sizePerTask)*1000;
-            }
-            do{
-                TimeUnit.SECONDS.sleep(10);
-            }while (integer.get() < maxTask);
-            System.out.println("数据获取完成，开始检查数据有无缺失");
-            stopWatch.stop();
             stopWatch.start("开始检查数据有无缺失");
-            this.checkPartData(checkStartTime, checkEndTime, batchSize);
-
-//            // 检查所有数据
-//            stopWatch.start("检查所有数据");
-//            this.checkAllData();
-//            stopWatch.stop();
-
+            this.checkPartData(1628876000000L, 1630425599000L, batchSize);
             stopWatch.stop();
             System.out.println("stopWatch.prettyPrint() = " + stopWatch.prettyPrint());
         } catch (Exception e) {
@@ -151,7 +109,7 @@ public class FetchBinanceDataJob {
             }
         }while (minId < endId);
         if (!CollectionUtils.isEmpty(lackData)) {
-            log.warn("lackData数量:{}。起始位置:{}", lackData.size(), lackData.get(0));
+            log.warn("lackData数量:{}。起始位置:{},结束位置:{}", lackData.size(), lackData.get(0), lackData.get(lackData.size()-1));
             for (Long lackDatum : lackData) {
                 this.fetchDataBefore(lackDatum + 2*1000, 10, 10);
             }

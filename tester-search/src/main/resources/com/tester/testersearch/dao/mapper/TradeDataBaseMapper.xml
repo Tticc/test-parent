@@ -195,15 +195,14 @@
         order by t_alias.id asc
     </select>
 
-    <select id="listAfter" resultType="com.tester.testersearch.dao.domain.TradeSignDTO">
+    <select id="listAfter" resultType="com.tester.testersearch.dao.domain.TradeSignDTO" parameterType="com.tester.testersearch.dao.model.TradeDataBasePageRequest">
         select
         <include refid="Base_Column_List">
             <property name="tableName" value="t_alias"></property>
         </include>
         from trade_data_base t_alias
-        where t_alias.`id` >= #{id}
+        where t_alias.`id` between #{id} and #{endId}
         AND t_alias.`deleted` = 0
-        order by t_alias.id asc
     </select>
 
     <insert id="batchSave" parameterType="java.util.List" keyProperty="id" useGeneratedKeys="true">

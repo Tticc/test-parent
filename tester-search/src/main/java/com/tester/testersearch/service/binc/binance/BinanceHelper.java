@@ -100,7 +100,7 @@ public class BinanceHelper {
     private List<TradeSignDTO> fetchData(String startAt, TradeSignDTO last, int size, BarEnum barEnum) {
         Long minId;
         if (null != last) {
-            minId = last.getLastUpdateTimestamp();
+            minId = last.getLastUpdateTimestamp()+1000;
         } else if (!StringUtils.isEmpty(startAt)) {
             LocalDateTime localDateTime = DateUtil.getLocalDateTime(startAt);
             Date startDate = DateUtil.getDateFromLocalDateTime(localDateTime);
@@ -133,7 +133,7 @@ public class BinanceHelper {
                 combineMap.put(tradeSignDTO.getId(), tradeSignDTO);
             }
             size -= fetchSize;
-            currentId = pageInfo.getList().get(pageInfo.getList().size() - 1).getId(); // 更新当前ID
+            currentId = pageInfo.getList().get(pageInfo.getList().size() - 1).getId()+1000; // 更新当前最大ID+1000
         }
         return combineMap.values().stream().sorted(Comparator.comparing(TradeSignDTO::getId)).collect(Collectors.toList());
     }

@@ -28,7 +28,7 @@ public class TradeTestJob {
     @EventListener(ApplicationReadyEvent.class)
     public void runOnce() throws BusinessException {
 //        maCrossStrategy.runOnce("20230101000000",5, BarEnum._30m,"20250501000000");
-        maCrossWithTPSLStrategy.runOnce("20220801000000",5, BarEnum._30m,"20250501000000");
+        maCrossWithTPSLStrategy.runOnce("20210928000000",5, BarEnum._30m,"20220301000000");
         log.info("测试完成");
     }
 }

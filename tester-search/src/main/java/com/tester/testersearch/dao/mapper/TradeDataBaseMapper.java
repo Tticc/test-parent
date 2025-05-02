@@ -26,7 +26,7 @@ public interface TradeDataBaseMapper extends BaseMapper<TradeDataBaseDomain, Lon
      */
     List<TradeDataBaseDomain> list(TradeDataBasePageRequest request);
 
-    List<TradeSignDTO> listAfter(@Param("id") Long id);
+    List<TradeSignDTO> listAfter(TradeDataBasePageRequest request);
 
     /**
      * 批量插入

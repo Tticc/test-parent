@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StopWatch;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
@@ -57,11 +58,20 @@ public class MACrossWithTPSLStrategy {
             AtomicBoolean ifLastAto = new AtomicBoolean(false);
             long lastUpdateTimestamp = 0L;
             int size = 0;
+            StopWatch stopWatch = new StopWatch();
             do {
                 List<TradeSignDTO> tradeList = tradeSignDTOS.stream().filter(e -> OkxCommon.checkIfHasTradeSign(e)).collect(Collectors.toList());
                 if (tradeList.size() != size) {
+                    if(stopWatch.isRunning()){
+                        stopWatch.stop();
+                    }
                     size = tradeList.size();
+                    stopWatch.start("数据打印");
                     PrinterHelper.printProfitsWithTPSL(tradeList);
+                    stopWatch.stop();
+                    System.out.println(stopWatch.prettyPrint());
+                    stopWatch = new StopWatch();
+                    stopWatch.start("数据处理");
                 }
                 TradeSignDTO tradeSignDTO = tradeSignDTOS.get(tradeSignDTOS.size() - 1);
                 lastUpdateTimestamp = tradeSignDTO.getLastUpdateTimestamp();
