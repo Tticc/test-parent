@@ -20,10 +20,8 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -37,13 +35,28 @@ public class MACrossWithTPSLStrategy {
     @Autowired
     protected BinanceHelper binanceHelper;
 
+    private static BigDecimal slTimes = new BigDecimal("0.01");
+    private static BigDecimal tpTimes = new BigDecimal("0.07");
+
+
+    public static Map<String, Map<Long, TradeSignDTO>> tradeSignMap = new HashMap();
+    public static Map<Long, TradeSignDTO> getByBarEnumCode(String code) {
+        return tradeSignMap.get(code);
+    }
+
     /**
      * @param startAt "20250401000000"
      * @param step    5
      * @param barEnum BarEnum._30m
      * @throws BusinessException
      */
-    public void runOnce(String startAt, int step, BarEnum barEnum, String endAt) throws BusinessException {
+    public void runOnce(String startAt, int step, BarEnum barEnum, String endAt, int skipAfterHuge, int keepSkipAfterHuge, BigDecimal skipTimes, BigDecimal slTimes, BigDecimal tpTimes) throws BusinessException {
+        MACrossWithTPSLStrategy.slTimes = slTimes;
+        MACrossWithTPSLStrategy.tpTimes = tpTimes;
+        Map<Long, TradeSignDTO> longTradeSignDTOMap = tradeSignMap.get(barEnum.getCode());
+        if(CollectionUtils.isEmpty(longTradeSignDTOMap)){
+            longTradeSignDTOMap = new LinkedHashMap<>();
+        }
         long maxId = Long.MAX_VALUE;
         if (!StringUtils.isEmpty(endAt)) {
             LocalDateTime localDateTime = DateUtil.getLocalDateTime(endAt);
@@ -54,22 +67,26 @@ public class MACrossWithTPSLStrategy {
             binanceHelper.traceLocal(startAt, 80, step, barEnum, (ifLast) -> {
             }, true);
             Map<Long, TradeSignDTO> hisDataMap = BinanceHelper.getByBarEnumCode(barEnum.getCode());
-            List<TradeSignDTO> tradeSignDTOS = hisDataMap.values().stream().sorted(Comparator.comparing(e -> e.getTimestamp())).collect(Collectors.toList());
+            List<TradeSignDTO> tradeSignDTOS = hisDataMap.values().stream().collect(Collectors.toList());
             AtomicBoolean ifLastAto = new AtomicBoolean(false);
             long lastUpdateTimestamp = 0L;
             int size = 0;
             StopWatch stopWatch = new StopWatch();
             do {
                 List<TradeSignDTO> tradeList = tradeSignDTOS.stream().filter(e -> OkxCommon.checkIfHasTradeSign(e)).collect(Collectors.toList());
-                if (tradeList.size() != size) {
-                    if(stopWatch.isRunning()){
+                for (TradeSignDTO tradeSignDTO : tradeList) {
+                    longTradeSignDTOMap.put(tradeSignDTO.getId(), tradeSignDTO);
+                }
+                if (longTradeSignDTOMap.size() != size) {
+                    if (stopWatch.isRunning()) {
                         stopWatch.stop();
                     }
-                    size = tradeList.size();
+                    size = longTradeSignDTOMap.size();
                     stopWatch.start("数据打印");
-                    PrinterHelper.printProfitsWithTPSL(tradeList);
+                    PrinterHelper.printProfitsWithTPSL(longTradeSignDTOMap.values().stream().collect(Collectors.toList()), skipAfterHuge, keepSkipAfterHuge, skipTimes);
                     stopWatch.stop();
-                    System.out.println(stopWatch.prettyPrint());
+                    long lastTaskTimeMillis = stopWatch.getTotalTimeMillis();
+                    System.out.println("本轮计算耗时:"+lastTaskTimeMillis);
                     stopWatch = new StopWatch();
                     stopWatch.start("数据处理");
                 }
@@ -79,7 +96,7 @@ public class MACrossWithTPSLStrategy {
                     ifLastAto.set(ifLast);
                 }, true);
                 hisDataMap = BinanceHelper.getByBarEnumCode(barEnum.getCode());
-                tradeSignDTOS = hisDataMap.values().stream().sorted(Comparator.comparing(e -> e.getTimestamp())).collect(Collectors.toList());
+                tradeSignDTOS = hisDataMap.values().stream().collect(Collectors.toList());
             } while (!ifLastAto.get() && lastUpdateTimestamp < maxId);
         } catch (Exception e) {
             log.error("测试异常。err:", e);
@@ -109,6 +126,7 @@ public class MACrossWithTPSLStrategy {
         if (OkxCommon.checkIfHasTradeSign(lastCandleDTO)) {
             return;
         }
+        lastCandleDTO.setTradeSign(TradeSignEnum.NONE_SIGN.getCode());
         TradeSignDTO lastTradeSign = null;
         List<TradeSignDTO> tradeSigns = tempTradeSignList.stream().filter(e -> OkxCommon.checkIfHasTradeSign(e)).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(tradeSigns)) {
@@ -116,6 +134,8 @@ public class MACrossWithTPSLStrategy {
         }
         // 默认使用最新价格作为成交价格
         BigDecimal currTradePrice = lastCandleDTO.getClose();
+        BigDecimal currLowPrice = lastCandleDTO.getLow();
+        BigDecimal currHighPrice = lastCandleDTO.getHigh();
         /**
          * 交易信号到来
          * 1. 上穿
@@ -144,26 +164,28 @@ public class MACrossWithTPSLStrategy {
             tradeCode = "sell";
         } else {
             if (null != lastTradeSign) {
-                BigDecimal slNum = DecimalUtil.toDecimal(lastTradeSign.getTradePrice()).divide(new BigDecimal(100), 3, RoundingMode.HALF_UP);
-                BigDecimal tpNum = slNum.multiply(BigDecimal.valueOf(7l));
+                // 止损价格差额
+                BigDecimal slNum = DecimalUtil.toDecimal(lastTradeSign.getTradePrice()).multiply(slTimes);
+                // 止盈价格差额
+                BigDecimal tpNum = DecimalUtil.toDecimal(lastTradeSign.getTradePrice()).multiply(tpTimes);
 //                BigDecimal slNum = stopLossNum;
 //                BigDecimal tpNum = takeProfitNum;
                 if (OkxCommon.checkIfMASellSign(lastTradeSign)) {
                     // 如果上一次是MA SELL
-                    if ((DecimalUtil.toDecimal(currTradePrice).subtract(slNum)).compareTo(DecimalUtil.toDecimal(lastTradeSign.getTradePrice())) >= 0) {
+                    if ((DecimalUtil.toDecimal(currHighPrice).subtract(slNum)).compareTo(DecimalUtil.toDecimal(lastTradeSign.getTradePrice())) >= 0) {
                         // 如果当前交易价格-止损价格 > 上次MA信号SELL价。 到达止损
-                        // 例如上次MA信号SELL价为80000，此时已经达到80800. 80800 - 700 = 80100 > 80000。 需要止损
+                        // 例如上次MA信号SELL价为80000，此时已经达到80800. 80800 - 700 = 80100 > 80000。 需要止损，且止损价为80100
                         lastCandleDTO.setTradeSign(TradeSignEnum.SL_BUY_SIGN.getCode());
-                        lastCandleDTO.setTradePrice(currTradePrice);
+                        lastCandleDTO.setTradePrice(lastTradeSign.getTradePrice().add(slNum));
                         lastCandleDTO.setTradeTime(new Date(lastCandleDTO.getLastUpdateTimestamp()));
                         tradeSignCome = true;
                         prefix = "止损";
                         tradeCode = "buy";
-                    } else if ((DecimalUtil.toDecimal(currTradePrice).add(tpNum)).compareTo(DecimalUtil.toDecimal(lastTradeSign.getTradePrice())) <= 0) {
+                    } else if ((DecimalUtil.toDecimal(currLowPrice).add(tpNum)).compareTo(DecimalUtil.toDecimal(lastTradeSign.getTradePrice())) <= 0) {
                         // 如果当前交易价格+止盈价格 < 上次MA信号SELL价。 到达止盈
-                        // 例如上次MA信号SELL价为80000，此时已经达到70000. 70000 + 6000 = 76000 < 80000。 需要止盈
+                        // 例如上次MA信号SELL价为80000，此时已经达到70000. 70000 + 6000 = 76000 < 80000。 需要止盈，且止损价为76000
                         lastCandleDTO.setTradeSign(TradeSignEnum.TP_BUY_SIGN.getCode());
-                        lastCandleDTO.setTradePrice(currTradePrice);
+                        lastCandleDTO.setTradePrice(lastTradeSign.getTradePrice().subtract(tpNum));
                         lastCandleDTO.setTradeTime(new Date(lastCandleDTO.getLastUpdateTimestamp()));
                         tradeSignCome = true;
                         prefix = "止盈";
@@ -171,20 +193,20 @@ public class MACrossWithTPSLStrategy {
                     }
                 } else if (OkxCommon.checkIfMABuySign(lastTradeSign)) {
                     // 如果上一次是MA BUY
-                    if ((DecimalUtil.toDecimal(currTradePrice).add(slNum)).compareTo(DecimalUtil.toDecimal(lastTradeSign.getTradePrice())) <= 0) {
+                    if ((DecimalUtil.toDecimal(currLowPrice).add(slNum)).compareTo(DecimalUtil.toDecimal(lastTradeSign.getTradePrice())) <= 0) {
                         // 如果当前交易价格+止损价格 < 上次MA信号BUY价。 到达止损
                         // 例如上次MA信号BUY价为80800，此时已经达到80000. 80000 + 700 = 80700 < 80800。 需要止损
                         lastCandleDTO.setTradeSign(TradeSignEnum.SL_SELL_SIGN.getCode());
-                        lastCandleDTO.setTradePrice(currTradePrice);
+                        lastCandleDTO.setTradePrice(lastTradeSign.getTradePrice().subtract(slNum));
                         lastCandleDTO.setTradeTime(new Date(lastCandleDTO.getLastUpdateTimestamp()));
                         tradeSignCome = true;
                         prefix = "止损";
                         tradeCode = "sell";
-                    } else if ((DecimalUtil.toDecimal(currTradePrice).subtract(tpNum)).compareTo(DecimalUtil.toDecimal(lastTradeSign.getTradePrice())) >= 0) {
+                    } else if ((DecimalUtil.toDecimal(currHighPrice).subtract(tpNum)).compareTo(DecimalUtil.toDecimal(lastTradeSign.getTradePrice())) >= 0) {
                         // 如果当前交易价格-止盈价格 > 上次MA信号BUY价。 到达止盈
                         // 例如上次MA信号BUY价为70000，此时已经达到80000. 80000 - 6000 = 74000 > 70000。 需要止盈
                         lastCandleDTO.setTradeSign(TradeSignEnum.TP_SELL_SIGN.getCode());
-                        lastCandleDTO.setTradePrice(currTradePrice);
+                        lastCandleDTO.setTradePrice(lastTradeSign.getTradePrice().add(tpNum));
                         lastCandleDTO.setTradeTime(new Date(lastCandleDTO.getLastUpdateTimestamp()));
                         tradeSignCome = true;
                         prefix = "止盈";

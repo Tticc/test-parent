@@ -43,21 +43,26 @@ public class BinanceHelper {
     public List<TradeSignDTO> traceLocal(String startAt, Integer limit, Integer step, BarEnum barEnum, MyConsumer<Boolean> myConsumer, boolean tpsl) throws BusinessException {
         Map<Long, TradeSignDTO> hisData = hisDataMap.get(barEnum.getCode());
         if (null == hisData) {
-            hisData = new HashMap<>();
+            hisData = new LinkedHashMap<>();
             hisDataMap.put(barEnum.getCode(), hisData);
         }
         boolean first = false;
         if (null == limit) {
             limit = 2;
         }
+        int tempNum = 240;
         if (limit < 10) {
             if (CollectionUtils.isEmpty(hisData)) {
                 log.error("异常，数据未初始化完成");
                 throw new BusinessException(5000L);
             }
-            // 获取最新1s数据
-            Long aLong = hisData.keySet().stream().max(Comparator.naturalOrder()).orElse(0L);
-            TradeSignDTO lastTradeSignDTO = hisData.get(aLong);
+            Collection<TradeSignDTO> values = hisData.values();
+            if(values.size() > 1000){
+                hisData.remove(values.stream().findFirst().get().getId());
+            }
+            List<TradeSignDTO> collect = values.stream().skip(Math.max(0, values.size() - tempNum)).collect(Collectors.toList());
+            // 获取最新蜡烛数据
+            TradeSignDTO lastTradeSignDTO = collect.get(collect.size()-1);
             if (null == lastTradeSignDTO) {
                 log.error("异常，未找到数据");
                 throw new BusinessException(5000L);
@@ -80,9 +85,11 @@ public class BinanceHelper {
                 }
             }
         }
-        List<TradeSignDTO> allTradeDatas = hisData.values().stream()
-                .sorted(Comparator.comparing(TradeSignDTO::getId))
-                .collect(Collectors.toList());
+//        List<TradeSignDTO> allTradeDatas = hisData.values().stream()
+//                .sorted(Comparator.comparing(TradeSignDTO::getId))
+//                .collect(Collectors.toList());
+
+        List<TradeSignDTO> allTradeDatas = hisData.values().stream().skip(Math.max(0, hisData.size() - tempNum)).collect(Collectors.toList());
 //        this.calculateTradeData(allTradeDatas, first, false);
         this.calculateTradeData(allTradeDatas, first, true, tpsl);
         return first ? allTradeDatas : allTradeDatas.stream().skip(Math.max(0, allTradeDatas.size() - limit)).collect(Collectors.toList());

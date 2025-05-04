@@ -10,6 +10,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 /**
  * 交易测试
  * wenc
@@ -28,7 +30,12 @@ public class TradeTestJob {
     @EventListener(ApplicationReadyEvent.class)
     public void runOnce() throws BusinessException {
 //        maCrossStrategy.runOnce("20230101000000",5, BarEnum._30m,"20250501000000");
-        maCrossWithTPSLStrategy.runOnce("20210928000000",5, BarEnum._30m,"20220301000000");
+        int skipAfterHuge = 15;
+        int keepSkipAfterHuge = 15;
+        BigDecimal skipTimes = new BigDecimal("0.012");
+        BigDecimal slTimes = new BigDecimal("0.01");
+        BigDecimal tpTimes = new BigDecimal("0.07");
+        maCrossWithTPSLStrategy.runOnce("20240101000000",5, BarEnum._30m,"20250105000000", skipAfterHuge, keepSkipAfterHuge, skipTimes ,slTimes, tpTimes);
         log.info("测试完成");
     }
 }

@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 搜索
@@ -54,7 +56,10 @@ public class TradeController extends BaseController {
         // 步长。默认1s
         int step = 20;
         BarEnum barEnum = BarEnum._30m;
-        return success(binanceHelper.traceLocal("20250201000000",request.getLimit(), step, barEnum, (ifLast) -> {}, true));
+//        return success(binanceHelper.traceLocal("20250201000000",request.getLimit(), step, barEnum, (ifLast) -> {}, true));
+        Map<Long, TradeSignDTO> hisDataMap = BinanceHelper.getByBarEnumCode(barEnum.getCode());
+        List<TradeSignDTO> allTradeDatas = hisDataMap.values().stream().collect(Collectors.toList());
+        return success(allTradeDatas);
     }
 
 
