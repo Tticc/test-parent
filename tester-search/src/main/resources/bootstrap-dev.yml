@@ -55,6 +55,17 @@ normal-datasource:
 #  actual-data-nodes: trade_data_base_$->{2025..2025}${(4..4).collect{ it.toString().padLeft(2, '0')}}
   show-sql: false
 
+eth-datasource:
+  jdbc-url: jdbc:mysql://localhost:3306/eth_db?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8
+  username: root
+  password: 123456
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  ds: ds0
+  logic-table: trade_data_base
+  actual-data-nodes: trade_data_base_$->{2019..2025}${(1..12).collect{ it.toString().padLeft(2, '0')}}
+#  actual-data-nodes: trade_data_base_$->{2025..2025}${(4..4).collect{ it.toString().padLeft(2, '0')}}
+  show-sql: false
+
 
 #logging:
 #  level:

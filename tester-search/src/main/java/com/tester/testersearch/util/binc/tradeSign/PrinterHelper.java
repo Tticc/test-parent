@@ -6,6 +6,9 @@ import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.util.binc.okx.OkxCommon;
 
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -126,9 +129,11 @@ public class PrinterHelper {
         Integer sum = 0;
         Integer feeSum = 0;
         AtomicInteger skip = new AtomicInteger(0);
+        Date lastTime = null;
         for (TradeSignDTO value : tradeList) {
             if (null == st && null == ed) {
                 st = ed = value.getTradePrice().intValue();
+                lastTime = value.getTradeTime();
                 if (OkxCommon.checkIfBuySign(value)) {
                     System.out.println("买入信号。价格:" + value.getTradePrice() + ", open时间:" + DateUtil.dateFormat(value.getTradeTime()));
                 } else {
@@ -144,6 +149,7 @@ public class PrinterHelper {
                         int profits = st - ed;
                         System.out.println("收益:" + profits);
                         System.out.println("买入信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(value.getTradeTime()));
+//                        printInfo(value, st, lastTime, true);
                         peocessList(changeList, profitsList, tradeFeeList, profits, fee, skip, defaultSkipNumber, skipAfterHuge, keepSkipAfterHuge);
                     } else {
                         System.out.println("单边买入信号。价格:" + value.getTradePrice() + DateUtil.dateFormat(value.getTradeTime()));
@@ -154,12 +160,14 @@ public class PrinterHelper {
                     int profits = st - ed;
                     System.out.println("收益:" + profits);
                     System.out.println("止盈止损买入信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(value.getTradeTime()));
+//                    printInfo(value, st, lastTime, true);
                     peocessList(changeList, profitsList, tradeFeeList, profits, fee, skip, defaultSkipNumber, skipAfterHuge, keepSkipAfterHuge);
                 } else if (OkxCommon.checkIfMASellSign(value)) {
                     if (lastIsMa) {
                         int profits = ed - st;
                         System.out.println("收益:" + profits);
                         System.out.println("卖出信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(value.getTradeTime()));
+//                        printInfo(value, st, lastTime, false);
                         peocessList(changeList, profitsList, tradeFeeList, profits, fee, skip, defaultSkipNumber, skipAfterHuge, keepSkipAfterHuge);
                     } else {
                         System.out.println("单边卖出信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(value.getTradeTime()));
@@ -170,8 +178,10 @@ public class PrinterHelper {
                     int profits = ed - st;
                     System.out.println("收益:" + profits);
                     System.out.println("止盈止损卖出信号。价格:" + value.getTradePrice() + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(value.getTradeTime()));
+//                    printInfo(value, st, lastTime, false);
                     peocessList(changeList, profitsList, tradeFeeList, profits, fee, skip, defaultSkipNumber, skipAfterHuge, keepSkipAfterHuge);
                 }
+                lastTime = value.getTradeTime();
             }
             BigDecimal multiply = DecimalUtil.toDecimal(value.getTradePrice()).multiply(skipTimes);
             defaultSkipNumber = multiply.intValue();
@@ -182,11 +192,32 @@ public class PrinterHelper {
         }
         Collections.reverse(changeList);
         Collections.reverse(profitsList);
+        System.out.println("skip:" + skip.get());
         System.out.println("changeList.size():" + changeList.size() + ", changeList = " + changeList);
         System.out.println("profitList.size():" + profitsList.size() + ", profitList = " + profitsList);
         System.out.println("sum = " + sum);
         System.out.println("累计盈利:" + (sum - feeSum) + ". 交易数(买+卖一次记1)：" + profitsList.size() + ", 交易费总计：" + feeSum);
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------");
+    }
+
+    private static void printInfo(TradeSignDTO value, int st, Date lastDate, boolean ifBuy){
+        BigDecimal stBig = new BigDecimal(st);
+        BigDecimal edBig = value.getTradePrice();
+        Instant startInstant = lastDate.toInstant();
+        Instant endInstant = value.getTradeTime().toInstant();
+        Duration duration = Duration.between(startInstant, endInstant);
+        double time = duration.getSeconds() / 3600.0; // 注意用 3600.0 保留小数
+
+        BigDecimal rate;
+        String tag = "";
+        if(ifBuy) {
+            rate = stBig.subtract(edBig).divide(stBig, 3, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
+            tag = "空头";
+        }else{
+            rate = edBig.subtract(stBig).divide(edBig, 3, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
+            tag = "多头";
+        }
+        System.out.println(DateUtil.dateFormat(value.getTradeTime())+"\t"+tag+"\t"+stBig+"\t"+value.getTradePrice().intValue()+"\t"+rate+"\t"+String.format("%.2f", time));
     }
 
     private static void peocessList(List<Integer> changeList

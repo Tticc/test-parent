@@ -72,9 +72,9 @@ public class BinanceHelper {
             for (TradeSignDTO signDTO : tradeSignDTOS) {
                 hisData.put(signDTO.getId(), signDTO);
             }
-            TradeSignDTO newLastTradeSignDTO = tradeSignDTOS.get(tradeSignDTOS.size() - 1);
             // 是否已经取完所有数据
-            myConsumer.accept(Objects.equals(lastUpdateTimestamp, newLastTradeSignDTO.getLastUpdateTimestamp()));
+            myConsumer.accept(CollectionUtils.isEmpty(tradeSignDTOS) ||
+                    Objects.equals(lastUpdateTimestamp, tradeSignDTOS.get(tradeSignDTOS.size() - 1).getLastUpdateTimestamp()));
         } else {
             first = true;
             if (CollectionUtils.isEmpty(hisData)) {

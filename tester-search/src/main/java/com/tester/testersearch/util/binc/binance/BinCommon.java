@@ -21,6 +21,7 @@ public class BinCommon {
     private static String PARAM = "?symbol={}&interval={}&limit={}&startTime={}&endTime={}";
 
     public static final String B_KEY = "BTCUSDT";
+//    public static final String B_KEY = "ETHUSDT";
 
 
     private static Proxy proxy = HttpsClient.getProxy("127.0.0.1", 7890);
