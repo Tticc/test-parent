@@ -7,12 +7,11 @@ import com.tester.testercommon.util.MyConsumer;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
 import com.tester.testersearch.dao.service.TradeDataBaseService;
-import com.tester.testersearch.service.binc.strategy.MACrossStrategy;
 import com.tester.testersearch.service.binc.strategy.MACrossWithTPSLStrategy;
+import com.tester.testersearch.service.binc.strategy.MACrossWithTPSLStrategy_reverse;
+import com.tester.testersearch.service.binc.strategy.TradeParam;
 import com.tester.testersearch.util.BarEnum;
 import com.tester.testersearch.util.binc.binance.CombineCandle;
-import com.tester.testersearch.util.binc.tradeSign.ADXUtil;
-import com.tester.testersearch.util.binc.tradeSign.BollingerBandsUtil;
 import com.tester.testersearch.util.binc.tradeSign.MAUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +39,7 @@ public class BinanceHelper {
     private TradeDataBaseService tradeDataBaseService;
 
 
-    public List<TradeSignDTO> traceLocal(String startAt, Integer limit, Integer step, BarEnum barEnum, MyConsumer<Boolean> myConsumer, boolean tpsl) throws BusinessException {
+    public void traceLocal(String startAt, Integer limit, Integer step, BarEnum barEnum, MyConsumer<Boolean> myConsumer, boolean tpsl, TradeParam tradeParam) throws BusinessException {
         Map<Long, TradeSignDTO> hisData = hisDataMap.get(barEnum.getCode());
         if (null == hisData) {
             hisData = new LinkedHashMap<>();
@@ -76,8 +75,8 @@ public class BinanceHelper {
             myConsumer.accept(CollectionUtils.isEmpty(tradeSignDTOS) ||
                     Objects.equals(lastUpdateTimestamp, tradeSignDTOS.get(tradeSignDTOS.size() - 1).getLastUpdateTimestamp()));
         } else {
-            first = true;
             if (CollectionUtils.isEmpty(hisData)) {
+                first = true;
                 // 初始化，获取数据
                 List<TradeSignDTO> res = this.fetchData(startAt, null, limit * barEnum.getInterval(), barEnum);
                 for (TradeSignDTO signDTO : res) {
@@ -85,14 +84,8 @@ public class BinanceHelper {
                 }
             }
         }
-//        List<TradeSignDTO> allTradeDatas = hisData.values().stream()
-//                .sorted(Comparator.comparing(TradeSignDTO::getId))
-//                .collect(Collectors.toList());
-
         List<TradeSignDTO> allTradeDatas = hisData.values().stream().skip(Math.max(0, hisData.size() - tempNum)).collect(Collectors.toList());
-//        this.calculateTradeData(allTradeDatas, first, false);
-        this.calculateTradeData(allTradeDatas, first, true, tpsl);
-        return first ? allTradeDatas : allTradeDatas.stream().skip(Math.max(0, allTradeDatas.size() - limit)).collect(Collectors.toList());
+        this.calculateTradeData(allTradeDatas, first, true, tpsl, tradeParam);
     }
 
     /**
@@ -153,7 +146,7 @@ public class BinanceHelper {
      * @param excludeLast 是否排除最后一个蜡烛，确保计算的蜡烛都是已完成的
      * @throws BusinessException
      */
-    private void calculateTradeData(List<TradeSignDTO> allTradeDatas, boolean first, boolean excludeLast, boolean tpsl) throws BusinessException {
+    private void calculateTradeData(List<TradeSignDTO> allTradeDatas, boolean first, boolean excludeLast, boolean tpsl, TradeParam tradeParam) throws BusinessException {
         int branderPeriod = 20;
         int adxPeriod = 14;
         int dataSize = Math.max(branderPeriod, adxPeriod * 2 + 2);
@@ -162,13 +155,11 @@ public class BinanceHelper {
             // 如果不是第一次初始化数据，取最后 dataSize 条数据处理
             data = allTradeDatas.stream().skip(Math.max(0, allTradeDatas.size() - dataSize)).collect(Collectors.toList());
         }
-//        log.info("size:{}",data.size());
         // 计算MA
         MAUtil.calculateAndSetMA(data, 5, 10, 20);
         if(tpsl) {
-            MACrossWithTPSLStrategy.calculateTradeSign_excludeLast(allTradeDatas);
-        }else {
-            MACrossStrategy.calculateTradeSign(allTradeDatas, excludeLast);
+            MACrossWithTPSLStrategy.calculateTradeSign_excludeLast(allTradeDatas, tradeParam, first);
+            MACrossWithTPSLStrategy_reverse.calculateTradeSign_excludeLast_reverse(allTradeDatas, tradeParam, first);
         }
         // 计算Brander
 //        BollingerBandsUtil.calculateBollingerBands(data, branderPeriod, 2);

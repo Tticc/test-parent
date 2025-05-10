@@ -1,17 +1,17 @@
 package com.tester.testersearch.util.binc.tradeSign;
 
 import com.tester.base.dto.exception.BusinessException;
+import com.tester.testercommon.constant.ConstantList;
+import com.tester.testercommon.util.BeanCopyUtil;
 import com.tester.testercommon.util.DateUtil;
 import com.tester.testercommon.util.DecimalUtil;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
-import com.tester.testersearch.util.binc.okx.OkxCommon;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * MA计算工具
@@ -63,8 +63,8 @@ public class MAUtil {
     }
 
     public static void initTradeSignM5M20(List<TradeSignDTO> tradeSignList) throws BusinessException {
+        TradeSignDTO.TradeInfo lastTradeInfo = new TradeSignDTO.TradeInfo();
         long lastSignTime = -1L;
-        TradeSignDTO lastSignT = null;
         for (int i = 1; i < tradeSignList.size(); i++) {
             TradeSignDTO tradeSignDTO = tradeSignList.get(i);
             if (tradeSignList.get(i - 1).getMa5() == null || tradeSignList.get(i - 1).getMa20() == null ||
@@ -73,16 +73,14 @@ public class MAUtil {
             }
             if (tradeSignList.get(i - 1).getMa5().compareTo(tradeSignList.get(i - 1).getMa20()) <= 0
                     && tradeSignList.get(i).getMa5().compareTo(tradeSignList.get(i).getMa20()) > 0) {
-                tradeSignDTO.setTradeSign(BUY_SIGN);
-                tradeSignDTO.setTradePrice(tradeSignDTO.getClose());
+                lastTradeInfo.setTradeSign(TradeSignEnum.BUY_SIGN.getCode());
+                lastTradeInfo.setTradePrice(tradeSignDTO.getClose());
                 lastSignTime = tradeSignDTO.getTimestamp();
-                lastSignT = tradeSignDTO;
             } else if (tradeSignList.get(i - 1).getMa5().compareTo(tradeSignList.get(i - 1).getMa20()) >= 0
                     && tradeSignList.get(i).getMa5().compareTo(tradeSignList.get(i).getMa20()) < 0) {
-                tradeSignDTO.setTradeSign(SELL_SIGN);
-                tradeSignDTO.setTradePrice(tradeSignDTO.getClose());
+                lastTradeInfo.setTradeSign(TradeSignEnum.SELL_SIGN.getCode());
+                lastTradeInfo.setTradePrice(tradeSignDTO.getClose());
                 lastSignTime = tradeSignDTO.getTimestamp();
-                lastSignT = tradeSignDTO;
             } else {
                 continue;
             }
@@ -91,17 +89,27 @@ public class MAUtil {
             return;
         }
         for (TradeSignDTO tradeSignDTO : tradeSignList) {
-            if (tradeSignDTO.getTimestamp() < lastSignTime) {
-                tradeSignDTO.setTradePrice(null);
-                tradeSignDTO.setTradeSign(NONE_SIGN);
-            } else if (tradeSignDTO.getTimestamp() > lastSignTime) {
-                tradeSignDTO.setTradePrice(null);
-                tradeSignDTO.setTradeSign(NONE_SIGN);
+            if(Objects.equals(tradeSignDTO.getTimestamp(), lastSignTime)){
+                // 填充并设置正向交易信息
+                lastTradeInfo.setTradeTime(new Date(lastSignTime))
+                        .setTradeEnd(ConstantList.ZERO)
+                        .setTradeStart(ConstantList.ONE)
+                        .setTradeProfits(BigDecimal.ZERO)
+                        .setTradeProfitsRate(BigDecimal.ZERO)
+                        .setTradeSerialNum(ConstantList.ONE);
+                tradeSignDTO.setTradeInfo(lastTradeInfo);
+
+                // 填充并设置逆向交易信息
+                TradeSignDTO.TradeInfo lastReverseTradeInfo = new TradeSignDTO.TradeInfo();
+                BeanCopyUtil.copyPropertiesIgnoreNull(lastTradeInfo, lastReverseTradeInfo);
+                // TradeSign设置为正向交易相反即可
+                lastReverseTradeInfo.setTradeSign(lastTradeInfo.getTradeSign()*-1);
+                tradeSignDTO.setReverseTradeInfo(lastReverseTradeInfo);
+                break;
             }
         }
-        lastSignT.setTradeTime(new Date(lastSignTime));
         System.out.println("交易信号数据初始化完成。最近一次交易信号出现时间：" + DateUtil.dateFormat(new Date(lastSignTime)));
-        System.out.println("类型：" + lastSignT.getTradeSign());
-        System.out.println("金额：" + DecimalUtil.format(lastSignT.getClose()));
+        System.out.println("类型：" + lastTradeInfo.getTradeSign());
+        System.out.println("金额：" + DecimalUtil.format(lastTradeInfo.getTradePrice()));
     }
 }

@@ -5,104 +5,27 @@ import com.tester.testercommon.constant.ConstantList;
 import com.tester.testercommon.util.DateUtil;
 import com.tester.testercommon.util.DecimalUtil;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
-import com.tester.testersearch.service.binc.binance.BinanceHelper;
-import com.tester.testersearch.util.BarEnum;
 import com.tester.testersearch.util.binc.okx.OkxCommon;
 import com.tester.testersearch.util.binc.tradeSign.MAUtil;
-import com.tester.testersearch.util.binc.tradeSign.PrinterHelper;
 import com.tester.testersearch.util.binc.tradeSign.TradeSignEnum;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StopWatch;
-import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * ma加上止盈止损
+ * ma加上止盈止损。反向操作
  * TP (Take Profit) 和 SL (Stop Loss)
  */
 @Service
 @Slf4j
-public class MACrossWithTPSLStrategy {
-    @Autowired
-    protected BinanceHelper binanceHelper;
+public class MACrossWithTPSLStrategy_reverse {
 
     private static BigDecimal slTimes = new BigDecimal("0.01");
     private static BigDecimal tpTimes = new BigDecimal("0.07");
-
-
-    public static Map<String, Map<Long, TradeSignDTO>> tradeSignMap = new HashMap();
-
-    public static Map<Long, TradeSignDTO> getByBarEnumCode(String code) {
-        return tradeSignMap.get(code);
-    }
-
-    /**
-     * @param startAt "20250401000000"
-     * @param step    5
-     * @param barEnum BarEnum._30m
-     * @throws BusinessException
-     */
-    public void runOnce(String startAt, int step, BarEnum barEnum, String endAt, TradeParam tradeParam) throws BusinessException {
-        MACrossWithTPSLStrategy.slTimes = tradeParam.getSlTimes();
-        MACrossWithTPSLStrategy.tpTimes = tradeParam.getTpTimes();
-        Map<Long, TradeSignDTO> longTradeSignDTOMap = tradeSignMap.get(barEnum.getCode());
-        if (CollectionUtils.isEmpty(longTradeSignDTOMap)) {
-            longTradeSignDTOMap = new LinkedHashMap<>();
-        }
-        long maxId = Long.MAX_VALUE;
-        if (!StringUtils.isEmpty(endAt)) {
-            LocalDateTime localDateTime = DateUtil.getLocalDateTime(endAt);
-            Date endDate = DateUtil.getDateFromLocalDateTime(localDateTime);
-            maxId = endDate.getTime();
-        }
-        try {
-            binanceHelper.traceLocal(startAt, 80, step, barEnum, (ifLast) -> {
-            }, true, tradeParam);
-            Map<Long, TradeSignDTO> hisDataMap = BinanceHelper.getByBarEnumCode(barEnum.getCode());
-            List<TradeSignDTO> tradeSignDTOS = hisDataMap.values().stream().collect(Collectors.toList());
-            AtomicBoolean ifLastAto = new AtomicBoolean(false);
-            long lastUpdateTimestamp = 0L;
-            int size = 0;
-            StopWatch stopWatch = new StopWatch();
-            do {
-                List<TradeSignDTO> tradeList = tradeSignDTOS.stream().filter(e -> OkxCommon.checkIfHasTradeSign(e.getTradeInfo())).collect(Collectors.toList());
-                List<TradeSignDTO> reverseTradeList = tradeSignDTOS.stream().filter(e -> OkxCommon.checkIfHasTradeSign(e.getReverseTradeInfo())).collect(Collectors.toList());
-                for (TradeSignDTO tradeSignDTO : tradeList) {
-                    longTradeSignDTOMap.put(tradeSignDTO.getId(), tradeSignDTO);
-                }
-                if (longTradeSignDTOMap.size() != size) {
-                    if (stopWatch.isRunning()) {
-                        stopWatch.stop();
-                    }
-                    size = longTradeSignDTOMap.size();
-                    stopWatch.start("数据打印");
-                    PrinterHelper.printProfitsWithTPSL(longTradeSignDTOMap.values().stream().collect(Collectors.toList()), tradeParam);
-                    stopWatch.stop();
-                    long lastTaskTimeMillis = stopWatch.getTotalTimeMillis();
-                    System.out.println("本轮计算耗时:" + lastTaskTimeMillis);
-                    stopWatch = new StopWatch();
-                    stopWatch.start("数据处理");
-                }
-                TradeSignDTO tradeSignDTO = tradeSignDTOS.get(tradeSignDTOS.size() - 1);
-                lastUpdateTimestamp = tradeSignDTO.getLastUpdateTimestamp();
-                binanceHelper.traceLocal(startAt, 1, step, barEnum, (ifLast) -> {
-                    ifLastAto.set(ifLast);
-                }, true, tradeParam);
-                hisDataMap = BinanceHelper.getByBarEnumCode(barEnum.getCode());
-                tradeSignDTOS = hisDataMap.values().stream().collect(Collectors.toList());
-            } while (!ifLastAto.get() && lastUpdateTimestamp < maxId);
-        } catch (Exception e) {
-            log.error("测试异常。err:", e);
-        }
-    }
 
 
     /**
@@ -111,7 +34,9 @@ public class MACrossWithTPSLStrategy {
      * @param tradeSignList
      * @throws BusinessException
      */
-    public static void calculateTradeSign_excludeLast(List<TradeSignDTO> tradeSignList, TradeParam tradeParam, boolean first) throws BusinessException {
+    public static void calculateTradeSign_excludeLast_reverse(List<TradeSignDTO> tradeSignList, TradeParam tradeParam, boolean first) throws BusinessException {
+        MACrossWithTPSLStrategy_reverse.slTimes = tradeParam.getReverseSlTimes();
+        MACrossWithTPSLStrategy_reverse.tpTimes = tradeParam.getReverseTpTimes();
         TradeSignDTO lastCandleDTO = tradeSignList.get(tradeSignList.size() - 1);
         List<TradeSignDTO> tempTradeSignList = tradeSignList.stream().limit(tradeSignList.size() - 1).collect(Collectors.toList());
         TradeSignDTO lastCalcCandleDTO = tempTradeSignList.get(tempTradeSignList.size() - 1);
@@ -121,11 +46,11 @@ public class MACrossWithTPSLStrategy {
         }
         // 最后一次交易蜡烛
         TradeSignDTO lastTradeCandle = tempTradeSignList.stream()
-                .filter(e -> OkxCommon.checkIfHasTradeSign(e.getTradeInfo()))
+                .filter(e -> OkxCommon.checkIfHasTradeSign(e.getReverseTradeInfo()))
                 .reduce((a, b) -> b)
                 .orElse(null);
         // 如果当前蜡烛已经出现过交易信号，立即返回（避免在同一个蜡烛内反复买卖）
-        if (OkxCommon.checkIfHasTradeSign(lastCandleDTO.getTradeInfo())) {
+        if (OkxCommon.checkIfHasTradeSign(lastCandleDTO.getReverseTradeInfo())) {
             return;
         }
         // 默认使用最新价格作为成交价格
@@ -142,26 +67,26 @@ public class MACrossWithTPSLStrategy {
         String tradeCode = "";
         if (lastSecondCalcCandleDTO.getMa5().compareTo(lastSecondCalcCandleDTO.getMa20()) <= 0
                 && lastCalcCandleDTO.getMa5().compareTo(lastCalcCandleDTO.getMa20()) > 0) {
-            // 上穿，设置此次信号为BUY
-            tradeSignCome = true;
-            prefix = "MA";
-            tradeCode = "buy";
-            setAndFillTradeInfo(lastCandleDTO, currTradePrice, lastTradeCandle, TradeSignEnum.BUY_SIGN);
-        } else if (lastSecondCalcCandleDTO.getMa5().compareTo(lastSecondCalcCandleDTO.getMa20()) >= 0
-                && lastCalcCandleDTO.getMa5().compareTo(lastCalcCandleDTO.getMa20()) < 0) {
-            // 下穿，设置此次信号为SELL
+            // 上穿，但是reverse，设置此次信号为SELL
             tradeSignCome = true;
             prefix = "MA";
             tradeCode = "sell";
             setAndFillTradeInfo(lastCandleDTO, currTradePrice, lastTradeCandle, TradeSignEnum.SELL_SIGN);
+        } else if (lastSecondCalcCandleDTO.getMa5().compareTo(lastSecondCalcCandleDTO.getMa20()) >= 0
+                && lastCalcCandleDTO.getMa5().compareTo(lastCalcCandleDTO.getMa20()) < 0) {
+            // 下穿，但是reverse，设置此次信号为BUY
+            tradeSignCome = true;
+            prefix = "MA";
+            tradeCode = "buy";
+            setAndFillTradeInfo(lastCandleDTO, currTradePrice, lastTradeCandle, TradeSignEnum.BUY_SIGN);
         } else {
             if (null != lastTradeCandle) {
-                BigDecimal lastTradePrice = lastTradeCandle.getTradeInfo().getTradePrice();
+                BigDecimal lastTradePrice = lastTradeCandle.getReverseTradeInfo().getTradePrice();
                 // 止损价格差额
                 BigDecimal slNum = DecimalUtil.toDecimal(lastTradePrice).multiply(slTimes);
                 // 止盈价格差额
                 BigDecimal tpNum = DecimalUtil.toDecimal(lastTradePrice).multiply(tpTimes);
-                if (OkxCommon.checkIfMASellSign(lastTradeCandle.getTradeInfo())) {
+                if (OkxCommon.checkIfMASellSign(lastTradeCandle.getReverseTradeInfo())) {
                     // 如果上一次是MA SELL
                     if ((DecimalUtil.toDecimal(currHighPrice).subtract(slNum)).compareTo(DecimalUtil.toDecimal(lastTradePrice)) >= 0) {
                         // 如果当前交易价格-止损价格 > 上次MA信号SELL价。 到达止损
@@ -178,7 +103,7 @@ public class MACrossWithTPSLStrategy {
                         tradeCode = "buy";
                         setAndFillTradeInfoForTpsl(lastCandleDTO, tpNum, lastTradeCandle, TradeSignEnum.TP_BUY_SIGN);
                     }
-                } else if (OkxCommon.checkIfMABuySign(lastTradeCandle.getTradeInfo())) {
+                } else if (OkxCommon.checkIfMABuySign(lastTradeCandle.getReverseTradeInfo())) {
                     // 如果上一次是MA BUY
                     if ((DecimalUtil.toDecimal(currLowPrice).add(slNum)).compareTo(DecimalUtil.toDecimal(lastTradePrice)) <= 0) {
                         // 如果当前交易价格+止损价格 < 上次MA信号BUY价。 到达止损
@@ -199,21 +124,21 @@ public class MACrossWithTPSLStrategy {
             }
         }
         if (tradeSignCome) {
-            log.info("{}交易信号来临。{}。交易时间:{},交易价格:{}", prefix, tradeCode, DateUtil.dateFormat(lastCandleDTO.getTradeInfo().getTradeTime()), DecimalUtil.format(lastCandleDTO.getTradeInfo().getTradePrice()));
+//            log.info("reverse-{}交易信号来临。{}。交易时间:{},交易价格:{}", prefix, tradeCode, DateUtil.dateFormat(lastCandleDTO.getReverseTradeInfo().getTradeTime()), DecimalUtil.format(lastCandleDTO.getReverseTradeInfo().getTradePrice()));
         }
     }
 
     private static void setAndFillTradeInfo(TradeSignDTO lastCandleDTO, BigDecimal currTradePrice, TradeSignDTO lastTradeCandle, TradeSignEnum signEnum) {
         TradeSignDTO.TradeInfo tradeInfo = new TradeSignDTO.TradeInfo();
-        lastCandleDTO.setTradeInfo(tradeInfo);
+        lastCandleDTO.setReverseTradeInfo(tradeInfo);
         tradeInfo.setTradeSign(signEnum.getCode());
         tradeInfo.setTradePrice(currTradePrice);
         tradeInfo.setTradeTime(new Date(lastCandleDTO.getLastUpdateTimestamp()));
         tradeInfo.setTradeStart(ConstantList.ONE);
         tradeInfo.setTradeEnd(ConstantList.ONE);
         if (null != lastTradeCandle) {
-            tradeInfo.setTradeSerialNum(lastTradeCandle.getTradeInfo().getTradeSerialNum() + 1);
-            if (OkxCommon.checkIfHasTPLSTradeSign(lastTradeCandle.getTradeInfo())) {
+            tradeInfo.setTradeSerialNum(lastTradeCandle.getReverseTradeInfo().getTradeSerialNum() + 1);
+            if (OkxCommon.checkIfHasTPLSTradeSign(lastTradeCandle.getReverseTradeInfo())) {
                 // 如果上一次是止盈止损，这一次不计算，记为非交易终点
                 tradeInfo.setTradeEnd(ConstantList.ZERO);
                 tradeInfo.setTradeProfitsRate(BigDecimal.ZERO);
@@ -221,7 +146,7 @@ public class MACrossWithTPSLStrategy {
             } else {
                 // 当前为buy，上一次就是sell。 用上一次的减这一次的，计算盈利率
                 // 当前为sell，上一次就是buy。 用这一次的减上一次的，计算盈利率
-                BigDecimal lastTradePrice = lastTradeCandle.getTradeInfo().getTradePrice();
+                BigDecimal lastTradePrice = lastTradeCandle.getReverseTradeInfo().getTradePrice();
                 BigDecimal profits = calculateProfits(lastTradePrice, currTradePrice, signEnum);
                 BigDecimal tradeProfitRate = profits.divide(lastTradePrice, 4, BigDecimal.ROUND_HALF_UP);
                 tradeInfo.setTradeProfitsRate(tradeProfitRate);
@@ -237,10 +162,10 @@ public class MACrossWithTPSLStrategy {
 
     private static void setAndFillTradeInfoForTpsl(TradeSignDTO lastCandleDTO, BigDecimal tpslNum, TradeSignDTO lastTradeCandle, TradeSignEnum signEnum) throws BusinessException {
         TradeSignDTO.TradeInfo tradeInfo = new TradeSignDTO.TradeInfo();
-        lastCandleDTO.setTradeInfo(tradeInfo);
+        lastCandleDTO.setReverseTradeInfo(tradeInfo);
         tradeInfo.setTradeSign(signEnum.getCode());
         tradeInfo.setTradeTime(new Date(lastCandleDTO.getLastUpdateTimestamp()));
-        BigDecimal lastTradePrice = lastTradeCandle.getTradeInfo().getTradePrice();
+        BigDecimal lastTradePrice = lastTradeCandle.getReverseTradeInfo().getTradePrice();
         switch (signEnum) {
             case SL_BUY_SIGN:
                 // 止损buy，说明上一次是sell，且已经突破sell价+tpslNum
@@ -274,7 +199,7 @@ public class MACrossWithTPSLStrategy {
         }
         tradeInfo.setTradeStart(ConstantList.ZERO);
         tradeInfo.setTradeEnd(ConstantList.ONE);
-        tradeInfo.setTradeSerialNum(lastTradeCandle.getTradeInfo().getTradeSerialNum() + 1);
+        tradeInfo.setTradeSerialNum(lastTradeCandle.getReverseTradeInfo().getTradeSerialNum() + 1);
     }
 
     private static BigDecimal calculateProfits(BigDecimal lastTradePrice, BigDecimal currTradePrice, TradeSignEnum signEnum) {
@@ -296,6 +221,4 @@ public class MACrossWithTPSLStrategy {
         }
         return profits;
     }
-
-
 }

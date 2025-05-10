@@ -23,14 +23,6 @@ public class TradeSignDTO extends TradeDataBaseDomain {
     private static final long serialVersionUID = 1L;
 
     /***************** MA 和 交易信号 **********************************************************************/
-    @ApiModelProperty(value = "交易信号。 1=buy, -1=卖。null=未设置", name = "tradeSign")
-    private Integer tradeSign;
-
-    @ApiModelProperty(value = "交易价格", name = "tradePrice")
-    private BigDecimal tradePrice;
-
-    @ApiModelProperty(value = "交易时间", name = "tradeTime")
-    private Date tradeTime;
 
     @ApiModelProperty(value = "ma5", name = "ma5")
     private BigDecimal ma5;
@@ -40,8 +32,19 @@ public class TradeSignDTO extends TradeDataBaseDomain {
 
     @ApiModelProperty(value = "ma20", name = "ma20")
     private BigDecimal ma20;
+
     /***************** MA 和 交易信号 **********************************************************************/
 
+
+    /***************** MA反向交易信号 **********************************************************************/
+
+    @ApiModelProperty(value = "正向交易信息", name = "tradeInfo")
+    private TradeInfo tradeInfo;
+
+    @ApiModelProperty(value = "反向交易信息", name = "reverseTradeInfo")
+    private TradeInfo reverseTradeInfo;
+
+    /***************** MA反向交易信号 **********************************************************************/
 
 
     /***************** 蜡烛图扩展信息 **********************************************************************/
@@ -54,7 +57,6 @@ public class TradeSignDTO extends TradeDataBaseDomain {
     @ApiModelProperty(value = "蜡烛结束毫秒时间戳", name = "endTimestamp")
     private Long endTimestamp;
     /***************** 蜡烛图扩展信息 **********************************************************************/
-
 
 
     /***************** 布林线信息 **********************************************************************/
@@ -82,4 +84,35 @@ public class TradeSignDTO extends TradeDataBaseDomain {
 
     /***************** ADX信息 **********************************************************************/
 
+
+    @Data
+    @Accessors(chain = true)
+    public static class TradeInfo {
+        /**
+         * @see com.tester.testersearch.util.binc.tradeSign.TradeSignEnum
+         */
+        @ApiModelProperty(value = "交易信号。 1=buy, -1=卖。null=未设置", name = "tradeSign")
+        private Integer tradeSign;
+
+        @ApiModelProperty(value = "交易价格", name = "tradePrice")
+        private BigDecimal tradePrice;
+
+        @ApiModelProperty(value = "交易时间", name = "tradeTime")
+        private Date tradeTime;
+
+        @ApiModelProperty(value = "交易序列号", name = "tradeSerialNum")
+        private Integer tradeSerialNum = 0;
+
+        @ApiModelProperty(value = "交易收益率", name = "tradeProfitsRate")
+        private BigDecimal tradeProfitsRate;
+
+        @ApiModelProperty(value = "交易收益", name = "tradeProfits")
+        private BigDecimal tradeProfits;
+
+        @ApiModelProperty(value = "交易终点.true = 1, false = 0", name = "tradeEnd")
+        private Integer tradeEnd = 0;
+
+        @ApiModelProperty(value = "交易起点.true = 1, false = 0", name = "tradeStart")
+        private Integer tradeStart = 0;
+    }
 }
