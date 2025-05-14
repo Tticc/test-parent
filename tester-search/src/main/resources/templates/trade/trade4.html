@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>K 线图（实时更新）</title>
+    <!--    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>-->
+    <!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+    <script th:src="@{/static/js/echarts.min.js}"></script>
+    <script th:src="@{/static/js/jquery.min.js}"></script>
+</head>
+<body>
+<div id="main" style="width: 100%; height: 700%;"></div>
+
+<script>
+    var chart = echarts.init(document.getElementById('main'));
+    // 保存历史数据
+    var historicalData = [];
+
+    function fetchData(limit, currentPage) {
+        $.ajax({
+            // url: "/api/trade/tradeOkx",  // 后端接口
+            url: "/api/trade/tradeLocal",  // 后端接口
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({limit: limit, page: currentPage}),
+            success: function (response) {
+                updateHistoricalData(response.data);
+                updateChart();
+            },
+            error: function (xhr, status, error) {
+                console.error("数据加载失败:", error);
+            }
+        });
+    }
+
+    // 更新历史数据
+    function updateHistoricalData(newData) {
+        // 创建一个映射，按 timestamp 存储数据
+        const timestampMap = new Map();
+
+        // 将现有历史数据按照 timestamp 存入 Map
+        historicalData.forEach(item => {
+            timestampMap.set(item.timestamp, item);
+        });
+
+        if (null !== newData) {
+            // 更新 Map 中的数据或添加新数据
+            newData.forEach(item => {
+                timestampMap.set(item.timestamp, item);
+            });
+        }
+
+        // 将 Map 中的数据转回数组，更新历史数据
+        historicalData = Array.from(timestampMap.values());
+    }
+
+    function updateChart() {
+        var categoryData = [];
+        var klineData = [];
+        var ma5Data = [];
+        var ma10Data = [];
+        var ma20Data = [];
+        var tradeSignals = [];
+        var middleBand = [];
+        var upperBand = [];
+        var lowerBand = [];
+        var plusDI = [];
+        var minusDI = [];
+        var ADX = [];
+        let offset = 50; // 偏移量，设置为50
+
+        // 解析数据
+        historicalData.forEach((item, index) => {
+            let dateStr = new Date(item.timestamp).toLocaleString();
+            categoryData.push(dateStr);
+            klineData.push([item.open, item.close, item.low, item.high]);
+            ma5Data.push(item.ma5);
+            ma10Data.push(item.ma10);
+            ma20Data.push(item.ma20);
+
+            middleBand.push(item.middleBand);
+            upperBand.push(item.upperBand);
+            lowerBand.push(item.lowerBand);
+
+            plusDI.push(item.plusDI);
+            minusDI.push(item.minusDI);
+            ADX.push(item.ADX);
+
+            let tradeInfo = item.actualTradeInfo;
+            if(tradeInfo == null){
+                return;
+            }
+            if (tradeInfo.tradeSign === 1) {
+                // **买入信号 (MA5 上穿 MA10)**
+                tradeSignals.push({
+                    timestamp: dateStr,  // timestamp
+                    coord: [dateStr, item.low - offset],  // `coord` 定义标注位置：[时间，收盘价]
+                    value: tradeInfo.tradePrice.toFixed(2), // 显示价格.收盘价
+                    profits: tradeInfo.tradeProfits.toFixed(2), // 显示盈利
+                    type: '买入',
+                    itemStyle: {color: 'green'}
+                });
+            } else if (tradeInfo.tradeSign === 11) {
+                // **买入信号 (MA5 上穿 MA10)**
+                tradeSignals.push({
+                    timestamp: dateStr,  // timestamp
+                    coord: [dateStr, item.low - offset],  // `coord` 定义标注位置：[时间，收盘价]
+                    value: tradeInfo.tradePrice.toFixed(2), // 显示价格.收盘价
+                    profits: tradeInfo.tradeProfits.toFixed(2), // 显示盈利
+                    type: '止损买入',
+                    itemStyle: {color: 'blue'}
+                });
+            } else if (tradeInfo.tradeSign === 12) {
+                // **买入信号 (MA5 上穿 MA10)**
+                tradeSignals.push({
+                    timestamp: dateStr,  // timestamp
+                    coord: [dateStr, item.low - offset],  // `coord` 定义标注位置：[时间，收盘价]
+                    value: tradeInfo.tradePrice.toFixed(2), // 显示价格.收盘价
+                    profits: tradeInfo.tradeProfits.toFixed(2), // 显示盈利
+                    type: '止盈买入',
+                    itemStyle: {color: 'green'}
+                });
+            } else if (tradeInfo.tradeSign === -1) {
+                // **卖出信号 (MA5 下穿 MA10)**
+                tradeSignals.push({
+                    timestamp: dateStr,  // timestamp
+                    coord: [dateStr, item.high + offset],  // `coord` 定义标注位置：[时间，最高价]
+                    value: tradeInfo.tradePrice.toFixed(2),  // 显示价格.收盘价
+                    profits: tradeInfo.tradeProfits.toFixed(2), // 显示盈利
+                    type: '卖出',
+                    itemStyle: {color: 'red'}
+                });
+            } else if (tradeInfo.tradeSign === -11) {
+                // **卖出信号 (MA5 下穿 MA10)**
+                tradeSignals.push({
+                    timestamp: dateStr,  // timestamp
+                    coord: [dateStr, item.high + offset],  // `coord` 定义标注位置：[时间，最高价]
+                    value: tradeInfo.tradePrice.toFixed(2),  // 显示价格.收盘价
+                    profits: tradeInfo.tradeProfits.toFixed(2), // 显示盈利
+                    type: '止损卖出',
+                    itemStyle: {color: 'grey'}
+                });
+            } else if (tradeInfo.tradeSign === -12) {
+                // **卖出信号 (MA5 下穿 MA10)**
+                tradeSignals.push({
+                    timestamp: dateStr,  // timestamp
+                    coord: [dateStr, item.high + offset],  // `coord` 定义标注位置：[时间，最高价]
+                    value: tradeInfo.tradePrice.toFixed(2),  // 显示价格.收盘价
+                    profits: tradeInfo.tradeProfits.toFixed(2), // 显示盈利
+                    type: '止盈卖出',
+                    itemStyle: {color: 'red'}
+                });
+            }
+        });
+
+        // **获取当前的 dataZoom 状态**
+        var currentOption = chart.getOption();
+        var zoomStart = 0;  // 默认值
+        var zoomEnd = 100;   // 默认值
+        if (currentOption && currentOption.dataZoom && currentOption.dataZoom.length > 0) {
+            zoomStart = currentOption.dataZoom[0].start;
+            zoomEnd = currentOption.dataZoom[0].end;
+        }
+        var option = {
+            title: {text: '实时更新的 K 线图'},
+            tooltip: {trigger: 'axis'},
+            legend: {
+                data: ['K线', 'MA5', /*'MA10', */'MA20', 'BB 上轨', /*'BB 中轨', */'BB 下轨', '+DI', '-DI', 'ADX'],
+                bottom: '35%', // 放置在图表底部
+                left: 'center',
+                textStyle: {fontSize: 18}
+            },
+            grid: [
+                {
+                    left: '10%', right: '10%',
+                    top: '10%', height: '40%'  // ✅ K 线图占 50%（留出间距）
+                },
+                {
+                    left: '10%', right: '10%',
+                    top: '45%', height: '50%'  // ✅ ADX 占 50%
+                }
+            ],
+            xAxis: [
+                {type: 'category', data: categoryData, gridIndex: 0}, // K 线 x 轴
+                {type: 'category', data: categoryData, gridIndex: 1, show: false}  // ADX x 轴。隐藏
+            ],
+            yAxis: [{
+                type: 'value',
+                scale: true,  // 让Y轴根据数据自适应，不从0开始
+                min: function (value) {
+                    return value.min;
+                }, // Y轴最小值略小于数据最小值
+                max: function (value) {
+                    return value.max;
+                },  // Y轴最大值略大于数据最大值
+                gridIndex: 0,
+                name: '价格'
+            }, {
+                type: 'value',
+                min: 0,
+                max: 100,  // ADX 的范围一般在 0-100
+                gridIndex: 1,
+                name: 'ADX 指标',
+                axisLine: {lineStyle: {color: 'purple'}},
+                splitLine: {show: false}  // 不显示网格线，避免干扰
+            }
+            ],
+            dataZoom: [
+                {
+                    type: 'inside',  // ✅ 开启 **鼠标滚轮缩放**
+                    xAxisIndex: [0, 1], // 作用于 X 轴
+                    start: zoomStart,       // 初始展示 80% 右侧数据
+                    end: zoomEnd          // 初始展示 100% 右侧数据
+                },
+                {
+                    type: 'slider',   // ✅ 开启 **拖拽缩放**
+                    xAxisIndex: [0, 1],  // 作用于 X 轴
+                    start: zoomStart,
+                    end: zoomEnd,
+                    bottom: 30  // 移动 dataZoom，避免与 legend 重叠
+                }
+            ],
+            series: [
+                {
+                    type: 'candlestick',
+                    name: 'K线',
+                    data: klineData,
+                    itemStyle: {
+                        color: '#00AA00',    // 阳线（收盘价 > 开盘价）填充色（绿色）
+                        color0: '#AA0000',   // 阴线（收盘价 < 开盘价）填充色（红色）
+                        borderColor: '#00AA00',   // 阳线（边框颜色）
+                        borderColor0: '#AA0000'   // 阴线（边框颜色）
+                    },
+                    xAxisIndex: 0,
+                    yAxisIndex: 0,
+                    markPoint: { // 买入卖出信号
+                        data: tradeSignals,
+                        symbol: 'arrow',  // 改为箭头样式
+                        symbolSize: [70, 80], // 控制箭头大小，适当调整宽高
+                        symbolOffset: [0, 80], // [X偏移, Y偏移]，Y轴正值向下移动
+                        label: {
+                            show: true,
+                            color: '#fff',
+                            fontWeight: 'bold',
+                            formatter: function (param) {
+                                return param.data.type + '\n' + param.value + '\n' + param.data.profits;
+                            }
+                        }
+                    }
+                },
+                {// MA5
+                    name: 'MA5',
+                    type: 'line',
+                    data: ma5Data,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'orange'},
+                    xAxisIndex: 0,
+                    yAxisIndex: 0
+                },
+                /*{// MA10
+                    name: 'MA10',
+                    type: 'line',
+                    data: ma10Data,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'red'},
+                    xAxisIndex: 0,
+                    yAxisIndex: 0
+                },*/
+                {// MA20
+                    name: 'MA20',
+                    type: 'line',
+                    data: ma20Data,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'green'},
+                    xAxisIndex: 0,
+                    yAxisIndex: 0
+                },
+                // 布林带上轨
+                {
+                    name: 'BB 上轨',
+                    type: 'line',
+                    data: upperBand,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'blue', type: 'dashed'},
+                    xAxisIndex: 0,
+                    yAxisIndex: 0
+                },
+                /*// 布林带中轨（与 MA20 相同）
+                {
+                    name: 'BB 中轨',
+                    type: 'line',
+                    data: middleBand,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'purple'},
+                    xAxisIndex: 0,
+                    yAxisIndex: 0
+                },*/
+                // 布林带下轨
+                {
+                    name: 'BB 下轨',
+                    type: 'line',
+                    data: lowerBand,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'blue', type: 'dashed'},
+                    xAxisIndex: 0,
+                    yAxisIndex: 0
+                },
+                {
+                    name: '+DI',
+                    type: 'line',
+                    data: plusDI,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'blue'},
+                    xAxisIndex: 1,
+                    yAxisIndex: 1
+                },
+                {
+                    name: '-DI',
+                    type: 'line',
+                    data: minusDI,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'red'},
+                    xAxisIndex: 1,
+                    yAxisIndex: 1
+                },
+                {
+                    name: 'ADX',
+                    type: 'line',
+                    data: ADX,
+                    smooth: true,
+                    lineStyle: {width: 2, color: 'purple'},
+                    xAxisIndex: 1,
+                    yAxisIndex: 1
+                }
+            ]
+        };
+        chart.setOption(option);
+    }
+
+    // 初始加载数据
+    fetchData(25, 1);
+    // 每 5 秒自动刷新
+    setInterval(function () {
+        fetchData(2, 1);  // 传递limit和page参数
+    }, 5*60*1000);
+
+
+</script>
+</body>
+</html>

@@ -27,6 +27,7 @@ public interface TradeDataBaseService extends BaseService<Long, TradeDataBaseDom
     List<TradeDataBaseDomain> list(TradeDataBasePageRequest request);
 
     PageInfo<TradeSignDTO> listPage(TradeDataBasePageRequest request);
+    PageInfo<TradeSignDTO> listPageWithCache(TradeDataBasePageRequest request);
 
     /**
      * 批量保存

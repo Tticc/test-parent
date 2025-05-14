@@ -98,6 +98,7 @@ public class MAUtil {
                         .setTradeProfitsRate(BigDecimal.ZERO)
                         .setTradeSerialNum(ConstantList.ONE);
                 tradeSignDTO.setTradeInfo(lastTradeInfo);
+                tradeSignDTO.setPureTradeInfo(lastTradeInfo);
 
                 // 填充并设置逆向交易信息
                 TradeSignDTO.TradeInfo lastReverseTradeInfo = new TradeSignDTO.TradeInfo();
@@ -105,6 +106,7 @@ public class MAUtil {
                 // TradeSign设置为正向交易相反即可
                 lastReverseTradeInfo.setTradeSign(lastTradeInfo.getTradeSign()*-1);
                 tradeSignDTO.setReverseTradeInfo(lastReverseTradeInfo);
+                tradeSignDTO.setActualTradeInfo(lastTradeInfo);
                 break;
             }
         }

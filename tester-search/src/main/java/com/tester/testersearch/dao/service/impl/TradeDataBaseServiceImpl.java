@@ -9,6 +9,7 @@ import com.tester.testersearch.dao.mapper.TradeDataBaseMapper;
 import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
 import com.tester.testersearch.dao.service.TradeDataBaseService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -17,8 +18,12 @@ import javax.annotation.Resource;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.LongSummaryStatistics;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 /**
  * 交易数据业务服务实现类
@@ -33,6 +38,12 @@ public class TradeDataBaseServiceImpl extends BaseServiceImpl<Long, TradeDataBas
 
     @Resource
     private TradeDataBaseMapper tradeDataBaseMapper;
+
+    private int defaultCacheSize = 1000;
+
+    private AtomicLong minId = new AtomicLong(1L);
+    private AtomicLong maxId = new AtomicLong(1L);
+    private List<TradeSignDTO> cacheList = new ArrayList<>(defaultCacheSize+100);
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -79,6 +90,74 @@ public class TradeDataBaseServiceImpl extends BaseServiceImpl<Long, TradeDataBas
             PageHelper.clearPage(); // 清理 ThreadLocal
         }
         return pageInfo;
+    }
+
+
+    @Override
+    public PageInfo<TradeSignDTO> listPageWithCache(TradeDataBasePageRequest request) {
+        if(null == request.getId()){
+            return null;
+        }
+        Long id = request.getId();
+        int pageSize = request.getPageSize();
+        TradeDataBasePageRequest tempRequest = new TradeDataBasePageRequest();
+        BeanUtils.copyProperties(request,tempRequest);
+        PageInfo<TradeSignDTO> pageInfo;
+        try {
+            if(tempRequest.getEndId() == null) {
+                if(tempRequest.getPageSize() > 0){
+                    tempRequest.setEndId(tempRequest.getId() + (tempRequest.getPageSize()+10)*1000);
+                }else {
+                    tempRequest.setEndId(new Date().getTime());
+                }
+            }
+            if(tempRequest.getPageSize() < defaultCacheSize){
+                if(tempRequest.getId() > minId.get() && tempRequest.getEndId() < maxId.get()){
+                    List<TradeSignDTO> collect = this.returnList(cacheList, id, pageSize);
+                    pageInfo = new PageInfo<TradeSignDTO>();
+                    pageInfo.setList(collect);
+                    return pageInfo;
+                }
+                tempRequest.setPageSize(defaultCacheSize);
+                tempRequest.setEndId(Math.max(tempRequest.getId() + (tempRequest.getPageSize()+10)*1000,tempRequest.getEndId()));
+            }
+            pageInfo = PageHelper.startPage(tempRequest.getPageNum(), tempRequest.getPageSize(),false)
+                    .doSelectPageInfo(() -> tradeDataBaseMapper.listAfter(tempRequest));
+
+            // 如果结果为空，且当前请求的id小于最大id，加大范围（一个月）重试一次。
+            Long maxId;
+            if (null != pageInfo && CollectionUtils.isEmpty(pageInfo.getList())
+                    && null != (maxId = tradeDataBaseMapper.getMaxId()) && maxId > tempRequest.getId()) {
+                LocalDateTime endTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(tempRequest.getId()), ZoneId.systemDefault());
+                endTime = endTime.plusMonths(1);
+                Date endDate = DateUtil.getDateFromLocalDateTime(endTime);
+                tempRequest.setEndId(endDate.getTime());
+                pageInfo = PageHelper.startPage(tempRequest.getPageNum(), tempRequest.getPageSize(), false)
+                        .doSelectPageInfo(() -> tradeDataBaseMapper.listAfter(tempRequest));
+            }
+        } catch (Exception e) {
+            log.error("Error fetching paginated data", e);
+            throw e; // 或者其它适当的错误处理
+        } finally {
+            PageHelper.clearPage(); // 清理 ThreadLocal
+        }
+        if(!CollectionUtils.isEmpty(pageInfo.getList())){
+            cacheList = pageInfo.getList();
+            LongSummaryStatistics stats = pageInfo.getList().stream()
+                    .mapToLong(TradeSignDTO::getId)
+                    .summaryStatistics();
+            minId.set(stats.getMin());
+            maxId.set(stats.getMax());
+            List<TradeSignDTO> tradeSignDTOS = this.returnList(cacheList, id, pageSize);
+            pageInfo.setList(tradeSignDTOS);
+        }
+        return pageInfo;
+    }
+
+    private List<TradeSignDTO> returnList(List<TradeSignDTO> list, Long minId, int size){
+        return list.stream().filter(obj -> obj.getId() >= minId)
+                .limit(size)
+                .collect(Collectors.toList());
     }
 
     @Override

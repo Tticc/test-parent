@@ -122,7 +122,8 @@ public class BinanceHelper {
             req.setPageNum(1);
             req.setPageSize(fetchSize);
 
-            PageInfo<TradeSignDTO> pageInfo = tradeDataBaseService.listPage(req);
+            PageInfo<TradeSignDTO> pageInfo = tradeDataBaseService.listPageWithCache(req);
+//            PageInfo<TradeSignDTO> pageInfo = tradeDataBaseService.listPage(req);
 
             if (pageInfo == null || CollectionUtils.isEmpty(pageInfo.getList())) {
                 break;
@@ -159,7 +160,7 @@ public class BinanceHelper {
         MAUtil.calculateAndSetMA(data, 5, 10, 20);
         if(tpsl) {
             MACrossWithTPSLStrategy.calculateTradeSign_excludeLast(allTradeDatas, tradeParam, first);
-            MACrossWithTPSLStrategy_reverse.calculateTradeSign_excludeLast_reverse(allTradeDatas, tradeParam, first);
+//            MACrossWithTPSLStrategy_reverse.calculateTradeSign_excludeLast_reverse(allTradeDatas, tradeParam, first);
         }
         // 计算Brander
 //        BollingerBandsUtil.calculateBollingerBands(data, branderPeriod, 2);

@@ -41,8 +41,14 @@ public class TradeSignDTO extends TradeDataBaseDomain {
     @ApiModelProperty(value = "正向交易信息", name = "tradeInfo")
     private TradeInfo tradeInfo;
 
+    @ApiModelProperty(value = "纯MA正向交易信息", name = "pureTradeInfo")
+    private TradeInfo pureTradeInfo;
+
     @ApiModelProperty(value = "反向交易信息", name = "reverseTradeInfo")
     private TradeInfo reverseTradeInfo;
+
+    @ApiModelProperty(value = "实际交易信息", name = "actualTradeInfo")
+    private TradeInfo actualTradeInfo;
 
     /***************** MA反向交易信号 **********************************************************************/
 

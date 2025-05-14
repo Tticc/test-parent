@@ -199,7 +199,7 @@ public class MACrossWithTPSLStrategy_reverse {
         }
         tradeInfo.setTradeStart(ConstantList.ZERO);
         tradeInfo.setTradeEnd(ConstantList.ONE);
-        tradeInfo.setTradeSerialNum(lastTradeCandle.getReverseTradeInfo().getTradeSerialNum() + 1);
+        tradeInfo.setTradeSerialNum(lastTradeCandle.getReverseTradeInfo().getTradeSerialNum());
     }
 
     private static BigDecimal calculateProfits(BigDecimal lastTradePrice, BigDecimal currTradePrice, TradeSignEnum signEnum) {

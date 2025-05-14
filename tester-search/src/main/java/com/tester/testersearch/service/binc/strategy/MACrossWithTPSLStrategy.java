@@ -2,6 +2,7 @@ package com.tester.testersearch.service.binc.strategy;
 
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.constant.ConstantList;
+import com.tester.testercommon.util.BeanCopyUtil;
 import com.tester.testercommon.util.DateUtil;
 import com.tester.testercommon.util.DecimalUtil;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
@@ -10,6 +11,7 @@ import com.tester.testersearch.util.BarEnum;
 import com.tester.testersearch.util.binc.okx.OkxCommon;
 import com.tester.testersearch.util.binc.tradeSign.MAUtil;
 import com.tester.testersearch.util.binc.tradeSign.PrinterHelper;
+import com.tester.testersearch.util.binc.tradeSign.PrinterHelperV2;
 import com.tester.testersearch.util.binc.tradeSign.TradeSignEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +42,6 @@ public class MACrossWithTPSLStrategy {
 
     public static Map<String, Map<Long, TradeSignDTO>> tradeSignMap = new HashMap();
 
-    public static Map<Long, TradeSignDTO> getByBarEnumCode(String code) {
-        return tradeSignMap.get(code);
-    }
 
     /**
      * @param startAt "20250401000000"
@@ -53,9 +52,9 @@ public class MACrossWithTPSLStrategy {
     public void runOnce(String startAt, int step, BarEnum barEnum, String endAt, TradeParam tradeParam) throws BusinessException {
         MACrossWithTPSLStrategy.slTimes = tradeParam.getSlTimes();
         MACrossWithTPSLStrategy.tpTimes = tradeParam.getTpTimes();
-        Map<Long, TradeSignDTO> longTradeSignDTOMap = tradeSignMap.get(barEnum.getCode());
-        if (CollectionUtils.isEmpty(longTradeSignDTOMap)) {
-            longTradeSignDTOMap = new LinkedHashMap<>();
+        Map<Long, TradeSignDTO> tradeSignDTOMap = tradeSignMap.get(barEnum.getCode());
+        if (CollectionUtils.isEmpty(tradeSignDTOMap)) {
+            tradeSignDTOMap = new LinkedHashMap<>();
         }
         long maxId = Long.MAX_VALUE;
         if (!StringUtils.isEmpty(endAt)) {
@@ -73,18 +72,18 @@ public class MACrossWithTPSLStrategy {
             int size = 0;
             StopWatch stopWatch = new StopWatch();
             do {
-                List<TradeSignDTO> tradeList = tradeSignDTOS.stream().filter(e -> OkxCommon.checkIfHasTradeSign(e.getTradeInfo())).collect(Collectors.toList());
-                List<TradeSignDTO> reverseTradeList = tradeSignDTOS.stream().filter(e -> OkxCommon.checkIfHasTradeSign(e.getReverseTradeInfo())).collect(Collectors.toList());
+                List<TradeSignDTO> tradeList = tradeSignDTOS.stream().filter(e -> OkxCommon.checkIfHasTradeSign(e.getTradeInfo()) || OkxCommon.checkIfHasTradeSign(e.getReverseTradeInfo())).collect(Collectors.toList());
                 for (TradeSignDTO tradeSignDTO : tradeList) {
-                    longTradeSignDTOMap.put(tradeSignDTO.getId(), tradeSignDTO);
+                    tradeSignDTOMap.put(tradeSignDTO.getId(), tradeSignDTO);
                 }
-                if (longTradeSignDTOMap.size() != size) {
+                if (tradeSignDTOMap.size() != size) {
                     if (stopWatch.isRunning()) {
                         stopWatch.stop();
                     }
-                    size = longTradeSignDTOMap.size();
+                    size = tradeSignDTOMap.size();
                     stopWatch.start("数据打印");
-                    PrinterHelper.printProfitsWithTPSL(longTradeSignDTOMap.values().stream().collect(Collectors.toList()), tradeParam);
+//                    PrinterHelper.printProfitsWithTPSL(tradeSignDTOMap.values().stream().collect(Collectors.toList()), tradeParam);
+                    PrinterHelperV2.printProfitsWithTPSL(tradeSignDTOMap, tradeParam);
                     stopWatch.stop();
                     long lastTaskTimeMillis = stopWatch.getTotalTimeMillis();
                     System.out.println("本轮计算耗时:" + lastTaskTimeMillis);
@@ -124,6 +123,11 @@ public class MACrossWithTPSLStrategy {
                 .filter(e -> OkxCommon.checkIfHasTradeSign(e.getTradeInfo()))
                 .reduce((a, b) -> b)
                 .orElse(null);
+        // 最后一次交易蜡烛
+        TradeSignDTO lastMaTradeCandle = tempTradeSignList.stream()
+                .filter(e -> OkxCommon.checkIfHasMATradeSign(e.getTradeInfo()))
+                .reduce((a, b) -> b)
+                .orElse(null);
         // 如果当前蜡烛已经出现过交易信号，立即返回（避免在同一个蜡烛内反复买卖）
         if (OkxCommon.checkIfHasTradeSign(lastCandleDTO.getTradeInfo())) {
             return;
@@ -142,18 +146,30 @@ public class MACrossWithTPSLStrategy {
         String tradeCode = "";
         if (lastSecondCalcCandleDTO.getMa5().compareTo(lastSecondCalcCandleDTO.getMa20()) <= 0
                 && lastCalcCandleDTO.getMa5().compareTo(lastCalcCandleDTO.getMa20()) > 0) {
+            if(lastCandleDTO.getMa5().compareTo(lastCandleDTO.getMa20()) < 0
+                    || OkxCommon.checkIfMABuySign(lastTradeCandle.getTradeInfo())){
+                // 应该上穿，但是此时是ma5小于ma20，直接return
+                // 或者上一次已经是buy
+                return;
+            }
             // 上穿，设置此次信号为BUY
             tradeSignCome = true;
             prefix = "MA";
             tradeCode = "buy";
-            setAndFillTradeInfo(lastCandleDTO, currTradePrice, lastTradeCandle, TradeSignEnum.BUY_SIGN);
+            setAndFillTradeInfo(lastCandleDTO, currTradePrice, lastTradeCandle, TradeSignEnum.BUY_SIGN, lastMaTradeCandle);
         } else if (lastSecondCalcCandleDTO.getMa5().compareTo(lastSecondCalcCandleDTO.getMa20()) >= 0
                 && lastCalcCandleDTO.getMa5().compareTo(lastCalcCandleDTO.getMa20()) < 0) {
+            if(lastCandleDTO.getMa5().compareTo(lastCandleDTO.getMa20()) > 0
+                    || OkxCommon.checkIfMASellSign(lastTradeCandle.getTradeInfo())){
+                // 应该下穿，但是此时是ma5大于ma20，直接return
+                // 或者上一次已经是sell
+                return;
+            }
             // 下穿，设置此次信号为SELL
             tradeSignCome = true;
             prefix = "MA";
             tradeCode = "sell";
-            setAndFillTradeInfo(lastCandleDTO, currTradePrice, lastTradeCandle, TradeSignEnum.SELL_SIGN);
+            setAndFillTradeInfo(lastCandleDTO, currTradePrice, lastTradeCandle, TradeSignEnum.SELL_SIGN, lastMaTradeCandle);
         } else {
             if (null != lastTradeCandle) {
                 BigDecimal lastTradePrice = lastTradeCandle.getTradeInfo().getTradePrice();
@@ -203,9 +219,14 @@ public class MACrossWithTPSLStrategy {
         }
     }
 
-    private static void setAndFillTradeInfo(TradeSignDTO lastCandleDTO, BigDecimal currTradePrice, TradeSignDTO lastTradeCandle, TradeSignEnum signEnum) {
+    private static void setAndFillTradeInfo(TradeSignDTO lastCandleDTO,
+                                            BigDecimal currTradePrice,
+                                            TradeSignDTO lastTradeCandle,
+                                            TradeSignEnum signEnum,
+                                            TradeSignDTO lastMaTradeCandle) {
         TradeSignDTO.TradeInfo tradeInfo = new TradeSignDTO.TradeInfo();
         lastCandleDTO.setTradeInfo(tradeInfo);
+        lastCandleDTO.setPureTradeInfo(tradeInfo);
         tradeInfo.setTradeSign(signEnum.getCode());
         tradeInfo.setTradePrice(currTradePrice);
         tradeInfo.setTradeTime(new Date(lastCandleDTO.getLastUpdateTimestamp()));
@@ -218,6 +239,21 @@ public class MACrossWithTPSLStrategy {
                 tradeInfo.setTradeEnd(ConstantList.ZERO);
                 tradeInfo.setTradeProfitsRate(BigDecimal.ZERO);
                 tradeInfo.setTradeProfits(BigDecimal.ZERO);
+                if(null != lastMaTradeCandle){
+                    TradeSignDTO.TradeInfo pureTradeInfo = new TradeSignDTO.TradeInfo();
+                    BeanCopyUtil.copyPropertiesIgnoreNull(tradeInfo, pureTradeInfo);
+                    BigDecimal lastTradePrice = lastMaTradeCandle.getTradeInfo().getTradePrice();
+                    BigDecimal profits = calculateProfits(lastTradePrice, currTradePrice, signEnum);
+                    BigDecimal tradeProfitRate = profits.divide(lastTradePrice, 4, BigDecimal.ROUND_HALF_UP);
+                    pureTradeInfo.setTradeEnd(ConstantList.ONE);
+                    pureTradeInfo.setTradeProfitsRate(tradeProfitRate);
+                    pureTradeInfo.setTradeProfits(profits);
+                    if(!Objects.equals(lastMaTradeCandle.getTradeInfo().getTradeSign(),signEnum.getCode())){
+                        tradeInfo.setTradeProfits(profits);
+                        tradeInfo.setTradeProfits(profits);
+                    }
+                    lastCandleDTO.setPureTradeInfo(pureTradeInfo);
+                }
             } else {
                 // 当前为buy，上一次就是sell。 用上一次的减这一次的，计算盈利率
                 // 当前为sell，上一次就是buy。 用这一次的减上一次的，计算盈利率
@@ -274,7 +310,7 @@ public class MACrossWithTPSLStrategy {
         }
         tradeInfo.setTradeStart(ConstantList.ZERO);
         tradeInfo.setTradeEnd(ConstantList.ONE);
-        tradeInfo.setTradeSerialNum(lastTradeCandle.getTradeInfo().getTradeSerialNum() + 1);
+        tradeInfo.setTradeSerialNum(lastTradeCandle.getTradeInfo().getTradeSerialNum());
     }
 
     private static BigDecimal calculateProfits(BigDecimal lastTradePrice, BigDecimal currTradePrice, TradeSignEnum signEnum) {

@@ -20,8 +20,7 @@ import java.util.stream.Collectors;
 public class PrinterHelper {
 
 
-    public static void printProfitsWithTPSL(List<TradeSignDTO> tradeSignList, TradeParam tradeParam) {
-        List<TradeSignDTO> tradeList = tradeSignList.stream().filter(e -> OkxCommon.checkIfHasTradeSign(e.getTradeInfo())).collect(Collectors.toList());
+    public static void printProfitsWithTPSL(List<TradeSignDTO> normalTradeList, TradeParam tradeParam) {
         Integer st = null;
         Integer ed = null;
         List<Integer> changeList = new ArrayList<>();
@@ -42,12 +41,16 @@ public class PrinterHelper {
         Integer sum = 0;
         Integer feeSum = 0;
         AtomicInteger skip = new AtomicInteger(0);
-        for (TradeSignDTO value : tradeList) {
-            BigDecimal tradePrice = value.getTradeInfo().getTradePrice();
-            Date tradeTime = value.getTradeInfo().getTradeTime();
+        for (TradeSignDTO value : normalTradeList) {
+            TradeSignDTO.TradeInfo tradeInfo = value.getTradeInfo();
+            if(null == tradeInfo){
+                continue;
+            }
+            BigDecimal tradePrice = tradeInfo.getTradePrice();
+            Date tradeTime = tradeInfo.getTradeTime();
             if (null == st && null == ed) {
                 st = ed = tradePrice.intValue();
-                if (OkxCommon.checkIfBuySign(value.getTradeInfo())) {
+                if (OkxCommon.checkIfBuySign(tradeInfo)) {
                     System.out.println("买入信号。价格:" + tradePrice + ", open时间:" + DateUtil.dateFormat(tradeTime));
                 } else {
                     System.out.println("卖出信号。价格:" + tradePrice + ", open时间:" + DateUtil.dateFormat(tradeTime));
@@ -57,7 +60,7 @@ public class PrinterHelper {
                 ed = tradePrice.intValue();
                 BigDecimal feeBig = DecimalUtil.toDecimal(tradePrice).multiply(new BigDecimal("0.0004"));
                 int fee = feeBig.intValue();
-                if (OkxCommon.checkIfMABuySign(value.getTradeInfo())) {
+                if (OkxCommon.checkIfMABuySign(tradeInfo)) {
                     if (lastIsMa) {
                         int profits = st - ed;
                         System.out.println("收益:" + profits);
@@ -67,13 +70,13 @@ public class PrinterHelper {
                         System.out.println("单边买入信号。价格:" + tradePrice + DateUtil.dateFormat(tradeTime));
                     }
                     lastIsMa = true;
-                } else if (OkxCommon.checkIfTPSLBuySign(value.getTradeInfo())) {
+                } else if (OkxCommon.checkIfTPSLBuySign(tradeInfo)) {
                     lastIsMa = false;
                     int profits = st - ed;
                     System.out.println("收益:" + profits);
                     System.out.println("止盈止损买入信号。价格:" + tradePrice + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(tradeTime));
                     peocessList(changeList, profitsList, tradeFeeList, profits, fee, skip, defaultSkipNumber, tradeParam.getSkipAfterHuge(), tradeParam.getKeepSkipAfterHuge());
-                } else if (OkxCommon.checkIfMASellSign(value.getTradeInfo())) {
+                } else if (OkxCommon.checkIfMASellSign(tradeInfo)) {
                     if (lastIsMa) {
                         int profits = ed - st;
                         System.out.println("收益:" + profits);
@@ -83,7 +86,7 @@ public class PrinterHelper {
                         System.out.println("单边卖出信号。价格:" + tradePrice + "(上一轮" + st + "), open时间:" + DateUtil.dateFormat(tradeTime));
                     }
                     lastIsMa = true;
-                } else if (OkxCommon.checkIfTPSLSellSign(value.getTradeInfo())) {
+                } else if (OkxCommon.checkIfTPSLSellSign(tradeInfo)) {
                     lastIsMa = false;
                     int profits = ed - st;
                     System.out.println("收益:" + profits);

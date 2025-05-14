@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 
 import java.math.BigDecimal;
 
@@ -26,6 +27,8 @@ public class TradeTestJob {
 
     @EventListener(ApplicationReadyEvent.class)
     public void runOnce() throws BusinessException {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start("测试开始");
         TradeParam tradeParam = new TradeParam();
         tradeParam.setSkipAfterHuge(10)
                 .setKeepSkipAfterHuge(10)
@@ -33,10 +36,11 @@ public class TradeTestJob {
                 .setTpTimes(new BigDecimal("0.07"))
                 .setReverseSlTimes(new BigDecimal("0.005"))
                 .setReverseTpTimes(new BigDecimal("0.01"))
-                .setReverseSkipNum(2)
-                .setReverseTakeNum(3)
+                .setReverseSkipNum(0)
+                .setReverseTakeNum(0)
                 .setSkipTimes(new BigDecimal("0.012"));
-        maCrossWithTPSLStrategy.runOnce("20250101000000",5, BarEnum._30m,"20260105000000", tradeParam);
-        log.info("测试完成");
+        maCrossWithTPSLStrategy.runOnce("20240101000000",5, BarEnum._30m,"20250105000000", tradeParam);
+        stopWatch.stop();
+        log.info("测试完成。耗时：{}",stopWatch.prettyPrint());
     }
 }
