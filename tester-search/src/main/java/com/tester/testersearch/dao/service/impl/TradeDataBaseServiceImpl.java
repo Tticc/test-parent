@@ -75,7 +75,7 @@ public class TradeDataBaseServiceImpl extends BaseServiceImpl<Long, TradeDataBas
             // 如果结果为空，且当前请求的id小于最大id，加大范围（一个月）重试一次。
             Long maxId;
             if (null != pageInfo && CollectionUtils.isEmpty(pageInfo.getList())
-                    && null != (maxId = tradeDataBaseMapper.getMaxId()) && maxId > request.getId()) {
+                    && null != (maxId = tradeDataBaseMapper.getMaxId(request.getBKey())) && maxId > request.getId()) {
                 LocalDateTime endTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(request.getId()), ZoneId.systemDefault());
                 endTime = endTime.plusMonths(1);
                 Date endDate = DateUtil.getDateFromLocalDateTime(endTime);
@@ -125,9 +125,11 @@ public class TradeDataBaseServiceImpl extends BaseServiceImpl<Long, TradeDataBas
                     .doSelectPageInfo(() -> tradeDataBaseMapper.listAfter(tempRequest));
 
             // 如果结果为空，且当前请求的id小于最大id，加大范围（一个月）重试一次。
+            // 去除查询最大id逻辑，因为ShardingSphere会全表扫描，耗时过大 2025年5月17日
             Long maxId;
             if (null != pageInfo && CollectionUtils.isEmpty(pageInfo.getList())
-                    && null != (maxId = tradeDataBaseMapper.getMaxId()) && maxId > tempRequest.getId()) {
+//                    && null != (maxId = tradeDataBaseMapper.getMaxId(request.getBKey())) && maxId > tempRequest.getId()
+            ) {
                 LocalDateTime endTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(tempRequest.getId()), ZoneId.systemDefault());
                 endTime = endTime.plusMonths(1);
                 Date endDate = DateUtil.getDateFromLocalDateTime(endTime);
@@ -166,12 +168,12 @@ public class TradeDataBaseServiceImpl extends BaseServiceImpl<Long, TradeDataBas
     }
 
     @Override
-    public Long getMinId() {
-        return tradeDataBaseMapper.getMinId();
+    public Long getMinId(String bKey) {
+        return tradeDataBaseMapper.getMinId(bKey);
     }
 
     @Override
-    public Long getMaxId() {
-        return tradeDataBaseMapper.getMaxId();
+    public Long getMaxId(String bKey) {
+        return tradeDataBaseMapper.getMaxId(bKey);
     }
 }

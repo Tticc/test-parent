@@ -36,7 +36,7 @@ public interface TradeDataBaseMapper extends BaseMapper<TradeDataBaseDomain, Lon
      */
     int batchSave(List<TradeDataBaseDomain> entities);
 
-    Long getMinId();
+    Long getMinId(@Param("bKey") String bKey);
 
-    Long getMaxId();
+    Long getMaxId(@Param("bKey") String bKey);
 }

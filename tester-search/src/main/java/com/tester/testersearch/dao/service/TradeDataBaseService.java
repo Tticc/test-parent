@@ -37,9 +37,9 @@ public interface TradeDataBaseService extends BaseService<Long, TradeDataBaseDom
      */
     int batchSave(List<TradeDataBaseDomain> entities);
 
-    Long getMinId();
+    Long getMinId(String bKey);
 
-    Long getMaxId();
+    Long getMaxId(String bKey);
 
     /* 基础CRUD、分页、列表部分 end */
 }

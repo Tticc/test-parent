@@ -1,5 +1,6 @@
 package com.tester.testersearch.service.binc.strategy;
 
+import com.tester.testersearch.util.BKeyEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -8,6 +9,7 @@ import java.math.BigDecimal;
 @Data
 @Accessors(chain = true)
 public class TradeParam {
+    private String bKey = BKeyEnum.BTCUSDT.getCode();
     /**
      * 遇到大收益后跳过交易次数
      */
@@ -39,9 +41,9 @@ public class TradeParam {
     /**
      * 大收益后反向交易前跳过次数
      */
-    private int reverseSkipNum = 2;
+    private int reverseSkipNum = 0;
     /**
      * 大收益后反向交易持续次数
      */
-    private int reverseTakeNum = 3;
+    private int reverseTakeNum = 0;
 }

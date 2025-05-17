@@ -7,6 +7,7 @@ import com.tester.testersearch.dao.domain.TradeDataBaseDomain;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
 import com.tester.testersearch.dao.service.TradeDataBaseService;
+import com.tester.testersearch.util.BKeyEnum;
 import com.tester.testersearch.util.BarEnum;
 import com.tester.testersearch.util.binc.binance.BinCommon;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +33,8 @@ import java.util.stream.Collectors;
 //@Component
 public class FetchBinanceBeforeDataJob {
 
-        public static final String B_KEY = "BTCUSDT";
-//    public static final String B_KEY = "ETHUSDT";
+        public static final String B_KEY = BKeyEnum.BTCUSDT.getCode();
+//    public static final String B_KEY = BKeyEnum.ETHUSDT.getCode();
 
     @Autowired
     private TradeDataBaseService tradeDataBaseService;
@@ -46,7 +47,7 @@ public class FetchBinanceBeforeDataJob {
             int batchSize = 500;
             StopWatch stopWatch = new StopWatch();
             stopWatch.start("查询最小id");
-            Long minId = tradeDataBaseService.getMinId();
+            Long minId = tradeDataBaseService.getMinId(B_KEY);
             stopWatch.stop();
 
             stopWatch.start("取历史数据fetchDataBefore");
@@ -150,7 +151,7 @@ public class FetchBinanceBeforeDataJob {
     }
     private void checkAllData() {
         List<Long> lackData = new ArrayList<>();
-        Long minId = tradeDataBaseService.getMinId();
+        Long minId = tradeDataBaseService.getMinId(B_KEY);
         boolean hasNextPage = false;
         int pageSize = 100;
         do {

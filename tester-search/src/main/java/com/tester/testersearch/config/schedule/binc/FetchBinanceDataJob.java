@@ -7,6 +7,7 @@ import com.tester.testersearch.dao.domain.TradeDataBaseDomain;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
 import com.tester.testersearch.dao.service.TradeDataBaseService;
+import com.tester.testersearch.util.BKeyEnum;
 import com.tester.testersearch.util.BarEnum;
 import com.tester.testersearch.util.binc.binance.BinCommon;
 import lombok.extern.slf4j.Slf4j;
@@ -35,8 +36,8 @@ import java.util.stream.Collectors;
 //@Component
 public class FetchBinanceDataJob {
 
-        public static final String B_KEY = "BTCUSDT";
-//    public static final String B_KEY = "ETHUSDT";
+    public static final String B_KEY = BKeyEnum.BTCUSDT.getCode();
+//    public static final String B_KEY = BKeyEnum.ETHUSDT.getCode();
 
 
     @Autowired
@@ -50,7 +51,7 @@ public class FetchBinanceDataJob {
             StopWatch stopWatch = new StopWatch();
             stopWatch.start("查询最大id");
             int batchSize = 500;
-            Long maxId = tradeDataBaseService.getMaxId();
+            Long maxId = tradeDataBaseService.getMaxId(B_KEY);
             stopWatch.stop();if(null == maxId){
                 maxId = new Date().getTime()-60*60*1000;
             }
@@ -135,7 +136,7 @@ public class FetchBinanceDataJob {
     }
     private void checkAllData() {
         List<Long> lackData = new ArrayList<>();
-        Long minId = tradeDataBaseService.getMinId();
+        Long minId = tradeDataBaseService.getMinId(B_KEY);
         boolean hasNextPage = false;
         int pageSize = 100;
         do {

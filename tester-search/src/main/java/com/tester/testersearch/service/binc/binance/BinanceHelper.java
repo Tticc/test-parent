@@ -67,7 +67,7 @@ public class BinanceHelper {
                 throw new BusinessException(5000L);
             }
             Long lastUpdateTimestamp = lastTradeSignDTO.getLastUpdateTimestamp();
-            List<TradeSignDTO> tradeSignDTOS = this.fetchData(null, lastTradeSignDTO, step, barEnum);
+            List<TradeSignDTO> tradeSignDTOS = this.fetchData(null, lastTradeSignDTO, step, barEnum,tradeParam.getBKey());
             for (TradeSignDTO signDTO : tradeSignDTOS) {
                 hisData.put(signDTO.getId(), signDTO);
             }
@@ -78,7 +78,7 @@ public class BinanceHelper {
             if (CollectionUtils.isEmpty(hisData)) {
                 first = true;
                 // 初始化，获取数据
-                List<TradeSignDTO> res = this.fetchData(startAt, null, limit * barEnum.getInterval(), barEnum);
+                List<TradeSignDTO> res = this.fetchData(startAt, null, limit * barEnum.getInterval(), barEnum,tradeParam.getBKey());
                 for (TradeSignDTO signDTO : res) {
                     hisData.put(signDTO.getId(), signDTO);
                 }
@@ -100,7 +100,7 @@ public class BinanceHelper {
      * @param barEnum
      * @return
      */
-    private List<TradeSignDTO> fetchData(String startAt, TradeSignDTO last, int size, BarEnum barEnum) {
+    private List<TradeSignDTO> fetchData(String startAt, TradeSignDTO last, int size, BarEnum barEnum, String bKey) {
         Long minId;
         if (null != last) {
             minId = last.getLastUpdateTimestamp()+1000;
@@ -122,6 +122,7 @@ public class BinanceHelper {
             int fetchSize = Math.min(batchSize, size);
             TradeDataBasePageRequest req = new TradeDataBasePageRequest();
             req.setId(currentId);
+            req.setBKey(bKey);
             req.setPageNum(1);
             req.setPageSize(fetchSize);
 

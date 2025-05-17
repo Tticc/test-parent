@@ -143,6 +143,7 @@
         select
         min(t_alias.id)
         from trade_data_base t_alias
+        where t_alias.`b_key` = #{bKey}
     </select>
 
 
@@ -150,6 +151,7 @@
         select
         max(t_alias.id)
         from trade_data_base t_alias
+        where t_alias.`b_key` = #{bKey}
     </select>
 
     <select id="list" resultMap="BaseResultMap">
@@ -202,6 +204,7 @@
         </include>
         from trade_data_base t_alias
         where t_alias.`id` between #{id} and #{endId}
+        AND t_alias.`b_key` = #{bKey}
         AND t_alias.`deleted` = 0
     </select>
 

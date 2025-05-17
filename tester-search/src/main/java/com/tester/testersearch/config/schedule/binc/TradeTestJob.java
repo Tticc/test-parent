@@ -3,6 +3,7 @@ package com.tester.testersearch.config.schedule.binc;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testersearch.service.binc.strategy.MACrossWithTPSLStrategy;
 import com.tester.testersearch.service.binc.strategy.TradeParam;
+import com.tester.testersearch.util.BKeyEnum;
 import com.tester.testersearch.util.BarEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,23 +25,25 @@ public class TradeTestJob {
     @Autowired
     private MACrossWithTPSLStrategy maCrossWithTPSLStrategy;
 
-
     @EventListener(ApplicationReadyEvent.class)
     public void runOnce() throws BusinessException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start("测试开始");
         TradeParam tradeParam = new TradeParam();
-        tradeParam.setSkipAfterHuge(10)
+        tradeParam
+                .setBKey(BKeyEnum.BTCUSDT.getCode())
+//                .setBKey(BKeyEnum.ETHUSDT.getCode())
+                .setSkipAfterHuge(10)
                 .setKeepSkipAfterHuge(10)
-                .setSlTimes(new BigDecimal("0.005"))
+                .setSlTimes(new BigDecimal("0.01"))
                 .setTpTimes(new BigDecimal("0.07"))
+                .setSkipTimes(new BigDecimal("0.012"))
                 .setReverseSlTimes(new BigDecimal("0.005"))
                 .setReverseTpTimes(new BigDecimal("0.01"))
                 .setReverseSkipNum(0)
-                .setReverseTakeNum(0)
-                .setSkipTimes(new BigDecimal("0.012"));
-        maCrossWithTPSLStrategy.runOnce("20200101000000",63, BarEnum._30m,"20260105000000", tradeParam);
+                .setReverseTakeNum(0);
+        maCrossWithTPSLStrategy.runOnce("20200101000000", 63, BarEnum._30m, "20260105000000", tradeParam);
         stopWatch.stop();
-        log.info("测试完成。耗时：{}",stopWatch.prettyPrint());
+        log.info("测试完成。耗时：{}", stopWatch.prettyPrint());
     }
 }

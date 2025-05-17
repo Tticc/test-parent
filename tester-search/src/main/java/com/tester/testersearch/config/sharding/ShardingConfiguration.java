@@ -1,9 +1,9 @@
 package com.tester.testersearch.config.sharding;
 
+import com.tester.testersearch.config.sharding.properties.ShardingDatabaseProperties;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.shardingsphere.api.config.sharding.ShardingRuleConfiguration;
 import org.apache.shardingsphere.api.config.sharding.TableRuleConfiguration;
-import org.apache.shardingsphere.api.config.sharding.strategy.NoneShardingStrategyConfiguration;
 import org.apache.shardingsphere.api.config.sharding.strategy.StandardShardingStrategyConfiguration;
 import org.apache.shardingsphere.shardingjdbc.api.ShardingDataSourceFactory;
 import org.springframework.context.annotation.Bean;
@@ -16,50 +16,71 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 @Configuration
 public class ShardingConfiguration {
 
     @Bean
-    public DataSource normalDataSource(NormalDatabaseProperties normalDatabaseProperties) throws SQLException {
-        HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setPoolName("normalDataSourcePool");
-        dataSource.setDriverClassName(normalDatabaseProperties.getDriverClassName());
-        dataSource.setJdbcUrl(normalDatabaseProperties.getJdbcUrl());
-        dataSource.setUsername(normalDatabaseProperties.getUsername());
-        dataSource.setPassword(normalDatabaseProperties.getPassword());
-        dataSource.setMaximumPoolSize(normalDatabaseProperties.getMaximumPoolSize());
-        dataSource.setConnectionTimeout(normalDatabaseProperties.getConnectionTimeout());
-        dataSource.setMinimumIdle(normalDatabaseProperties.getMinimumIdle());
-        dataSource.setMaxLifetime(normalDatabaseProperties.getMaxLifetime());
-        dataSource.addDataSourceProperty("cachePrepStmts", normalDatabaseProperties.isCachePrepStmts());
-        dataSource.addDataSourceProperty("prepStmtCacheSize", normalDatabaseProperties.getPrepStmtCacheSize());
-        dataSource.addDataSourceProperty("prepStmtCacheSqlLimit", normalDatabaseProperties.getPrepStmtCacheSqlLimit());
-        dataSource.addDataSourceProperty("useServerPrepStmts", normalDatabaseProperties.isUseServerPrepStmts());
+    public DataSource shardingDataSource(ShardingDatabaseProperties databaseProperties) throws SQLException {
 
+        Map<String, DataSource> dataSourceMap = createDataSource(databaseProperties);
 
-        Map<String, DataSource> dataSourceMap = new HashMap<>();
-        dataSourceMap.put(normalDatabaseProperties.getDs(), dataSource);
+        String actualDataNodes = dataSourceMap.keySet().stream()
+                .map(ds -> ds + "." + databaseProperties.getDatasources().get(ds).getActualDataNodes())
+                .collect(Collectors.joining(","));
 
         // 配置分表规则
-        TableRuleConfiguration tradeDataTableRule = new TableRuleConfiguration(normalDatabaseProperties.getLogicTable(), normalDatabaseProperties.getDs() + "." + normalDatabaseProperties.getActualDataNodes());
+        TableRuleConfiguration tradeDataTableRule = new TableRuleConfiguration(databaseProperties.getLogicTable(), actualDataNodes);
 
         // 分片策略（按月份）
         tradeDataTableRule.setTableShardingStrategyConfig(
-                new StandardShardingStrategyConfiguration("id", new MonthShardingAlgorithm(),
+                new StandardShardingStrategyConfiguration(databaseProperties.getShardingTableColumn(), new MonthShardingAlgorithm(),
                         new MonthShardingAlgorithm())
         );
-        tradeDataTableRule.setDatabaseShardingStrategyConfig(new NoneShardingStrategyConfiguration());
+        // 无分库配置
+        // tradeDataTableRule.setDatabaseShardingStrategyConfig(new NoneShardingStrategyConfiguration());
+        // 有分库配置
+        tradeDataTableRule.setDatabaseShardingStrategyConfig(
+                new StandardShardingStrategyConfiguration(databaseProperties.getShardingDbColumn(), new DatabaseShardingAlgorithm())
+        );
+
 
         // 构建分片配置
         ShardingRuleConfiguration shardingRuleConfig = new ShardingRuleConfiguration();
         shardingRuleConfig.getTableRuleConfigs().add(tradeDataTableRule);
 
         Properties props = new Properties();
-        props.put("sql.show", normalDatabaseProperties.isShowSql());
+        props.put("sql.show", databaseProperties.isShowSql());
         // 创建 Sharding 数据源
         return ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfig, props);
     }
+
+    private Map<String, DataSource> createDataSource(ShardingDatabaseProperties databaseProperties) {
+        Map<String, ShardingDatabaseProperties.DbProperties> dataSources = databaseProperties.getDatasources();
+        Map<String, DataSource> dataSourceMap = new HashMap<>();
+        for (Map.Entry<String, ShardingDatabaseProperties.DbProperties> ds : dataSources.entrySet()) {
+            String key = ds.getKey();
+            ShardingDatabaseProperties.DbProperties dbProperties = ds.getValue();
+            HikariDataSource dataSource = new HikariDataSource();
+            dataSource.setPoolName("dsPool_" + key);
+            dataSource.setDriverClassName(dbProperties.getDriverClassName());
+            dataSource.setJdbcUrl(dbProperties.getJdbcUrl());
+            dataSource.setUsername(dbProperties.getUsername());
+            dataSource.setPassword(dbProperties.getPassword());
+            dataSource.setMaximumPoolSize(databaseProperties.getMaximumPoolSize());
+            dataSource.setConnectionTimeout(databaseProperties.getConnectionTimeout());
+            dataSource.setMinimumIdle(databaseProperties.getMinimumIdle());
+            dataSource.setMaxLifetime(databaseProperties.getMaxLifetime());
+            dataSource.addDataSourceProperty("cachePrepStmts", databaseProperties.isCachePrepStmts());
+            dataSource.addDataSourceProperty("prepStmtCacheSize", databaseProperties.getPrepStmtCacheSize());
+            dataSource.addDataSourceProperty("prepStmtCacheSqlLimit", databaseProperties.getPrepStmtCacheSqlLimit());
+            dataSource.addDataSourceProperty("useServerPrepStmts", databaseProperties.isUseServerPrepStmts());
+            dataSourceMap.put(key, dataSource);
+        }
+        return dataSourceMap;
+    }
+
 
     @Bean
     public PlatformTransactionManager txManager(DataSource dataSource) {
