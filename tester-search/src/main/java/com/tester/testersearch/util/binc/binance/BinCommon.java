@@ -20,18 +20,16 @@ public class BinCommon {
     //    String PARAM = "?symbol=BTCUSDT&interval=1s&limit=5&startTime=1742037060000&endTime=1742037120000";
     private static String PARAM = "?symbol={}&interval={}&limit={}&startTime={}&endTime={}";
 
-    public static final String B_KEY = "BTCUSDT";
-//    public static final String B_KEY = "ETHUSDT";
 
 
     private static Proxy proxy = HttpsClient.getProxy("127.0.0.1", 7890);
 
     public static void main(String[] args) {
-        fetchData("1s", "100", "1742037060000", "1742037071000");
+        fetchData("BTCUSDT", "1s", "100", "1742037060000", "1742037071000");
     }
 
-    public static List<TradeDataBaseDomain> fetchData(String bar, String limit, String startAt, String endAt) {
-        String param = format(PARAM, B_KEY, bar, limit, startAt, endAt);
+    public static List<TradeDataBaseDomain> fetchData(String bKey, String bar, String limit, String startAt, String endAt) {
+        String param = format(PARAM, bKey, bar, limit, startAt, endAt);
         String url = BASE_URL + API + param;
         Map<String, String> propertyMap = new HashMap<>();
         propertyMap.put("Content-Type", "application/json;charset=UTF-8");
@@ -53,7 +51,7 @@ public class BinCommon {
                         .setLow(lowPrice)
                         .setClose(closePrice)
                         .setVolume(volume)
-                        .setBKey(B_KEY)
+                        .setBKey(bKey)
                         .setRealData(1)
                         .setTimestamp(timestamp)
                         .setBar(bar)

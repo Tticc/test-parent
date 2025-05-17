@@ -67,6 +67,9 @@ public class MACrossWithTPSLStrategy {
             }, true, tradeParam);
             Map<Long, TradeSignDTO> hisDataMap = BinanceHelper.getByBarEnumCode(barEnum.getCode());
             List<TradeSignDTO> tradeSignDTOS = hisDataMap.values().stream().collect(Collectors.toList());
+            if(CollectionUtils.isEmpty(tradeSignDTOS)){
+                return;
+            }
             AtomicBoolean ifLastAto = new AtomicBoolean(false);
             long lastUpdateTimestamp = 0L;
             int size = 0;

@@ -46,7 +46,8 @@ public class PrinterHelperV2 {
         boolean normalTrade = true;
         for (TradeSignDTO value : tradeList) {
             int currentSkip = skip.get();
-            resetSkipByMa(lastMa,value,currentSkip,skip,tradeParam,pureMaList, resetSkipRecords);
+            resetSkipByProfit(value,currentSkip,skip,tradeParam,pureMaList, resetSkipRecords);
+//            resetSkipByMa(lastMa,value,currentSkip,skip,tradeParam,pureMaList, resetSkipRecords);
             if (normalTrade) {
                 TradeSignDTO.TradeInfo tradeInfo = value.getTradeInfo();
                 if (currentSkip <= 0) {
@@ -61,7 +62,6 @@ public class PrinterHelperV2 {
                 boolean hitHuge = tradeInfo.getTradeProfitsRate().compareTo(tradeParam.getSkipTimes()) >= 0;
                 if (currentSkip > 0) {
                     if (hitHuge && tradeParam.getKeepSkipAfterHuge() > currentSkip && tradeParam.getKeepSkipAfterHuge() > 0) {
-//                        System.out.println("normal剩余skip："+leftSkip+",重置skip为："+tradeParam.getKeepSkipAfterHuge());
 //                        skip.set(tradeParam.getKeepSkipAfterHuge());
                     }
                     continue;
@@ -72,14 +72,16 @@ public class PrinterHelperV2 {
                 tradeFeeList.add(feeBig.intValue());
 
                 // 如果达到大额收益，开始进入反向交易
-                if (hitHuge && (tradeParam.getReverseSkipNum() > 0 || tradeParam.getReverseTakeNum() > 0)) {
-                    normalTrade = false;
-                    reverseSkipNum = tradeParam.getReverseSkipNum();
-                    reverseTakeNum = tradeParam.getReverseTakeNum();
-                    if (OkxCommon.checkIfHasTPLSTradeSign(tradeInfo)) {
-                        reverseSkipNum += 1;
-                    }
+                if (hitHuge) {
 //                    skip.set(tradeParam.getSkipAfterHuge());
+                    if(tradeParam.getReverseSkipNum() > 0 || tradeParam.getReverseTakeNum() > 0) {
+                        normalTrade = false;
+                        reverseSkipNum = tradeParam.getReverseSkipNum();
+                        reverseTakeNum = tradeParam.getReverseTakeNum();
+                        if (OkxCommon.checkIfHasTPLSTradeSign(tradeInfo)) {
+                            reverseSkipNum += 1;
+                        }
+                    }
                 }
             } else {
                 TradeSignDTO.TradeInfo reverseTradeInfo = value.getReverseTradeInfo();
@@ -132,9 +134,9 @@ public class PrinterHelperV2 {
             System.out.println("normalTrade = " + normalTrade);
         }
 
-        List<Integer> maChangeList = tradeList.stream()
+        List<BigDecimal> maChangeList = tradeList.stream()
                 .filter(e -> e.getTradeInfo() != null && Objects.equals(e.getTradeInfo().getTradeEnd(), ConstantList.ONE))
-                .map(e -> e.getTradeInfo().getTradeProfits().intValue())
+                .map(e -> e.getTradeInfo().getTradeProfitsRate())
                 .collect(Collectors.toList());
         List<Integer> reverseMaChangeList = tradeList.stream()
                 .filter(e -> e.getReverseTradeInfo() != null && Objects.equals(e.getReverseTradeInfo().getTradeEnd(), ConstantList.ONE))
@@ -159,6 +161,33 @@ public class PrinterHelperV2 {
         System.out.println("rate sum = " + rateSum);
         System.out.println("累计盈利:" + (sum - feeSum) + ". 交易数(买+卖一次记1)：" + profitsList.size() + ", 交易费总计：" + feeSum);
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------");
+    }
+
+    private static void resetSkipByProfit(TradeSignDTO value,
+                                          int currentSkip,
+                                          AtomicInteger skip,
+                                          TradeParam tradeParam,
+                                          List<Integer> pureMaList,
+                                          List<Integer> resetSkipRecords){
+        TradeSignDTO.TradeInfo tradeInfo = value.getTradeInfo();
+        if(tradeInfo == null || !Objects.equals(tradeInfo.getTradeEnd(), ConstantList.ONE)){
+            return;
+        }
+        int i = skip.decrementAndGet();
+        if (tradeInfo.getTradeProfitsRate().compareTo(tradeParam.getSkipTimes()) >= 0) {
+            if (currentSkip > 0) {
+                if (tradeParam.getKeepSkipAfterHuge() >= currentSkip && tradeParam.getKeepSkipAfterHuge() > 0) {
+                    skip.set(tradeParam.getKeepSkipAfterHuge());
+                    resetSkipRecords.add(currentSkip);
+                    System.out.println("ma超过大收益收益率，当前：" + currentSkip + "，重置为：" + tradeParam.getSkipAfterHuge() + "，收益：" + tradeInfo.getTradeProfits() + "，交易时间:" + DateUtil.dateFormat(value.getTradeInfo().getTradeTime()));
+                }
+            } else {
+                skip.set(tradeParam.getSkipAfterHuge());
+                resetSkipRecords.add(currentSkip);
+                System.out.println("ma超过大收益收益率，当前：" + currentSkip + "，重置为：" + tradeParam.getSkipAfterHuge() + "，收益：" + tradeInfo.getTradeProfits() + "，交易时间:" + DateUtil.dateFormat(value.getTradeInfo().getTradeTime()));
+            }
+        }
+
     }
 
     private static void resetSkipByMa(AtomicReference<TradeSignDTO> lastMa,

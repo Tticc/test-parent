@@ -82,6 +82,9 @@ public class BinanceHelper {
                 for (TradeSignDTO signDTO : res) {
                     hisData.put(signDTO.getId(), signDTO);
                 }
+                if(CollectionUtils.isEmpty(res)){
+                    return;
+                }
             }
         }
         List<TradeSignDTO> allTradeDatas = hisData.values().stream().skip(Math.max(0, hisData.size() - tempNum)).collect(Collectors.toList());

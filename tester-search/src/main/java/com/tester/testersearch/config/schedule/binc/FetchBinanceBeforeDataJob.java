@@ -32,6 +32,8 @@ import java.util.stream.Collectors;
 //@Component
 public class FetchBinanceBeforeDataJob {
 
+        public static final String B_KEY = "BTCUSDT";
+//    public static final String B_KEY = "ETHUSDT";
 
     @Autowired
     private TradeDataBaseService tradeDataBaseService;
@@ -88,7 +90,7 @@ public class FetchBinanceBeforeDataJob {
         long startAt;
         do {
             startAt = endAt - pageSize * 1000;
-            List<TradeDataBaseDomain> dataList = BinCommon.fetchData(BarEnum._1s.getCode(), pageSize + "", startAt + "", endAt + "");
+            List<TradeDataBaseDomain> dataList = BinCommon.fetchData(B_KEY,BarEnum._1s.getCode(), pageSize + "", startAt + "", endAt + "");
             endAt = startAt;
             if (CollectionUtils.isEmpty(dataList)) {
                 continue;
@@ -103,7 +105,7 @@ public class FetchBinanceBeforeDataJob {
         long endAt = startAt;
         do {
             endAt += pageSize * 1000;
-            List<TradeDataBaseDomain> dataList = BinCommon.fetchData(BarEnum._1s.getCode(), pageSize + "", startAt + "", endAt + "");
+            List<TradeDataBaseDomain> dataList = BinCommon.fetchData(B_KEY,BarEnum._1s.getCode(), pageSize + "", startAt + "", endAt + "");
             startAt = endAt;
             if (CollectionUtils.isEmpty(dataList)) {
                 continue;

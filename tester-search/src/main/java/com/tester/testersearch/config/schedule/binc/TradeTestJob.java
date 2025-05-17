@@ -39,7 +39,7 @@ public class TradeTestJob {
                 .setReverseSkipNum(0)
                 .setReverseTakeNum(0)
                 .setSkipTimes(new BigDecimal("0.012"));
-        maCrossWithTPSLStrategy.runOnce("20240101000000",5, BarEnum._30m,"20250105000000", tradeParam);
+        maCrossWithTPSLStrategy.runOnce("20200101000000",63, BarEnum._30m,"20260105000000", tradeParam);
         stopWatch.stop();
         log.info("测试完成。耗时：{}",stopWatch.prettyPrint());
     }
