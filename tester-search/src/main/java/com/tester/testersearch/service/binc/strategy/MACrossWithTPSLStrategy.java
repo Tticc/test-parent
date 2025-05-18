@@ -83,7 +83,9 @@ public class MACrossWithTPSLStrategy {
                     if (stopWatch.isRunning()) {
                         stopWatch.stop();
                     }
-                    this.saveOrUpdateSignal(tradeParam, tradeSignDTOMap, size);
+                    if(tradeParam.isNeedSave()) {
+                        this.saveOrUpdateSignal(tradeParam, tradeSignDTOMap, size);
+                    }
                     size = tradeSignDTOMap.size();
                     stopWatch.start("数据打印");
 //                    PrinterHelper.printProfitsWithTPSL(tradeSignDTOMap.values().stream().collect(Collectors.toList()), tradeParam);
@@ -138,6 +140,8 @@ public class MACrossWithTPSLStrategy {
                         .setSkipNum(null)
                         .setSkipTimes(tradeParam.getSkipTimes())
                         .setActualTrade(0)
+                        .setSlTimes(tradeParam.getSlTimes())
+                        .setTpTimes(tradeParam.getTpTimes())
                         .setExtColumn(null);
                 candleTradeSignalService.save(saveDomain);
             }

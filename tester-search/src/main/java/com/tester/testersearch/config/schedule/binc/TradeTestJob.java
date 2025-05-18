@@ -33,11 +33,12 @@ public class TradeTestJob {
         tradeParam
 //                .setBKey(BKeyEnum.BTCUSDT.getCode())
                 .setBKey(BKeyEnum.BTCUSDT.getCode())
+                .setNeedSave(true)
                 .setStep(63)
                 .setBarEnum(BarEnum._30m)
                 .setSkipAfterHuge(10)
                 .setKeepSkipAfterHuge(10)
-                .setSlTimes(new BigDecimal("0.01"))
+                .setSlTimes(new BigDecimal("0.0075"))
                 .setTpTimes(new BigDecimal("0.07"))
                 .setSkipTimes(new BigDecimal("0.012"))
                 .setReverseSlTimes(new BigDecimal("0.005"))

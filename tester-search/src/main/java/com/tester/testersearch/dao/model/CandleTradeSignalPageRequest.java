@@ -136,4 +136,14 @@ public class CandleTradeSignalPageRequest extends PageRequest {
      */
     @ApiModelProperty(value = "实际交易。1=true，0=false", name = "deleted")
     private Integer actualTrade;
+    /**
+     * 止损比率
+     */
+    @ApiModelProperty(value = "止损比率", name = "slTimes")
+    private BigDecimal slTimes;
+    /**
+     * 止盈比率
+     */
+    @ApiModelProperty(value = "止盈比率", name = "tpTimes")
+    private BigDecimal tpTimes;
 }

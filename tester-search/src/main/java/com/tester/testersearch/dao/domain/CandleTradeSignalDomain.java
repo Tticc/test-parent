@@ -48,6 +48,14 @@ public class CandleTradeSignalDomain extends BaseDomain {
      * 大收益比率
      */
     private BigDecimal skipTimes;
+    /**
+     * 止损比率
+     */
+    private BigDecimal slTimes;
+    /**
+     * 止盈比率
+     */
+    private BigDecimal tpTimes;
 
 
     /**

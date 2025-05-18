@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 @Accessors(chain = true)
 public class TradeParam {
 
+    private boolean needSave = false;
+
     private String bKey = BKeyEnum.BTCUSDT.getCode();
     /**
      * 步长

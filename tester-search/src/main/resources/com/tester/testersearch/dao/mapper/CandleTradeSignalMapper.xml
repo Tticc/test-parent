@@ -24,6 +24,8 @@
         <result column="skip_num" property="skipNum"/>
         <result column="actual_trade" property="actualTrade"/>
         <result column="skip_times" property="skipTimes"/>
+        <result column="sl_times" property="slTimes"/>
+        <result column="tp_times" property="tpTimes"/>
         <result column="deleted" property="deleted"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
@@ -52,33 +54,11 @@
     ${tableName}.`skip_num`,
     ${tableName}.`actual_trade`,
     ${tableName}.`skip_times`,
+    ${tableName}.`sl_times`,
+    ${tableName}.`tp_times`,
     ${tableName}.`deleted`,
     ${tableName}.`create_time`,
     ${tableName}.`update_time`
-    </sql>
-    <!-- 通用查询结果列 -->
-    <sql id="list_column_list">
-            ${tableName}.`id`,
-            ${tableName}.`b_key`,
-            ${tableName}.`bar`,
-            ${tableName}.`step`,
-            ${tableName}.`open_timestamp`,
-            ${tableName}.`ext_column`,
-            ${tableName}.`trade_sign`,
-            ${tableName}.`trade_price`,
-            ${tableName}.`trade_time`,
-            ${tableName}.`trade_serial_num`,
-            ${tableName}.`trade_profits_rate`,
-            ${tableName}.`trade_profits`,
-            ${tableName}.`trade_end`,
-            ${tableName}.`trade_start`,
-            ${tableName}.`ma_trade_profits_rate`,
-            ${tableName}.`ma_trade_profits`,
-            ${tableName}.`skip_after_huge`,
-            ${tableName}.`keep_skip_after_huge`,
-            ${tableName}.`skip_num`,
-            ${tableName}.`actual_trade`,
-            ${tableName}.`skip_times`,
     </sql>
 
     <!--基础CRUD、分页、列表部分 begin-->
@@ -107,6 +87,8 @@
             `skip_num`,
             `actual_trade`,
             `skip_times`,
+            `sl_times`,
+            `tp_times`,
             `deleted`,
             `create_time`,
             `update_time`
@@ -134,6 +116,8 @@
             #{skipNum},
             #{actualTrade},
             #{skipTimes},
+            #{slTimes},
+            #{tpTimes},
             #{deleted},
             #{createTime},
             #{updateTime}
@@ -203,6 +187,12 @@
             </if>
             <if test="skipTimes != null">
                 `skip_times` = #{skipTimes},
+            </if>
+            <if test="slTimes != null">
+                `sl_times` = #{slTimes},
+            </if>
+            <if test="tpTimes != null">
+                `tp_times` = #{tpTimes},
             </if>
             <if test="deleted != null">
                 `deleted` = #{deleted},
@@ -324,6 +314,12 @@
                 <if test="skipTimes != null">
                     AND t_alias.`skip_times` = #{skipTimes}
                 </if>
+                <if test="slTimes != null">
+                    AND t_alias.`sl_times` = #{slTimes}
+                </if>
+                <if test="tpTimes != null">
+                    AND t_alias.`tp_times` = #{tpTimes}
+                </if>
             </trim>
         </where>
         order by t_alias.id asc
@@ -354,6 +350,8 @@
         `skip_num`,
         `actual_trade`,
         `skip_times`,
+        `sl_times`,
+        `tp_times`,
         `deleted`,
         `create_time`,
         `update_time`
@@ -382,6 +380,8 @@
             #{item.skipNum},
             #{item.actualTrade},
             #{item.skipTimes},
+            #{item.slTimes},
+            #{item.tpTimes},
             #{item.deleted},
             #{item.createTime},
             #{item.updateTime}
@@ -404,6 +404,8 @@
         and t_alias.skip_after_huge = #{skipAfterHuge}
         and t_alias.keep_skip_after_huge = #{keepSkipAfterHuge}
         and t_alias.skip_times = #{skipTimes}
+        and t_alias.sl_times = #{slTimes}
+        and t_alias.tp_times = #{tpTimes}
         and deleted = 0
     </select>
 

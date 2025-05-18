@@ -65,13 +65,13 @@ public class PrinterHelperV2 {
 //            resetSkipByMa(lastMa,value,currentSkip,skip,tradeParam,pureMaList, resetSkipRecords);
             if (normalTrade) {
                 TradeSignDTO.TradeInfo tradeInfo = value.getTradeInfo();
-                if (currentSkip <= 0) {
-                    value.setActualTradeInfo(tradeInfo);
-                    toSetActualTrade(value);
-                }
                 // 正向交易
                 if (null == tradeInfo || !Objects.equals(tradeInfo.getTradeEnd(), ConstantList.ONE)) {
                     continue;
+                }
+                if (currentSkip <= 0) {
+                    value.setActualTradeInfo(tradeInfo);
+                    toSetActualTrade(value);
                 }
                 int profits = tradeInfo.getTradeProfits().intValue();
                 BigDecimal profitRate = tradeInfo.getTradeProfitsRate();
@@ -146,19 +146,21 @@ public class PrinterHelperV2 {
 
         }
 
-        for (Map.Entry<Long, TradeSignDTO> item : toBeUpdateCache.entrySet()) {
-            TradeSignDTO tradeSignDTO = updatedCache.get(item.getKey());
-            if(null != tradeSignDTO){
-                continue;
+        if(tradeParam.isNeedSave()) {
+            for (Map.Entry<Long, TradeSignDTO> item : toBeUpdateCache.entrySet()) {
+                TradeSignDTO tradeSignDTO = updatedCache.get(item.getKey());
+                if (null != tradeSignDTO) {
+                    continue;
+                }
+                tradeSignDTO = item.getValue();
+                CandleTradeSignalDomain signal = candleTradeSignalService.getByTimestamp(tradeParam, tradeSignDTO.getOpenTimestamp());
+                if (null != signal) {
+                    signal.setSkipNum(tradeSignDTO.getSkipNum());
+                    signal.setActualTrade(tradeSignDTO.getActualTrade());
+                    candleTradeSignalService.update(signal);
+                }
+                updatedCache.put(item.getKey(), tradeSignDTO);
             }
-            tradeSignDTO = item.getValue();
-            CandleTradeSignalDomain signal = candleTradeSignalService.getByTimestamp(tradeParam, tradeSignDTO.getOpenTimestamp());
-            if(null != signal){
-                signal.setSkipNum(tradeSignDTO.getSkipNum());
-                signal.setActualTrade(tradeSignDTO.getActualTrade());
-                candleTradeSignalService.update(signal);
-            }
-            updatedCache.put(item.getKey(), tradeSignDTO);
         }
 
         List<BigDecimal> maChangeList = tradeList.stream()

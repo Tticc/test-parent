@@ -57,7 +57,18 @@ public class CandleTradeSignalServiceImpl extends BaseServiceImpl<Long, CandleTr
         int skipAfterHuge = tradeParam.getSkipAfterHuge();
         int keepSkipAfterHuge = tradeParam.getKeepSkipAfterHuge();
         BigDecimal skipTimes = tradeParam.getSkipTimes();
-        return candleTradeSignalMapper.getByTimestamp(bKey, bar, step, openTimestamp, skipAfterHuge, keepSkipAfterHuge, skipTimes);
+        BigDecimal slTimes = tradeParam.getSlTimes();
+        BigDecimal tpTimes = tradeParam.getTpTimes();
+        return candleTradeSignalMapper.getByTimestamp(bKey,
+                bar,
+                step,
+                openTimestamp,
+                skipAfterHuge,
+                keepSkipAfterHuge,
+                skipTimes,
+                slTimes,
+                tpTimes
+        );
     }
 
 
