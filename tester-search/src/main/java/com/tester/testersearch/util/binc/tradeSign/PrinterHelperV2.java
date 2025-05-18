@@ -28,7 +28,8 @@ public class PrinterHelperV2 {
         PrinterHelperV2.candleTradeSignalService = candleTradeSignalService;
     }
 
-    private static Map<Long, CandleTradeSignalDomain> cache = new HashMap<>();
+    private static Map<Long, TradeSignDTO> toBeUpdateCache = new HashMap<>();
+    private static Map<Long, TradeSignDTO> updatedCache = new HashMap<>();
 
     public static void printProfitsWithTPSL(Map<Long, TradeSignDTO> tradeMap, TradeParam tradeParam) {
         List<TradeSignDTO> tradeList = tradeMap.values().stream().collect(Collectors.toList());
@@ -66,6 +67,7 @@ public class PrinterHelperV2 {
                 TradeSignDTO.TradeInfo tradeInfo = value.getTradeInfo();
                 if (currentSkip <= 0) {
                     value.setActualTradeInfo(tradeInfo);
+                    toSetActualTrade(value);
                 }
                 // 正向交易
                 if (null == tradeInfo || !Objects.equals(tradeInfo.getTradeEnd(), ConstantList.ONE)) {
@@ -144,8 +146,19 @@ public class PrinterHelperV2 {
 
         }
 
-        if(profitsList.size() >= 10){
-            System.out.println("normalTrade = " + normalTrade);
+        for (Map.Entry<Long, TradeSignDTO> item : toBeUpdateCache.entrySet()) {
+            TradeSignDTO tradeSignDTO = updatedCache.get(item.getKey());
+            if(null != tradeSignDTO){
+                continue;
+            }
+            tradeSignDTO = item.getValue();
+            CandleTradeSignalDomain signal = candleTradeSignalService.getByTimestamp(tradeParam, tradeSignDTO.getOpenTimestamp());
+            if(null != signal){
+                signal.setSkipNum(tradeSignDTO.getSkipNum());
+                signal.setActualTrade(tradeSignDTO.getActualTrade());
+                candleTradeSignalService.update(signal);
+            }
+            updatedCache.put(item.getKey(), tradeSignDTO);
         }
 
         List<BigDecimal> maChangeList = tradeList.stream()
@@ -193,32 +206,24 @@ public class PrinterHelperV2 {
                 if (tradeParam.getKeepSkipAfterHuge() >= currentSkip && tradeParam.getKeepSkipAfterHuge() > 0) {
                     skip.set(tradeParam.getKeepSkipAfterHuge());
                     resetSkipRecords.add(currentSkip);
-                    updateSkipNum(value,currentSkip,tradeParam);
+                    toSetSkipNum(value,currentSkip);
                     System.out.println("ma超过大收益收益率，当前：" + currentSkip + "，重置为：" + tradeParam.getSkipAfterHuge() + "，收益：" + tradeInfo.getTradeProfits() + "，交易时间:" + DateUtil.dateFormat(value.getTradeInfo().getTradeTime()));
                 }
             } else {
                 skip.set(tradeParam.getSkipAfterHuge());
                 resetSkipRecords.add(currentSkip);
-                updateSkipNum(value,currentSkip,tradeParam);
+                toSetSkipNum(value,currentSkip);
                 System.out.println("ma超过大收益收益率，当前：" + currentSkip + "，重置为：" + tradeParam.getSkipAfterHuge() + "，收益：" + tradeInfo.getTradeProfits() + "，交易时间:" + DateUtil.dateFormat(value.getTradeInfo().getTradeTime()));
             }
         }
     }
-    private static void updateSkipNum(TradeSignDTO value, int currentSkip, TradeParam tradeParam){
-        if(null != cache.get(value.getOpenTimestamp())){
-            return;
-        }
-        CandleTradeSignalDomain signal = candleTradeSignalService.getByTimestamp(tradeParam, value.getOpenTimestamp());
-        if(null != signal){
-            signal.setSkipNum(currentSkip);
-            if (null != value.getActualTradeInfo()){
-                signal.setActualTrade(1);
-            }
-            candleTradeSignalService.update(signal);
-            cache.put(signal.getOpenTimestamp(), signal);
-        }else{
-            System.out.println("异常，找不到数据");
-        }
+    private static void toSetSkipNum(TradeSignDTO value, int currentSkip){
+        value.setSkipNum(currentSkip);
+        toBeUpdateCache.putIfAbsent(value.getOpenTimestamp(), value);
+    }
+    private static void toSetActualTrade(TradeSignDTO value){
+        value.setActualTrade(1);
+        toBeUpdateCache.putIfAbsent(value.getOpenTimestamp(), value);
     }
 
     private static void resetSkipByMa(AtomicReference<TradeSignDTO> lastMa,

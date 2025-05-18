@@ -25,6 +25,14 @@ public class TradeSignDTO extends TradeDataBaseDomain {
 
     @ApiModelProperty(value = "已完成", name = "completed")
     private Integer completed;
+    /**
+     * skip数。距离上一次大收益信号数
+     */
+    private Integer skipNum;
+    /**
+     * 实际交易
+     */
+    private Integer actualTrade;
 
 
     /***************** MA 和 交易信号 **********************************************************************/

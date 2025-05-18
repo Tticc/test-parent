@@ -19,7 +19,7 @@ import java.math.BigDecimal;
  * wenc
  */
 @Slf4j
-//@Component
+@Component
 public class TradeTestJob {
 
     @Autowired
