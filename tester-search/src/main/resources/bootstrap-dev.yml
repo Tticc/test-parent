@@ -46,6 +46,7 @@ spring:
 
 sharding-datasource:
   show-sql: false
+  logic_table_only_split_db: trade_candle_data
   logic-table: trade_data_base
   sharding_db_column: b_key
   sharding_table_column: id

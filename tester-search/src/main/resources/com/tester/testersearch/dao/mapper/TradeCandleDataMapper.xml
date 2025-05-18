@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tester.testersearch.dao.mapper.TradeCandleDataMapper">
+   <!-- 通用查询映射结果 -->
+   <resultMap id="BaseResultMap" type="com.tester.testersearch.dao.domain.TradeCandleDataDomain">
+      <id column="id" property="id" />
+      <result column="b_key" property="bKey" />
+      <result column="bar" property="bar" />
+      <result column="open_timestamp" property="openTimestamp" />
+      <result column="end_timestamp" property="endTimestamp" />
+      <result column="last_update_timestamp" property="lastUpdateTimestamp" />
+      <result column="open" property="open" />
+      <result column="close" property="close" />
+      <result column="high" property="high" />
+      <result column="low" property="low" />
+      <result column="volume" property="volume" />
+      <result column="ma5" property="ma5" />
+      <result column="ma10" property="ma10" />
+      <result column="ma20" property="ma20" />
+      <result column="completed" property="completed" />
+      <result column="ext_column" property="extColumn" />
+      <result column="deleted" property="deleted" />
+      <result column="create_time" property="createTime" />
+      <result column="update_time" property="updateTime" />
+   </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+    ${tableName}.`id`,
+    ${tableName}.`b_key`,
+    ${tableName}.`bar`,
+    ${tableName}.`open_timestamp`,
+    ${tableName}.`end_timestamp`,
+    ${tableName}.`last_update_timestamp`,
+    ${tableName}.`open`,
+    ${tableName}.`close`,
+    ${tableName}.`high`,
+    ${tableName}.`low`,
+    ${tableName}.`volume`,
+    ${tableName}.`ma5`,
+    ${tableName}.`ma10`,
+    ${tableName}.`ma20`,
+    ${tableName}.`completed`,
+    ${tableName}.`ext_column`,
+    ${tableName}.`deleted`,
+    ${tableName}.`create_time`,
+    ${tableName}.`update_time`
+    </sql>
+    <!-- 通用查询结果列 -->
+    <sql id="list_column_list">
+            ${tableName}.`id`,
+            ${tableName}.`b_key`,
+            ${tableName}.`bar`,
+            ${tableName}.`open_timestamp`,
+            ${tableName}.`end_timestamp`,
+            ${tableName}.`last_update_timestamp`,
+            ${tableName}.`open`,
+            ${tableName}.`close`,
+            ${tableName}.`high`,
+            ${tableName}.`low`,
+            ${tableName}.`volume`,
+            ${tableName}.`ma5`,
+            ${tableName}.`ma10`,
+            ${tableName}.`ma20`,
+            ${tableName}.`completed`,
+            ${tableName}.`ext_column`,
+    </sql>
+
+    <!--基础CRUD、分页、列表部分 begin-->
+    <insert id="save" parameterType="com.tester.testersearch.dao.domain.TradeCandleDataDomain"
+            keyProperty="id" useGeneratedKeys="true">
+        insert into trade_candle_data
+        (
+            `id`,
+            `b_key`,
+            `bar`,
+            `open_timestamp`,
+            `end_timestamp`,
+            `last_update_timestamp`,
+            `open`,
+            `close`,
+            `high`,
+            `low`,
+            `volume`,
+            `ma5`,
+            `ma10`,
+            `ma20`,
+            `completed`,
+            `ext_column`,
+            `deleted`,
+            `create_time`,
+            `update_time`
+        )
+        values
+        (
+            #{id},
+            #{bKey},
+            #{bar},
+            #{openTimestamp},
+            #{endTimestamp},
+            #{lastUpdateTimestamp},
+            #{open},
+            #{close},
+            #{high},
+            #{low},
+            #{volume},
+            #{ma5},
+            #{ma10},
+            #{ma20},
+            #{completed},
+            #{extColumn},
+            #{deleted},
+            #{createTime},
+            #{updateTime}
+
+        )
+    </insert>
+
+    <update id="update" parameterType="com.tester.testersearch.dao.domain.TradeCandleDataDomain">
+        update trade_candle_data
+        <set>
+            <if test="bKey != null and bKey != ''">
+                `b_key` = #{bKey},
+            </if>
+            <if test="bar != null and bar != ''">
+                `bar` = #{bar},
+            </if>
+            <if test="openTimestamp != null">
+                `open_timestamp` = #{openTimestamp},
+            </if>
+            <if test="endTimestamp != null">
+                `end_timestamp` = #{endTimestamp},
+            </if>
+            <if test="lastUpdateTimestamp != null">
+                `last_update_timestamp` = #{lastUpdateTimestamp},
+            </if>
+            <if test="open != null">
+                `open` = #{open},
+            </if>
+            <if test="close != null">
+                `close` = #{close},
+            </if>
+            <if test="high != null">
+                `high` = #{high},
+            </if>
+            <if test="low != null">
+                `low` = #{low},
+            </if>
+            <if test="volume != null">
+                `volume` = #{volume},
+            </if>
+            <if test="ma5 != null">
+                `ma5` = #{ma5},
+            </if>
+            <if test="ma10 != null">
+                `ma10` = #{ma10},
+            </if>
+            <if test="ma20 != null">
+                `ma20` = #{ma20},
+            </if>
+            <if test="completed != null">
+                `completed` = #{completed},
+            </if>
+            <if test="extColumn != null and extColumn != ''">
+                `ext_column` = #{extColumn},
+            </if>
+            <if test="deleted != null">
+                `deleted` = #{deleted},
+            </if>
+            <if test="updateTime != null">
+                `update_time` = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="delete">
+        update trade_candle_data
+        <set>
+            deleted = 1,
+            updated_at = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="get" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List">
+            <property name="tableName" value="t_alias"></property>
+        </include>
+        from trade_candle_data t_alias
+        where t_alias.id = #{id}
+          and t_alias.deleted = 0
+    </select>
+
+    <select id="list" resultMap="BaseResultMap" parameterType="com.tester.testersearch.dao.domain.TradeCandleDataDomain">
+        select
+        <include refid="Base_Column_List">
+            <property name="tableName" value="t_alias"></property>
+        </include>
+        from trade_candle_data t_alias
+        <where>
+            <trim prefixOverrides="AND |OR ">
+                AND t_alias.`b_key` = #{bKey}
+            <if test="bar != null and bar != ''">
+                AND t_alias.`bar` = #{bar}
+            </if>
+            <if test="openTimestamp != null">
+                AND t_alias.`open_timestamp` = #{openTimestamp}
+            </if>
+            <if test="endTimestamp != null">
+                AND t_alias.`end_timestamp` = #{endTimestamp}
+            </if>
+            <if test="lastUpdateTimestamp != null">
+                AND t_alias.`last_update_timestamp` = #{lastUpdateTimestamp}
+            </if>
+            <if test="open != null">
+                AND t_alias.`open` = #{open}
+            </if>
+            <if test="close != null">
+                AND t_alias.`close` = #{close}
+            </if>
+            <if test="high != null">
+                AND t_alias.`high` = #{high}
+            </if>
+            <if test="low != null">
+                AND t_alias.`low` = #{low}
+            </if>
+            <if test="volume != null">
+                AND t_alias.`volume` = #{volume}
+            </if>
+            <if test="ma5 != null">
+                AND t_alias.`ma5` = #{ma5}
+            </if>
+            <if test="ma10 != null">
+                AND t_alias.`ma10` = #{ma10}
+            </if>
+            <if test="ma20 != null">
+                AND t_alias.`ma20` = #{ma20}
+            </if>
+            <if test="completed != null">
+                AND t_alias.`completed` = #{completed}
+            </if>
+            <if test="extColumn != null and extColumn != ''">
+                AND t_alias.`ext_column` = #{extColumn}
+            </if>
+            <if test="deleted != null">
+                AND t_alias.`deleted` = #{deleted}
+            </if>
+            </trim>
+        </where>
+            order by t_alias.id asc
+    </select>
+
+    <insert id="batchSave" parameterType="java.util.List"
+            keyProperty="id" useGeneratedKeys="true">
+        insert into trade_candle_data
+        (
+            `id`,
+            `b_key`,
+            `bar`,
+            `open_timestamp`,
+            `end_timestamp`,
+            `last_update_timestamp`,
+            `open`,
+            `close`,
+            `high`,
+            `low`,
+            `volume`,
+            `ma5`,
+            `ma10`,
+            `ma20`,
+            `completed`,
+            `ext_column`,
+            `deleted`,
+            `create_time`,
+                `update_time`
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            #{item.id},
+            #{item.bKey},
+            #{item.bar},
+            #{item.openTimestamp},
+            #{item.endTimestamp},
+            #{item.lastUpdateTimestamp},
+            #{item.open},
+            #{item.close},
+            #{item.high},
+            #{item.low},
+            #{item.volume},
+            #{item.ma5},
+            #{item.ma10},
+            #{item.ma20},
+            #{item.completed},
+            #{item.extColumn},
+            #{item.deleted},
+            #{item.createTime},
+            #{item.updateTime}
+
+        )
+        </foreach>
+    </insert>
+    <!--基础CRUD、分页、列表部分 end-->
+</mapper>

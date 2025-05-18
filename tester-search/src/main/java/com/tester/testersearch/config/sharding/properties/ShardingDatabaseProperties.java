@@ -26,6 +26,10 @@ public class ShardingDatabaseProperties {
      */
     private String logicTable;
     /**
+     * 仅需分库的逻辑表
+     */
+    private String logicTableOnlySplitDb;
+    /**
      * 分库字段
      */
     private String shardingDbColumn;

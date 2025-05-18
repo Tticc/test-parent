@@ -49,11 +49,28 @@ public class ShardingConfiguration {
         // 构建分片配置
         ShardingRuleConfiguration shardingRuleConfig = new ShardingRuleConfiguration();
         shardingRuleConfig.getTableRuleConfigs().add(tradeDataTableRule);
+        setOnlySplitDbConfig(databaseProperties, dataSourceMap, shardingRuleConfig);
 
         Properties props = new Properties();
         props.put("sql.show", databaseProperties.isShowSql());
         // 创建 Sharding 数据源
         return ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfig, props);
+    }
+
+    private void setOnlySplitDbConfig(ShardingDatabaseProperties databaseProperties, Map<String, DataSource> dataSourceMap, ShardingRuleConfiguration shardingRuleConfig){
+        // 配置 trade_candle_data 表（只分库，不分表）
+        String[] split = databaseProperties.getLogicTableOnlySplitDb().split("\\s*,\\s*");
+        for (String logicTb : split) {
+            TableRuleConfiguration candleDataRule = new TableRuleConfiguration(logicTb,
+                    dataSourceMap.keySet().stream()
+                            .map(ds -> ds + "."+logicTb)
+                            .collect(Collectors.joining(","))
+            );
+            candleDataRule.setDatabaseShardingStrategyConfig(
+                    new StandardShardingStrategyConfiguration(databaseProperties.getShardingDbColumn(), new DatabaseShardingAlgorithm())
+            );
+            shardingRuleConfig.getTableRuleConfigs().add(candleDataRule);
+        }
     }
 
     private Map<String, DataSource> createDataSource(ShardingDatabaseProperties databaseProperties) {
