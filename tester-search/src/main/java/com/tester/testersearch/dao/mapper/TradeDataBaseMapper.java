@@ -18,6 +18,16 @@ import java.util.List;
  */
 @Mapper
 public interface TradeDataBaseMapper extends BaseMapper<TradeDataBaseDomain, Long> {
+
+    @Deprecated
+    TradeDataBaseDomain get(Long id);
+
+    @Deprecated
+    int delete(Long id);
+
+    int getByBKey(@Param("id")Long id, @Param("bKey") String bKey);
+
+    int deleteByBKey(@Param("id")Long id, @Param("bKey") String bKey);
     /**
      * 列表查询
      *

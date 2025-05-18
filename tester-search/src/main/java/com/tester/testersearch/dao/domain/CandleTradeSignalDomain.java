@@ -33,6 +33,24 @@ public class CandleTradeSignalDomain extends BaseDomain {
      */
     private String bar;
     /**
+     * 步长
+     */
+    private Integer step;
+    /**
+     * 遇到大收益后跳过交易次数
+     */
+    private Integer skipAfterHuge;
+    /**
+     * 跳过期间遇到大收益重置跳过次数
+     */
+    private Integer keepSkipAfterHuge;
+    /**
+     * 大收益比率
+     */
+    private BigDecimal skipTimes;
+
+
+    /**
      * 蜡烛开始毫秒时间戳
      */
     private Long openTimestamp;
@@ -81,24 +99,17 @@ public class CandleTradeSignalDomain extends BaseDomain {
      */
     private BigDecimal maTradeProfits;
     /**
-     * 遇到大收益后跳过交易次数
-     */
-    private Integer skipAfterHuge;
-    /**
-     * 跳过期间遇到大收益重置跳过次数
-     */
-    private Integer keepSkipAfterHuge;
-    /**
      * skip数。距离上一次大收益信号数
      */
-    private BigDecimal skipNum;
+    private Integer skipNum;
     /**
-     * 大收益比率
+     * 实际交易。1=true，0=false;
      */
-    private BigDecimal skipTimes;
+    private Integer actualTrade;
 
     public static final String B_KEY = "b_key";
     public static final String BAR = "bar";
+    public static final String STEP = "step";
     public static final String OPEN_TIMESTAMP = "open_timestamp";
     public static final String EXT_COLUMN = "ext_column";
     public static final String TRADE_SIGN = "trade_sign";
@@ -115,5 +126,6 @@ public class CandleTradeSignalDomain extends BaseDomain {
     public static final String KEEP_SKIP_AFTER_HUGE = "keep_skip_after_huge";
     public static final String SKIP_NUM = "skip_num";
     public static final String SKIP_TIMES = "skip_times";
+    public static final String ACTUAL_TRADE = "actual_trade";
 
 }

@@ -42,6 +42,11 @@ public class CandleTradeSignalPageRequest extends PageRequest {
     @ApiModelProperty(value = "时间区间", name = "bar")
     private String bar;
     /**
+     * 步长
+     */
+    @ApiModelProperty(value = "步长", name = "step")
+    private Integer step;
+    /**
      * 蜡烛开始毫秒时间戳
      */
     @ApiModelProperty(value = "蜡烛开始毫秒时间戳", name = "openTimestamp")
@@ -115,7 +120,7 @@ public class CandleTradeSignalPageRequest extends PageRequest {
      * skip数。距离上一次大收益信号数
      */
     @ApiModelProperty(value = "skip数。距离上一次大收益信号数", name = "skipNum")
-    private BigDecimal skipNum;
+    private Integer skipNum;
     /**
      * 大收益比率
      */
@@ -126,4 +131,9 @@ public class CandleTradeSignalPageRequest extends PageRequest {
      */
     @ApiModelProperty(value = "是否删除 0=未删除，1=删除", name = "deleted")
     private Integer deleted;
+    /**
+     * 实际交易。1=true，0=false;
+     */
+    @ApiModelProperty(value = "实际交易。1=true，0=false", name = "deleted")
+    private Integer actualTrade;
 }

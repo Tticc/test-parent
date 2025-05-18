@@ -32,7 +32,9 @@ public class TradeTestJob {
         TradeParam tradeParam = new TradeParam();
         tradeParam
 //                .setBKey(BKeyEnum.BTCUSDT.getCode())
-                .setBKey(BKeyEnum.ETHUSDT.getCode())
+                .setBKey(BKeyEnum.BTCUSDT.getCode())
+                .setStep(63)
+                .setBarEnum(BarEnum._30m)
                 .setSkipAfterHuge(10)
                 .setKeepSkipAfterHuge(10)
                 .setSlTimes(new BigDecimal("0.01"))
@@ -42,7 +44,7 @@ public class TradeTestJob {
                 .setReverseTpTimes(new BigDecimal("0.01"))
                 .setReverseSkipNum(0)
                 .setReverseTakeNum(0);
-        maCrossWithTPSLStrategy.runOnce("20200101000000", 63, BarEnum._30m, "20260105000000", tradeParam);
+        maCrossWithTPSLStrategy.runOnce("20200101000000",  "20260105000000", tradeParam);
         stopWatch.stop();
         log.info("测试完成。耗时：{}", stopWatch.prettyPrint());
     }

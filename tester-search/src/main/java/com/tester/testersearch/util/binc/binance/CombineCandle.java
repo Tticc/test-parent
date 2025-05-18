@@ -1,5 +1,6 @@
 package com.tester.testersearch.util.binc.binance;
 
+import com.tester.testercommon.util.DecimalUtil;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.util.BarEnum;
 import org.springframework.util.CollectionUtils;
@@ -30,6 +31,7 @@ public class CombineCandle {
                 if(item.getLow().compareTo(current.getLow()) < 0){
                     current.setLow(item.getLow());
                 }
+                current.setVolume(DecimalUtil.toDecimal(current.getVolume()).add(DecimalUtil.toDecimal(item.getVolume())));
             }else{
                 current = new TradeSignDTO();
                 current.setOpenTimestamp(item.getId())
@@ -42,6 +44,7 @@ public class CombineCandle {
                         .setLow(item.getLow())
                         .setBKey(item.getBKey())
                         .setBar(barEnum.getCode())
+                        .setVolume(item.getVolume())
                         .setId(item.getId());
                 res.add(current);
             }

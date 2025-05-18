@@ -22,6 +22,11 @@ import java.util.Date;
 public class TradeSignDTO extends TradeDataBaseDomain {
     private static final long serialVersionUID = 1L;
 
+
+    @ApiModelProperty(value = "已完成", name = "completed")
+    private Integer completed;
+
+
     /***************** MA 和 交易信号 **********************************************************************/
 
     @ApiModelProperty(value = "ma5", name = "ma5")

@@ -8,7 +8,9 @@ import com.github.pagehelper.PageInfo;
 import com.tester.base.dto.dao.BaseService;
 import com.tester.testersearch.dao.domain.CandleTradeSignalDomain;
 import com.tester.testersearch.dao.model.CandleTradeSignalPageRequest;
+import com.tester.testersearch.service.binc.strategy.TradeParam;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -29,12 +31,22 @@ public interface CandleTradeSignalService extends BaseService<Long, CandleTradeS
      */
     PageInfo<CandleTradeSignalDomain> listPage(CandleTradeSignalPageRequest request);
 
+
     /**
-     * 列表查询
+     * 根据timestamp获取记录
      *
-     * @param domain 请求对象
+     * @param tradeParam
+     * @param openTimestamp
      * @return
      */
-    List<CandleTradeSignalDomain> list(CandleTradeSignalDomain domain);
+    CandleTradeSignalDomain getByTimestamp(TradeParam tradeParam, Long openTimestamp);
+
+    /**
+     * 批量保存
+     *
+     * @param entities
+     * @return
+     */
+    int batchSave(List<CandleTradeSignalDomain> entities);
     /* 基础CRUD、分页、列表部分 end */
 }

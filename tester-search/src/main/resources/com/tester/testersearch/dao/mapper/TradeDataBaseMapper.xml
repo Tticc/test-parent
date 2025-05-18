@@ -117,6 +117,7 @@
             </if>
         </set>
         where id = #{id}
+        and `b_key` = #{bKey}
     </update>
 
     <update id="delete">
@@ -128,6 +129,16 @@
         where id = #{id}
     </update>
 
+    <update id="deleteByBKey">
+        update trade_data_base
+        <set>
+            deleted = 1,
+            updated_at = now()
+        </set>
+        where id = #{id}
+        and `b_key` = #{bKey}
+    </update>
+
     <select id="get" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List">
@@ -135,6 +146,17 @@
         </include>
         from trade_data_base t_alias
         where t_alias.id = #{id}
+        and t_alias.deleted = 0
+    </select>
+
+    <select id="getByBKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List">
+            <property name="tableName" value="t_alias"></property>
+        </include>
+        from trade_data_base t_alias
+        where t_alias.id = #{id}
+        and t_alias.`b_key` = #{bKey}
         and t_alias.deleted = 0
     </select>
 

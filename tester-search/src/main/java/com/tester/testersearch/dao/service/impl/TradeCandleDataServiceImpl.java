@@ -42,12 +42,18 @@ public class TradeCandleDataServiceImpl extends BaseServiceImpl<Long,TradeCandle
     public PageInfo<TradeCandleDataDomain> listPage(TradeCandleDataPageRequest request){
         TradeCandleDataDomain domain = new TradeCandleDataDomain();
         BeanUtils.copyProperties(request, domain);
-        PageInfo<TradeCandleDataDomain> pageInfo= PageHelper.startPage(request.getPageNum(), request.getPageSize(),false)
+        PageInfo<TradeCandleDataDomain> pageInfo= PageHelper.startPage(request.getPageNum(), request.getPageSize(),true)
                 .doSelectPageInfo(() -> tradeCandleDataMapper.list(domain));
         return pageInfo;
     }
+
     @Override
-    public List<TradeCandleDataDomain> list(TradeCandleDataDomain domain){
-        return null;
+    public TradeCandleDataDomain getByTimestamp(String bKey, String bar, Long openTimestamp){
+        return tradeCandleDataMapper.getByTimestamp(bKey, bar, openTimestamp);
+    }
+
+    @Override
+    public int batchSave(List<TradeCandleDataDomain> entities){
+        return tradeCandleDataMapper.batchSave(entities);
     }
 }

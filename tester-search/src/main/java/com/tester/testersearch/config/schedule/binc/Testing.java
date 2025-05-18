@@ -26,7 +26,7 @@ import java.math.BigDecimal;
  * wenc
  */
 @Slf4j
-@Component
+//@Component
 public class Testing {
 
     @Autowired
@@ -38,11 +38,11 @@ public class Testing {
     public void runOnce() throws BusinessException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start("测试开始");
-        CandleTradeSignalPageRequest request = new CandleTradeSignalPageRequest();
-//        request.setBKey(BKeyEnum.BTCUSDT.getCode());
-        request.setBKey(BKeyEnum.ETHUSDT.getCode());
+        TradeCandleDataPageRequest request = new TradeCandleDataPageRequest();
+        request.setBKey(BKeyEnum.BTCUSDT.getCode());
+//        request.setBKey(BKeyEnum.ETHUSDT.getCode());
         request.setBar(BarEnum._30m.getCode());
-        PageInfo<CandleTradeSignalDomain> tradeCandleDataDomainPageInfo = candleTradeSignalService.listPage(request);
+        PageInfo<TradeCandleDataDomain> tradeCandleDataDomainPageInfo = tradeCandleDataService.listPage(request);
         System.out.println("tradeCandleDataDomainPageInfo = " + tradeCandleDataDomainPageInfo);
         stopWatch.stop();
         log.info("测试完成。耗时：{}", stopWatch.prettyPrint());

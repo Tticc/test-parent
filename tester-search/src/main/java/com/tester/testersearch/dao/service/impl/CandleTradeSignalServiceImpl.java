@@ -10,12 +10,14 @@ import com.tester.testersearch.dao.domain.CandleTradeSignalDomain;
 import com.tester.testersearch.dao.mapper.CandleTradeSignalMapper;
 import com.tester.testersearch.dao.model.CandleTradeSignalPageRequest;
 import com.tester.testersearch.dao.service.CandleTradeSignalService;
+import com.tester.testersearch.service.binc.strategy.TradeParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -41,13 +43,26 @@ public class CandleTradeSignalServiceImpl extends BaseServiceImpl<Long, CandleTr
     public PageInfo<CandleTradeSignalDomain> listPage(CandleTradeSignalPageRequest request) {
         CandleTradeSignalDomain domain = new CandleTradeSignalDomain();
         BeanUtils.copyProperties(request, domain);
-        PageInfo<CandleTradeSignalDomain> pageInfo = PageHelper.startPage(request.getPageNum(), request.getPageSize(), false)
+        PageInfo<CandleTradeSignalDomain> pageInfo = PageHelper.startPage(request.getPageNum(), request.getPageSize(), true)
                 .doSelectPageInfo(() -> candleTradeSignalMapper.list(domain));
         return pageInfo;
     }
 
+
     @Override
-    public List<CandleTradeSignalDomain> list(CandleTradeSignalDomain domain) {
-        return null;
+    public CandleTradeSignalDomain getByTimestamp(TradeParam tradeParam, Long openTimestamp) {
+        String bKey = tradeParam.getBKey();
+        String bar = tradeParam.getBarEnum().getCode();
+        Integer step = tradeParam.getStep();
+        int skipAfterHuge = tradeParam.getSkipAfterHuge();
+        int keepSkipAfterHuge = tradeParam.getKeepSkipAfterHuge();
+        BigDecimal skipTimes = tradeParam.getSkipTimes();
+        return candleTradeSignalMapper.getByTimestamp(bKey, bar, step, openTimestamp, skipAfterHuge, keepSkipAfterHuge, skipTimes);
+    }
+
+
+    @Override
+    public int batchSave(List<CandleTradeSignalDomain> entities) {
+        return candleTradeSignalMapper.batchSave(entities);
     }
 }

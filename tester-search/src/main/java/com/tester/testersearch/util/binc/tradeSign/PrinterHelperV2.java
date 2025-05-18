@@ -3,9 +3,14 @@ package com.tester.testersearch.util.binc.tradeSign;
 import com.tester.testercommon.constant.ConstantList;
 import com.tester.testercommon.util.DateUtil;
 import com.tester.testercommon.util.DecimalUtil;
+import com.tester.testersearch.dao.domain.CandleTradeSignalDomain;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
+import com.tester.testersearch.dao.service.CandleTradeSignalService;
 import com.tester.testersearch.service.binc.strategy.TradeParam;
 import com.tester.testersearch.util.binc.okx.OkxCommon;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -13,8 +18,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+@Service
 public class PrinterHelperV2 {
 
+    private static CandleTradeSignalService candleTradeSignalService; // 静态方法中可以使用spring内的实例对象了
+
+    @Autowired
+    public void setExecutor(CandleTradeSignalService candleTradeSignalService) {
+        PrinterHelperV2.candleTradeSignalService = candleTradeSignalService;
+    }
+
+    private static Map<Long, CandleTradeSignalDomain> cache = new HashMap<>();
 
     public static void printProfitsWithTPSL(Map<Long, TradeSignDTO> tradeMap, TradeParam tradeParam) {
         List<TradeSignDTO> tradeList = tradeMap.values().stream().collect(Collectors.toList());
@@ -179,15 +193,32 @@ public class PrinterHelperV2 {
                 if (tradeParam.getKeepSkipAfterHuge() >= currentSkip && tradeParam.getKeepSkipAfterHuge() > 0) {
                     skip.set(tradeParam.getKeepSkipAfterHuge());
                     resetSkipRecords.add(currentSkip);
+                    updateSkipNum(value,currentSkip,tradeParam);
                     System.out.println("ma超过大收益收益率，当前：" + currentSkip + "，重置为：" + tradeParam.getSkipAfterHuge() + "，收益：" + tradeInfo.getTradeProfits() + "，交易时间:" + DateUtil.dateFormat(value.getTradeInfo().getTradeTime()));
                 }
             } else {
                 skip.set(tradeParam.getSkipAfterHuge());
                 resetSkipRecords.add(currentSkip);
+                updateSkipNum(value,currentSkip,tradeParam);
                 System.out.println("ma超过大收益收益率，当前：" + currentSkip + "，重置为：" + tradeParam.getSkipAfterHuge() + "，收益：" + tradeInfo.getTradeProfits() + "，交易时间:" + DateUtil.dateFormat(value.getTradeInfo().getTradeTime()));
             }
         }
-
+    }
+    private static void updateSkipNum(TradeSignDTO value, int currentSkip, TradeParam tradeParam){
+        if(null != cache.get(value.getOpenTimestamp())){
+            return;
+        }
+        CandleTradeSignalDomain signal = candleTradeSignalService.getByTimestamp(tradeParam, value.getOpenTimestamp());
+        if(null != signal){
+            signal.setSkipNum(currentSkip);
+            if (null != value.getActualTradeInfo()){
+                signal.setActualTrade(1);
+            }
+            candleTradeSignalService.update(signal);
+            cache.put(signal.getOpenTimestamp(), signal);
+        }else{
+            System.out.println("异常，找不到数据");
+        }
     }
 
     private static void resetSkipByMa(AtomicReference<TradeSignDTO> lastMa,

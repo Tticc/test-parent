@@ -30,11 +30,19 @@ public interface TradeCandleDataService extends BaseService<Long,TradeCandleData
     PageInfo<TradeCandleDataDomain> listPage(TradeCandleDataPageRequest request);
 
     /**
-     * 列表查询
-     *
-     * @param domain 请求对象
+     * 根据timestamp获取记录
+     * @param bKey
+     * @param bar
+     * @param openTimestamp
      * @return
      */
-    List<TradeCandleDataDomain> list(TradeCandleDataDomain domain);
+    TradeCandleDataDomain getByTimestamp(String bKey, String bar, Long openTimestamp);
+
+    /**
+     * 批量保存
+     * @param entities
+     * @return
+     */
+    int batchSave(List<TradeCandleDataDomain> entities);
     /* 基础CRUD、分页、列表部分 end */
 }

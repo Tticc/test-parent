@@ -6,6 +6,7 @@
         <id column="id" property="id"/>
         <result column="b_key" property="bKey"/>
         <result column="bar" property="bar"/>
+        <result column="step" property="step"/>
         <result column="open_timestamp" property="openTimestamp"/>
         <result column="ext_column" property="extColumn"/>
         <result column="trade_sign" property="tradeSign"/>
@@ -21,6 +22,7 @@
         <result column="skip_after_huge" property="skipAfterHuge"/>
         <result column="keep_skip_after_huge" property="keepSkipAfterHuge"/>
         <result column="skip_num" property="skipNum"/>
+        <result column="actual_trade" property="actualTrade"/>
         <result column="skip_times" property="skipTimes"/>
         <result column="deleted" property="deleted"/>
         <result column="create_time" property="createTime"/>
@@ -32,6 +34,7 @@
     ${tableName}.`id`,
     ${tableName}.`b_key`,
     ${tableName}.`bar`,
+    ${tableName}.`step`,
     ${tableName}.`open_timestamp`,
     ${tableName}.`ext_column`,
     ${tableName}.`trade_sign`,
@@ -47,6 +50,7 @@
     ${tableName}.`skip_after_huge`,
     ${tableName}.`keep_skip_after_huge`,
     ${tableName}.`skip_num`,
+    ${tableName}.`actual_trade`,
     ${tableName}.`skip_times`,
     ${tableName}.`deleted`,
     ${tableName}.`create_time`,
@@ -57,6 +61,7 @@
             ${tableName}.`id`,
             ${tableName}.`b_key`,
             ${tableName}.`bar`,
+            ${tableName}.`step`,
             ${tableName}.`open_timestamp`,
             ${tableName}.`ext_column`,
             ${tableName}.`trade_sign`,
@@ -72,6 +77,7 @@
             ${tableName}.`skip_after_huge`,
             ${tableName}.`keep_skip_after_huge`,
             ${tableName}.`skip_num`,
+            ${tableName}.`actual_trade`,
             ${tableName}.`skip_times`,
     </sql>
 
@@ -83,6 +89,7 @@
             `id`,
             `b_key`,
             `bar`,
+            `step`,
             `open_timestamp`,
             `ext_column`,
             `trade_sign`,
@@ -98,6 +105,7 @@
             `skip_after_huge`,
             `keep_skip_after_huge`,
             `skip_num`,
+            `actual_trade`,
             `skip_times`,
             `deleted`,
             `create_time`,
@@ -108,6 +116,7 @@
             #{id},
             #{bKey},
             #{bar},
+            #{step},
             #{openTimestamp},
             #{extColumn},
             #{tradeSign},
@@ -123,6 +132,7 @@
             #{skipAfterHuge},
             #{keepSkipAfterHuge},
             #{skipNum},
+            #{actualTrade},
             #{skipTimes},
             #{deleted},
             #{createTime},
@@ -139,6 +149,9 @@
             </if>
             <if test="bar != null and bar != ''">
                 `bar` = #{bar},
+            </if>
+            <if test="step != null">
+                `step` = #{step},
             </if>
             <if test="openTimestamp != null">
                 `open_timestamp` = #{openTimestamp},
@@ -185,6 +198,9 @@
             <if test="skipNum != null">
                 `skip_num` = #{skipNum},
             </if>
+            <if test="actualTrade != null">
+                `actual_trade` = #{actualTrade},
+            </if>
             <if test="skipTimes != null">
                 `skip_times` = #{skipTimes},
             </if>
@@ -196,6 +212,7 @@
             </if>
         </set>
         where id = #{id}
+        and b_key = #{bKey}
     </update>
 
     <update id="delete">
@@ -207,6 +224,16 @@
         where id = #{id}
     </update>
 
+    <update id="deleteByBKey">
+        update candle_trade_signal
+        <set>
+            deleted = 1,
+            updated_at = now()
+        </set>
+        where id = #{id}
+        and b_key = #{bKey}
+    </update>
+
     <select id="get" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List">
@@ -214,6 +241,17 @@
         </include>
         from candle_trade_signal t_alias
         where t_alias.id = #{id}
+        and t_alias.deleted = 0
+    </select>
+
+    <select id="getByBKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List">
+            <property name="tableName" value="t_alias"></property>
+        </include>
+        from candle_trade_signal t_alias
+        where t_alias.id = #{id}
+        and b_key = #{bKey}
         and t_alias.deleted = 0
     </select>
 
@@ -231,6 +269,9 @@
                 </if>
                 <if test="bar != null and bar != ''">
                     AND t_alias.`bar` = #{bar}
+                </if>
+                <if test="step != null">
+                    AND t_alias.`step` = #{step}
                 </if>
                 <if test="openTimestamp != null">
                     AND t_alias.`open_timestamp` = #{openTimestamp}
@@ -277,6 +318,9 @@
                 <if test="skipNum != null">
                     AND t_alias.`skip_num` = #{skipNum}
                 </if>
+                <if test="actualTrade != null">
+                    AND t_alias.`actual_trade` = #{actualTrade}
+                </if>
                 <if test="skipTimes != null">
                     AND t_alias.`skip_times` = #{skipTimes}
                 </if>
@@ -292,6 +336,7 @@
         `id`,
         `b_key`,
         `bar`,
+        `step`,
         `open_timestamp`,
         `ext_column`,
         `trade_sign`,
@@ -307,6 +352,7 @@
         `skip_after_huge`,
         `keep_skip_after_huge`,
         `skip_num`,
+        `actual_trade`,
         `skip_times`,
         `deleted`,
         `create_time`,
@@ -318,6 +364,7 @@
             #{item.id},
             #{item.bKey},
             #{item.bar},
+            #{item.step},
             #{item.openTimestamp},
             #{item.extColumn},
             #{item.tradeSign},
@@ -333,6 +380,7 @@
             #{item.skipAfterHuge},
             #{item.keepSkipAfterHuge},
             #{item.skipNum},
+            #{item.actualTrade},
             #{item.skipTimes},
             #{item.deleted},
             #{item.createTime},
@@ -341,5 +389,23 @@
             )
         </foreach>
     </insert>
+
+
+    <select id="getByTimestamp" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List">
+            <property name="tableName" value="t_alias"></property>
+        </include>
+        from candle_trade_signal t_alias
+        where t_alias.b_key = #{bKey}
+        and t_alias.bar = #{bar}
+        and t_alias.step = #{step}
+        and t_alias.open_timestamp = #{openTimestamp}
+        and t_alias.skip_after_huge = #{skipAfterHuge}
+        and t_alias.keep_skip_after_huge = #{keepSkipAfterHuge}
+        and t_alias.skip_times = #{skipTimes}
+        and deleted = 0
+    </select>
+
     <!--基础CRUD、分页、列表部分 end-->
 </mapper>

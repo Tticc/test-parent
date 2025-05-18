@@ -1,6 +1,7 @@
 package com.tester.testersearch.dao.mapper;
 
 import com.tester.base.dto.dao.BaseMapper;
+import com.tester.testersearch.dao.domain.CandleTradeSignalDomain;
 import com.tester.testersearch.dao.domain.TradeCandleDataDomain;
 import com.tester.testersearch.dao.model.TradeCandleDataPageRequest;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,6 +18,17 @@ import java.util.List;
  */
 @Mapper
 public interface TradeCandleDataMapper extends BaseMapper<TradeCandleDataDomain, Long> {
+
+    @Deprecated
+    int delete(Long id);
+
+    int getByBKey(@Param("id")Long id, @Param("bKey") String bKey);
+
+    @Deprecated
+    TradeCandleDataDomain get(Long id);
+
+    int deleteByBKey(@Param("id")Long id, @Param("bKey") String bKey);
+
     /**
      * 列表查询
      *
@@ -24,6 +36,9 @@ public interface TradeCandleDataMapper extends BaseMapper<TradeCandleDataDomain,
      * @return List<TradeCandleDataDomain>
      */
     List<TradeCandleDataDomain> list(TradeCandleDataDomain domain);
+
+
+    TradeCandleDataDomain getByTimestamp(@Param("bKey") String bKey, @Param("bar") String bar, @Param("openTimestamp") Long openTimestamp);
 
     /**
      * 批量插入

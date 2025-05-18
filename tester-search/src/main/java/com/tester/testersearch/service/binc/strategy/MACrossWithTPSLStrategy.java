@@ -5,12 +5,12 @@ import com.tester.testercommon.constant.ConstantList;
 import com.tester.testercommon.util.BeanCopyUtil;
 import com.tester.testercommon.util.DateUtil;
 import com.tester.testercommon.util.DecimalUtil;
+import com.tester.testersearch.dao.domain.CandleTradeSignalDomain;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
+import com.tester.testersearch.dao.service.CandleTradeSignalService;
 import com.tester.testersearch.service.binc.binance.BinanceHelper;
-import com.tester.testersearch.util.BarEnum;
 import com.tester.testersearch.util.binc.okx.OkxCommon;
 import com.tester.testersearch.util.binc.tradeSign.MAUtil;
-import com.tester.testersearch.util.binc.tradeSign.PrinterHelper;
 import com.tester.testersearch.util.binc.tradeSign.PrinterHelperV2;
 import com.tester.testersearch.util.binc.tradeSign.TradeSignEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +35,8 @@ import java.util.stream.Collectors;
 public class MACrossWithTPSLStrategy {
     @Autowired
     protected BinanceHelper binanceHelper;
+    @Autowired
+    private CandleTradeSignalService candleTradeSignalService;
 
     private static BigDecimal slTimes = new BigDecimal("0.01");
     private static BigDecimal tpTimes = new BigDecimal("0.07");
@@ -45,14 +47,12 @@ public class MACrossWithTPSLStrategy {
 
     /**
      * @param startAt "20250401000000"
-     * @param step    5
-     * @param barEnum BarEnum._30m
      * @throws BusinessException
      */
-    public void runOnce(String startAt, int step, BarEnum barEnum, String endAt, TradeParam tradeParam) throws BusinessException {
+    public void runOnce(String startAt, String endAt, TradeParam tradeParam) throws BusinessException {
         MACrossWithTPSLStrategy.slTimes = tradeParam.getSlTimes();
         MACrossWithTPSLStrategy.tpTimes = tradeParam.getTpTimes();
-        Map<Long, TradeSignDTO> tradeSignDTOMap = tradeSignMap.get(barEnum.getCode());
+        Map<Long, TradeSignDTO> tradeSignDTOMap = tradeSignMap.get(tradeParam.getBarEnum().getCode());
         if (CollectionUtils.isEmpty(tradeSignDTOMap)) {
             tradeSignDTOMap = new LinkedHashMap<>();
         }
@@ -63,11 +63,11 @@ public class MACrossWithTPSLStrategy {
             maxId = endDate.getTime();
         }
         try {
-            binanceHelper.traceLocal(startAt, 80, step, barEnum, (ifLast) -> {
+            binanceHelper.traceLocal(startAt, 80, (ifLast) -> {
             }, true, tradeParam);
-            Map<Long, TradeSignDTO> hisDataMap = BinanceHelper.getByBarEnumCode(barEnum.getCode());
+            Map<Long, TradeSignDTO> hisDataMap = BinanceHelper.getByBarEnumCode(tradeParam.getBarEnum().getCode());
             List<TradeSignDTO> tradeSignDTOS = hisDataMap.values().stream().collect(Collectors.toList());
-            if(CollectionUtils.isEmpty(tradeSignDTOS)){
+            if (CollectionUtils.isEmpty(tradeSignDTOS)) {
                 return;
             }
             AtomicBoolean ifLastAto = new AtomicBoolean(false);
@@ -83,6 +83,7 @@ public class MACrossWithTPSLStrategy {
                     if (stopWatch.isRunning()) {
                         stopWatch.stop();
                     }
+                    this.saveOrUpdateSignal(tradeParam, tradeSignDTOMap, size);
                     size = tradeSignDTOMap.size();
                     stopWatch.start("数据打印");
 //                    PrinterHelper.printProfitsWithTPSL(tradeSignDTOMap.values().stream().collect(Collectors.toList()), tradeParam);
@@ -95,14 +96,51 @@ public class MACrossWithTPSLStrategy {
                 }
                 TradeSignDTO tradeSignDTO = tradeSignDTOS.get(tradeSignDTOS.size() - 1);
                 lastUpdateTimestamp = tradeSignDTO.getLastUpdateTimestamp();
-                binanceHelper.traceLocal(startAt, 1, step, barEnum, (ifLast) -> {
+                binanceHelper.traceLocal(startAt, 1, (ifLast) -> {
                     ifLastAto.set(ifLast);
                 }, true, tradeParam);
-                hisDataMap = BinanceHelper.getByBarEnumCode(barEnum.getCode());
+                hisDataMap = BinanceHelper.getByBarEnumCode(tradeParam.getBarEnum().getCode());
                 tradeSignDTOS = hisDataMap.values().stream().collect(Collectors.toList());
             } while (!ifLastAto.get() && lastUpdateTimestamp < maxId);
         } catch (Exception e) {
             log.error("测试异常。err:", e);
+        }
+    }
+
+    private void saveOrUpdateSignal(TradeParam tradeParam, Map<Long, TradeSignDTO> tradeSignDTOMap, int size) {
+        List<TradeSignDTO> tradeList = tradeSignDTOMap.values().stream().skip(size).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(tradeList)) {
+            return;
+        }
+        for (TradeSignDTO tradeSignDTO : tradeList) {
+            CandleTradeSignalDomain signal = candleTradeSignalService.getByTimestamp(tradeParam, tradeSignDTO.getOpenTimestamp());
+            TradeSignDTO.TradeInfo tradeInfo = tradeSignDTO.getTradeInfo();
+            TradeSignDTO.TradeInfo pureMaTradeInfo = tradeSignDTO.getPureTradeInfo();
+            if (null == signal) {
+                CandleTradeSignalDomain saveDomain = new CandleTradeSignalDomain();
+                saveDomain.init();
+                saveDomain.setBar(tradeParam.getBarEnum().getCode())
+                        .setBKey(tradeParam.getBKey())
+                        .setStep(tradeParam.getStep())
+                        .setOpenTimestamp(tradeSignDTO.getOpenTimestamp())
+                        .setTradeSign(tradeInfo.getTradeSign())
+                        .setTradePrice(tradeInfo.getTradePrice())
+                        .setTradeTime(tradeInfo.getTradeTime())
+                        .setTradeSerialNum(tradeInfo.getTradeSerialNum())
+                        .setTradeProfitsRate(tradeInfo.getTradeProfitsRate())
+                        .setTradeProfits(tradeInfo.getTradeProfits())
+                        .setTradeEnd(tradeInfo.getTradeEnd())
+                        .setTradeStart(tradeInfo.getTradeStart())
+                        .setMaTradeProfitsRate(pureMaTradeInfo != null ? pureMaTradeInfo.getTradeProfitsRate() : null)
+                        .setMaTradeProfits(pureMaTradeInfo != null ? pureMaTradeInfo.getTradeProfits() : null)
+                        .setSkipAfterHuge(tradeParam.getSkipAfterHuge())
+                        .setKeepSkipAfterHuge(tradeParam.getKeepSkipAfterHuge())
+                        .setSkipNum(null)
+                        .setSkipTimes(tradeParam.getSkipTimes())
+                        .setActualTrade(0)
+                        .setExtColumn(null);
+                candleTradeSignalService.save(saveDomain);
+            }
         }
     }
 
@@ -149,8 +187,8 @@ public class MACrossWithTPSLStrategy {
         String tradeCode = "";
         if (lastSecondCalcCandleDTO.getMa5().compareTo(lastSecondCalcCandleDTO.getMa20()) <= 0
                 && lastCalcCandleDTO.getMa5().compareTo(lastCalcCandleDTO.getMa20()) > 0) {
-            if(lastCandleDTO.getMa5().compareTo(lastCandleDTO.getMa20()) < 0
-                    || OkxCommon.checkIfMABuySign(lastTradeCandle.getTradeInfo())){
+            if (lastCandleDTO.getMa5().compareTo(lastCandleDTO.getMa20()) < 0
+                    || OkxCommon.checkIfMABuySign(lastTradeCandle.getTradeInfo())) {
                 // 应该上穿，但是此时是ma5小于ma20，直接return
                 // 或者上一次已经是buy
                 return;
@@ -162,8 +200,8 @@ public class MACrossWithTPSLStrategy {
             setAndFillTradeInfo(lastCandleDTO, currTradePrice, lastTradeCandle, TradeSignEnum.BUY_SIGN, lastMaTradeCandle);
         } else if (lastSecondCalcCandleDTO.getMa5().compareTo(lastSecondCalcCandleDTO.getMa20()) >= 0
                 && lastCalcCandleDTO.getMa5().compareTo(lastCalcCandleDTO.getMa20()) < 0) {
-            if(lastCandleDTO.getMa5().compareTo(lastCandleDTO.getMa20()) > 0
-                    || OkxCommon.checkIfMASellSign(lastTradeCandle.getTradeInfo())){
+            if (lastCandleDTO.getMa5().compareTo(lastCandleDTO.getMa20()) > 0
+                    || OkxCommon.checkIfMASellSign(lastTradeCandle.getTradeInfo())) {
                 // 应该下穿，但是此时是ma5大于ma20，直接return
                 // 或者上一次已经是sell
                 return;
@@ -242,7 +280,7 @@ public class MACrossWithTPSLStrategy {
                 tradeInfo.setTradeEnd(ConstantList.ZERO);
                 tradeInfo.setTradeProfitsRate(BigDecimal.ZERO);
                 tradeInfo.setTradeProfits(BigDecimal.ZERO);
-                if(null != lastMaTradeCandle){
+                if (null != lastMaTradeCandle) {
                     TradeSignDTO.TradeInfo pureTradeInfo = new TradeSignDTO.TradeInfo();
                     BeanCopyUtil.copyPropertiesIgnoreNull(tradeInfo, pureTradeInfo);
                     BigDecimal lastTradePrice = lastMaTradeCandle.getTradeInfo().getTradePrice();
@@ -251,7 +289,7 @@ public class MACrossWithTPSLStrategy {
                     pureTradeInfo.setTradeEnd(ConstantList.ONE);
                     pureTradeInfo.setTradeProfitsRate(tradeProfitRate);
                     pureTradeInfo.setTradeProfits(profits);
-                    if(!Objects.equals(lastMaTradeCandle.getTradeInfo().getTradeSign(),signEnum.getCode())){
+                    if (!Objects.equals(lastMaTradeCandle.getTradeInfo().getTradeSign(), signEnum.getCode())) {
                         tradeInfo.setTradeProfits(profits);
                         tradeInfo.setTradeProfits(profits);
                     }

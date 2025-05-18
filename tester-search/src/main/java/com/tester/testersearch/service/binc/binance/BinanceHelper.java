@@ -39,11 +39,11 @@ public class BinanceHelper {
     private TradeDataBaseService tradeDataBaseService;
 
 
-    public void traceLocal(String startAt, Integer limit, Integer step, BarEnum barEnum, MyConsumer<Boolean> myConsumer, boolean tpsl, TradeParam tradeParam) throws BusinessException {
-        Map<Long, TradeSignDTO> hisData = hisDataMap.get(barEnum.getCode());
+    public List<TradeSignDTO> traceLocal(String startAt, Integer limit, MyConsumer<Boolean> myConsumer, boolean tpsl, TradeParam tradeParam) throws BusinessException {
+        Map<Long, TradeSignDTO> hisData = hisDataMap.get(tradeParam.getBarEnum().getCode());
         if (null == hisData) {
             hisData = new LinkedHashMap<>();
-            hisDataMap.put(barEnum.getCode(), hisData);
+            hisDataMap.put(tradeParam.getBarEnum().getCode(), hisData);
         }
         boolean first = false;
         if (null == limit) {
@@ -67,7 +67,7 @@ public class BinanceHelper {
                 throw new BusinessException(5000L);
             }
             Long lastUpdateTimestamp = lastTradeSignDTO.getLastUpdateTimestamp();
-            List<TradeSignDTO> tradeSignDTOS = this.fetchData(null, lastTradeSignDTO, step, barEnum,tradeParam.getBKey());
+            List<TradeSignDTO> tradeSignDTOS = this.fetchData(null, lastTradeSignDTO, tradeParam.getStep(), tradeParam.getBarEnum(),tradeParam.getBKey());
             for (TradeSignDTO signDTO : tradeSignDTOS) {
                 hisData.put(signDTO.getId(), signDTO);
             }
@@ -78,17 +78,18 @@ public class BinanceHelper {
             if (CollectionUtils.isEmpty(hisData)) {
                 first = true;
                 // 初始化，获取数据
-                List<TradeSignDTO> res = this.fetchData(startAt, null, limit * barEnum.getInterval(), barEnum,tradeParam.getBKey());
+                List<TradeSignDTO> res = this.fetchData(startAt, null, limit * tradeParam.getBarEnum().getInterval(), tradeParam.getBarEnum(),tradeParam.getBKey());
                 for (TradeSignDTO signDTO : res) {
                     hisData.put(signDTO.getId(), signDTO);
                 }
                 if(CollectionUtils.isEmpty(res)){
-                    return;
+                    return Collections.emptyList();
                 }
             }
         }
         List<TradeSignDTO> allTradeDatas = hisData.values().stream().skip(Math.max(0, hisData.size() - tempNum)).collect(Collectors.toList());
         this.calculateTradeData(allTradeDatas, first, true, tpsl, tradeParam);
+        return first ? allTradeDatas : allTradeDatas.stream().skip(Math.max(0, allTradeDatas.size() - 2)).collect(Collectors.toList());
     }
 
     /**
@@ -100,7 +101,7 @@ public class BinanceHelper {
      * @param barEnum
      * @return
      */
-    private List<TradeSignDTO> fetchData(String startAt, TradeSignDTO last, int size, BarEnum barEnum, String bKey) {
+    public List<TradeSignDTO> fetchData(String startAt, TradeSignDTO last, int size, BarEnum barEnum, String bKey) {
         Long minId;
         if (null != last) {
             minId = last.getLastUpdateTimestamp()+1000;

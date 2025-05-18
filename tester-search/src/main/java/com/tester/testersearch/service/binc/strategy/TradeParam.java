@@ -1,6 +1,7 @@
 package com.tester.testersearch.service.binc.strategy;
 
 import com.tester.testersearch.util.BKeyEnum;
+import com.tester.testersearch.util.BarEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -9,7 +10,16 @@ import java.math.BigDecimal;
 @Data
 @Accessors(chain = true)
 public class TradeParam {
+
     private String bKey = BKeyEnum.BTCUSDT.getCode();
+    /**
+     * 步长
+     */
+    private Integer step = 5;
+    /**
+     * 蜡烛时长
+     */
+    private BarEnum barEnum = BarEnum._30m;
     /**
      * 遇到大收益后跳过交易次数
      */
