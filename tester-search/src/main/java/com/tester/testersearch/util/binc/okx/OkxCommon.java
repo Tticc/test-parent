@@ -109,6 +109,19 @@ public class OkxCommon {
     }
 
     /**
+     * 检查是否为止损交易信号
+     * @param tradeInfo
+     * @return
+     */
+    public static boolean checkIfSLSign(TradeSignDTO.TradeInfo tradeInfo) {
+        if(null == tradeInfo){
+            return false;
+        }
+        return Objects.equals(tradeInfo.getTradeSign(), TradeSignEnum.SL_SELL_SIGN.getCode())
+                || Objects.equals(tradeInfo.getTradeSign(), TradeSignEnum.SL_BUY_SIGN.getCode());
+    }
+
+    /**
      * 检查是否为止盈止损sell交易信号
      * @param tradeInfo
      * @return

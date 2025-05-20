@@ -5,6 +5,7 @@
 package com.tester.testersearch.dao.domain;
 
 import com.tester.base.dto.dao.BaseDomain;
+import com.tester.testersearch.service.binc.strategy.TradeParam;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -29,35 +30,9 @@ public class CandleTradeSignalDomain extends BaseDomain {
      */
     private String bKey;
     /**
-     * 时间区间
+     * 策略编码
      */
-    private String bar;
-    /**
-     * 步长
-     */
-    private Integer step;
-    /**
-     * 遇到大收益后跳过交易次数
-     */
-    private Integer skipAfterHuge;
-    /**
-     * 跳过期间遇到大收益重置跳过次数
-     */
-    private Integer keepSkipAfterHuge;
-    /**
-     * 大收益比率
-     */
-    private BigDecimal skipTimes;
-    /**
-     * 止损比率
-     */
-    private BigDecimal slTimes;
-    /**
-     * 止盈比率
-     */
-    private BigDecimal tpTimes;
-
-
+    private String strategyCode;
     /**
      * 蜡烛开始毫秒时间戳
      */
@@ -115,25 +90,11 @@ public class CandleTradeSignalDomain extends BaseDomain {
      */
     private Integer actualTrade;
 
-    public static final String B_KEY = "b_key";
-    public static final String BAR = "bar";
-    public static final String STEP = "step";
-    public static final String OPEN_TIMESTAMP = "open_timestamp";
-    public static final String EXT_COLUMN = "ext_column";
-    public static final String TRADE_SIGN = "trade_sign";
-    public static final String TRADE_PRICE = "trade_price";
-    public static final String TRADE_TIME = "trade_time";
-    public static final String TRADE_SERIAL_NUM = "trade_serial_num";
-    public static final String TRADE_PROFITS_RATE = "trade_profits_rate";
-    public static final String TRADE_PROFITS = "trade_profits";
-    public static final String TRADE_END = "trade_end";
-    public static final String TRADE_START = "trade_start";
-    public static final String MA_TRADE_PROFITS_RATE = "ma_trade_profits_rate";
-    public static final String MA_TRADE_PROFITS = "ma_trade_profits";
-    public static final String SKIP_AFTER_HUGE = "skip_after_huge";
-    public static final String KEEP_SKIP_AFTER_HUGE = "keep_skip_after_huge";
-    public static final String SKIP_NUM = "skip_num";
-    public static final String SKIP_TIMES = "skip_times";
-    public static final String ACTUAL_TRADE = "actual_trade";
+
+    @Data
+    @Accessors(chain = true)
+    public static class ExtColumn{
+        private TradeParam tradeParam;
+    }
 
 }

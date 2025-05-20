@@ -69,6 +69,10 @@ public class PrinterHelperV2 {
                 if (null == tradeInfo || !Objects.equals(tradeInfo.getTradeEnd(), ConstantList.ONE)) {
                     continue;
                 }
+                BigDecimal fee = tradeParam.getTradeFee();
+                if(OkxCommon.checkIfSLSign(tradeInfo)){
+                    fee = tradeParam.getSlTradeFee();
+                }
                 if (currentSkip <= 0) {
                     value.setActualTradeInfo(tradeInfo);
                     toSetActualTrade(value);
@@ -83,8 +87,8 @@ public class PrinterHelperV2 {
                     continue;
                 }
                 profitsList.add(profits);
-                profitsRates.add(profitRate.subtract(new BigDecimal("0.0004")));
-                BigDecimal feeBig = DecimalUtil.toDecimal(tradeInfo.getTradePrice()).multiply(new BigDecimal("0.0004"));
+                profitsRates.add(profitRate.subtract(fee));
+                BigDecimal feeBig = DecimalUtil.toDecimal(tradeInfo.getTradePrice()).multiply(fee);
                 tradeFeeList.add(feeBig.intValue());
 
                 // 如果达到大额收益，开始进入反向交易
@@ -99,54 +103,10 @@ public class PrinterHelperV2 {
                         }
                     }
                 }
-            } else {
-                TradeSignDTO.TradeInfo reverseTradeInfo = value.getReverseTradeInfo();
-                if(reverseSkipNum <= 0 && reverseTakeNum > 0){
-                    value.setActualTradeInfo(reverseTradeInfo);
-                }
-                // 逆向交易
-                if (null != reverseTradeInfo) {
-                    if (reverseSkipNum > 0 && OkxCommon.checkIfHasMATradeSign(reverseTradeInfo)) {
-                        reverseSkipNum -= 1;
-                    } else if(reverseSkipNum <= 0 && Objects.equals(reverseTradeInfo.getTradeEnd(), ConstantList.ONE)){
-                        reverseTakeNum -= 1;
-                        if (reverseTakeNum >= 0) {
-                            profitsList.add(reverseTradeInfo.getTradeProfits().intValue());
-                            profitsRates.add(reverseTradeInfo.getTradeProfitsRate().subtract(new BigDecimal("0.0004")));
-                            BigDecimal feeBig = DecimalUtil.toDecimal(reverseTradeInfo.getTradePrice()).multiply(new BigDecimal("0.0004"));
-                            tradeFeeList.add(feeBig.intValue());
-                        } else {
-                            normalTrade = true;
-                        }
-                    }
-                }
-                TradeSignDTO.TradeInfo tradeInfo = value.getTradeInfo();
-                if (tradeInfo != null && Objects.equals(tradeInfo.getTradeEnd(), ConstantList.ONE)) {
-                    if(tradeInfo.getTradeProfitsRate().compareTo(tradeParam.getSkipTimes()) >= 0) {
-                        if (OkxCommon.checkIfHasMATradeSign(tradeInfo)) {
-                            reverseSkipNum = tradeParam.getReverseSkipNum();
-                            reverseTakeNum = tradeParam.getReverseTakeNum();
-                        } else if (OkxCommon.checkIfHasTPLSTradeSign(tradeInfo)) {
-                            // 如果是止盈止损交易信号
-                            reverseSkipNum = tradeParam.getReverseSkipNum() + 1;
-                            reverseTakeNum = tradeParam.getReverseTakeNum();
-                        }
-                        normalTrade = false;
-                        if (currentSkip > 0) {
-                            int leftSkip = currentSkip;
-                            if (tradeParam.getKeepSkipAfterHuge() > leftSkip && tradeParam.getKeepSkipAfterHuge() > 0) {
-//                                System.out.println("reverse剩余skip："+leftSkip+",重置skip为："+tradeParam.getKeepSkipAfterHuge());
-//                                skip.set(tradeParam.getKeepSkipAfterHuge());
-                            }
-                        }
-
-                    }
-                }
             }
-
         }
 
-        if(tradeParam.isNeedSave()) {
+        if(tradeParam.getNeedSave()) {
             for (Map.Entry<Long, TradeSignDTO> item : toBeUpdateCache.entrySet()) {
                 TradeSignDTO tradeSignDTO = updatedCache.get(item.getKey());
                 if (null != tradeSignDTO) {

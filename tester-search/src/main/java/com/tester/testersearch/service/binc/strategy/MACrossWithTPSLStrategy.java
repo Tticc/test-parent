@@ -1,5 +1,6 @@
 package com.tester.testersearch.service.binc.strategy;
 
+import com.alibaba.fastjson.JSON;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.constant.ConstantList;
 import com.tester.testercommon.util.BeanCopyUtil;
@@ -83,7 +84,7 @@ public class MACrossWithTPSLStrategy {
                     if (stopWatch.isRunning()) {
                         stopWatch.stop();
                     }
-                    if(tradeParam.isNeedSave()) {
+                    if(tradeParam.getNeedSave()) {
                         this.saveOrUpdateSignal(tradeParam, tradeSignDTOMap, size);
                     }
                     size = tradeSignDTOMap.size();
@@ -119,29 +120,28 @@ public class MACrossWithTPSLStrategy {
             TradeSignDTO.TradeInfo tradeInfo = tradeSignDTO.getTradeInfo();
             TradeSignDTO.TradeInfo pureMaTradeInfo = tradeSignDTO.getPureTradeInfo();
             if (null == signal) {
+                BigDecimal fee = tradeParam.getTradeFee();
+                if(OkxCommon.checkIfSLSign(tradeInfo)){
+                    fee = tradeParam.getSlTradeFee();
+                }
                 CandleTradeSignalDomain saveDomain = new CandleTradeSignalDomain();
                 saveDomain.init();
-                saveDomain.setBar(tradeParam.getBarEnum().getCode())
-                        .setBKey(tradeParam.getBKey())
-                        .setStep(tradeParam.getStep())
+                saveDomain.setBKey(tradeParam.getBKey())
+                        .setStrategyCode(tradeParam.getStrategyCode())
+                        .setExtColumn(JSON.toJSONString(new CandleTradeSignalDomain.ExtColumn().setTradeParam(tradeParam)))
                         .setOpenTimestamp(tradeSignDTO.getOpenTimestamp())
                         .setTradeSign(tradeInfo.getTradeSign())
                         .setTradePrice(tradeInfo.getTradePrice())
                         .setTradeTime(tradeInfo.getTradeTime())
                         .setTradeSerialNum(tradeInfo.getTradeSerialNum())
-                        .setTradeProfitsRate(tradeInfo.getTradeProfitsRate())
+                        .setTradeProfitsRate(DecimalUtil.toDecimal(tradeInfo.getTradeProfitsRate()).subtract(fee))
                         .setTradeProfits(tradeInfo.getTradeProfits())
                         .setTradeEnd(tradeInfo.getTradeEnd())
                         .setTradeStart(tradeInfo.getTradeStart())
                         .setMaTradeProfitsRate(pureMaTradeInfo != null ? pureMaTradeInfo.getTradeProfitsRate() : null)
                         .setMaTradeProfits(pureMaTradeInfo != null ? pureMaTradeInfo.getTradeProfits() : null)
-                        .setSkipAfterHuge(tradeParam.getSkipAfterHuge())
-                        .setKeepSkipAfterHuge(tradeParam.getKeepSkipAfterHuge())
                         .setSkipNum(null)
-                        .setSkipTimes(tradeParam.getSkipTimes())
                         .setActualTrade(0)
-                        .setSlTimes(tradeParam.getSlTimes())
-                        .setTpTimes(tradeParam.getTpTimes())
                         .setExtColumn(null);
                 candleTradeSignalService.save(saveDomain);
             }

@@ -43,19 +43,13 @@ public interface CandleTradeSignalMapper extends BaseMapper<CandleTradeSignalDom
     /**
      *
      * @param bKey
-     * @param bar
+     * @param strategyCode
      * @param openTimestamp
      * @return
      */
     CandleTradeSignalDomain getByTimestamp(@Param("bKey") String bKey,
-                                           @Param("bar") String bar,
-                                           @Param("step") Integer step,
-                                           @Param("openTimestamp") Long openTimestamp,
-                                           @Param("skipAfterHuge") Integer skipAfterHuge,
-                                           @Param("keepSkipAfterHuge") Integer keepSkipAfterHuge,
-                                           @Param("skipTimes") BigDecimal skipTimes,
-                                           @Param("slTimes") BigDecimal slTimes,
-                                           @Param("tpTimes") BigDecimal tpTimes
+                                           @Param("strategyCode") String strategyCode,
+                                           @Param("openTimestamp") Long openTimestamp
     );
 
     /**

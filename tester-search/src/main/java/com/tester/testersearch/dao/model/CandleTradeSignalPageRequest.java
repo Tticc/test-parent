@@ -37,15 +37,10 @@ public class CandleTradeSignalPageRequest extends PageRequest {
     @ApiModelProperty(value = "币key", name = "bKey")
     private String bKey;
     /**
-     * 时间区间
+     * 策略编码
      */
-    @ApiModelProperty(value = "时间区间", name = "bar")
-    private String bar;
-    /**
-     * 步长
-     */
-    @ApiModelProperty(value = "步长", name = "step")
-    private Integer step;
+    @ApiModelProperty(value = "策略编码", name = "strategyCode")
+    private String strategyCode;
     /**
      * 蜡烛开始毫秒时间戳
      */
@@ -107,43 +102,18 @@ public class CandleTradeSignalPageRequest extends PageRequest {
     @ApiModelProperty(value = "纯ma交易收益(不设止盈止损)", name = "maTradeProfits")
     private BigDecimal maTradeProfits;
     /**
-     * 遇到大收益后跳过交易次数
-     */
-    @ApiModelProperty(value = "遇到大收益后跳过交易次数", name = "skipAfterHuge")
-    private Integer skipAfterHuge;
-    /**
-     * 跳过期间遇到大收益重置跳过次数
-     */
-    @ApiModelProperty(value = "跳过期间遇到大收益重置跳过次数", name = "keepSkipAfterHuge")
-    private Integer keepSkipAfterHuge;
-    /**
      * skip数。距离上一次大收益信号数
      */
     @ApiModelProperty(value = "skip数。距离上一次大收益信号数", name = "skipNum")
     private Integer skipNum;
-    /**
-     * 大收益比率
-     */
-    @ApiModelProperty(value = "大收益比率", name = "skipTimes")
-    private BigDecimal skipTimes;
-    /**
-     * 是否删除 0=未删除，1=删除
-     */
-    @ApiModelProperty(value = "是否删除 0=未删除，1=删除", name = "deleted")
-    private Integer deleted;
     /**
      * 实际交易。1=true，0=false;
      */
     @ApiModelProperty(value = "实际交易。1=true，0=false", name = "deleted")
     private Integer actualTrade;
     /**
-     * 止损比率
+     * 是否删除 0=未删除，1=删除
      */
-    @ApiModelProperty(value = "止损比率", name = "slTimes")
-    private BigDecimal slTimes;
-    /**
-     * 止盈比率
-     */
-    @ApiModelProperty(value = "止盈比率", name = "tpTimes")
-    private BigDecimal tpTimes;
+    @ApiModelProperty(value = "是否删除 0=未删除，1=删除", name = "deleted")
+    private Integer deleted;
 }

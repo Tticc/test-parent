@@ -51,24 +51,7 @@ public class CandleTradeSignalServiceImpl extends BaseServiceImpl<Long, CandleTr
 
     @Override
     public CandleTradeSignalDomain getByTimestamp(TradeParam tradeParam, Long openTimestamp) {
-        String bKey = tradeParam.getBKey();
-        String bar = tradeParam.getBarEnum().getCode();
-        Integer step = tradeParam.getStep();
-        int skipAfterHuge = tradeParam.getSkipAfterHuge();
-        int keepSkipAfterHuge = tradeParam.getKeepSkipAfterHuge();
-        BigDecimal skipTimes = tradeParam.getSkipTimes();
-        BigDecimal slTimes = tradeParam.getSlTimes();
-        BigDecimal tpTimes = tradeParam.getTpTimes();
-        return candleTradeSignalMapper.getByTimestamp(bKey,
-                bar,
-                step,
-                openTimestamp,
-                skipAfterHuge,
-                keepSkipAfterHuge,
-                skipTimes,
-                slTimes,
-                tpTimes
-        );
+        return candleTradeSignalMapper.getByTimestamp(tradeParam.getBKey(),tradeParam.getStrategyCode(), openTimestamp);
     }
 
 

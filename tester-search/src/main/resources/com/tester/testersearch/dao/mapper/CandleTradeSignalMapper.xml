@@ -5,9 +5,8 @@
     <resultMap id="BaseResultMap" type="com.tester.testersearch.dao.domain.CandleTradeSignalDomain">
         <id column="id" property="id"/>
         <result column="b_key" property="bKey"/>
-        <result column="bar" property="bar"/>
-        <result column="step" property="step"/>
         <result column="open_timestamp" property="openTimestamp"/>
+        <result column="strategy_code" property="strategyCode"/>
         <result column="ext_column" property="extColumn"/>
         <result column="trade_sign" property="tradeSign"/>
         <result column="trade_price" property="tradePrice"/>
@@ -19,13 +18,8 @@
         <result column="trade_start" property="tradeStart"/>
         <result column="ma_trade_profits_rate" property="maTradeProfitsRate"/>
         <result column="ma_trade_profits" property="maTradeProfits"/>
-        <result column="skip_after_huge" property="skipAfterHuge"/>
-        <result column="keep_skip_after_huge" property="keepSkipAfterHuge"/>
         <result column="skip_num" property="skipNum"/>
         <result column="actual_trade" property="actualTrade"/>
-        <result column="skip_times" property="skipTimes"/>
-        <result column="sl_times" property="slTimes"/>
-        <result column="tp_times" property="tpTimes"/>
         <result column="deleted" property="deleted"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
@@ -35,9 +29,8 @@
     <sql id="Base_Column_List">
     ${tableName}.`id`,
     ${tableName}.`b_key`,
-    ${tableName}.`bar`,
-    ${tableName}.`step`,
     ${tableName}.`open_timestamp`,
+    ${tableName}.`strategy_code`,
     ${tableName}.`ext_column`,
     ${tableName}.`trade_sign`,
     ${tableName}.`trade_price`,
@@ -49,13 +42,8 @@
     ${tableName}.`trade_start`,
     ${tableName}.`ma_trade_profits_rate`,
     ${tableName}.`ma_trade_profits`,
-    ${tableName}.`skip_after_huge`,
-    ${tableName}.`keep_skip_after_huge`,
     ${tableName}.`skip_num`,
     ${tableName}.`actual_trade`,
-    ${tableName}.`skip_times`,
-    ${tableName}.`sl_times`,
-    ${tableName}.`tp_times`,
     ${tableName}.`deleted`,
     ${tableName}.`create_time`,
     ${tableName}.`update_time`
@@ -68,9 +56,8 @@
         (
             `id`,
             `b_key`,
-            `bar`,
-            `step`,
             `open_timestamp`,
+            `strategy_code`,
             `ext_column`,
             `trade_sign`,
             `trade_price`,
@@ -82,13 +69,8 @@
             `trade_start`,
             `ma_trade_profits_rate`,
             `ma_trade_profits`,
-            `skip_after_huge`,
-            `keep_skip_after_huge`,
             `skip_num`,
             `actual_trade`,
-            `skip_times`,
-            `sl_times`,
-            `tp_times`,
             `deleted`,
             `create_time`,
             `update_time`
@@ -97,9 +79,8 @@
         (
             #{id},
             #{bKey},
-            #{bar},
-            #{step},
             #{openTimestamp},
+            #{strategyCode},
             #{extColumn},
             #{tradeSign},
             #{tradePrice},
@@ -111,13 +92,8 @@
             #{tradeStart},
             #{maTradeProfitsRate},
             #{maTradeProfits},
-            #{skipAfterHuge},
-            #{keepSkipAfterHuge},
             #{skipNum},
             #{actualTrade},
-            #{skipTimes},
-            #{slTimes},
-            #{tpTimes},
             #{deleted},
             #{createTime},
             #{updateTime}
@@ -131,14 +107,11 @@
             <if test="bKey != null and bKey != ''">
                 `b_key` = #{bKey},
             </if>
-            <if test="bar != null and bar != ''">
-                `bar` = #{bar},
-            </if>
-            <if test="step != null">
-                `step` = #{step},
-            </if>
             <if test="openTimestamp != null">
                 `open_timestamp` = #{openTimestamp},
+            </if>
+            <if test="strategyCode != null and strategyCode != ''">
+                `strategy_code` = #{strategyCode},
             </if>
             <if test="extColumn != null and extColumn != ''">
                 `ext_column` = #{extColumn},
@@ -173,26 +146,11 @@
             <if test="maTradeProfits != null">
                 `ma_trade_profits` = #{maTradeProfits},
             </if>
-            <if test="skipAfterHuge != null">
-                `skip_after_huge` = #{skipAfterHuge},
-            </if>
-            <if test="keepSkipAfterHuge != null">
-                `keep_skip_after_huge` = #{keepSkipAfterHuge},
-            </if>
             <if test="skipNum != null">
                 `skip_num` = #{skipNum},
             </if>
             <if test="actualTrade != null">
                 `actual_trade` = #{actualTrade},
-            </if>
-            <if test="skipTimes != null">
-                `skip_times` = #{skipTimes},
-            </if>
-            <if test="slTimes != null">
-                `sl_times` = #{slTimes},
-            </if>
-            <if test="tpTimes != null">
-                `tp_times` = #{tpTimes},
             </if>
             <if test="deleted != null">
                 `deleted` = #{deleted},
@@ -257,14 +215,11 @@
                 <if test="bKey != null and bKey != ''">
                     AND t_alias.`b_key` = #{bKey}
                 </if>
-                <if test="bar != null and bar != ''">
-                    AND t_alias.`bar` = #{bar}
-                </if>
-                <if test="step != null">
-                    AND t_alias.`step` = #{step}
-                </if>
                 <if test="openTimestamp != null">
                     AND t_alias.`open_timestamp` = #{openTimestamp}
+                </if>
+                <if test="strategyCode != null and strategyCode != ''">
+                    AND t_alias.`strategy_code` = #{strategyCode}
                 </if>
                 <if test="extColumn != null and extColumn != ''">
                     AND t_alias.`ext_column` = #{extColumn}
@@ -299,26 +254,11 @@
                 <if test="maTradeProfits != null">
                     AND t_alias.`ma_trade_profits` = #{maTradeProfits}
                 </if>
-                <if test="skipAfterHuge != null">
-                    AND t_alias.`skip_after_huge` = #{skipAfterHuge}
-                </if>
-                <if test="keepSkipAfterHuge != null">
-                    AND t_alias.`keep_skip_after_huge` = #{keepSkipAfterHuge}
-                </if>
                 <if test="skipNum != null">
                     AND t_alias.`skip_num` = #{skipNum}
                 </if>
                 <if test="actualTrade != null">
                     AND t_alias.`actual_trade` = #{actualTrade}
-                </if>
-                <if test="skipTimes != null">
-                    AND t_alias.`skip_times` = #{skipTimes}
-                </if>
-                <if test="slTimes != null">
-                    AND t_alias.`sl_times` = #{slTimes}
-                </if>
-                <if test="tpTimes != null">
-                    AND t_alias.`tp_times` = #{tpTimes}
                 </if>
             </trim>
         </where>
@@ -331,9 +271,8 @@
         (
         `id`,
         `b_key`,
-        `bar`,
-        `step`,
         `open_timestamp`,
+        `strategy_code`,
         `ext_column`,
         `trade_sign`,
         `trade_price`,
@@ -345,13 +284,8 @@
         `trade_start`,
         `ma_trade_profits_rate`,
         `ma_trade_profits`,
-        `skip_after_huge`,
-        `keep_skip_after_huge`,
         `skip_num`,
         `actual_trade`,
-        `skip_times`,
-        `sl_times`,
-        `tp_times`,
         `deleted`,
         `create_time`,
         `update_time`
@@ -361,9 +295,8 @@
             (
             #{item.id},
             #{item.bKey},
-            #{item.bar},
-            #{item.step},
             #{item.openTimestamp},
+            #{item.strategyCode},
             #{item.extColumn},
             #{item.tradeSign},
             #{item.tradePrice},
@@ -375,13 +308,8 @@
             #{item.tradeStart},
             #{item.maTradeProfitsRate},
             #{item.maTradeProfits},
-            #{item.skipAfterHuge},
-            #{item.keepSkipAfterHuge},
             #{item.skipNum},
             #{item.actualTrade},
-            #{item.skipTimes},
-            #{item.slTimes},
-            #{item.tpTimes},
             #{item.deleted},
             #{item.createTime},
             #{item.updateTime}
@@ -398,14 +326,8 @@
         </include>
         from candle_trade_signal t_alias
         where t_alias.b_key = #{bKey}
-        and t_alias.bar = #{bar}
-        and t_alias.step = #{step}
         and t_alias.open_timestamp = #{openTimestamp}
-        and t_alias.skip_after_huge = #{skipAfterHuge}
-        and t_alias.keep_skip_after_huge = #{keepSkipAfterHuge}
-        and t_alias.skip_times = #{skipTimes}
-        and t_alias.sl_times = #{slTimes}
-        and t_alias.tp_times = #{tpTimes}
+        and t_alias.strategy_code = #{strategyCode}
         and deleted = 0
     </select>
 
