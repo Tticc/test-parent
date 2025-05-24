@@ -51,6 +51,8 @@ public enum StrategyEnum {
     _1000310("_1000310", newTradeParam("_1000310",e -> e.setStep(135).setSlTimes(new BigDecimal("0.01")).setMaShort(7).setMaLong(21))),
     _1000320("_1000320", newTradeParam("_1000320",e -> e.setStep(135).setSlTimes(new BigDecimal("0.015")).setMaShort(7).setMaLong(21))),
 
+    _1000330("_1000330", newTradeParam("_1000330",e -> e.setStep(1).setSlTimes(new BigDecimal("0.01")).setMaShort(7).setMaLong(21))),
+
     ;
     private final String code;
     private final TradeParam param;

@@ -1,30 +1,23 @@
 package com.tester.testersearch.service.binc.strategy;
 
-import com.alibaba.fastjson.JSON;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.constant.ConstantList;
 import com.tester.testercommon.util.BeanCopyUtil;
 import com.tester.testercommon.util.DateUtil;
 import com.tester.testercommon.util.DecimalUtil;
-import com.tester.testersearch.dao.domain.CandleTradeSignalDomain;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
-import com.tester.testersearch.dao.service.CandleTradeSignalService;
 import com.tester.testersearch.service.binc.binance.BinanceHelper;
 import com.tester.testersearch.util.binc.okx.OkxCommon;
 import com.tester.testersearch.util.binc.tradeSign.MAUtil;
-import com.tester.testersearch.util.binc.tradeSign.PrinterHelperV2;
 import com.tester.testersearch.util.binc.tradeSign.TradeSignEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StopWatch;
-import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -33,110 +26,9 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class MACrossWithTPSLStrategy {
+public class MACrossWithTPSLStrategy2 {
     @Autowired
     protected BinanceHelper binanceHelper;
-    @Autowired
-    private CandleTradeSignalService candleTradeSignalService;
-
-
-    public static Map<String, Map<Long, TradeSignDTO>> tradeSignMap = new HashMap();
-
-
-    /**
-     * @param startAt "20250401000000"
-     * @throws BusinessException
-     */
-    public void runOnce(String startAt, String endAt, TradeParam tradeParam) throws BusinessException {
-        Map<Long, TradeSignDTO> tradeSignDTOMap = tradeSignMap.get(tradeParam.getBarEnum().getCode());
-        if (CollectionUtils.isEmpty(tradeSignDTOMap) || tradeParam.getFirst()) {
-            tradeSignDTOMap = new LinkedHashMap<>();
-            tradeSignMap.put(tradeParam.getBarEnum().getCode(), tradeSignDTOMap);
-        }
-        long maxId = Long.MAX_VALUE;
-        if (!StringUtils.isEmpty(endAt)) {
-            LocalDateTime localDateTime = DateUtil.getLocalDateTime(endAt);
-            Date endDate = DateUtil.getDateFromLocalDateTime(localDateTime);
-            maxId = endDate.getTime();
-        }
-        try {
-            AtomicBoolean ifLastAto = new AtomicBoolean(false);
-            long lastUpdateTimestamp = 0L;
-            int size = 0;
-            StopWatch stopWatch = new StopWatch();
-            do {
-                binanceHelper.traceLocal(startAt, 80, (ifLast) -> {
-                    ifLastAto.set(ifLast);
-                }, true, tradeParam);
-                Map<Long, TradeSignDTO> hisDataMap = BinanceHelper.getByBarEnumCode(tradeParam.getBarEnum().getCode());
-                List<TradeSignDTO> tradeSignDTOS = hisDataMap.values().stream().collect(Collectors.toList());
-                List<TradeSignDTO> tradeList = tradeSignDTOS.stream().filter(e -> OkxCommon.checkIfHasTradeSign(e.getTradeInfo()) || OkxCommon.checkIfHasTradeSign(e.getReverseTradeInfo())).collect(Collectors.toList());
-                for (TradeSignDTO tradeSignDTO : tradeList) {
-                    tradeSignDTOMap.put(tradeSignDTO.getId(), tradeSignDTO);
-                }
-                if (tradeSignDTOMap.size() != size) {
-                    if (stopWatch.isRunning()) {
-                        stopWatch.stop();
-                    }
-                    if(tradeParam.getNeedSave()) {
-                        this.saveOrUpdateSignal(tradeParam, tradeSignDTOMap, size);
-                    }
-                    size = tradeSignDTOMap.size();
-                    stopWatch.start("数据打印");
-//                    PrinterHelper.printProfitsWithTPSL(tradeSignDTOMap.values().stream().collect(Collectors.toList()), tradeParam);
-                    PrinterHelperV2.printProfitsWithTPSL(tradeSignDTOMap, tradeParam);
-                    stopWatch.stop();
-                    long lastTaskTimeMillis = stopWatch.getTotalTimeMillis();
-                    System.out.println("本轮计算耗时:" + lastTaskTimeMillis);
-                    stopWatch = new StopWatch();
-                    stopWatch.start("数据处理");
-                }
-                TradeSignDTO tradeSignDTO = tradeSignDTOS.get(tradeSignDTOS.size() - 1);
-                lastUpdateTimestamp = tradeSignDTO.getLastUpdateTimestamp();
-                tradeParam.setFirst(false);
-            } while (!ifLastAto.get() && lastUpdateTimestamp < maxId);
-        } catch (Exception e) {
-            log.error("测试异常。err:", e);
-        }
-    }
-
-    private void saveOrUpdateSignal(TradeParam tradeParam, Map<Long, TradeSignDTO> tradeSignDTOMap, int size) {
-        List<TradeSignDTO> tradeList = tradeSignDTOMap.values().stream().skip(size).collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(tradeList)) {
-            return;
-        }
-        for (TradeSignDTO tradeSignDTO : tradeList) {
-            CandleTradeSignalDomain signal = candleTradeSignalService.getByTimestamp(tradeParam, tradeSignDTO.getOpenTimestamp());
-            TradeSignDTO.TradeInfo tradeInfo = tradeSignDTO.getTradeInfo();
-            TradeSignDTO.TradeInfo pureMaTradeInfo = tradeSignDTO.getPureTradeInfo();
-            if (null == signal) {
-                BigDecimal fee = tradeParam.getTradeFee();
-                if(OkxCommon.checkIfSLSign(tradeInfo)){
-                    fee = tradeParam.getSlTradeFee();
-                }
-                CandleTradeSignalDomain saveDomain = new CandleTradeSignalDomain();
-                saveDomain.init();
-                saveDomain.setBKey(tradeParam.getBKey())
-                        .setStrategyCode(tradeParam.getStrategyCode())
-                        .setExtColumn(JSON.toJSONString(new CandleTradeSignalDomain.ExtColumn().setTradeParam(tradeParam)))
-                        .setOpenTimestamp(tradeSignDTO.getOpenTimestamp())
-                        .setTradeSign(tradeInfo.getTradeSign())
-                        .setTradePrice(tradeInfo.getTradePrice())
-                        .setTradeTime(tradeInfo.getTradeTime())
-                        .setTradeSerialNum(tradeInfo.getTradeSerialNum())
-                        .setTradeProfitsRate(DecimalUtil.toDecimal(tradeInfo.getTradeProfitsRate()).subtract(fee))
-                        .setTradeProfits(tradeInfo.getTradeProfits())
-                        .setTradeEnd(tradeInfo.getTradeEnd())
-                        .setTradeStart(tradeInfo.getTradeStart())
-                        .setMaTradeProfitsRate(pureMaTradeInfo != null ? pureMaTradeInfo.getTradeProfitsRate() : null)
-                        .setMaTradeProfits(pureMaTradeInfo != null ? pureMaTradeInfo.getTradeProfits() : null)
-                        .setSkipNum(null)
-                        .setActualTrade(0)
-                        .setExtColumn(null);
-                candleTradeSignalService.save(saveDomain);
-            }
-        }
-    }
 
 
     /**
@@ -187,6 +79,20 @@ public class MACrossWithTPSLStrategy {
                 // 或者上一次已经是buy
                 return;
             }
+            if(null == lastCandleDTO.getTryTradePrice()){
+                // 信号出现，模拟限价下单-buy
+                lastCandleDTO.setTryTradePrice(lastCandleDTO.getClose().subtract(lastCandleDTO.getClose().multiply(new BigDecimal("0.00001"))));
+                lastCandleDTO.setTryTradeTime(lastCandleDTO.getLastUpdateTimestamp());
+                return;
+            }else if(lastCandleDTO.getClose().compareTo(lastCandleDTO.getTryTradePrice()) > 0){
+                // 如果现价高于下单价，无法成交。等待N秒后重新下限价单
+                if(lastCandleDTO.getLastUpdateTimestamp()-lastCandleDTO.getTryTradeTime() > tradeParam.getRetryTradeGap()){
+                    // 重新下单
+                    lastCandleDTO.setTryTradePrice(lastCandleDTO.getClose().subtract(lastCandleDTO.getClose().multiply(new BigDecimal("0.00001"))));
+                    lastCandleDTO.setTryTradeTime(lastCandleDTO.getLastUpdateTimestamp());
+                }
+                return;
+            }
             // 上穿，设置此次信号为BUY
             tradeSignCome = true;
             prefix = "MA";
@@ -198,6 +104,20 @@ public class MACrossWithTPSLStrategy {
                     || OkxCommon.checkIfMASellSign(lastTradeCandle.getTradeInfo())) {
                 // 应该下穿，但是此时是ma5大于ma20，直接return
                 // 或者上一次已经是sell
+                return;
+            }
+            if(null == lastCandleDTO.getTryTradePrice()){
+                // 信号出现，模拟限价下单-sell
+                lastCandleDTO.setTryTradePrice(lastCandleDTO.getClose().add(lastCandleDTO.getClose().multiply(new BigDecimal("0.00001"))));
+                lastCandleDTO.setTryTradeTime(lastCandleDTO.getLastUpdateTimestamp());
+                return;
+            }else if(lastCandleDTO.getClose().compareTo(lastCandleDTO.getTryTradePrice()) < 0){
+                // 如果现价低于下单价，无法成交。等待N秒后重新下限价单
+                if(lastCandleDTO.getLastUpdateTimestamp()-lastCandleDTO.getTryTradeTime() > tradeParam.getRetryTradeGap()){
+                    // 重新下单
+                    lastCandleDTO.setTryTradePrice(lastCandleDTO.getClose().add(lastCandleDTO.getClose().multiply(new BigDecimal("0.00001"))));
+                    lastCandleDTO.setTryTradeTime(lastCandleDTO.getLastUpdateTimestamp());
+                }
                 return;
             }
             // 下穿，设置此次信号为SELL
@@ -220,14 +140,14 @@ public class MACrossWithTPSLStrategy {
                         tradeSignCome = true;
                         prefix = "止损";
                         tradeCode = "buy";
-                        setAndFillTradeInfoForTpsl(lastCandleDTO, slNum, lastTradeCandle, TradeSignEnum.SL_BUY_SIGN, tradeParam);
+                        setAndFillTradeInfoForTpsl(lastCandleDTO, slNum, lastTradeCandle, TradeSignEnum.SL_BUY_SIGN,tradeParam);
                     } else if ((DecimalUtil.toDecimal(currLowPrice).add(tpNum)).compareTo(DecimalUtil.toDecimal(lastTradePrice)) <= 0) {
                         // 如果当前交易价格+止盈价格 < 上次MA信号SELL价。 到达止盈
                         // 例如上次MA信号SELL价为80000，此时已经达到70000. 70000 + 6000 = 76000 < 80000。 需要止盈，且止损价为76000
                         tradeSignCome = true;
                         prefix = "止盈";
                         tradeCode = "buy";
-                        setAndFillTradeInfoForTpsl(lastCandleDTO, tpNum, lastTradeCandle, TradeSignEnum.TP_BUY_SIGN, tradeParam);
+                        setAndFillTradeInfoForTpsl(lastCandleDTO, tpNum, lastTradeCandle, TradeSignEnum.TP_BUY_SIGN,tradeParam);
                     }
                 } else if (OkxCommon.checkIfMABuySign(lastTradeCandle.getTradeInfo())) {
                     // 如果上一次是MA BUY
@@ -237,14 +157,14 @@ public class MACrossWithTPSLStrategy {
                         tradeSignCome = true;
                         prefix = "止损";
                         tradeCode = "sell";
-                        setAndFillTradeInfoForTpsl(lastCandleDTO, slNum, lastTradeCandle, TradeSignEnum.SL_SELL_SIGN, tradeParam);
+                        setAndFillTradeInfoForTpsl(lastCandleDTO, slNum, lastTradeCandle, TradeSignEnum.SL_SELL_SIGN,tradeParam);
                     } else if ((DecimalUtil.toDecimal(currHighPrice).subtract(tpNum)).compareTo(DecimalUtil.toDecimal(lastTradePrice)) >= 0) {
                         // 如果当前交易价格-止盈价格 > 上次MA信号BUY价。 到达止盈
                         // 例如上次MA信号BUY价为70000，此时已经达到80000. 80000 - 6000 = 74000 > 70000。 需要止盈
                         tradeSignCome = true;
                         prefix = "止盈";
                         tradeCode = "sell";
-                        setAndFillTradeInfoForTpsl(lastCandleDTO, tpNum, lastTradeCandle, TradeSignEnum.TP_SELL_SIGN, tradeParam);
+                        setAndFillTradeInfoForTpsl(lastCandleDTO, tpNum, lastTradeCandle, TradeSignEnum.TP_SELL_SIGN,tradeParam);
                     }
                 }
             }

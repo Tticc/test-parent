@@ -12,6 +12,10 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 /**
  * 交易测试
  * wenc
@@ -24,15 +28,24 @@ public class TradeTestJob {
     private MACrossWithTPSLStrategy maCrossWithTPSLStrategy;
 
     @EventListener(ApplicationReadyEvent.class)
-    public void runOnce() throws BusinessException {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start("测试开始");
-        TradeParam tradeParam = StrategyEnum._1000320.getParam();
-        tradeParam.setNeedSave(true)
-                .setBKey(BKeyEnum.BTCUSDT.getCode());
-        maCrossWithTPSLStrategy.runOnce("20200101000000",  "20250516000000", tradeParam);
-        stopWatch.stop();
-        log.info("测试完成。耗时：{}", stopWatch.prettyPrint());
-        System.out.println("strategy = " + tradeParam.getStrategyCode());
+    public void runOnce() throws BusinessException, InterruptedException {
+        List<StrategyEnum> strategyEnums = Arrays.asList(
+//                StrategyEnum._1000310,
+                StrategyEnum._1000330
+        );
+        for (StrategyEnum strategyEnum : strategyEnums) {
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start("测试开始");
+            TradeParam tradeParam = strategyEnum.getParam();
+            tradeParam.setNeedSave(false)
+                    .setFirst(true)
+                    .setBKey(BKeyEnum.BTCUSDT.getCode());
+            maCrossWithTPSLStrategy.runOnce("20250101000000",  "20250122000000", tradeParam);
+//            maCrossWithTPSLStrategy.runOnce("20250101000000",  "20250516000000", tradeParam);
+            stopWatch.stop();
+            log.info("测试完成。耗时：{}", stopWatch.prettyPrint());
+            System.out.println("strategy = " + tradeParam.getStrategyCode());
+            TimeUnit.MINUTES.sleep(1);
+        }
     }
 }

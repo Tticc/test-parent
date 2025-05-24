@@ -22,10 +22,16 @@ public class TradeParam {
     // 止损交易费用
     private BigDecimal slTradeFee = new BigDecimal("0.0007");
 
+    private Boolean first = true;
+
     /***************** 非策略字段 ***********************************************/
 
 
     /***************** 策略字段 ***********************************************/
+    /**
+     * 步长
+     */
+    private Integer retryTradeGap = 5*1000;
     /**
      * 步长
      */

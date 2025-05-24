@@ -8,6 +8,7 @@ import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
 import com.tester.testersearch.dao.service.TradeDataBaseService;
 import com.tester.testersearch.service.binc.strategy.MACrossWithTPSLStrategy;
+import com.tester.testersearch.service.binc.strategy.MACrossWithTPSLStrategy2;
 import com.tester.testersearch.service.binc.strategy.MACrossWithTPSLStrategy_reverse;
 import com.tester.testersearch.service.binc.strategy.TradeParam;
 import com.tester.testersearch.util.BarEnum;
@@ -39,18 +40,18 @@ public class BinanceHelper {
     private TradeDataBaseService tradeDataBaseService;
 
 
-    public List<TradeSignDTO> traceLocal(String startAt, Integer limit, MyConsumer<Boolean> myConsumer, boolean tpsl, TradeParam tradeParam) throws BusinessException {
+    public List<TradeSignDTO> traceLocal(String startAt, Integer firstCandleSize, MyConsumer<Boolean> myConsumer, boolean tpsl, TradeParam tradeParam) throws BusinessException {
+        boolean first = tradeParam.getFirst();
         Map<Long, TradeSignDTO> hisData = hisDataMap.get(tradeParam.getBarEnum().getCode());
-        if (null == hisData) {
+        if (null == hisData || first) {
             hisData = new LinkedHashMap<>();
             hisDataMap.put(tradeParam.getBarEnum().getCode(), hisData);
         }
-        boolean first = false;
-        if (null == limit) {
-            limit = 2;
+        if (null == firstCandleSize) {
+            firstCandleSize = 80;
         }
         int tempNum = 480;
-        if (limit < 10) {
+        if (!first) {
             if (CollectionUtils.isEmpty(hisData)) {
                 log.error("异常，数据未初始化完成");
                 throw new BusinessException(5000L);
@@ -76,9 +77,8 @@ public class BinanceHelper {
                     Objects.equals(lastUpdateTimestamp, tradeSignDTOS.get(tradeSignDTOS.size() - 1).getLastUpdateTimestamp()));
         } else {
             if (CollectionUtils.isEmpty(hisData)) {
-                first = true;
                 // 初始化，获取数据
-                List<TradeSignDTO> res = this.fetchData(startAt, null, limit * tradeParam.getBarEnum().getInterval(),tradeParam);
+                List<TradeSignDTO> res = this.fetchData(startAt, null, firstCandleSize * tradeParam.getBarEnum().getInterval(),tradeParam);
                 for (TradeSignDTO signDTO : res) {
                     hisData.put(signDTO.getId(), signDTO);
                 }
@@ -88,7 +88,7 @@ public class BinanceHelper {
             }
         }
         List<TradeSignDTO> allTradeDatas = hisData.values().stream().skip(Math.max(0, hisData.size() - tempNum)).collect(Collectors.toList());
-        this.calculateTradeData(allTradeDatas, first, true, tpsl, tradeParam);
+        this.calculateTradeData(allTradeDatas, first, tradeParam.getExcludeLast(), tpsl, tradeParam);
         List<TradeSignDTO> res = first ? allTradeDatas : allTradeDatas.stream().skip(Math.max(0, allTradeDatas.size() - 2)).collect(Collectors.toList());
         return res;
     }
@@ -167,7 +167,7 @@ public class BinanceHelper {
         // 计算MA
         MAUtil.calculateAndSetMA(data, tradeParam, first);
         if(tpsl) {
-            MACrossWithTPSLStrategy.calculateTradeSign_excludeLast(allTradeDatas, tradeParam, first);
+            MACrossWithTPSLStrategy2.calculateTradeSign_excludeLast(allTradeDatas, tradeParam, first);
 //            MACrossWithTPSLStrategy_reverse.calculateTradeSign_excludeLast_reverse(allTradeDatas, tradeParam, first);
         }
         // 计算Brander

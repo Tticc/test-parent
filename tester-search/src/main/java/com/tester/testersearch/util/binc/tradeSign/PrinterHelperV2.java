@@ -32,6 +32,10 @@ public class PrinterHelperV2 {
     private static Map<Long, TradeSignDTO> updatedCache = new HashMap<>();
 
     public static void printProfitsWithTPSL(Map<Long, TradeSignDTO> tradeMap, TradeParam tradeParam) {
+        if(tradeParam.getFirst()){
+            toBeUpdateCache = new HashMap<>();
+            updatedCache = new HashMap<>();
+        }
         List<TradeSignDTO> tradeList = tradeMap.values().stream().collect(Collectors.toList());
 
         // 初始化
