@@ -59,6 +59,7 @@ public class PrinterHelperV2 {
         AtomicReference<TradeSignDTO> lastMa = new AtomicReference<>(null);
         AtomicInteger skip = new AtomicInteger(0);
         boolean normalTrade = true;
+        BigDecimal feeRateSum = BigDecimal.ZERO;
         for (TradeSignDTO value : tradeList) {
             int currentSkip = skip.get();
             resetSkipByProfit(value,currentSkip,skip,tradeParam,pureMaList, resetSkipRecords);
@@ -90,6 +91,7 @@ public class PrinterHelperV2 {
                 profitsRates.add(profitRate.subtract(fee));
                 BigDecimal feeBig = DecimalUtil.toDecimal(tradeInfo.getTradePrice()).multiply(fee);
                 tradeFeeList.add(feeBig.intValue());
+                feeRateSum=feeRateSum.add(fee);
 
                 // 如果达到大额收益，开始进入反向交易
                 if (hitHuge) {
@@ -148,6 +150,7 @@ public class PrinterHelperV2 {
         System.out.println("profits.size() :" + profitsRates.size() + ", profitsRates = " + profitsRates);
         System.out.println("sum = " + sum);
         System.out.println("rate sum = " + rateSum);
+        System.out.println("feeRateSum sum = " + feeRateSum);
         System.out.println("累计盈利:" + (sum - feeSum) + ". 交易数(买+卖一次记1)：" + profitsList.size() + ", 交易费总计：" + feeSum);
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }

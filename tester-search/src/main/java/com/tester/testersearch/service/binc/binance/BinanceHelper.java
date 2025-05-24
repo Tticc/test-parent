@@ -49,7 +49,7 @@ public class BinanceHelper {
         if (null == limit) {
             limit = 2;
         }
-        int tempNum = 240;
+        int tempNum = 480;
         if (limit < 10) {
             if (CollectionUtils.isEmpty(hisData)) {
                 log.error("异常，数据未初始化完成");
@@ -67,7 +67,7 @@ public class BinanceHelper {
                 throw new BusinessException(5000L);
             }
             Long lastUpdateTimestamp = lastTradeSignDTO.getLastUpdateTimestamp();
-            List<TradeSignDTO> tradeSignDTOS = this.fetchData(null, lastTradeSignDTO, tradeParam.getStep(), tradeParam.getBarEnum(),tradeParam.getBKey());
+            List<TradeSignDTO> tradeSignDTOS = this.fetchData(null, lastTradeSignDTO, tradeParam.getStep(),tradeParam);
             for (TradeSignDTO signDTO : tradeSignDTOS) {
                 hisData.put(signDTO.getId(), signDTO);
             }
@@ -78,7 +78,7 @@ public class BinanceHelper {
             if (CollectionUtils.isEmpty(hisData)) {
                 first = true;
                 // 初始化，获取数据
-                List<TradeSignDTO> res = this.fetchData(startAt, null, limit * tradeParam.getBarEnum().getInterval(), tradeParam.getBarEnum(),tradeParam.getBKey());
+                List<TradeSignDTO> res = this.fetchData(startAt, null, limit * tradeParam.getBarEnum().getInterval(),tradeParam);
                 for (TradeSignDTO signDTO : res) {
                     hisData.put(signDTO.getId(), signDTO);
                 }
@@ -89,7 +89,8 @@ public class BinanceHelper {
         }
         List<TradeSignDTO> allTradeDatas = hisData.values().stream().skip(Math.max(0, hisData.size() - tempNum)).collect(Collectors.toList());
         this.calculateTradeData(allTradeDatas, first, true, tpsl, tradeParam);
-        return first ? allTradeDatas : allTradeDatas.stream().skip(Math.max(0, allTradeDatas.size() - 2)).collect(Collectors.toList());
+        List<TradeSignDTO> res = first ? allTradeDatas : allTradeDatas.stream().skip(Math.max(0, allTradeDatas.size() - 2)).collect(Collectors.toList());
+        return res;
     }
 
     /**
@@ -98,10 +99,12 @@ public class BinanceHelper {
      * @param startAt
      * @param last
      * @param size
-     * @param barEnum
+     * @param tradeParam
      * @return
      */
-    public List<TradeSignDTO> fetchData(String startAt, TradeSignDTO last, int size, BarEnum barEnum, String bKey) {
+    public List<TradeSignDTO> fetchData(String startAt, TradeSignDTO last, int size, TradeParam tradeParam) {
+        BarEnum barEnum = tradeParam.getBarEnum();
+        String bKey = tradeParam.getBKey();
         Long minId;
         if (null != last) {
             minId = last.getLastUpdateTimestamp()+1000;
@@ -127,7 +130,7 @@ public class BinanceHelper {
             req.setPageNum(1);
             req.setPageSize(fetchSize);
 
-            PageInfo<TradeSignDTO> pageInfo = tradeDataBaseService.listPageWithCache(req);
+            PageInfo<TradeSignDTO> pageInfo = tradeDataBaseService.listPageWithCache(req,tradeParam);
 //            PageInfo<TradeSignDTO> pageInfo = tradeDataBaseService.listPage(req);
 
             if (pageInfo == null || CollectionUtils.isEmpty(pageInfo.getList())) {
@@ -155,14 +158,14 @@ public class BinanceHelper {
     private void calculateTradeData(List<TradeSignDTO> allTradeDatas, boolean first, boolean excludeLast, boolean tpsl, TradeParam tradeParam) throws BusinessException {
         int branderPeriod = 20;
         int adxPeriod = 14;
-        int dataSize = Math.max(branderPeriod, adxPeriod * 2 + 2);
+        int dataSize = tradeParam.getMaLong()*2;
         List<TradeSignDTO> data = allTradeDatas;
         if (!first) {
             // 如果不是第一次初始化数据，取最后 dataSize 条数据处理
             data = allTradeDatas.stream().skip(Math.max(0, allTradeDatas.size() - dataSize)).collect(Collectors.toList());
         }
         // 计算MA
-        MAUtil.calculateAndSetMA(data, 5, 10, 20);
+        MAUtil.calculateAndSetMA(data, tradeParam, first);
         if(tpsl) {
             MACrossWithTPSLStrategy.calculateTradeSign_excludeLast(allTradeDatas, tradeParam, first);
 //            MACrossWithTPSLStrategy_reverse.calculateTradeSign_excludeLast_reverse(allTradeDatas, tradeParam, first);

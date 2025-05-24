@@ -48,6 +48,7 @@ public class FetchBinanceDataJob {
     @Scheduled(fixedRate = 30 * 60 * 1000)
     public void performTask() {
         try {
+            log.info("测试开始");
             StopWatch stopWatch = new StopWatch();
             stopWatch.start("查询最大id");
             int batchSize = 500;
@@ -56,7 +57,7 @@ public class FetchBinanceDataJob {
                 maxId = new Date().getTime()-60*60*1000;
             }
             stopWatch.start("取最近数据fetchDataAfter");
-            this.fetchDataAfter(maxId, batchSize);
+            this.fetchDataAfter(maxId, batchSize,B_KEY);
             stopWatch.stop();
 
 //            // 检查所有数据
@@ -85,7 +86,7 @@ public class FetchBinanceDataJob {
         } while (startAt > stopTime);
     }
 
-    private void fetchDataAfter(Long startAt, int pageSize) {
+    private void fetchDataAfter(Long startAt, int pageSize, String bKey) {
         long startTime = startAt;
         long endTime = new Date().getTime();
         long endAt = startAt;
@@ -98,15 +99,16 @@ public class FetchBinanceDataJob {
             }
             tradeDataBaseService.batchSave(dataList);
         } while (endAt < endTime);
-        this.checkPartData(startTime, endTime, pageSize);
+        this.checkPartData(startTime, endTime, pageSize, bKey);
     }
 
-    private void checkPartData(Long startId, Long endId, int pageSize) {
+    private void checkPartData(Long startId, Long endId, int pageSize, String bKey) {
         List<Long> lackData = new ArrayList<>();
         long minId = startId;
         do{
             TradeDataBasePageRequest req = new TradeDataBasePageRequest();
             req.setId(minId);
+            req.setBKey(bKey);
             req.setPageNum(1);
             req.setPageSize(pageSize);
             PageInfo<TradeSignDTO> pageInfo = tradeDataBaseService.listPage(req);
@@ -143,6 +145,7 @@ public class FetchBinanceDataJob {
             hasNextPage = false;
             TradeDataBasePageRequest req = new TradeDataBasePageRequest();
             req.setId(minId);
+            req.setBKey(B_KEY);
             req.setPageNum(1);
             req.setPageSize(pageSize);
             PageInfo<TradeSignDTO> pageInfo = tradeDataBaseService.listPage(req);

@@ -5,6 +5,7 @@ import com.tester.base.dto.dao.BaseService;
 import com.tester.testersearch.dao.domain.TradeDataBaseDomain;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
+import com.tester.testersearch.service.binc.strategy.TradeParam;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public interface TradeDataBaseService extends BaseService<Long, TradeDataBaseDom
     List<TradeDataBaseDomain> list(TradeDataBasePageRequest request);
 
     PageInfo<TradeSignDTO> listPage(TradeDataBasePageRequest request);
-    PageInfo<TradeSignDTO> listPageWithCache(TradeDataBasePageRequest request);
+    PageInfo<TradeSignDTO> listPageWithCache(TradeDataBasePageRequest request, TradeParam tradeParam);
 
     /**
      * 批量保存

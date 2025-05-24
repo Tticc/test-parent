@@ -35,6 +35,18 @@ public class TradeParam {
      */
     private Integer step = 5;
     /**
+     * 短期MA
+     */
+    private Integer maShort = 5;
+    /**
+     * 中期期MA
+     */
+    private Integer maMiddle = 10;
+    /**
+     * 长期MA
+     */
+    private Integer maLong = 20;
+    /**
      * 蜡烛时长
      */
     private BarEnum barEnum = BarEnum._30m;

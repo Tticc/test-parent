@@ -48,7 +48,7 @@ public class FetchBinanceDataJobForCheck {
             StopWatch stopWatch = new StopWatch();
             int batchSize = 500;
             stopWatch.start("开始检查数据有无缺失");
-            this.checkPartData(1628876000000L, 1630425599000L, batchSize);
+            this.checkPartData(1628876000000L, 1630425599000L, batchSize,B_KEY);
             stopWatch.stop();
             System.out.println("stopWatch.prettyPrint() = " + stopWatch.prettyPrint());
         } catch (Exception e) {
@@ -85,15 +85,16 @@ public class FetchBinanceDataJobForCheck {
             }
             tradeDataBaseService.batchSave(dataList);
         } while (endAt < endTime);
-        this.checkPartData(startTime, endTime, pageSize);
+        this.checkPartData(startTime, endTime, pageSize,B_KEY);
     }
 
-    private void checkPartData(Long startId, Long endId, int pageSize) {
+    private void checkPartData(Long startId, Long endId, int pageSize,String bKey) {
         List<Long> lackData = new ArrayList<>();
         long minId = startId;
         do{
             TradeDataBasePageRequest req = new TradeDataBasePageRequest();
             req.setId(minId);
+            req.setBKey(bKey);
             req.setPageNum(1);
             req.setPageSize(pageSize);
             PageInfo<TradeSignDTO> pageInfo = tradeDataBaseService.listPage(req);
@@ -130,6 +131,7 @@ public class FetchBinanceDataJobForCheck {
             hasNextPage = false;
             TradeDataBasePageRequest req = new TradeDataBasePageRequest();
             req.setId(minId);
+            req.setBKey(B_KEY);
             req.setPageNum(1);
             req.setPageSize(pageSize);
             PageInfo<TradeSignDTO> pageInfo = tradeDataBaseService.listPage(req);

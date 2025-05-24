@@ -31,6 +31,26 @@ public enum StrategyEnum {
     _1000150("_1000150", newTradeParam("_1000150",e -> e.setStep(135).setSlTimes(new BigDecimal("0.01")))),
     _1000160("_1000160", newTradeParam("_1000160",e -> e.setStep(135).setSlTimes(new BigDecimal("0.015")))),
 
+    _1000170("_1000170", newTradeParam("_1000170",e -> e.setStep(35).setSlTimes(new BigDecimal("0.005")).setMaShort(7).setMaLong(21))),
+    _1000180("_1000180", newTradeParam("_1000180",e -> e.setStep(35).setSlTimes(new BigDecimal("0.0075")).setMaShort(7).setMaLong(21))),
+    _1000190("_1000190", newTradeParam("_1000190",e -> e.setStep(35).setSlTimes(new BigDecimal("0.01")).setMaShort(7).setMaLong(21))),
+    _1000200("_1000200", newTradeParam("_1000200",e -> e.setStep(35).setSlTimes(new BigDecimal("0.015")).setMaShort(7).setMaLong(21))),
+
+    _1000210("_1000210", newTradeParam("_1000210",e -> e.setStep(65).setSlTimes(new BigDecimal("0.005")).setMaShort(7).setMaLong(21))),
+    _1000220("_1000220", newTradeParam("_1000220",e -> e.setStep(65).setSlTimes(new BigDecimal("0.0075")).setMaShort(7).setMaLong(21))),
+    _1000230("_1000230", newTradeParam("_1000230",e -> e.setStep(65).setSlTimes(new BigDecimal("0.01")).setMaShort(7).setMaLong(21))),
+    _1000240("_1000240", newTradeParam("_1000240",e -> e.setStep(65).setSlTimes(new BigDecimal("0.015")).setMaShort(7).setMaLong(21))),
+
+    _1000250("_1000250", newTradeParam("_1000250",e -> e.setStep(95).setSlTimes(new BigDecimal("0.005")).setMaShort(7).setMaLong(21))),
+    _1000260("_1000260", newTradeParam("_1000260",e -> e.setStep(95).setSlTimes(new BigDecimal("0.0075")).setMaShort(7).setMaLong(21))),
+    _1000270("_1000270", newTradeParam("_1000270",e -> e.setStep(95).setSlTimes(new BigDecimal("0.01")).setMaShort(7).setMaLong(21))),
+    _1000280("_1000280", newTradeParam("_1000280",e -> e.setStep(95).setSlTimes(new BigDecimal("0.015")).setMaShort(7).setMaLong(21))),
+
+    _1000290("_1000290", newTradeParam("_1000290",e -> e.setStep(135).setSlTimes(new BigDecimal("0.005")).setMaShort(7).setMaLong(21))),
+    _1000300("_1000300", newTradeParam("_1000300",e -> e.setStep(135).setSlTimes(new BigDecimal("0.0075")).setMaShort(7).setMaLong(21))),
+    _1000310("_1000310", newTradeParam("_1000310",e -> e.setStep(135).setSlTimes(new BigDecimal("0.01")).setMaShort(7).setMaLong(21))),
+    _1000320("_1000320", newTradeParam("_1000320",e -> e.setStep(135).setSlTimes(new BigDecimal("0.015")).setMaShort(7).setMaLong(21))),
+
     ;
     private final String code;
     private final TradeParam param;

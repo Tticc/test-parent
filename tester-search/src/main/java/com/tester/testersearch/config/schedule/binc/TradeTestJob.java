@@ -4,7 +4,6 @@ import com.tester.base.dto.exception.BusinessException;
 import com.tester.testersearch.service.binc.strategy.MACrossWithTPSLStrategy;
 import com.tester.testersearch.service.binc.strategy.TradeParam;
 import com.tester.testersearch.util.BKeyEnum;
-import com.tester.testersearch.util.BarEnum;
 import com.tester.testersearch.util.StrategyEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,6 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
-
-import java.math.BigDecimal;
 
 /**
  * 交易测试
@@ -30,11 +27,12 @@ public class TradeTestJob {
     public void runOnce() throws BusinessException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start("测试开始");
-        TradeParam tradeParam = StrategyEnum._1000010.getParam();
-        tradeParam.setNeedSave(false)
+        TradeParam tradeParam = StrategyEnum._1000320.getParam();
+        tradeParam.setNeedSave(true)
                 .setBKey(BKeyEnum.BTCUSDT.getCode());
-        maCrossWithTPSLStrategy.runOnce("20200101000000",  "20260105000000", tradeParam);
+        maCrossWithTPSLStrategy.runOnce("20200101000000",  "20250516000000", tradeParam);
         stopWatch.stop();
         log.info("测试完成。耗时：{}", stopWatch.prettyPrint());
+        System.out.println("strategy = " + tradeParam.getStrategyCode());
     }
 }

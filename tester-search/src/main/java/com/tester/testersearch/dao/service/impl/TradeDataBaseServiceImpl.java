@@ -8,6 +8,7 @@ import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.dao.mapper.TradeDataBaseMapper;
 import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
 import com.tester.testersearch.dao.service.TradeDataBaseService;
+import com.tester.testersearch.service.binc.strategy.TradeParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -94,7 +95,7 @@ public class TradeDataBaseServiceImpl extends BaseServiceImpl<Long, TradeDataBas
 
 
     @Override
-    public PageInfo<TradeSignDTO> listPageWithCache(TradeDataBasePageRequest request) {
+    public PageInfo<TradeSignDTO> listPageWithCache(TradeDataBasePageRequest request, TradeParam tradeParam) {
         if(null == request.getId()){
             return null;
         }

@@ -6,6 +6,7 @@ import com.tester.testercommon.util.BeanCopyUtil;
 import com.tester.testercommon.util.DateUtil;
 import com.tester.testercommon.util.DecimalUtil;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
+import com.tester.testersearch.service.binc.strategy.TradeParam;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -23,9 +24,16 @@ public class MAUtil {
     public static Integer SELL_SIGN = -1;
     public static Integer NONE_SIGN = 0;
 
-    public static void calculateAndSetMA(List<TradeSignDTO> tradeSignList, int period1, int period2, int period3) {
-        int period = period1;
+    public static void calculateAndSetMA(List<TradeSignDTO> tradeSignList, TradeParam tradeParam, boolean first) {
+        int period = tradeParam.getMaShort();
+        int skipNum = -1;
+        if(!first){
+            skipNum = tradeSignList.size()-2;
+        }
         for (int i = 0; i < tradeSignList.size(); i++) {
+            if(i < skipNum){
+                continue;
+            }
             if (i < period - 1) {
 //                tradeSignList.get(i).setMa5(null);
             } else {
@@ -36,8 +44,11 @@ public class MAUtil {
                 tradeSignList.get(i).setMa5(sum.divide(BigDecimal.valueOf(period),2,BigDecimal.ROUND_HALF_UP));
             }
         }
-        period = period2;
+        period = tradeParam.getMaMiddle();
         for (int i = 0; i < tradeSignList.size(); i++) {
+            if(i < skipNum){
+                continue;
+            }
             if (i < period - 1) {
 //                tradeSignList.get(i).setMa10(null);
             } else {
@@ -48,8 +59,11 @@ public class MAUtil {
                 tradeSignList.get(i).setMa10(sum.divide(BigDecimal.valueOf(period),2,BigDecimal.ROUND_HALF_UP));
             }
         }
-        period = period3;
+        period = tradeParam.getMaLong();
         for (int i = 0; i < tradeSignList.size(); i++) {
+            if(i < skipNum){
+                continue;
+            }
             if (i < period - 1) {
 //                tradeSignList.get(i).setMa20(null);
             } else {

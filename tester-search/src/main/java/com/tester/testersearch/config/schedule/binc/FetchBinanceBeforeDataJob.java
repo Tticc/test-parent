@@ -70,7 +70,7 @@ public class FetchBinanceBeforeDataJob {
             System.out.println("数据获取完成，开始检查数据有无缺失");
             stopWatch.stop();
             stopWatch.start("开始检查数据有无缺失");
-            this.checkPartData(checkStartTime, checkEndTime, batchSize);
+            this.checkPartData(checkStartTime, checkEndTime, batchSize, B_KEY);
 
 //            // 检查所有数据
 //            stopWatch.start("检查所有数据");
@@ -100,28 +100,14 @@ public class FetchBinanceBeforeDataJob {
         } while (startAt > stopTime);
     }
 
-    private void fetchDataAfter(Long startAt, int pageSize) {
-        long startTime = startAt;
-        long endTime = new Date().getTime();
-        long endAt = startAt;
-        do {
-            endAt += pageSize * 1000;
-            List<TradeDataBaseDomain> dataList = BinCommon.fetchData(B_KEY,BarEnum._1s.getCode(), pageSize + "", startAt + "", endAt + "");
-            startAt = endAt;
-            if (CollectionUtils.isEmpty(dataList)) {
-                continue;
-            }
-            tradeDataBaseService.batchSave(dataList);
-        } while (endAt < endTime);
-        this.checkPartData(startTime, endTime, pageSize);
-    }
 
-    private void checkPartData(Long startId, Long endId, int pageSize) {
+    private void checkPartData(Long startId, Long endId, int pageSize, String bKey) {
         List<Long> lackData = new ArrayList<>();
         long minId = startId;
         do{
             TradeDataBasePageRequest req = new TradeDataBasePageRequest();
             req.setId(minId);
+            req.setBKey(bKey);
             req.setPageNum(1);
             req.setPageSize(pageSize);
             PageInfo<TradeSignDTO> pageInfo = tradeDataBaseService.listPage(req);
@@ -158,6 +144,7 @@ public class FetchBinanceBeforeDataJob {
             hasNextPage = false;
             TradeDataBasePageRequest req = new TradeDataBasePageRequest();
             req.setId(minId);
+            req.setBKey(B_KEY);
             req.setPageNum(1);
             req.setPageSize(pageSize);
             PageInfo<TradeSignDTO> pageInfo = tradeDataBaseService.listPage(req);

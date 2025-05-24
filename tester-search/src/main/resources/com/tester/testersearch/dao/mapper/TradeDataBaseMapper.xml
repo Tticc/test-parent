@@ -258,7 +258,6 @@
             )
         </foreach>
         ON DUPLICATE KEY UPDATE
-        `b_key` = VALUES(`b_key`),
         `bar` = VALUES(`bar`),
         `open` = VALUES(`open`),
         `close` = VALUES(`close`),
