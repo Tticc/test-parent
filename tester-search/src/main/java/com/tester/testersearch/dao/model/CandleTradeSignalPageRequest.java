@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 蜡烛交易信号数据请求对象
@@ -48,6 +49,12 @@ public class CandleTradeSignalPageRequest extends PageRequest {
      */
     @ApiModelProperty(value = "蜡烛开始毫秒时间戳", name = "openTimestamp")
     private Long openTimestamp;
+
+    /**
+     * 蜡烛开始毫秒时间戳 list
+     */
+    @ApiModelProperty(value = "蜡烛开始毫秒时间戳列表", name = "openTimestampList")
+    private List<Long> openTimestampList;
     /**
      * 扩展信息
      */

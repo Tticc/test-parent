@@ -14,6 +14,8 @@ public enum StrategyEnum {
     _1000010("_1000010", newTradeParam("_1000010",e -> e.setStep(35).setSlTimes(new BigDecimal("0.005")))),
     _1000020("_1000020", newTradeParam("_1000020",e -> e.setStep(35).setSlTimes(new BigDecimal("0.0075")))),
     _1000030("_1000030", newTradeParam("_1000030",e -> e.setStep(35).setSlTimes(new BigDecimal("0.01")))),
+    _1000031("_1000031", newTradeParam("_1000031",e -> e.setStep(1).setSlTimes(new BigDecimal("0.01")))),
+
     _1000040("_1000040", newTradeParam("_1000040",e -> e.setStep(35).setSlTimes(new BigDecimal("0.015")))),
 
     _1000050("_1000050", newTradeParam("_1000050",e -> e.setStep(65).setSlTimes(new BigDecimal("0.005")))),
@@ -29,6 +31,7 @@ public enum StrategyEnum {
     _1000130("_1000130", newTradeParam("_1000130",e -> e.setStep(135).setSlTimes(new BigDecimal("0.005")))),
     _1000140("_1000140", newTradeParam("_1000140",e -> e.setStep(135).setSlTimes(new BigDecimal("0.0075")))),
     _1000150("_1000150", newTradeParam("_1000150",e -> e.setStep(135).setSlTimes(new BigDecimal("0.01")))),
+    _1000151("_1000151", newTradeParam("_1000151",e -> e.setStep(1).setBeforeTryGap(110*1000).setSlTimes(new BigDecimal("0.01")))),
     _1000160("_1000160", newTradeParam("_1000160",e -> e.setStep(135).setSlTimes(new BigDecimal("0.015")))),
 
     _1000170("_1000170", newTradeParam("_1000170",e -> e.setStep(35).setSlTimes(new BigDecimal("0.005")).setMaShort(7).setMaLong(21))),

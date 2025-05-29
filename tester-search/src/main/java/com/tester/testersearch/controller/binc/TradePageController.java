@@ -39,4 +39,11 @@ public class TradePageController {
         req.setAttribute("someAttr", "here is the someAttr");
         return "trade/trade4";
     }
+
+    @GetMapping("/trade5")
+    public String getTrade5(HttpServletRequest req) {
+        req.setAttribute("content", "something");
+        req.setAttribute("someAttr", "here is the someAttr");
+        return "trade/trade5";
+    }
 }

@@ -271,7 +271,7 @@
             </if>
             </trim>
         </where>
-            order by t_alias.id asc
+            order by t_alias.open_timestamp asc
     </select>
 
     <insert id="batchSave" parameterType="java.util.List"

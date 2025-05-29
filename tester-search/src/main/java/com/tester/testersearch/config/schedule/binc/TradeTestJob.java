@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  * wenc
  */
 @Slf4j
-@Component
+//@Component
 public class TradeTestJob {
 
     @Autowired
@@ -31,17 +31,17 @@ public class TradeTestJob {
     public void runOnce() throws BusinessException, InterruptedException {
         List<StrategyEnum> strategyEnums = Arrays.asList(
 //                StrategyEnum._1000310,
-                StrategyEnum._1000330
+                StrategyEnum._1000151
         );
         for (StrategyEnum strategyEnum : strategyEnums) {
             StopWatch stopWatch = new StopWatch();
             stopWatch.start("测试开始");
             TradeParam tradeParam = strategyEnum.getParam();
-            tradeParam.setNeedSave(false)
+            tradeParam.setNeedSave(true)
                     .setFirst(true)
                     .setBKey(BKeyEnum.BTCUSDT.getCode());
-            maCrossWithTPSLStrategy.runOnce("20250101000000",  "20250122000000", tradeParam);
-//            maCrossWithTPSLStrategy.runOnce("20250101000000",  "20250516000000", tradeParam);
+//            maCrossWithTPSLStrategy.runOnce("20200101000000",  "20250122000000", tradeParam);
+            maCrossWithTPSLStrategy.runOnce("20200101000000",  "20250516000000", tradeParam);
             stopWatch.stop();
             log.info("测试完成。耗时：{}", stopWatch.prettyPrint());
             System.out.println("strategy = " + tradeParam.getStrategyCode());

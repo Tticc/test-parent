@@ -59,42 +59,57 @@ public class MACrossWithTPSLStrategy {
             Date endDate = DateUtil.getDateFromLocalDateTime(localDateTime);
             maxId = endDate.getTime();
         }
+        Integer firstFetchCandleSize = 80;
+        boolean tpsl = true;
         try {
             AtomicBoolean ifLastAto = new AtomicBoolean(false);
+            AtomicBoolean hasNewCandle = new AtomicBoolean(true);
             long lastUpdateTimestamp = 0L;
             int size = 0;
             StopWatch stopWatch = new StopWatch();
+            long total = 0L;
             do {
-                binanceHelper.traceLocal(startAt, 80, (ifLast) -> {
-                    ifLastAto.set(ifLast);
-                }, true, tradeParam);
-                Map<Long, TradeSignDTO> hisDataMap = BinanceHelper.getByBarEnumCode(tradeParam.getBarEnum().getCode());
-                List<TradeSignDTO> tradeSignDTOS = hisDataMap.values().stream().collect(Collectors.toList());
-                List<TradeSignDTO> tradeList = tradeSignDTOS.stream().filter(e -> OkxCommon.checkIfHasTradeSign(e.getTradeInfo()) || OkxCommon.checkIfHasTradeSign(e.getReverseTradeInfo())).collect(Collectors.toList());
-                for (TradeSignDTO tradeSignDTO : tradeList) {
-                    tradeSignDTOMap.put(tradeSignDTO.getId(), tradeSignDTO);
-                }
-                if (tradeSignDTOMap.size() != size) {
-                    if (stopWatch.isRunning()) {
-                        stopWatch.stop();
+                long curr = System.currentTimeMillis();
+                binanceHelper.traceLocal(
+                        tradeParam,
+                        startAt,
+                        firstFetchCandleSize,
+                        (ifLast) -> ifLastAto.set(ifLast),
+                        (newCandle) -> hasNewCandle.set(newCandle),
+                        tpsl);
+                if(hasNewCandle.get()) {
+                    hasNewCandle.set(false);
+                    Map<Long, TradeSignDTO> hisDataMap = BinanceHelper.getByBarEnumCode(tradeParam.getBarEnum().getCode());
+                    List<TradeSignDTO> tradeSignDTOS = hisDataMap.values().stream().collect(Collectors.toList());
+                    List<TradeSignDTO> tradeList = tradeSignDTOS.stream().filter(e -> OkxCommon.checkIfHasTradeSign(e.getTradeInfo()) || OkxCommon.checkIfHasTradeSign(e.getReverseTradeInfo())).collect(Collectors.toList());
+                    for (TradeSignDTO tradeSignDTO : tradeList) {
+                        tradeSignDTOMap.put(tradeSignDTO.getId(), tradeSignDTO);
                     }
-                    if(tradeParam.getNeedSave()) {
-                        this.saveOrUpdateSignal(tradeParam, tradeSignDTOMap, size);
-                    }
-                    size = tradeSignDTOMap.size();
-                    stopWatch.start("数据打印");
+                    if (tradeSignDTOMap.size() != size) {
+                        if (stopWatch.isRunning()) {
+                            stopWatch.stop();
+                        }
+                        if (tradeParam.getNeedSave()) {
+                            this.saveOrUpdateSignal(tradeParam, tradeSignDTOMap, size);
+                        }
+                        size = tradeSignDTOMap.size();
+                        stopWatch.start("数据打印");
 //                    PrinterHelper.printProfitsWithTPSL(tradeSignDTOMap.values().stream().collect(Collectors.toList()), tradeParam);
-                    PrinterHelperV2.printProfitsWithTPSL(tradeSignDTOMap, tradeParam);
-                    stopWatch.stop();
-                    long lastTaskTimeMillis = stopWatch.getTotalTimeMillis();
-                    System.out.println("本轮计算耗时:" + lastTaskTimeMillis);
-                    stopWatch = new StopWatch();
-                    stopWatch.start("数据处理");
+                        PrinterHelperV2.printProfitsWithTPSL(tradeSignDTOMap, tradeParam);
+                        stopWatch.stop();
+                        long lastTaskTimeMillis = stopWatch.getTotalTimeMillis();
+                        System.out.println("本轮计算耗时:" + lastTaskTimeMillis);
+                        stopWatch = new StopWatch();
+                        stopWatch.start("数据处理");
+                    }
+                    TradeSignDTO tradeSignDTO = tradeSignDTOS.get(tradeSignDTOS.size() - 1);
+                    lastUpdateTimestamp = tradeSignDTO.getLastUpdateTimestamp();
+                    tradeParam.setFirst(false);
                 }
-                TradeSignDTO tradeSignDTO = tradeSignDTOS.get(tradeSignDTOS.size() - 1);
-                lastUpdateTimestamp = tradeSignDTO.getLastUpdateTimestamp();
-                tradeParam.setFirst(false);
+                total = total + (System.currentTimeMillis() - curr);
             } while (!ifLastAto.get() && lastUpdateTimestamp < maxId);
+            System.out.println("total = " + total);
+            System.out.println("getFetchTime = " + tradeParam.getFetchTime());
         } catch (Exception e) {
             log.error("测试异常。err:", e);
         }

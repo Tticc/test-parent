@@ -80,9 +80,12 @@ public class MACrossWithTPSLStrategy2 {
                 return;
             }
             if(null == lastCandleDTO.getTryTradePrice()){
+                lastCandleDTO.setKeyCandle(true);
                 // 信号出现，模拟限价下单-buy
                 lastCandleDTO.setTryTradePrice(lastCandleDTO.getClose().subtract(lastCandleDTO.getClose().multiply(new BigDecimal("0.00001"))));
                 lastCandleDTO.setTryTradeTime(lastCandleDTO.getLastUpdateTimestamp());
+                return;
+            }else if(lastCandleDTO.getLastUpdateTimestamp() - lastCandleDTO.getOpenTimestamp() <= tradeParam.getBeforeTryGap()){
                 return;
             }else if(lastCandleDTO.getClose().compareTo(lastCandleDTO.getTryTradePrice()) > 0){
                 // 如果现价高于下单价，无法成交。等待N秒后重新下限价单
@@ -93,6 +96,8 @@ public class MACrossWithTPSLStrategy2 {
                 }
                 return;
             }
+            lastCandleDTO.setKeyCandle(false);
+            currTradePrice = lastCandleDTO.getTryTradePrice();
             // 上穿，设置此次信号为BUY
             tradeSignCome = true;
             prefix = "MA";
@@ -107,9 +112,12 @@ public class MACrossWithTPSLStrategy2 {
                 return;
             }
             if(null == lastCandleDTO.getTryTradePrice()){
+                lastCandleDTO.setKeyCandle(true);
                 // 信号出现，模拟限价下单-sell
                 lastCandleDTO.setTryTradePrice(lastCandleDTO.getClose().add(lastCandleDTO.getClose().multiply(new BigDecimal("0.00001"))));
                 lastCandleDTO.setTryTradeTime(lastCandleDTO.getLastUpdateTimestamp());
+                return;
+            }else if(lastCandleDTO.getLastUpdateTimestamp() - lastCandleDTO.getOpenTimestamp() <= tradeParam.getBeforeTryGap()){
                 return;
             }else if(lastCandleDTO.getClose().compareTo(lastCandleDTO.getTryTradePrice()) < 0){
                 // 如果现价低于下单价，无法成交。等待N秒后重新下限价单
@@ -120,6 +128,8 @@ public class MACrossWithTPSLStrategy2 {
                 }
                 return;
             }
+            lastCandleDTO.setKeyCandle(false);
+            currTradePrice = lastCandleDTO.getTryTradePrice();
             // 下穿，设置此次信号为SELL
             tradeSignCome = true;
             prefix = "MA";

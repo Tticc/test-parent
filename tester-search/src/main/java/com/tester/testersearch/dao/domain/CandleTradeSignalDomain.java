@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 蜡烛交易信号数据(与数据库表字段一一对应的实体类,公有字段继承至父类)
@@ -89,6 +90,14 @@ public class CandleTradeSignalDomain extends BaseDomain {
      * 实际交易。1=true，0=false;
      */
     private Integer actualTrade;
+
+
+    /*************************************查询字段*****************************************/
+    /**
+     * 蜡烛开始毫秒时间戳 list
+     */
+    private List<Long> openTimestampList;
+    /*************************************查询字段*****************************************/
 
 
     @Data

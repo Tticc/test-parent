@@ -42,6 +42,9 @@ public class TradeSignDTO extends TradeDataBaseDomain {
     @ApiModelProperty(value = "限价下单时间", name = "tryTradeTime")
     private Long tryTradeTime;
 
+    @ApiModelProperty(value = "限价下单时间", name = "tryTradeTime")
+    private Boolean keyCandle = false;
+
 
     /***************** MA 和 交易信号 **********************************************************************/
 

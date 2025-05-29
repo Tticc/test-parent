@@ -40,7 +40,7 @@ public class BinanceHelper {
     private TradeDataBaseService tradeDataBaseService;
 
 
-    public List<TradeSignDTO> traceLocal(String startAt, Integer firstCandleSize, MyConsumer<Boolean> myConsumer, boolean tpsl, TradeParam tradeParam) throws BusinessException {
+    public List<TradeSignDTO> traceLocal(TradeParam tradeParam, String startAt, Integer firstCandleSize, MyConsumer<Boolean> myConsumer, MyConsumer<Boolean> newCandleConsumer, boolean tpsl) throws BusinessException {
         boolean first = tradeParam.getFirst();
         Map<Long, TradeSignDTO> hisData = hisDataMap.get(tradeParam.getBarEnum().getCode());
         if (null == hisData || first) {
@@ -68,13 +68,29 @@ public class BinanceHelper {
                 throw new BusinessException(5000L);
             }
             Long lastUpdateTimestamp = lastTradeSignDTO.getLastUpdateTimestamp();
-            List<TradeSignDTO> tradeSignDTOS = this.fetchData(null, lastTradeSignDTO, tradeParam.getStep(),tradeParam);
+            long curr = System.currentTimeMillis();
+//            int step = tradeParam.getStep();
+            int step = 1;
+            int nonKeyStep = 60;
+            if (!lastTradeSignDTO.getKeyCandle()
+                    && (lastTradeSignDTO.getEndTimestamp() - lastUpdateTimestamp) > (nonKeyStep + 10) * 1000
+                    && (lastUpdateTimestamp - lastTradeSignDTO.getOpenTimestamp()) > (nonKeyStep + 10) * 1000) {
+                step = nonKeyStep;
+            }
+            List<TradeSignDTO> tradeSignDTOS = this.fetchData(null, lastTradeSignDTO, step, tradeParam);
+            tradeParam.setFetchTime(tradeParam.getFetchTime() + (System.currentTimeMillis() - curr));
             for (TradeSignDTO signDTO : tradeSignDTOS) {
                 hisData.put(signDTO.getId(), signDTO);
             }
-            // 是否已经取完所有数据
-            myConsumer.accept(CollectionUtils.isEmpty(tradeSignDTOS) ||
-                    Objects.equals(lastUpdateTimestamp, tradeSignDTOS.get(tradeSignDTOS.size() - 1).getLastUpdateTimestamp()));
+            if(tradeSignDTOS.size() > 1){
+                newCandleConsumer.accept(true);
+            }
+            if(CollectionUtils.isEmpty(tradeSignDTOS) ||
+                    Objects.equals(lastUpdateTimestamp, tradeSignDTOS.get(tradeSignDTOS.size() - 1).getLastUpdateTimestamp())){
+                // 已经取完所有数据
+                myConsumer.accept(true);
+                newCandleConsumer.accept(true);
+            }
         } else {
             if (CollectionUtils.isEmpty(hisData)) {
                 // 初始化，获取数据

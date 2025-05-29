@@ -218,6 +218,12 @@
                 <if test="openTimestamp != null">
                     AND t_alias.`open_timestamp` = #{openTimestamp}
                 </if>
+                <if test="openTimestampList !=null and openTimestampList.size > 0">
+                    AND t_alias.`open_timestamp` in
+                    <foreach collection="openTimestampList" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
                 <if test="strategyCode != null and strategyCode != ''">
                     AND t_alias.`strategy_code` = #{strategyCode}
                 </if>

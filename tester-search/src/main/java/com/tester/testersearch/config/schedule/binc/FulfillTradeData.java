@@ -72,15 +72,12 @@ public class FulfillTradeData {
         }
         List<TradeSignDTO> resList;
         AtomicBoolean ifLastAto = new AtomicBoolean(false);
-        resList = binanceHelper.traceLocal(startAt, 80, (ifLast) -> {
-        }, true, tradeParam);
+        resList = binanceHelper.traceLocal(tradeParam,startAt, 80, (ifLast) -> {}, (newCandle) -> {}, true);
         this.saveList(resList, tradeParam);
 
         long lastUpdateTimestamp = 0L;
         do {
-            resList = binanceHelper.traceLocal(startAt, 1, (ifLast) -> {
-                ifLastAto.set(ifLast);
-            }, true, tradeParam);
+            resList = binanceHelper.traceLocal(tradeParam,startAt, 1, (ifLast) -> ifLastAto.set(ifLast), (newCandle) -> {}, true);
             TradeSignDTO tradeSignDTO = resList.get(resList.size() - 1);
             lastUpdateTimestamp = tradeSignDTO.getLastUpdateTimestamp();
             this.saveList(resList, tradeParam);
