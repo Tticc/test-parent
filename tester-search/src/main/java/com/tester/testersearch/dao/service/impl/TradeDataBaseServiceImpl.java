@@ -10,6 +10,7 @@ import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
 import com.tester.testersearch.dao.service.TradeDataBaseService;
 import com.tester.testersearch.service.binc.strategy.TradeParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shardingsphere.api.hint.HintManager;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
@@ -76,7 +77,7 @@ public class TradeDataBaseServiceImpl extends BaseServiceImpl<Long, TradeDataBas
             // 如果结果为空，且当前请求的id小于最大id，加大范围（一个月）重试一次。
             Long maxId;
             if (null != pageInfo && CollectionUtils.isEmpty(pageInfo.getList())
-                    && null != (maxId = tradeDataBaseMapper.getMaxId(request.getBKey())) && maxId > request.getId()) {
+                    && null != (maxId = this.getMaxIdWithHint(request.getBKey())) && maxId > request.getId()) {
                 LocalDateTime endTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(request.getId()), ZoneId.systemDefault());
                 endTime = endTime.plusMonths(1);
                 Date endDate = DateUtil.getDateFromLocalDateTime(endTime);
@@ -176,5 +177,21 @@ public class TradeDataBaseServiceImpl extends BaseServiceImpl<Long, TradeDataBas
     @Override
     public Long getMaxId(String bKey) {
         return tradeDataBaseMapper.getMaxId(bKey);
+    }
+
+    @Override
+    public Long getMaxIdWithHint(String bKey) {
+        // 1) 获取 HintManager 实例
+        HintManager hintManager = HintManager.getInstance();
+        try {
+            // 2) 告诉 ShardingSphere：下面这条 SQL 要路由到 b_key = bKey 的那个物理库
+            hintManager.addDatabaseShardingValue("trade_data_base", bKey);
+
+            // 3) 执行不带 WHERE b_key 的 SQL
+            return tradeDataBaseMapper.getMaxIdWithoutBKey();
+        } finally {
+            // 4) 别忘了关闭 HintManager，复位路由标识
+            hintManager.close();
+        }
     }
 }

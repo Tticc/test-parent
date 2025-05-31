@@ -176,6 +176,13 @@
         where t_alias.`b_key` = #{bKey}
     </select>
 
+
+    <select id="getMaxIdWithoutBKey" resultType="java.lang.Long">
+        select
+        max(t_alias.id)
+        from trade_data_base t_alias
+    </select>
+
     <select id="list" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List">
