@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * wenc
  */
 @Slf4j
-//@Component
+@Component
 public class FetchBinanceDataJob {
 
     @Autowired
