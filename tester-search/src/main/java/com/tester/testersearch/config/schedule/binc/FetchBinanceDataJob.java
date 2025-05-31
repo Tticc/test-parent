@@ -2,7 +2,6 @@ package com.tester.testersearch.config.schedule.binc;
 
 import com.github.pagehelper.PageInfo;
 import com.tester.testercommon.util.DateUtil;
-import com.tester.testercommon.util.pool.DefaultPool;
 import com.tester.testersearch.dao.domain.TradeDataBaseDomain;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
@@ -17,12 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StopWatch;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -30,7 +24,7 @@ import java.util.stream.Collectors;
  * wenc
  */
 @Slf4j
-@Component
+//@Component
 public class FetchBinanceDataJob {
 
     @Autowired
@@ -53,7 +47,7 @@ public class FetchBinanceDataJob {
             StopWatch stopWatch = new StopWatch();
             stopWatch.start("查询最大id");
             int batchSize = 500;
-            Long maxId = tradeDataBaseService.getMaxId(bKey);
+            Long maxId = tradeDataBaseService.getMaxIdByDs(bKey);
             stopWatch.stop();
             if(null == maxId){
                 maxId = new Date().getTime()-60*60*1000;

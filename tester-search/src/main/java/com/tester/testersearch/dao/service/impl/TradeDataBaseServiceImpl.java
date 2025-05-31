@@ -3,6 +3,7 @@ package com.tester.testersearch.dao.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tester.testercommon.util.DateUtil;
+import com.tester.testersearch.config.sharding.properties.ShardingDatabaseProperties;
 import com.tester.testersearch.dao.domain.TradeDataBaseDomain;
 import com.tester.testersearch.dao.domain.TradeSignDTO;
 import com.tester.testersearch.dao.mapper.TradeDataBaseMapper;
@@ -10,14 +11,15 @@ import com.tester.testersearch.dao.model.TradeDataBasePageRequest;
 import com.tester.testersearch.dao.service.TradeDataBaseService;
 import com.tester.testersearch.service.binc.strategy.TradeParam;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shardingsphere.api.hint.HintManager;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -40,6 +42,9 @@ public class TradeDataBaseServiceImpl extends BaseServiceImpl<Long, TradeDataBas
 
     @Resource
     private TradeDataBaseMapper tradeDataBaseMapper;
+
+    @Autowired
+    private ShardingDatabaseProperties databaseProperties;
 
     private int defaultCacheSize = 1000;
 
@@ -77,7 +82,7 @@ public class TradeDataBaseServiceImpl extends BaseServiceImpl<Long, TradeDataBas
             // 如果结果为空，且当前请求的id小于最大id，加大范围（一个月）重试一次。
             Long maxId;
             if (null != pageInfo && CollectionUtils.isEmpty(pageInfo.getList())
-                    && null != (maxId = this.getMaxId(request.getBKey())) && maxId > request.getId()) {
+                    && null != (maxId = this.getMaxIdByDs(request.getBKey())) && maxId > request.getId()) {
                 LocalDateTime endTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(request.getId()), ZoneId.systemDefault());
                 endTime = endTime.plusMonths(1);
                 Date endDate = DateUtil.getDateFromLocalDateTime(endTime);
@@ -177,5 +182,31 @@ public class TradeDataBaseServiceImpl extends BaseServiceImpl<Long, TradeDataBas
     @Override
     public Long getMaxId(String bKey) {
         return tradeDataBaseMapper.getMaxId(bKey);
+    }
+
+    /**
+     * 利用范围分表规则，较少需要查询的表，优化查询速度
+     * @param bKey
+     * @return
+     */
+    @Override
+    public Long getMaxIdByDs(String bKey) {
+        long time = new Date().getTime()+(60*60*1000);
+        for (int i = 0; i >= -12 ; i--) {
+            LocalDateTime firstDayOfMonth = LocalDate.now()
+                    .plusMonths(i)
+                    .withDayOfMonth(1)         // 设置为本月第一天
+                    .atStartOfDay();           // 设置时间为00:00:00
+            // 转换为时间戳（毫秒）
+            long timestamp = firstDayOfMonth
+                    .atZone(ZoneId.systemDefault())  // 使用系统默认时区
+                    .toInstant()
+                    .toEpochMilli();
+            Long maxIdByDs = tradeDataBaseMapper.getMaxIdByDs(bKey, timestamp,time);
+            if(null != maxIdByDs){
+                return maxIdByDs;
+            }
+        }
+        return null;
     }
 }

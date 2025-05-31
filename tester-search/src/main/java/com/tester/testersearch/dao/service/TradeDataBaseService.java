@@ -40,7 +40,15 @@ public interface TradeDataBaseService extends BaseService<Long, TradeDataBaseDom
 
     Long getMinId(String bKey);
 
+    @Deprecated
     Long getMaxId(String bKey);
+
+    /**
+     * 优化最大id查询
+     * @param bKey
+     * @return
+     */
+    Long getMaxIdByDs(String bKey);
 
     /* 基础CRUD、分页、列表部分 end */
 }

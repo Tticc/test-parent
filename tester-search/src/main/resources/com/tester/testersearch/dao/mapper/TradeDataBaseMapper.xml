@@ -176,6 +176,16 @@
         where t_alias.`b_key` = #{bKey}
     </select>
 
+    <select id="getMaxIdByDs" resultType="java.lang.Long">
+        select
+        max(t_alias.id)
+        from trade_data_base t_alias
+        where t_alias.`b_key` = #{bKey}
+        and t_alias.`id` between #{timestamp} and #{endTimestamp}
+    </select>
+
+
+
 
     <select id="getMaxIdWithoutBKey" resultType="java.lang.Long">
         select

@@ -50,5 +50,7 @@ public interface TradeDataBaseMapper extends BaseMapper<TradeDataBaseDomain, Lon
 
     Long getMaxId(@Param("bKey") String bKey);
 
+    Long getMaxIdByDs(@Param("bKey") String bKey, @Param("timestamp") Long timestamp, @Param("endTimestamp") Long endTimestamp);
+
     Long getMaxIdWithoutBKey();
 }
