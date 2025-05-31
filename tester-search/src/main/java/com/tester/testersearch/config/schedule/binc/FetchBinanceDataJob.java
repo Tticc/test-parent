@@ -53,7 +53,7 @@ public class FetchBinanceDataJob {
             StopWatch stopWatch = new StopWatch();
             stopWatch.start("查询最大id");
             int batchSize = 500;
-            Long maxId = tradeDataBaseService.getMaxIdWithHint(bKey);
+            Long maxId = tradeDataBaseService.getMaxId(bKey);
             stopWatch.stop();
             if(null == maxId){
                 maxId = new Date().getTime()-60*60*1000;

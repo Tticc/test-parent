@@ -4,7 +4,6 @@ import com.tester.testersearch.config.sharding.properties.ShardingDatabaseProper
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.shardingsphere.api.config.sharding.ShardingRuleConfiguration;
 import org.apache.shardingsphere.api.config.sharding.TableRuleConfiguration;
-import org.apache.shardingsphere.api.config.sharding.strategy.HintShardingStrategyConfiguration;
 import org.apache.shardingsphere.api.config.sharding.strategy.StandardShardingStrategyConfiguration;
 import org.apache.shardingsphere.shardingjdbc.api.ShardingDataSourceFactory;
 import org.springframework.context.annotation.Bean;
@@ -42,11 +41,8 @@ public class ShardingConfiguration {
         // 无分库配置
         // tradeDataTableRule.setDatabaseShardingStrategyConfig(new NoneShardingStrategyConfiguration());
         // 有分库配置
-//        tradeDataTableRule.setDatabaseShardingStrategyConfig(
-//                new StandardShardingStrategyConfiguration(databaseProperties.getShardingDbColumn(), new DatabaseShardingAlgorithm())
-//        );
         tradeDataTableRule.setDatabaseShardingStrategyConfig(
-                new HintShardingStrategyConfiguration(new DatabaseHintShardingAlgorithm())
+                new StandardShardingStrategyConfiguration(databaseProperties.getShardingDbColumn(), new DatabaseShardingAlgorithm())
         );
 
 
