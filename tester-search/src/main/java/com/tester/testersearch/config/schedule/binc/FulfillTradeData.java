@@ -1,5 +1,6 @@
 package com.tester.testersearch.config.schedule.binc;
 
+import com.alibaba.fastjson.JSON;
 import com.tester.base.dto.exception.BusinessException;
 import com.tester.testercommon.util.DateUtil;
 import com.tester.testersearch.dao.domain.TradeCandleDataDomain;
@@ -9,6 +10,7 @@ import com.tester.testersearch.service.binc.binance.BinanceHelper;
 import com.tester.testersearch.service.binc.strategy.TradeParam;
 import com.tester.testersearch.util.BKeyEnum;
 import com.tester.testersearch.util.BarEnum;
+import com.tester.testersearch.util.StrategyEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -43,21 +45,10 @@ public class FulfillTradeData {
     public void runOnce() throws BusinessException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start("测试开始");
-        TradeParam tradeParam = new TradeParam();
-        tradeParam
-                .setBKey(BKeyEnum.BTCUSDT.getCode())
-//                .setBKey(BKeyEnum.ETHUSDT.getCode())
-                .setStep(100)
-                .setBarEnum(BarEnum._30m)
-                .setSkipAfterHuge(10)
-                .setKeepSkipAfterHuge(10)
-                .setSlTimes(new BigDecimal("0.01"))
-                .setTpTimes(new BigDecimal("0.07"))
-                .setSkipTimes(new BigDecimal("0.012"))
-                .setReverseSlTimes(new BigDecimal("0.005"))
-                .setReverseTpTimes(new BigDecimal("0.01"))
-                .setReverseSkipNum(0)
-                .setReverseTakeNum(0);
+        TradeParam tradeParam = StrategyEnum._1000151.getParam();
+        tradeParam.setNeedSave(false)
+                .setFirst(true)
+                .setBKey(BKeyEnum.ETHUSDT.getCode());
         this.fetchData("20191225000000", "20260105000000", tradeParam);
         stopWatch.stop();
         log.info("测试完成。耗时：{}", stopWatch.prettyPrint());
@@ -72,15 +63,20 @@ public class FulfillTradeData {
         }
         List<TradeSignDTO> resList;
         AtomicBoolean ifLastAto = new AtomicBoolean(false);
-        resList = binanceHelper.traceLocal(tradeParam,startAt, 80, (ifLast) -> {}, (newCandle) -> {}, true);
-        this.saveList(resList, tradeParam);
-
+        Integer firstFetchCandleSize = 80;
         long lastUpdateTimestamp = 0L;
+        boolean tpsl = true;
         do {
-            resList = binanceHelper.traceLocal(tradeParam,startAt, 1, (ifLast) -> ifLastAto.set(ifLast), (newCandle) -> {}, true);
+            resList = binanceHelper.traceLocal(tradeParam,
+                    startAt,
+                    firstFetchCandleSize,
+                    (ifLast) -> ifLastAto.set(ifLast),
+                    (newCandle) -> {},
+                    tpsl);
             TradeSignDTO tradeSignDTO = resList.get(resList.size() - 1);
             lastUpdateTimestamp = tradeSignDTO.getLastUpdateTimestamp();
             this.saveList(resList, tradeParam);
+            tradeParam.setFirst(false);
         } while (!ifLastAto.get() && lastUpdateTimestamp < maxId);
         this.updateList(tradeParam);
     }
@@ -96,40 +92,53 @@ public class FulfillTradeData {
                 TradeCandleDataDomain saveDomain = new TradeCandleDataDomain();
                 saveDomain.init();
                 saveDomain.setBar(tradeParam.getBarEnum().getCode())
-                        .setBKey(tradeParam.getBKey())
-                        .setOpen(res.getOpen())
-                        .setClose(res.getClose())
-                        .setHigh(res.getHigh())
-                        .setLow(res.getLow())
-                        .setOpenTimestamp(res.getOpenTimestamp())
-                        .setEndTimestamp(res.getEndTimestamp())
-                        .setLastUpdateTimestamp(res.getLastUpdateTimestamp())
-                        .setVolume(res.getVolume())
-                        .setMa5(res.getMa5())
-                        .setMa10(res.getMa10())
-                        .setMa20(res.getMa20())
-                        .setCompleted(res.getCompleted())
-                        .setExtColumn(null);
+                        .setBKey(tradeParam.getBKey());
+//                        .setOpen(res.getOpen())
+//                        .setClose(res.getClose())
+//                        .setHigh(res.getHigh())
+//                        .setLow(res.getLow())
+//                        .setOpenTimestamp(res.getOpenTimestamp())
+//                        .setEndTimestamp(res.getEndTimestamp())
+//                        .setLastUpdateTimestamp(res.getLastUpdateTimestamp())
+//                        .setVolume(res.getVolume())
+//                        .setMa5(res.getMa5())
+//                        .setMa10(res.getMa10())
+//                        .setMa20(res.getMa20())
+//                        .setCompleted(res.getCompleted())
+//                        .setExtColumn(null);
+                this.setCommonInfo(res, saveDomain);
                 cacheMap.put(res.getOpenTimestamp(), saveDomain);
             } else {
-                candle.setLastUpdateTimestamp(res.getLastUpdateTimestamp())
-                        .setVolume(res.getVolume())
-                        .setMa5(res.getMa5())
-                        .setMa10(res.getMa10())
-                        .setMa20(res.getMa20())
-                        .setOpen(res.getOpen())
-                        .setClose(res.getClose())
-                        .setHigh(res.getHigh())
-                        .setLow(res.getLow())
-                        .setCompleted(res.getCompleted())
-                        .setOpenTimestamp(res.getOpenTimestamp())
-                        .setEndTimestamp(res.getEndTimestamp())
-                        .setUpdateTime(new Date());
+                this.setCommonInfo(res, candle);
             }
         }
         if (cacheMap.size() > 100) {
             this.updateList(tradeParam);
         }
+    }
+
+    private void setCommonInfo(TradeSignDTO res, TradeCandleDataDomain candle){
+        candle.setLastUpdateTimestamp(res.getLastUpdateTimestamp())
+                .setVolume(res.getVolume())
+                .setMa5(res.getMa5())
+                .setMa10(res.getMa10())
+                .setMa20(res.getMa20())
+                .setOpen(res.getOpen())
+                .setClose(res.getClose())
+                .setHigh(res.getHigh())
+                .setLow(res.getLow())
+                .setCompleted(res.getCompleted())
+                .setOpenTimestamp(res.getOpenTimestamp())
+                .setEndTimestamp(res.getEndTimestamp())
+                .setUpdateTime(new Date());
+        TradeCandleDataDomain.ExtColumn extColumn = candle.parseExtColumn();
+        extColumn.setADX(res.getADX())
+                .setMinusDI(res.getMinusDI())
+                .setPlusDI(res.getPlusDI())
+                .setLowerBand(res.getLowerBand())
+                .setMiddleBand(res.getMiddleBand())
+                .setUpperBand(res.getUpperBand());
+        candle.setExtColumn(JSON.toJSONString(extColumn));
     }
 
     private void updateList(TradeParam tradeParam) {

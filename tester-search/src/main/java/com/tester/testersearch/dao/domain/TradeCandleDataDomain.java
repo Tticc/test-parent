@@ -1,9 +1,12 @@
 package com.tester.testersearch.dao.domain;
 
+import com.alibaba.fastjson.JSON;
 import com.tester.base.dto.dao.BaseDomain;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 
@@ -80,20 +83,43 @@ public class TradeCandleDataDomain extends BaseDomain {
      */
     private String extColumn;
 
-    public static final String B_KEY = "b_key";
-    public static final String BAR = "bar";
-    public static final String OPEN_TIMESTAMP = "open_timestamp";
-    public static final String END_TIMESTAMP = "end_timestamp";
-    public static final String LAST_UPDATE_TIMESTAMP = "last_update_timestamp";
-    public static final String OPEN = "open";
-    public static final String CLOSE = "close";
-    public static final String HIGH = "high";
-    public static final String LOW = "low";
-    public static final String VOLUME = "volume";
-    public static final String MA5 = "ma5";
-    public static final String MA10 = "ma10";
-    public static final String MA20 = "ma20";
-    public static final String COMPLETED = "completed";
-    public static final String EXT_COLUMN = "ext_column";
+    public ExtColumn parseExtColumn(){
+        String extColumnStr = this.getExtColumn();
+        ExtColumn extColumnObj;
+        if(StringUtils.isEmpty(extColumnStr) || null == (extColumnObj = JSON.parseObject(extColumnStr, ExtColumn.class))){
+            extColumnObj = new ExtColumn();
+        }
+        return extColumnObj;
+    }
+
+    @Data
+    @Accessors(chain = true)
+    public static class ExtColumn{
+
+        /***************** 布林线信息 **********************************************************************/
+        @ApiModelProperty(value = "布林线中轨", name = "middleBand")
+        public BigDecimal middleBand;
+
+        @ApiModelProperty(value = "布林线下轨", name = "middleBand")
+        public BigDecimal upperBand;
+
+        @ApiModelProperty(value = "布林线上轨", name = "middleBand")
+        public BigDecimal lowerBand;
+        /***************** 布林线信息 **********************************************************************/
+
+
+        /***************** ADX信息 **********************************************************************/
+
+        @ApiModelProperty(value = "+DI", name = "plusDI")
+        public BigDecimal plusDI;
+
+        @ApiModelProperty(value = "-DI", name = "minusDI")
+        public BigDecimal minusDI;
+
+        @ApiModelProperty(value = "ADX", name = "ADX")
+        public BigDecimal ADX;
+
+        /***************** ADX信息 **********************************************************************/
+    }
 
 }

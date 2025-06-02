@@ -13,6 +13,8 @@ import com.tester.testersearch.service.binc.strategy.MACrossWithTPSLStrategy_rev
 import com.tester.testersearch.service.binc.strategy.TradeParam;
 import com.tester.testersearch.util.BarEnum;
 import com.tester.testersearch.util.binc.binance.CombineCandle;
+import com.tester.testersearch.util.binc.tradeSign.ADXUtil;
+import com.tester.testersearch.util.binc.tradeSign.BollingerBandsUtil;
 import com.tester.testersearch.util.binc.tradeSign.MAUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -187,8 +189,8 @@ public class BinanceHelper {
 //            MACrossWithTPSLStrategy_reverse.calculateTradeSign_excludeLast_reverse(allTradeDatas, tradeParam, first);
         }
         // 计算Brander
-//        BollingerBandsUtil.calculateBollingerBands(data, branderPeriod, 2);
+        BollingerBandsUtil.calculateBollingerBands(data, branderPeriod, 2);
         // 计算ADX
-//        ADXUtil.calculateADX(data, adxPeriod);
+        ADXUtil.calculateADX(data, adxPeriod);
     }
 }
