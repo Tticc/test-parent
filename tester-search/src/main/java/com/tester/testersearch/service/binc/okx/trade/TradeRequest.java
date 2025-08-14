@@ -7,7 +7,7 @@ import lombok.Data;
 public class TradeRequest {
     @ApiModelProperty(name = "instId", value = "币id。如BTC-USDT-SWAP", example = "BTC-USDT-SWAP", required = true)
     private String instId;
-    @ApiModelProperty(name = "tdMode", value = "交易模式.cross", required = true)
+    @ApiModelProperty(name = "tdMode", value = "isolated：逐仓 ；cross：全仓", required = true)
     private String tdMode;
 //    @ApiModelProperty(name = "ccy", value = "保证金货币", required = false)
 //    private String ccy;

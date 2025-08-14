@@ -1,10 +1,14 @@
 package com.tester.testersearch.service.binc.okx;
 
 import com.alibaba.fastjson.JSON;
+import com.tester.testercommon.util.MyConsumer;
+import com.tester.testersearch.service.binc.okx.trade.TickerTradeResponse;
 import com.tester.testersearch.service.binc.okx.trade.TradeRequest;
+import com.tester.testersearch.service.binc.okx.trade.order.OrderSubmitResponse;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.json.JSONObject;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StopWatch;
 
 import javax.crypto.Mac;
@@ -13,6 +17,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.math.BigDecimal;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.nio.charset.StandardCharsets;
@@ -27,8 +32,8 @@ import java.util.concurrent.TimeUnit;
 public class OkxTradeHelper {
 
     // 交易+查询
-    private static final String API_KEY = "8f6a9728-0191-4778-b056-63efb3e4d7b7";
-    private static final String SECRET_KEY = "E7657D77125CBE37B9944B72DB36C2F0"; // 秘钥
+    private static final String API_KEY = "1b3ad5c6-6dbb-4bd6-b783-a12f0a449f70";
+    private static final String SECRET_KEY = "BCF9588A144269F911FA3218E3521B9D"; // 秘钥
     private static final String PASSPHRASE = "Q!w2e3r4";
     // 查询
 //    private static final String API_KEY = "64fdbec7-b3c6-4255-8ee7-2c89a8d1dba3";
@@ -38,61 +43,22 @@ public class OkxTradeHelper {
     public static final String B_KEY = "BTC-USDT";
     public static int count = 15;
 
+    public static BigDecimal cha = new BigDecimal(5);
+
     private static OkHttpClient client;
     static {
         client = getUnsafeOkHttpClient();
     }
 
     public static void main(String[] args) throws Exception {
+        String instId = "BTC-USDT-SWAP";
+        String instType = "SWAP";
         OkxTradeHelper okxTradeHelper = new OkxTradeHelper();
         StopWatch stopWatch = new StopWatch();
         stopWatch.start("交易");
-        JSONObject swap = okxTradeHelper.trade("SWAP", "BTC-USDT-SWAP");
+//        okxTradeHelper.trade(instId,"sell");
         stopWatch.stop();
-        System.out.println("swap = " + swap);
         System.out.println(stopWatch.prettyPrint());
-
-//        JSONObject post_only = okxTradeHelper.orderHis("SWAP", "BTC-USDT-SWAP");
-//        JSONArray data = post_only.getJSONArray("data");
-//        for (Object datum : data) {
-//            JSONObject json = (JSONObject)datum;
-//            Object fillTime = json.get("fillTime");
-//            String s = String.valueOf(fillTime);
-//            Date date1 = new Date(Long.valueOf(s));
-//            json.put("fillTime", DateUtil.dateFormat(date1));
-//        }
-//        System.out.println("post_only = " + data);
-//        for (int i = 0; i < 200; i++) {
-////            JSONObject swap = okxTradeHelper.getTicker("BTC-USDT-SWAP");
-//            JSONObject swap = okxTradeHelper.getTickers("SWAP","BTC-USDT");
-//            JSONArray data = swap.getJSONArray("data");
-//            for (Object datum : data) {
-//                JSONObject json = (JSONObject)datum;
-//                Object fillTime = json.get("ts");
-//                String s = String.valueOf(fillTime);
-//                Date date1 = new Date(Long.valueOf(s));
-//                json.put("ts", DateUtil.dateFormat(date1));
-//            }
-////            Object ts = swap.get("ts");
-////            String s = String.valueOf(ts);
-////            Date date = new Date(Long.valueOf(s));
-////            swap.put("ts",DateUtil.dateFormat(date));
-//            System.out.println("swap = " + swap);
-//            TimeUnit.MILLISECONDS.sleep(500);
-//        }
-    }
-
-
-    /**
-     * 获取产品成交价
-     * @param instType SWAP
-     * @param uly BTC-USDT
-     * @return
-     * @throws Exception
-     */
-    public JSONObject getTickers(String instType, String uly) throws Exception {
-        String url = "/api/v5/market/tickers?instType=" + instType + "&uly=" + uly;
-        return commonGet(url);
     }
 
     /**
@@ -101,23 +67,54 @@ public class OkxTradeHelper {
      * @return
      * @throws Exception
      */
-    public JSONObject getTicker(String instId) throws Exception {
+    public static void getOrderStatus(String instId, String orderId) throws Exception {
+        String url = "/api/v5/trade/order?instId=" + instId+"&ordId"+orderId;
+        String s = commonGet(url, (e) -> {});
+        System.out.println("s = " + s);
+    }
+    public static TickerTradeResponse getTicker(String instId) throws Exception {
         String url = "/api/v5/market/ticker?instId=" + instId;
-        return commonGet(url);
+        String s = commonGet(url, (e) -> {});
+        TickerTradeResponse tickerTradeResponse = JSON.parseObject(s, TickerTradeResponse.class);
+        return tickerTradeResponse;
     }
 
     // 获取标记价格的方法
-    public JSONObject trade(String instType, String instId) throws Exception {
+    public void trade(String instId,String side) throws Exception {
+        BigDecimal tradePrice = null;
+        TickerTradeResponse ticker = getTicker(instId);
+        String posSide = null;
+        if(Objects.equals(ticker.getCode(),"0") && !CollectionUtils.isEmpty(ticker.getData())){
+            String last = ticker.getData().get(0).getLast();
+            BigDecimal lastPrice = new BigDecimal(last);
+            if("buy".equals(side)){
+                tradePrice = lastPrice.subtract(cha);
+                posSide = "long";
+            }else if("sell".equals(side)){
+                tradePrice = lastPrice.add(cha);
+                posSide = "short";
+            }
+        }
+        if(null == tradePrice){
+            log.error("异常，交易价格为空");
+            return;
+        }
         String url = "/api/v5/trade/order";
         TradeRequest request = new TradeRequest();
         request.setInstId(instId);
         request.setTdMode("cross");
-        request.setSide("buy");
-        request.setPosSide("long");
+        request.setSide(side);
+//        request.setPosSide(posSide);
         request.setOrdType("post_only");
-        request.setSz("0.02");
-        request.setPx("88000");
-        return commonPost(url, JSON.toJSONString(request));
+        request.setSz("0.01");
+        request.setPx(tradePrice.toPlainString());
+        String s = commonPost(url, JSON.toJSONString(request), (e) -> {});
+        OrderSubmitResponse orderSubmitResponse = JSON.parseObject(s, OrderSubmitResponse.class);
+        if(orderSubmitResponse !=null && orderSubmitResponse.checkIfSuccess() && !CollectionUtils.isEmpty(orderSubmitResponse.getData())){
+            OrderSubmitResponse.OrderData orderData = orderSubmitResponse.getData().get(0);
+            String ordId = orderData.getOrdId();
+            getOrderStatus(instId,ordId);
+        }
     }
 
     /**
@@ -145,6 +142,10 @@ public class OkxTradeHelper {
     }
 
     private static JSONObject commonPost(String urlP, String body) throws Exception {
+        String respBody = commonPost(urlP, body, (e) -> {});
+        return new JSONObject(respBody);
+    }
+    private static String commonPost(String urlP, String body, MyConsumer<String> consumer) throws Exception {
         String url = BASE_URL + urlP;String timestamp = DateTimeFormatter
                 .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                 .withZone(ZoneOffset.UTC)
@@ -159,17 +160,28 @@ public class OkxTradeHelper {
                 .addHeader("OK-ACCESS-PASSPHRASE", PASSPHRASE)
                 .addHeader("Content-Type", "application/json")
                 .build();
-
+        System.out.println("====【Request】====");
+        System.out.println("POST " + url);
+        System.out.println("Body: " + body);
+        System.out.println("Headers:");
         StopWatch stopWatch = new StopWatch();
         stopWatch.start("调用");
         Response response = client.newCall(request).execute();
         stopWatch.stop();
         System.out.println(stopWatch.prettyPrint());
-        String string = response.body().string();
-        return new JSONObject(string);
+        String respBody = response.body() != null ? response.body().string() : "";
+        System.out.println("====【Response】====");
+        System.out.println("Status: " + response.code());
+        System.out.println("Body: " + respBody);
+        consumer.accept(respBody);
+        return respBody;
     }
 
     private static JSONObject commonGet(String urlP) throws Exception {
+        return new JSONObject(commonGet(urlP, (e) -> {}));
+    }
+
+    private static String commonGet(String urlP, MyConsumer<String> consumer) throws Exception {
         String url = BASE_URL + urlP;
         String timestamp = DateTimeFormatter
                 .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -185,10 +197,16 @@ public class OkxTradeHelper {
                 .addHeader("OK-ACCESS-PASSPHRASE", PASSPHRASE)
                 .addHeader("Content-Type", "application/json")
                 .build();
-
+        System.out.println("====【Request】====");
+        System.out.println("POST " + url);
+        System.out.println("Headers:");
         Response response = client.newCall(request).execute();
-        String string = response.body().string();
-        return new JSONObject(string);
+        String respBody = response.body() != null ? response.body().string() : "";
+        System.out.println("====【Response】====");
+        System.out.println("Status: " + response.code());
+        System.out.println("Body: " + respBody);
+        consumer.accept(respBody);
+        return respBody;
     }
 
     private static String signMessage(String timestamp, String method, String requestPath, String body) throws Exception {
