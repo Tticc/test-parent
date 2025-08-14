@@ -24,15 +24,15 @@ import java.util.stream.Collectors;
  * wenc
  */
 @Slf4j
-//@Component
+@Component
 public class FetchBinanceDataJob {
 
     @Autowired
     private TradeDataBaseService tradeDataBaseService;
 
 
-    // 每隔 5分钟 执行一次
-    @Scheduled(fixedRate = 30 * 60 * 1000)
+    // 每隔 60分钟 执行一次
+    @Scheduled(fixedRate = 60 * 60 * 1000)
     public void performTask() {
         List<String> bKeyList = Arrays.asList(BKeyEnum.BTCUSDT.getCode(),BKeyEnum.ETHUSDT.getCode());
         for (String bKey : bKeyList) {
