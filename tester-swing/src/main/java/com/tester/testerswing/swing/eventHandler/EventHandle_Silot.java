@@ -89,6 +89,7 @@ public class EventHandle_Silot {
         // 取点用
         getPointInfo(script);
         // 初始化leader follow
+        // !!!!!初始化数据，调用onClick
         leaderShift(script, accountInfoList);
         // 初始化环绕残骸
         initAroundTrash(script, accountInfoList);
@@ -135,6 +136,13 @@ public class EventHandle_Silot {
             script.getAccountNum1().setText(Boot.getAccountNum()+"");
             script.getAccountNum2().setText(Boot.getAccountNum()+"");
         });
+
+        // 初始化账号数量为4
+        RobotHelper.delay(200);
+        reduce_use.doClick();
+        RobotHelper.delay(200);
+        reduce_use.doClick();
+        RobotHelper.delay(200);
 
 
     }
@@ -280,14 +288,14 @@ public class EventHandle_Silot {
                 exception.printStackTrace();
             }
         });
-        lead_shift_2.doClick();
-        RobotHelper.delay(200);
-        lead_shift_6.doClick();
-        RobotHelper.delay(200);
-        lead_shift_4.doClick();
-        RobotHelper.delay(200);
-        lead_shift_4.doClick();
-        RobotHelper.delay(200);
+//        lead_shift_2.doClick();
+//        RobotHelper.delay(200);
+//        lead_shift_6.doClick();
+//        RobotHelper.delay(200);
+//        lead_shift_4.doClick();
+//        RobotHelper.delay(200);
+//        lead_shift_4.doClick();
+//        RobotHelper.delay(200);
 
     }
 

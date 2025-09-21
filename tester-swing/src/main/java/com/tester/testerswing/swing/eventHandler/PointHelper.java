@@ -758,7 +758,7 @@ public class PointHelper {
         // 打开星图
         RobotHelper.move(prepareEvePoint.getEve_spaceMapPoint());
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(3024, 3370));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(4524, 3370));
 
         // 单击太空
         RobotHelper.move(prepareEvePoint.getEve_emptySpacePoint());
@@ -941,10 +941,12 @@ public class PointHelper {
     }
 
     public static void minimize(GaussianStrPointInfoDTO p1) {
-        // 最小化
+        // 最小化 - 停用
+        /**
         RobotHelper.move(p1, 394);
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(315, 470));
+         */
     }
 
 
