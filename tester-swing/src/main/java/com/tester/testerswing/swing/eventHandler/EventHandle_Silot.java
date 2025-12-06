@@ -137,7 +137,10 @@ public class EventHandle_Silot {
             script.getAccountNum2().setText(Boot.getAccountNum()+"");
         });
 
-        // 初始化账号数量为4
+        // button reduce_use
+        // 初始化账号数量为3
+        RobotHelper.delay(200);
+        reduce_use.doClick();
         RobotHelper.delay(200);
         reduce_use.doClick();
         RobotHelper.delay(200);
@@ -198,9 +201,12 @@ public class EventHandle_Silot {
                 }
             });
         }
-//        script.getAround_trash5().doClick();
-//        RobotHelper.delay(200);
-//        script.getAround_trash6().doClick();
+        // button 1残骸
+        script.getAround_trash1().doClick();
+        RobotHelper.delay(200);
+        script.getAround_trash2().doClick();
+        RobotHelper.delay(200);
+        script.getAround_trash3().doClick();
     }
     private static void leaderShift(Silot_Input script, List<AccountInfo> accountInfoList){
         List<JLabel> labels = new ArrayList<>();

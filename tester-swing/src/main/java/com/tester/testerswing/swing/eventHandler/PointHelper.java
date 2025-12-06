@@ -285,6 +285,34 @@ public class PointHelper {
         public GaussianStrPointInfoDTO eve_reparePoint = new GaussianStrPointInfoDTO("1414,971", "1429,980");
         // 脚本装备点
         public GaussianStrPointInfoDTO eve_scriptPoint = new GaussianStrPointInfoDTO("1363,971", "1380,984");
+
+
+        // 装备位置：第2行，第1位
+        public GaussianStrPointInfoDTO eve_reparePoint_2_1 = new GaussianStrPointInfoDTO("1084,921", "1099,935");
+
+        // 装备位置：第2行，第2位
+        public GaussianStrPointInfoDTO eve_scriptPoint_2_2 = new GaussianStrPointInfoDTO("1132,919", "1150,936");
+
+        // 装备位置：第2行，第3位
+        public GaussianStrPointInfoDTO eve_scriptPoint_2_3 = new GaussianStrPointInfoDTO("1185,922", "1202,937");
+
+        // 装备位置：第2行，第4位
+        public GaussianStrPointInfoDTO eve_scriptPoint_2_4 = new GaussianStrPointInfoDTO("1237,919", "1250,936");
+
+        // 装备位置：第2行，第5位
+        public GaussianStrPointInfoDTO eve_scriptPoint_2_5 = new GaussianStrPointInfoDTO("1291,919", "1302,934");
+
+        // 装备位置：第2行，第6位
+        public GaussianStrPointInfoDTO eve_scriptPoint_2_6 = new GaussianStrPointInfoDTO("1339,918", "1356,936");
+
+        // 装备位置：第2行，第7位
+        public GaussianStrPointInfoDTO eve_scriptPoint_2_7 = new GaussianStrPointInfoDTO("1391,919", "1405,935");
+
+        // 装备位置：第2行，第8位
+        public GaussianStrPointInfoDTO eve_scriptPoint_2_8 = new GaussianStrPointInfoDTO("1439,921", "1453,937");
+
+
+
     }
 
 
@@ -738,6 +766,9 @@ public class PointHelper {
 
     }
 
+    /**
+     * button 全准备
+     */
     private static void evePrepare_sub() {
         PrepareEvePoint prepareEvePoint = new PrepareEvePoint();
 
@@ -755,10 +786,27 @@ public class PointHelper {
         RobotHelper.delay(GaussianHelper.getGaussianInt(524, 670));
         RobotHelper.keyPress(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_F9);
 
+        RobotHelper.delay(GaussianHelper.getGaussianInt(324, 470));
         // 打开星图
         RobotHelper.move(prepareEvePoint.getEve_spaceMapPoint());
+        RobotHelper.delay(GaussianHelper.getGaussianInt(224, 370));
         RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(4524, 3370));
+        RobotHelper.delay(GaussianHelper.getGaussianInt(4524, 5370));
+
+        // 启动维修1
+        RobotHelper.move(prepareEvePoint.getEve_scriptPoint_2_2());
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(424, 470));
+
+        // 启动维修2
+        RobotHelper.move(prepareEvePoint.getEve_scriptPoint_2_3());
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(424, 470));
+
+        // 启动维修3
+        RobotHelper.move(prepareEvePoint.getEve_scriptPoint_2_4());
+        RobotHelper.mouseLeftPress();
+        RobotHelper.delay(GaussianHelper.getGaussianInt(424, 470));
 
         // 单击太空
         RobotHelper.move(prepareEvePoint.getEve_emptySpacePoint());
@@ -769,18 +817,13 @@ public class PointHelper {
         RobotHelper.mouseWheel(2);
         RobotHelper.delay(GaussianHelper.getGaussianInt(424, 470));
 
-        // 启动维修
-        RobotHelper.move(prepareEvePoint.getEve_reparePoint());
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(424, 470));
-
-        // 启动脚本
-        RobotHelper.move(prepareEvePoint.getEve_scriptPoint());
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(424, 470));
-
     }
 
+    /**
+     * button 全投屏
+     * @param accountPoints
+     * @param num
+     */
     public static void onTopReplicaPrepare(List<AccountPoint> accountPoints, Integer num) {
         CommonReplicaPoint commonReplicaPoint = new CommonReplicaPoint();
         CommonEvePoint commonEvePoint = new CommonEvePoint();
@@ -802,65 +845,95 @@ public class PointHelper {
             }
             RobotHelper.move(commonReplicaPoint.getReplica_searchPoint2());
             RobotHelper.keyPress("OnTopReplica");
-            RobotHelper.delay(456);
+            RobotHelper.delay(856);
             RobotHelper.move(commonReplicaPoint.getReplica_startPoint());
+            RobotHelper.delay(356);
             RobotHelper.mouseLeftPress();
-            RobotHelper.delay(656);
+            RobotHelper.delay(856);
             RobotHelper.move(commonReplicaPoint.getReplica_rightClickEmptyPoint());
             RobotHelper.delay(456);
             RobotHelper.mouseRightPress();
+            RobotHelper.delay(236);
             RobotHelper.move(commonReplicaPoint.getReplica_lockMenuPoint());
+            RobotHelper.delay(256);
             RobotHelper.mouseLeftPress();
+            RobotHelper.delay(256);
             RobotHelper.move(commonReplicaPoint.getReplica_lockLeftPoint());
+            RobotHelper.delay(256);
             RobotHelper.mouseLeftPress();
+            RobotHelper.delay(256);
             // 移动到起始位置
             RobotHelper.move(commonReplicaPoint.getReplica_lockedStartPoint());
+            RobotHelper.delay(256);
             RobotHelper.mouseRightPress();
+            RobotHelper.delay(256);
             if (shouldStop.get()) {
                 return;
             }
             // 选择窗口
             RobotHelper.move(commonReplicaPoint.getReplica_selectWindowMenuPoint());
+            RobotHelper.delay(256);
             RobotHelper.mouseLeftPress();
+            RobotHelper.delay(256);
             // 选择 a
             RobotHelper.move(accountPoint.getReplica_selectPoint());
+            RobotHelper.delay(256);
             RobotHelper.mouseLeftPress();
+            RobotHelper.delay(256);
 
             // 移动到起始位置
             RobotHelper.move(commonReplicaPoint.getReplica_lockedStartPoint());
+            RobotHelper.delay(256);
             RobotHelper.mouseRightPress();
+            RobotHelper.delay(256);
             RobotHelper.move(commonReplicaPoint.getReplica_percentageWindowMenuPoint());
+            RobotHelper.delay(256);
             RobotHelper.mouseLeftPress();
+            RobotHelper.delay(256);
             RobotHelper.move(commonReplicaPoint.getReplica_50PercentageWindowMenuPoint());
+            RobotHelper.delay(256);
             RobotHelper.mouseLeftPress();
+            RobotHelper.delay(256);
             if (shouldStop.get()) {
                 return;
             }
 
             // 移动到起始位置
             RobotHelper.move(commonReplicaPoint.getReplica_lockedStartPoint());
+            RobotHelper.delay(256);
             RobotHelper.mouseRightPress();
+            RobotHelper.delay(256);
             RobotHelper.move(commonReplicaPoint.getReplica_selectAreaPoint());
+            RobotHelper.delay(256);
             RobotHelper.mouseLeftPress();
+            RobotHelper.delay(256);
 
             // 移动到区域起始点
             RobotHelper.move(commonReplicaPoint.getReplica_areaStartPoint());
+            RobotHelper.delay(256);
             // 按下鼠标左键
             RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
+            RobotHelper.delay(256);
             // 移动到区域终止点
             RobotHelper.move(commonReplicaPoint.getReplica_areaEndPoint());
+            RobotHelper.delay(256);
             // 弹起鼠标左键
             RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
+            RobotHelper.delay(256);
             // 区域选择完成
             RobotHelper.move(commonReplicaPoint.getReplica_areaDoneButtonPoint());
+            RobotHelper.delay(256);
             RobotHelper.mouseLeftPress();
+            RobotHelper.delay(256);
             if (shouldStop.get()) {
                 return;
             }
 
 //        // 拖动放缩分屏窗口
             RobotHelper.move(commonReplicaPoint.getReplica_scrollStartPoint());
+            RobotHelper.delay(256);
             RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
+            RobotHelper.delay(256);
             RobotHelper.move(commonReplicaPoint.getReplica_scrollEndPoint());
             RobotHelper.delay(400);
             RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
@@ -868,17 +941,25 @@ public class PointHelper {
 //
 //        // 解除锁定
             RobotHelper.move(commonReplicaPoint.getReplica_beforeUnlockMenuPoint());
+            RobotHelper.delay(256);
             RobotHelper.mouseRightPress();
+            RobotHelper.delay(256);
             RobotHelper.move(commonReplicaPoint.getReplica_unlockMenuPoint());
+            RobotHelper.delay(256);
             RobotHelper.mouseLeftPress();
+            RobotHelper.delay(256);
             RobotHelper.move(commonReplicaPoint.getReplica_unlockPoint());
+            RobotHelper.delay(256);
             RobotHelper.mouseLeftPress();
+            RobotHelper.delay(256);
             if (shouldStop.get()) {
                 return;
             }
             // 拖动1
             RobotHelper.move(commonReplicaPoint.getReplica_commonMoveStartPoint());
+            RobotHelper.delay(256);
             RobotHelper.r.mousePress(InputEvent.BUTTON1_MASK);
+            RobotHelper.delay(256);
             RobotHelper.move(accountPoint.getReplica_moveEndPoint());
             RobotHelper.delay(500);
             RobotHelper.r.mouseRelease(InputEvent.BUTTON1_MASK);
@@ -889,8 +970,6 @@ public class PointHelper {
         }
         RobotHelper.delay(200);
         RobotHelper.move(555, 555);
-
-
     }
 
     public static void linkDrone(List<AccountPoint> accountPoints, Integer num) throws BusinessException {
