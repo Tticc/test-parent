@@ -448,7 +448,7 @@ public class PointHelper {
             EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
             EveToWorkPoint eveToWorkPoint = new EveToWorkPoint();
             // release 释放无人机
-            releaseDone_ori(eveToWorkPoint);
+            releaseDrone_ori(eveToWorkPoint);
             // 释放箱子并存点
             doHarvest_sub(eveToWorkPoint);
             // 环绕建筑
@@ -609,6 +609,13 @@ public class PointHelper {
     }
 
 
+    /**
+     * button 开工
+     * @param accountPoints
+     * @param num
+     * @param accountInfoList
+     * @throws BusinessException
+     */
     public static void eveToWorkAll(List<AccountPoint> accountPoints, Integer num, List<AccountInfo> accountInfoList) throws BusinessException {
         CommonEvePoint commonEvePoint = new CommonEvePoint();
         for (int i = 1; i <= accountPoints.size(); i++) {
@@ -620,7 +627,7 @@ public class PointHelper {
             EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
             RobotHelper.delay(200);
             eveToWork_sub(accountInfo);
-            speedUpAndDroneAndSavePoint();
+            speedUpAndDroneAndSavePoint(accountInfo.getArroundTrash());
 
             if(!Objects.equals(accountInfo.getSerialNo(),accountInfo.getLeaderSerialNo())) {
 //                EventHandle_Main.openOpeNew(commonEvePoint.getEve_openSelectPoint(), accountPoint.getEve_selectPoint());
@@ -690,46 +697,54 @@ public class PointHelper {
     }
 
 
-    // 最后三项操作。加速、环绕、存点
-    public static List<MyConsumer> FINAL_ACTION_LIST = finalActionList();
+    // 最后三项操作。1=加速、2=释放无人机、3=存点
+    public static Map<Integer, MyConsumer> FINAL_ACTION_LIST = finalActionList();
 
-    private static void speedUpAndDroneAndSavePoint() throws BusinessException {
-        List<MyConsumer> executeList = FINAL_ACTION_LIST;
-        boolean shuffle = Math.random() * 10 < 1;
-        if (shuffle) {
-            List<MyConsumer> tempList = new ArrayList<>(FINAL_ACTION_LIST);
-            Collections.shuffle(tempList);
-            executeList = tempList;
+    private static void speedUpAndDroneAndSavePoint(Boolean arroundTrash) throws BusinessException {
+        Map<Integer, MyConsumer> executeList = FINAL_ACTION_LIST;
+        List<Integer> randomList = new ArrayList<>(Arrays.asList(1, 2, 3));
+        Collections.shuffle(randomList);
+        if (arroundTrash == null) {
+            arroundTrash = false;
         }
-        for (MyConsumer myConsumer : executeList) {
-            if (shouldStop.get()) {
-                return;
+        for (Integer index : randomList) {
+            // 没有加速，直接跳过
+            if(index == 1){
+                continue;
+            }
+            // 如果环绕垃圾，不需要释放无人机
+            if(arroundTrash && index == 2){
+                continue;
+            }
+            MyConsumer myConsumer = executeList.get(index);
+            if(null == myConsumer){
+                continue;
             }
             myConsumer.accept(null);
         }
         RobotHelper.delay(GaussianHelper.getGaussianInt(200, 270));
     }
 
-    private static List<MyConsumer> finalActionList() {
+    private static Map<Integer, MyConsumer> finalActionList() {
         EveToWorkPoint eveToWorkPoint = new EveToWorkPoint();
-        List<MyConsumer> list = new ArrayList<>();
-        list.add((e) -> {
+        Map<Integer, MyConsumer> list = new HashMap<>();
+        list.put(1,(e) -> {
             // speedUp 加速
             RobotHelper.move(eveToWorkPoint.getEve_speedUpPoint(), 94);
             RobotHelper.mouseLeftPress();
             RobotHelper.delay(GaussianHelper.getGaussianInt(415, 530));
         });
-        list.add((e) -> {
-            releaseDone_ori(eveToWorkPoint);
+        list.put(2,(e) -> {
+            releaseDrone_ori(eveToWorkPoint);
         });
-        list.add((e) -> {
+        list.put(3,(e) -> {
             // 保存点
             savePoint();
         });
         return list;
     }
 
-    private static void releaseDone_ori(EveToWorkPoint eveToWorkPoint){
+    private static void releaseDrone_ori(EveToWorkPoint eveToWorkPoint){
         // release 释放无人机
         RobotHelper.move(eveToWorkPoint.getEve_releaseDronePoint(), 94);
         RobotHelper.mouseLeftPress();
