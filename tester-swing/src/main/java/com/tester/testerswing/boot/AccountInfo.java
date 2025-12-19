@@ -74,6 +74,9 @@ public class AccountInfo extends BaseDTO {
     // 是否有警卫
     private boolean hasGuard = false;
 
+    // 是否监控旗舰
+    private boolean watchCapitalEnable = false;
+
     // 警卫状态。1=待命, 2=警戒中, 3=跑路
     private Integer guardStatus = 1;
 

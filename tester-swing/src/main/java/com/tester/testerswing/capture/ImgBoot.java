@@ -243,14 +243,18 @@ public class ImgBoot {
 
     // 监控旗舰
     public static void checkIfHasCapital(AccountInfo accountInfo, int imgType, Map<Integer, AccountInfo> serialNoAccountInfoMap) throws Exception {
+        // 如果不开启旗舰监控，直接return
+        if(!accountInfo.isWatchCapitalEnable()){
+            return;
+        }
+        // 无需告警，直接返回
+        if (!accountInfo.isNeedWarn()) {
+            return;
+        }
         // red 截图起点
         PointInfoDTO redSt = accountInfo.getCapitalSt();
         // red 截图终点
         PointInfoDTO redEd = accountInfo.getCapitalEd();
-        if (!accountInfo.isNeedWarn()) {
-            // 无需告警，直接返回
-            return;
-        }
         boolean warning = false;
         Mat src = createScreenAnd2Mat(redSt, redEd, imgType, accountInfo.getAccount());
         if (src == null) {

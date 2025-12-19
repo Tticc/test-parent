@@ -97,6 +97,30 @@ public class EventHandle_Silot {
         initAccountNum(script);
         // 设置警卫状态
         initGuardStatus(script, accountInfoList);
+        // 设置旗舰监控
+        initWatchCapitalStatus(script, accountInfoList);
+    }
+
+    // button 忽略旗舰
+    // button 监控旗舰
+    private static void initWatchCapitalStatus(Silot_Input script, List<AccountInfo> accountInfoList){
+        JButton watch_capital = script.getWatch_capital();
+        JButton unwatch_capital = script.getUnwatch_capital();
+        JLabel isWatchingCapital = script.getIsWatchingCapital();
+        watch_capital.addActionListener((e) -> {
+            for (AccountInfo accountInfo : accountInfoList) {
+                accountInfo.setWatchCapitalEnable(true);
+            }
+            isWatchingCapital.setText("true");
+        });
+        unwatch_capital.addActionListener((e) -> {
+            for (AccountInfo accountInfo : accountInfoList) {
+                accountInfo.setWatchCapitalEnable(false);
+            }
+            isWatchingCapital.setText("false");
+        });
+        // 默认为 监控旗舰
+        watch_capital.doClick();
     }
 
     private static void initGuardStatus(Silot_Input script, List<AccountInfo> accountInfoList){
