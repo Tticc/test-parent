@@ -138,9 +138,10 @@ public class EventHandle_Silot {
         });
 
         // button reduce_use
-        // 初始化账号数量为3
-        RobotHelper.delay(200);
-        reduce_use.doClick();
+        // button add_use
+        // 初始化账号数量为4
+//        RobotHelper.delay(200);
+//        reduce_use.doClick();
         RobotHelper.delay(200);
         reduce_use.doClick();
         RobotHelper.delay(200);

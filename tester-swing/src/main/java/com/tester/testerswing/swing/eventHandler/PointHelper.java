@@ -570,6 +570,8 @@ public class PointHelper {
 
     }
 
+    // button 回收
+    // button 回收all
     public static void eveEndWorkAll(List<AccountPoint> accountPoints, Integer num) {
         CommonEvePoint commonEvePoint = new CommonEvePoint();
         for (int i = 1; i <= accountPoints.size(); i++) {
@@ -591,9 +593,9 @@ public class PointHelper {
 //        RobotHelper.delay(GaussianHelper.getGaussianInt(330, 370));
 
         // 停止加速
-        RobotHelper.move(eveToWorkPoint.getEve_speedUpPoint(), 194);
-        RobotHelper.mouseLeftPress();
-        RobotHelper.delay(GaussianHelper.getGaussianInt(315, 470));
+//        RobotHelper.move(eveToWorkPoint.getEve_speedUpPoint(), 194);
+//        RobotHelper.mouseLeftPress();
+//        RobotHelper.delay(GaussianHelper.getGaussianInt(315, 470));
 
         // 回收无人机
         RobotHelper.keyPress(KeyEvent.VK_R);
@@ -807,6 +809,9 @@ public class PointHelper {
         RobotHelper.delay(GaussianHelper.getGaussianInt(224, 370));
         RobotHelper.mouseLeftPress();
         RobotHelper.delay(GaussianHelper.getGaussianInt(4524, 5370));
+
+        RobotHelper.move(prepareEvePoint.getEve_emptySpacePoint());
+        RobotHelper.delay(GaussianHelper.getGaussianInt(424, 570));
 
         // 启动维修1
         RobotHelper.move(prepareEvePoint.getEve_scriptPoint_2_2());

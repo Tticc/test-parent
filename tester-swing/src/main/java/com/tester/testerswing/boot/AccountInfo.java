@@ -50,6 +50,12 @@ public class AccountInfo extends BaseDTO {
     // 敌对 截图终点
     private PointInfoDTO enemyEd;
 
+    // 旗舰 截图起点。同敌对
+    private PointInfoDTO capitalSt;
+
+    // 旗舰 截图终点。同敌对
+    private PointInfoDTO capitalEd;
+
     // 本地 截图起点
     private PointInfoDTO localSt;
 

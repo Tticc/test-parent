@@ -111,7 +111,7 @@ public class ImgBoot {
      * @Date 9:49 2022/8/2
      * @Author 温昌营
      **/
-    public static void checkNumber(AccountInfo accountInfo, int imgType, List<AccountInfo> accountInfoList) throws Exception {
+    public static void watchEnemy(AccountInfo accountInfo, int imgType, List<AccountInfo> accountInfoList) throws Exception {
         if ((!Objects.equals(AccountInfo.GuardStatusEnum.WATCHING_OUT.getCode(), accountInfo.getGuardStatus())
                 && !Objects.equals(AccountInfo.GuardStatusEnum.BEFORE_STAND_BY.getCode(), accountInfo.getGuardStatus()))
                 || accountInfo.getHisMat() == null) {
@@ -237,6 +237,31 @@ public class ImgBoot {
             if(System.currentTimeMillis() > accountInfo.getAutoReturnTime()+2*60*1000) {
                 doEscapeWithFollows(accountInfo);
                 accountInfo.setAutoReturnTime(null);
+            }
+        }
+    }
+
+    // 监控旗舰
+    public static void checkIfHasCapital(AccountInfo accountInfo, int imgType, Map<Integer, AccountInfo> serialNoAccountInfoMap) throws Exception {
+        // red 截图起点
+        PointInfoDTO redSt = accountInfo.getCapitalSt();
+        // red 截图终点
+        PointInfoDTO redEd = accountInfo.getCapitalEd();
+        if (!accountInfo.isNeedWarn()) {
+            // 无需告警，直接返回
+            return;
+        }
+        boolean warning = false;
+        Mat src = createScreenAnd2Mat(redSt, redEd, imgType, accountInfo.getAccount());
+        if (src == null) {
+            System.out.println("异常，无法获取警告mat");
+            warning = true;
+        }
+        if (warning || doCheckIfNeedWarning(src, accountInfo)) {
+            // 发音提醒
+            sendVoice(accountInfo.getWarnMsg(), false);
+            for (AccountInfo value : accountInfo.getFollows().values()) {
+                sendVoice(value.getWarnMsg(), false);
             }
         }
     }

@@ -48,6 +48,8 @@ public class Boot {
                     .setRedEd(accountPoint.getRedEd())
                     .setEnemySt(accountPoint.getEnemySt())
                     .setEnemyEd(accountPoint.getEnemyEd())
+                    .setCapitalSt(accountPoint.getEnemySt())
+                    .setCapitalEd(accountPoint.getEnemyEd())
                     .setLocalSt(commonEvePoint.getEve_localStPoint())
                     .setLocalEd(commonEvePoint.getEve_localEdPoint())
                     .setLastQuickRunTime(DateUtil.getYesterdayStart())
@@ -101,6 +103,7 @@ public class Boot {
         checkerExecutorService.scheduleAtFixedRate(() -> {
                     try {
                         List<AccountInfo> accountInfoList = getAccountInfoList();
+                        // 1. 监控本地
                         for (AccountInfo accountInfo : accountInfoList) {
                             if(!Objects.equals(accountInfo.getSerialNo(), accountInfo.getLeaderSerialNo())){
                                 continue;
@@ -108,10 +111,19 @@ public class Boot {
                             // 监控数量取原图
                             ImgBoot.checkIfNeedWarning(accountInfo, Imgcodecs.IMREAD_UNCHANGED, serialNoAccountInfoMap);
                         }
+
+                        // 2. 监控旗舰，与监控本地共用按钮和true/false展示
                         for (AccountInfo accountInfo : accountInfoList) {
-                            // 监控数量取灰度图，比较本地数量变化 - 已废弃
-                            ImgBoot.checkNumber(accountInfo, Imgcodecs.IMREAD_GRAYSCALE, accountInfoList);
+                            if(!Objects.equals(accountInfo.getSerialNo(), accountInfo.getLeaderSerialNo())){
+                                continue;
+                            }
+                            ImgBoot.checkIfHasCapital(accountInfo, Imgcodecs.IMREAD_UNCHANGED, serialNoAccountInfoMap);
                         }
+                        // 监控跳脸白 - 暂时无用，注释掉
+//                        for (AccountInfo accountInfo : accountInfoList) {
+//                            // 监控数量取灰度图，比较本地数量变化 - 现已经调整为监控跳到脸上的白
+//                            ImgBoot.watchEnemy(accountInfo, Imgcodecs.IMREAD_GRAYSCALE, accountInfoList);
+//                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
