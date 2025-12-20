@@ -261,7 +261,7 @@ public class ImgBoot {
             System.out.println("异常，无法获取警告mat");
             warning = true;
         }
-        if (warning || doCheckIfNeedWarning(src, accountInfo)) {
+        if (warning || doCheckIfNPCWarning(src, accountInfo)) {
             // 发音提醒
             sendVoice(accountInfo.getWarnMsg(), false);
             for (AccountInfo value : accountInfo.getFollows().values()) {
@@ -405,6 +405,25 @@ public class ImgBoot {
         return ColorDetectTool.doDetect(src,
                 ColorDetectTool.defaultMinValues,
                 ColorDetectTool.defaultMaxValues,
+                // 不需要保存，去掉2025-1-4 22:40:41
+                // (targetMat) -> OpenCVHelper.saveMat2Img(basePath, targetMat, getCountPrefix(accountInfo.getRefreshCount().get()) + "_warning.png"));
+                (targetMat) -> {
+                });
+    }
+
+    /**
+     * 判断是否出现深红色
+     *
+     * @param src
+     * @param accountInfo
+     * @return
+     * @throws BusinessException
+     */
+    private static boolean doCheckIfNPCWarning(Mat src, AccountInfo accountInfo) throws BusinessException {
+        String basePath = getBasePath(accountInfo.getAccount());
+        return ColorDetectTool.doDetect(src,
+                ColorDetectTool.defaultNPCMinValues,
+                ColorDetectTool.defaultNPCMaxValues,
                 // 不需要保存，去掉2025-1-4 22:40:41
                 // (targetMat) -> OpenCVHelper.saveMat2Img(basePath, targetMat, getCountPrefix(accountInfo.getRefreshCount().get()) + "_warning.png"));
                 (targetMat) -> {

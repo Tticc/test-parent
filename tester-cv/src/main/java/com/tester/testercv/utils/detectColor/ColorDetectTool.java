@@ -23,6 +23,10 @@ public class ColorDetectTool {
     public static List<Scalar> defaultMinValues = new ArrayList<>();
     public static List<Scalar> defaultMaxValues = new ArrayList<>();
 
+    // 在static代码块中初始化
+    public static List<Scalar> defaultNPCMinValues = new ArrayList<>();
+    public static List<Scalar> defaultNPCMaxValues = new ArrayList<>();
+
 
 
     public static void main(String[] args) throws Exception {
@@ -198,6 +202,9 @@ public class ColorDetectTool {
         addLightRed(defaultMinValues, defaultMaxValues);
         addYellow(defaultMinValues, defaultMaxValues);
         addOrange(defaultMinValues, defaultMaxValues);
+
+        addDeepRed(defaultNPCMinValues, defaultNPCMaxValues);
+        addLightRed(defaultNPCMinValues, defaultNPCMaxValues);
     }
 
     public static void addGray(List<Scalar> defaultMinValues, List<Scalar> defaultMaxValues){
