@@ -16,7 +16,6 @@ import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.springframework.util.CollectionUtils;
 
@@ -412,16 +411,6 @@ public class ImgBoot {
                 });
     }
 
-
-
-    // 在static代码块中初始化
-    public static List<Scalar> defaultNPCMinValues = new ArrayList<>();
-    public static List<Scalar> defaultNPCMaxValues = new ArrayList<>();
-
-    static {
-        ColorDetectTool.addDeepRed(defaultNPCMinValues, defaultNPCMaxValues);
-        ColorDetectTool.addLightRed(defaultNPCMinValues, defaultNPCMaxValues);
-    }
     /**
      * 判断是否出现深红色
      *
@@ -433,8 +422,8 @@ public class ImgBoot {
     private static boolean doCheckIfNPCWarning(Mat src, AccountInfo accountInfo) throws BusinessException {
         String basePath = getBasePath(accountInfo.getAccount());
         return ColorDetectTool.doDetect(src,
-                ImgBoot.defaultNPCMinValues,
-                ImgBoot.defaultNPCMaxValues,
+                ColorDetectTool.defaultNPCMinValues,
+                ColorDetectTool.defaultNPCMaxValues,
                 // 不需要保存，去掉2025-1-4 22:40:41
                 // (targetMat) -> OpenCVHelper.saveMat2Img(basePath, targetMat, getCountPrefix(accountInfo.getRefreshCount().get()) + "_warning.png"));
                 (targetMat) -> {

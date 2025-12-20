@@ -13,6 +13,9 @@
 >   3. 欧服_挂机.bat 为启动eve脚本
 >
 ---  
+### 注意
+> 1. 必须要使用 C:\Users\18883\.jdks\java-se-8u41-ri 的JDK才能本地运行
+> 2. 如果有打包问题，可以通过Project Structure切到1.8.0.351打包，打完后切回1.8.0_41
 
 ### 结构介绍
 > 1. swing包。本包为启动类所在位置，启动方法：EasyScript.start()
