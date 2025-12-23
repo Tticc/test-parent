@@ -62,6 +62,9 @@ public class SearchManager {
                     // 先按创建时间逆序
                     .sort(q -> q.field(f -> f.field("createdTime").order(SortOrder.Desc)))
                     .size(request.getPageSize()).from(request.getPageSize() * (request.getPageNum() - 1)), Knowledge.class);
+            if(null == search){
+                return new PagerInfo<KnowledgeResponse>();
+            }
             List<Knowledge> collect = search.hits().hits().stream().map(e -> e.source()).collect(Collectors.toList());
             int sort = request.getPageSize() * (request.getPageNum() - 1);
             List<KnowledgeResponse> resList = new ArrayList<>(collect.size());

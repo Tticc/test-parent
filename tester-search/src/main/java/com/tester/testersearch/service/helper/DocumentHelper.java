@@ -4,6 +4,9 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.ElasticsearchException;
 import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.util.ObjectBuilder;
+import com.alibaba.csp.sentinel.Entry;
+import com.alibaba.csp.sentinel.SphU;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -103,11 +106,24 @@ public class DocumentHelper {
     public static final <TDocument> SearchResponse<TDocument> mySearch(ElasticsearchClient client,
             Function<SearchRequest.Builder, ObjectBuilder<SearchRequest>> fn, Class<TDocument> tDocumentClass)
             throws IOException, ElasticsearchException {
-        SearchRequest build = fn.apply(new SearchRequest.Builder()).build();
-        log.info("query request info:\n【{}】", gson.toJson(build));
-        SearchResponse<TDocument> search = client.search(build, tDocumentClass);
-        log.info("query response info:\n【{}】", gson.toJson(search));
-        return search;
+        // 默认地，ES客户端发起的请求，不会被Sentinel监控到。需要显式配置
+        Entry entry = null;
+        try {
+            entry = SphU.entry("esSearch");
+            SearchRequest build = fn.apply(new SearchRequest.Builder()).build();
+            log.info("query request info:\n【{}】", gson.toJson(build));
+            SearchResponse<TDocument> search = client.search(build, tDocumentClass);
+            log.info("query response info:\n【{}】", gson.toJson(search));
+            return search;
+        } catch (BlockException ex) {
+            log.warn("Sentinel blocked esSearch: {}", ex.getMessage());
+//            throw new RuntimeException("Sentinel blocked esSearch", ex);
+            return null;
+        } finally {
+            if (entry != null) {
+                entry.exit();
+            }
+        }
     }
 
     /**

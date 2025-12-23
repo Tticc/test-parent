@@ -46,6 +46,12 @@ my:
     client:
       type: bonsai
 
+
+# 配置熔断服务器
+csp:
+  sentinel:
+    dashboard:
+      server: 127.0.0.1:8081
 # logging 配置示例。
 # 1. root。设置所有日志级别
 # 2. package。设置特定包下的日志级别

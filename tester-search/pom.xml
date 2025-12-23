@@ -26,6 +26,10 @@
             <version>8.2.0</version>
         </dependency>
         <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-transport-simple-http</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.tester</groupId>
             <artifactId>tester-common</artifactId>
             <version>${project.version}</version>

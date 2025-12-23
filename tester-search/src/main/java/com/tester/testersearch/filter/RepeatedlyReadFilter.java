@@ -52,9 +52,9 @@ public class RepeatedlyReadFilter implements Filter {
         }
         ByteArrayResponseWrapper responseWrapper = new ByteArrayResponseWrapper(httpResponse);
         chain.doFilter(finalRequest, responseWrapper);
-        // 获取 Controller 返回的响应字符串（一般是 JSON）
-        String responseBody = responseWrapper.getBodyAsString();
+        byte[] responseBytes = responseWrapper.getBytes();
         if (shouldEncrypt) {// 用 ECC 加密响应体
+            String responseBody = responseWrapper.getBodyAsString();
             byte[] encryptedResp = EccCryptoUtil.encrypt(responseBody, Constants.serverPublicKey);
             // 设置响应头为二进制流
             httpResponse.setContentType("application/octet-stream");
@@ -64,9 +64,15 @@ public class RepeatedlyReadFilter implements Filter {
             out.write(encryptedResp);
             out.flush();
         } else {
-            // 不加密，直接把捕获的响应字符串写回（常规JSON）
-            httpResponse.setContentType("application/json;charset=UTF-8");
-            httpResponse.getWriter().write(responseBody);
+            String originalContentType = responseWrapper.getContentType();
+            if (originalContentType != null) {
+                httpResponse.setContentType(originalContentType);
+            }
+            httpResponse.setCharacterEncoding(responseWrapper.getCharacterEncoding());
+            httpResponse.setContentLength(responseBytes.length);
+            ServletOutputStream out = httpResponse.getOutputStream();
+            out.write(responseBytes);
+            out.flush();
         }
     }
 
